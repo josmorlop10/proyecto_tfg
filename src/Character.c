@@ -1,11 +1,11 @@
-#include "LevelLogic.h"
-#include "Character.h"
-#include "Common.h"
+#include "Headers/LevelLogic.h"
+#include "Headers/Character.h"
+#include "Headers/Common.h"
 #include <stdio.h>
 #include <gb/gb.h>
 
 uint8_t debug = 0;
-
+//f
 //atributos derivados.
 uint16_t tile_index_BR(Character* p){
     uint8_t indexBRx = (p->x - 8) / 8; //señala la columna

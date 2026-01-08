@@ -1,13 +1,13 @@
 #include <gb/gb.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "../res/selector.h" 
-#include "../res/duck.h"
-#include "../res/map1.h" 
-#include "../res/map_tiles.h" 
-#include "Common.h"
-#include "Character.h"
-#include "LevelLogic.h"
+#include "../res/sprites/selector.h" 
+#include "../res/sprites/duck.h"
+#include "../res/levels/map1.h" 
+#include "../res/tiles/map_tiles.h" 
+#include "Headers/Common.h"
+#include "Headers/Character.h"
+#include "Headers/LevelLogic.h"
 
 Character p;
 
