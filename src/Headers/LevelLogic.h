@@ -34,5 +34,8 @@ extern uint16_t global_init_point;
 void update_game_state(GameState new_value);
 void get_colision_from_map(const unsigned char in[], uint8_t out[]);
 void get_init_point_from_map(uint8_t colision_map[360]);
+void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value);
+void change_bkg_tiles(uint16_t tileindexBR);
+
 
 #endif

@@ -12,6 +12,6 @@ void pointer_init(Pointer* s);
 void move_pointer(Pointer* s);
 void control_pointer(Pointer* s);
 void update_pointer(Pointer* s);
-void hide_pointer(Pointer* s);
+void hide_pointer(void);
 
 #endif

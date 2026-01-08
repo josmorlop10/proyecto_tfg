@@ -7,10 +7,8 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
-	.globl _control_player
 	.globl _flip_direction
 	.globl _movement_step_by_step
-	.globl _joypad
 	.globl _get_init_point_from_map
 	.globl _debug
 	.globl _tile_index_BR
@@ -708,104 +706,7 @@ _flip_direction::
 	ld	(hl), a
 ;src/Character.c:99: }
 	ret
-;src/Character.c:102: void control_player(Character* p){
-;	---------------------------------
-; Function control_player
-; ---------------------------------
-_control_player::
-;src/Character.c:104: if(joypad() & J_UP) {
-	push	de
-	call	_joypad
-	pop	de
-	bit	2, a
-	jr	Z, 00118$
-;src/Character.c:105: set_direction(p, 0, -1);
-	push	de
-	ld	a, #0xff
-	push	af
-	inc	sp
-	xor	a, a
-	call	_set_direction
-	pop	de
-;src/Character.c:106: if(canplayermove(p)) {
-	push	de
-	call	_canplayermove
-	pop	de
-	or	a, a
-	ret	Z
-;src/Character.c:107: movement_step_by_step(p);
-	jp	_movement_step_by_step
-00118$:
-;src/Character.c:109: } else if(joypad() & J_DOWN) {
-	push	de
-	call	_joypad
-	pop	de
-	bit	3, a
-	jr	Z, 00115$
-;src/Character.c:110: set_direction(p, 0, 1);
-	push	de
-	ld	a, #0x01
-	push	af
-	inc	sp
-	xor	a, a
-	call	_set_direction
-	pop	de
-;src/Character.c:111: if(canplayermove(p)) {
-	push	de
-	call	_canplayermove
-	pop	de
-	or	a, a
-	ret	Z
-;src/Character.c:112: movement_step_by_step(p);
-	jp	_movement_step_by_step
-00115$:
-;src/Character.c:114: } else if(joypad() & J_LEFT) {
-	push	de
-	call	_joypad
-	pop	de
-	bit	1, a
-	jr	Z, 00112$
-;src/Character.c:115: set_direction(p, -1, 0);
-	push	de
-	xor	a, a
-	push	af
-	inc	sp
-	ld	a, #0xff
-	call	_set_direction
-	pop	de
-;src/Character.c:116: if(canplayermove(p)) {
-	push	de
-	call	_canplayermove
-	pop	de
-	or	a, a
-	ret	Z
-;src/Character.c:117: movement_step_by_step(p);
-	jp	_movement_step_by_step
-00112$:
-;src/Character.c:119: } else if(joypad() & J_RIGHT) {
-	push	de
-	call	_joypad
-	pop	de
-	rrca
-	ret	NC
-;src/Character.c:120: set_direction(p, 1, 0);
-	push	de
-	xor	a, a
-	push	af
-	inc	sp
-	ld	a, #0x01
-	call	_set_direction
-	pop	de
-;src/Character.c:121: if(canplayermove(p)) {
-	push	de
-	call	_canplayermove
-	pop	de
-	or	a, a
-;src/Character.c:122: movement_step_by_step(p);
-	jp	NZ, _movement_step_by_step
-;src/Character.c:125: }
-	ret
-;src/Character.c:127: void update_character(Character* p) { //devuelve las teclas actuales
+;src/Character.c:101: void update_character(Character* p) { //devuelve las teclas actuales
 ;	---------------------------------
 ; Function update_character
 ; ---------------------------------
@@ -814,7 +715,7 @@ _update_character::
 	ldhl	sp,	#4
 	ld	a, e
 	ld	(hl+), a
-;src/Character.c:129: if(canplayermove(p)) {
+;src/Character.c:103: if(canplayermove(p)) {
 	ld	a, d
 	ld	(hl-), a
 	ld	a, (hl+)
@@ -823,7 +724,7 @@ _update_character::
 	call	_canplayermove
 	or	a, a
 	jr	Z, 00102$
-;src/Character.c:130: p->x += p->speed * p->dir_x;
+;src/Character.c:104: p->x += p->speed * p->dir_x;
 	ldhl	sp,#4
 	ld	a, (hl+)
 	ld	e, a
@@ -868,7 +769,7 @@ _update_character::
 	ld	e, (hl)
 	add	a, e
 	ld	(bc), a
-;src/Character.c:131: p->y += p->speed * p->dir_y;
+;src/Character.c:105: p->y += p->speed * p->dir_y;
 	ldhl	sp,#4
 	ld	a, (hl+)
 	ld	e, a
@@ -905,20 +806,20 @@ _update_character::
 	ld	(bc), a
 	jr	00103$
 00102$:
-;src/Character.c:133: flip_direction(p);
+;src/Character.c:107: flip_direction(p);
 	ldhl	sp,	#4
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
 	call	_flip_direction
 00103$:
-;src/Character.c:136: move_character(p);
+;src/Character.c:109: move_character(p);
 	ldhl	sp,	#4
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
 	call	_move_character
-;src/Character.c:137: }
+;src/Character.c:110: }
 	add	sp, #6
 	ret
 	.area _CODE

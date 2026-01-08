@@ -7,13 +7,16 @@ Symbol Table
     .__.ABS.                                                    =   00000000 G
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
-  0 _control_pointer                                                00000071 GR
-  0 _hide_pointer                                                   000000AE GR
+    _change_bkg_tile_xy                                             ******** GX
+    _change_colision_map_at                                         ******** GX
+  0 _control_pointer                                                00000106 GR
+  0 _hide_pointer                                                   00000156 GR
     _joypad                                                         ******** GX
   0 _move_pointer                                                   00000018 GR
+  0 _place_object_at_pointer                                        00000071 GR
   0 _pointer_init                                                   00000000 GR
     _shadow_OAM                                                     ******** GX
-  0 _update_pointer                                                 000000A6 GR
+  0 _update_pointer                                                 0000014E GR
 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
@@ -21,7 +24,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       C3   flags    0
+   0 _CODE                                      size      16B   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

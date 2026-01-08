@@ -8,11 +8,12 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _global_colision_map
-	.globl _global_game_state
 	.globl _global_init_point
 	.globl _global_events
+	.globl _global_game_state
 	.globl _update_game_state
 	.globl _get_colision_from_map
+	.globl _change_colision_map_at
 	.globl _get_init_point_from_map
 ;--------------------------------------------------------
 ; special function registers
@@ -21,6 +22,8 @@
 ; ram data
 ;--------------------------------------------------------
 	.area _DATA
+_global_game_state::
+	.ds 1
 _global_events::
 	.ds 40
 _global_init_point::
@@ -29,8 +32,6 @@ _global_init_point::
 ; ram data
 ;--------------------------------------------------------
 	.area _INITIALIZED
-_global_game_state::
-	.ds 1
 _global_colision_map::
 	.ds 360
 ;--------------------------------------------------------
@@ -146,14 +147,81 @@ _get_colision_from_map::
 ;src/LevelLogic.c:28: }
 	add	sp, #5
 	ret
-;src/LevelLogic.c:31: void get_init_point_from_map(uint8_t colision_map[360]){
+;src/LevelLogic.c:30: void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value){
+;	---------------------------------
+; Function change_colision_map_at
+; ---------------------------------
+_change_colision_map_at::
+	dec	sp
+	ldhl	sp,	#0
+	ld	(hl), a
+;src/LevelLogic.c:31: if(tileindexBR < 360){
+	ld	c, e
+	ld	b, d
+	ld	a, c
+	sub	a, #0x68
+	ld	a, b
+	sbc	a, #0x01
+	jr	NC, 00103$
+;src/LevelLogic.c:32: global_colision_map[tileindexBR] = new_value;
+	ld	hl, #_global_colision_map
+	add	hl, de
+	ld	e, l
+	ld	d, h
+	ldhl	sp,	#0
+	ld	a, (hl)
+	ld	(de), a
+;src/LevelLogic.c:33: global_colision_map[tileindexBR-1] = new_value;
+	ld	e, c
+	ld	d, b
+	dec	de
+	ld	hl, #_global_colision_map
+	add	hl, de
+	ld	e, l
+	ld	d, h
+	ldhl	sp,	#0
+	ld	a, (hl)
+	ld	(de), a
+;src/LevelLogic.c:34: global_colision_map[tileindexBR-20] = new_value;
+	ld	a, c
+	add	a, #0xec
+	ld	e, a
+	ld	a, b
+	adc	a, #0xff
+	ld	d, a
+	ld	hl, #_global_colision_map
+	add	hl, de
+	ld	e, l
+	ld	d, h
+	ldhl	sp,	#0
+	ld	a, (hl)
+	ld	(de), a
+;src/LevelLogic.c:35: global_colision_map[tileindexBR-21] = new_value;
+	ld	a, c
+	add	a, #0xeb
+	ld	c, a
+	ld	a, b
+	adc	a, #0xff
+	ld	b, a
+	ld	hl, #_global_colision_map
+	add	hl, bc
+	ld	c, l
+	ld	b, h
+	ldhl	sp,	#0
+	ld	a, (hl)
+	ld	(bc), a
+00103$:
+;src/LevelLogic.c:37: }
+	inc	sp
+	ret
+;src/LevelLogic.c:41: void get_init_point_from_map(uint8_t colision_map[360]){
 ;	---------------------------------
 ; Function get_init_point_from_map
 ; ---------------------------------
 _get_init_point_from_map::
 	dec	sp
 	dec	sp
-;src/LevelLogic.c:32: for(uint16_t i = 0; i<360; i++){
+;src/LevelLogic.c:42: for(uint16_t i = 0; i<360; i++){
 	xor	a, a
 	ldhl	sp,	#0
 	ld	(hl+), a
@@ -167,38 +235,36 @@ _get_init_point_from_map::
 	ld	a, h
 	sbc	a, #0x01
 	jr	NC, 00107$
-;src/LevelLogic.c:33: if(colision_map[i] == SOURCE){
+;src/LevelLogic.c:43: if(colision_map[i] == SOURCE){
 	ld	l, c
 	ld	h, b
 	add	hl, de
 	ld	a, (hl)
 	sub	a, #0x03
 	jr	NZ, 00106$
-;src/LevelLogic.c:34: global_init_point = i;
+;src/LevelLogic.c:44: global_init_point = i;
 	ldhl	sp,	#0
 	ld	a, (hl)
 	ld	(#_global_init_point),a
 	ldhl	sp,	#1
 	ld	a, (hl)
 	ld	(#_global_init_point + 1),a
-;src/LevelLogic.c:35: break;
+;src/LevelLogic.c:45: break;
 	jr	00107$
 00106$:
-;src/LevelLogic.c:32: for(uint16_t i = 0; i<360; i++){
+;src/LevelLogic.c:42: for(uint16_t i = 0; i<360; i++){
 	inc	bc
 	inc	sp
 	inc	sp
 	push	bc
 	jr	00105$
 00107$:
-;src/LevelLogic.c:38: }
+;src/LevelLogic.c:48: }
 	inc	sp
 	inc	sp
 	ret
 	.area _CODE
 	.area _INITIALIZER
-__xinit__global_game_state:
-	.db #0x02	; 2
 __xinit__global_colision_map:
 	.db #0x00	; 0
 	.db 0x00

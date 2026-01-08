@@ -42,9 +42,10 @@ void main(void)
 {   
     init_gfx();
     pointer_init(&s);
-
+    global_game_state = STATE_GAME_SETTING;
+    
     while(1) {
-        switch ( global_game_state)
+        switch (global_game_state)
         {
         case STATE_GAME_SETTING:
             if(last_state != STATE_GAME_SETTING) {
@@ -52,7 +53,7 @@ void main(void)
             }
             update_pointer(&s);
             if(joypad() & J_START){
-                hide_pointer(&s);
+                hide_pointer();
                 update_game_state(STATE_GAME_RUNNING);
             }
             break;
@@ -63,19 +64,22 @@ void main(void)
                 last_state = STATE_GAME_RUNNING;
             }
             update_character(&p);
+            
+            //DEBUG
+        
+            /*
+            if(joypad() & J_A){
+                for(uint16_t i = 0; i<360; i++){
+                    printf("%d",global_colision_map[i]);
+                }
+            }
+            */
+           
             break;
             
         default:
             break;
         }
         performantdelay(10);
-
-        //DEBUG
-        if(joypad() & J_A){
-            for(uint16_t i = 0; i<360; i++){
-                printf("%d",global_colision_map[i]);
-            }
-        }
-
     }
 }

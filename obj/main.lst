@@ -17,219 +17,188 @@
                                      17 	.globl _update_character
                                      18 	.globl _character_init
                                      19 	.globl _performantdelay
-                                     20 	.globl _printf
-                                     21 	.globl _set_sprite_data
-                                     22 	.globl _set_bkg_tiles
-                                     23 	.globl _set_bkg_data
-                                     24 	.globl _joypad
-                                     25 	.globl _last_state
-                                     26 	.globl _s
-                                     27 	.globl _p
-                                     28 ;--------------------------------------------------------
-                                     29 ; special function registers
+                                     20 	.globl _set_sprite_data
+                                     21 	.globl _set_bkg_tiles
+                                     22 	.globl _set_bkg_data
+                                     23 	.globl _joypad
+                                     24 	.globl _last_state
+                                     25 	.globl _s
+                                     26 	.globl _p
+                                     27 ;--------------------------------------------------------
+                                     28 ; special function registers
+                                     29 ;--------------------------------------------------------
                                      30 ;--------------------------------------------------------
-                                     31 ;--------------------------------------------------------
-                                     32 ; ram data
-                                     33 ;--------------------------------------------------------
-                                     34 	.area _DATA
-    00000000                         35 _p::
-    00000000                         36 	.ds 9
-    00000009                         37 _s::
-    00000009                         38 	.ds 6
-    0000000F                         39 _last_state::
-    0000000F                         40 	.ds 1
-                                     41 ;--------------------------------------------------------
-                                     42 ; ram data
-                                     43 ;--------------------------------------------------------
-                                     44 	.area _INITIALIZED
-                                     45 ;--------------------------------------------------------
-                                     46 ; absolute external ram data
-                                     47 ;--------------------------------------------------------
-                                     48 	.area _DABS (ABS)
-                                     49 ;--------------------------------------------------------
-                                     50 ; global & static initialisations
-                                     51 ;--------------------------------------------------------
-                                     52 	.area _HOME
-                                     53 	.area _GSINIT
-                                     54 	.area _GSFINAL
-                                     55 	.area _GSINIT
-                                     56 ;--------------------------------------------------------
-                                     57 ; Home
-                                     58 ;--------------------------------------------------------
+                                     31 ; ram data
+                                     32 ;--------------------------------------------------------
+                                     33 	.area _DATA
+    00000000                         34 _p::
+    00000000                         35 	.ds 9
+    00000009                         36 _s::
+    00000009                         37 	.ds 6
+    0000000F                         38 _last_state::
+    0000000F                         39 	.ds 1
+                                     40 ;--------------------------------------------------------
+                                     41 ; ram data
+                                     42 ;--------------------------------------------------------
+                                     43 	.area _INITIALIZED
+                                     44 ;--------------------------------------------------------
+                                     45 ; absolute external ram data
+                                     46 ;--------------------------------------------------------
+                                     47 	.area _DABS (ABS)
+                                     48 ;--------------------------------------------------------
+                                     49 ; global & static initialisations
+                                     50 ;--------------------------------------------------------
+                                     51 	.area _HOME
+                                     52 	.area _GSINIT
+                                     53 	.area _GSFINAL
+                                     54 	.area _GSINIT
+                                     55 ;--------------------------------------------------------
+                                     56 ; Home
+                                     57 ;--------------------------------------------------------
+                                     58 	.area _HOME
                                      59 	.area _HOME
-                                     60 	.area _HOME
-                                     61 ;--------------------------------------------------------
-                                     62 ; code
-                                     63 ;--------------------------------------------------------
-                                     64 	.area _CODE
-                                     65 ;src/main.c:17: void init_gfx(void){
-                                     66 ;	---------------------------------
-                                     67 ; Function init_gfx
-                                     68 ; ---------------------------------
-    00000000                         69 _init_gfx::
-                                     70 ;src/main.c:19: set_sprite_data(0, 4, duck);
-    00000000 11r00r00         [12]   71 	ld	de, #_duck
-    00000003 D5               [16]   72 	push	de
-    00000004 21 00 04         [12]   73 	ld	hl, #0x400
-    00000007 E5               [16]   74 	push	hl
-    00000008 CDr00r00         [24]   75 	call	_set_sprite_data
-    0000000B E8 04            [16]   76 	add	sp, #4
-                                     77 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
-    0000000D 21r02r00         [12]   78 	ld	hl, #(_shadow_OAM + 2)
-    00000010 36 00            [12]   79 	ld	(hl), #0x00
-    00000012 21r06r00         [12]   80 	ld	hl, #(_shadow_OAM + 6)
-    00000015 36 01            [12]   81 	ld	(hl), #0x01
-    00000017 21r0Ar00         [12]   82 	ld	hl, #(_shadow_OAM + 10)
-    0000001A 36 02            [12]   83 	ld	(hl), #0x02
-    0000001C 21r0Er00         [12]   84 	ld	hl, #(_shadow_OAM + 14)
-    0000001F 36 03            [12]   85 	ld	(hl), #0x03
-                                     86 ;src/main.c:26: set_sprite_data(4, 4, selector);
-    00000021 11r00r00         [12]   87 	ld	de, #_selector
-    00000024 D5               [16]   88 	push	de
-    00000025 21 04 04         [12]   89 	ld	hl, #0x404
-    00000028 E5               [16]   90 	push	hl
-    00000029 CDr00r00         [24]   91 	call	_set_sprite_data
-    0000002C E8 04            [16]   92 	add	sp, #4
-                                     93 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
-    0000002E 21r12r00         [12]   94 	ld	hl, #(_shadow_OAM + 18)
-    00000031 36 04            [12]   95 	ld	(hl), #0x04
-    00000033 21r16r00         [12]   96 	ld	hl, #(_shadow_OAM + 22)
-    00000036 36 05            [12]   97 	ld	(hl), #0x05
-    00000038 21r1Ar00         [12]   98 	ld	hl, #(_shadow_OAM + 26)
-    0000003B 36 06            [12]   99 	ld	(hl), #0x06
-    0000003D 21r1Er00         [12]  100 	ld	hl, #(_shadow_OAM + 30)
-    00000040 36 07            [12]  101 	ld	(hl), #0x07
-                                    102 ;src/main.c:32: SHOW_SPRITES;
-    00000042 F0r00            [12]  103 	ldh	a, (_LCDC_REG + 0)
-    00000044 F6 02            [ 8]  104 	or	a, #0x02
-    00000046 E0r00            [12]  105 	ldh	(_LCDC_REG + 0), a
-                                    106 ;src/main.c:35: set_bkg_data(0, 28, map_tiles);
-    00000048 11r00r00         [12]  107 	ld	de, #_map_tiles
-    0000004B D5               [16]  108 	push	de
-    0000004C 21 00 1C         [12]  109 	ld	hl, #0x1c00
-    0000004F E5               [16]  110 	push	hl
-    00000050 CDr00r00         [24]  111 	call	_set_bkg_data
-    00000053 E8 04            [16]  112 	add	sp, #4
-                                    113 ;src/main.c:36: set_bkg_tiles(0,0,20,18,map1);
-    00000055 11r00r00         [12]  114 	ld	de, #_map1+0
-    00000058 D5               [16]  115 	push	de
-    00000059 D5               [16]  116 	push	de
-    0000005A 21 14 12         [12]  117 	ld	hl, #0x1214
-    0000005D E5               [16]  118 	push	hl
-    0000005E AF               [ 4]  119 	xor	a, a
-    0000005F 0F               [ 4]  120 	rrca
-    00000060 F5               [16]  121 	push	af
-    00000061 CDr00r00         [24]  122 	call	_set_bkg_tiles
-    00000064 E8 06            [16]  123 	add	sp, #6
-    00000066 D1               [12]  124 	pop	de
-                                    125 ;src/main.c:37: get_colision_from_map(map1, global_colision_map);
-    00000067 01r00r00         [12]  126 	ld	bc, #_global_colision_map
-    0000006A CDr00r00         [24]  127 	call	_get_colision_from_map
-                                    128 ;src/main.c:38: SHOW_BKG;
-    0000006D F0r00            [12]  129 	ldh	a, (_LCDC_REG + 0)
-    0000006F F6 01            [ 8]  130 	or	a, #0x01
-    00000071 E0r00            [12]  131 	ldh	(_LCDC_REG + 0), a
-                                    132 ;src/main.c:39: }
-    00000073 C9               [16]  133 	ret
-                                    134 ;src/main.c:41: void main(void)
-                                    135 ;	---------------------------------
-                                    136 ; Function main
-                                    137 ; ---------------------------------
-    00000074                        138 _main::
-                                    139 ;src/main.c:43: init_gfx();
-    00000074 CDr00r00         [24]  140 	call	_init_gfx
-                                    141 ;src/main.c:44: pointer_init(&s);
-    00000077 11r09r00         [12]  142 	ld	de, #_s
-    0000007A CDr00r00         [24]  143 	call	_pointer_init
-                                    144 ;src/main.c:46: while(1) {
-    0000007D                        145 00115$:
-                                    146 ;src/main.c:47: switch ( global_game_state)
-    0000007D FAr00r00         [16]  147 	ld	a,(#_global_game_state)
-    00000080 FE 02            [ 8]  148 	cp	a,#0x02
-    00000082 28 06            [12]  149 	jr	Z, 00101$
-    00000084 D6 03            [ 8]  150 	sub	a, #0x03
-    00000086 28 27            [12]  151 	jr	Z, 00106$
-    00000088 18 3D            [12]  152 	jr	00110$
-                                    153 ;src/main.c:49: case STATE_GAME_SETTING:
-    0000008A                        154 00101$:
-                                    155 ;src/main.c:50: if(last_state != STATE_GAME_SETTING) {
-    0000008A FAr0Fr00         [16]  156 	ld	a, (#_last_state)
-    0000008D D6 02            [ 8]  157 	sub	a, #0x02
-    0000008F 28 05            [12]  158 	jr	Z, 00103$
-                                    159 ;src/main.c:51: last_state = STATE_GAME_SETTING;
-    00000091 21r0Fr00         [12]  160 	ld	hl, #_last_state
-    00000094 36 02            [12]  161 	ld	(hl), #0x02
-    00000096                        162 00103$:
-                                    163 ;src/main.c:53: update_pointer(&s);
-    00000096 11r09r00         [12]  164 	ld	de, #_s
-    00000099 CDr00r00         [24]  165 	call	_update_pointer
-                                    166 ;src/main.c:54: if(joypad() & J_START){
-    0000009C CDr00r00         [24]  167 	call	_joypad
-    0000009F 07               [ 4]  168 	rlca
-    000000A0 30 25            [12]  169 	jr	NC, 00110$
-                                    170 ;src/main.c:55: hide_pointer(&s);
-    000000A2 11r09r00         [12]  171 	ld	de, #_s
-    000000A5 CDr00r00         [24]  172 	call	_hide_pointer
-                                    173 ;src/main.c:56: update_game_state(STATE_GAME_RUNNING);
-    000000A8 3E 03            [ 8]  174 	ld	a, #0x03
-    000000AA CDr00r00         [24]  175 	call	_update_game_state
-                                    176 ;src/main.c:58: break;
-    000000AD 18 18            [12]  177 	jr	00110$
-                                    178 ;src/main.c:60: case STATE_GAME_RUNNING:
-    000000AF                        179 00106$:
-                                    180 ;src/main.c:61: if(last_state != STATE_GAME_RUNNING) {
-    000000AF FAr0Fr00         [16]  181 	ld	a, (#_last_state)
-    000000B2 D6 03            [ 8]  182 	sub	a, #0x03
-    000000B4 28 0B            [12]  183 	jr	Z, 00108$
-                                    184 ;src/main.c:62: character_init(&p);
-    000000B6 11r00r00         [12]  185 	ld	de, #_p
-    000000B9 CDr00r00         [24]  186 	call	_character_init
-                                    187 ;src/main.c:63: last_state = STATE_GAME_RUNNING;
-    000000BC 21r0Fr00         [12]  188 	ld	hl, #_last_state
-    000000BF 36 03            [12]  189 	ld	(hl), #0x03
-    000000C1                        190 00108$:
-                                    191 ;src/main.c:65: update_character(&p);
-    000000C1 11r00r00         [12]  192 	ld	de, #_p
-    000000C4 CDr00r00         [24]  193 	call	_update_character
-                                    194 ;src/main.c:70: }
-    000000C7                        195 00110$:
-                                    196 ;src/main.c:71: performantdelay(10);
-    000000C7 3E 0A            [ 8]  197 	ld	a, #0x0a
-    000000C9 CDr00r00         [24]  198 	call	_performantdelay
-                                    199 ;src/main.c:74: if(joypad() & J_A){
-    000000CC CDr00r00         [24]  200 	call	_joypad
-    000000CF CB 67            [ 8]  201 	bit	4, a
-    000000D1 28 AA            [12]  202 	jr	Z, 00115$
-                                    203 ;src/main.c:75: for(uint16_t i = 0; i<360; i++){
-    000000D3 01 00 00         [12]  204 	ld	bc, #0x0000
-    000000D6                        205 00118$:
-    000000D6 59               [ 4]  206 	ld	e, c
-    000000D7 50               [ 4]  207 	ld	d, b
-    000000D8 7B               [ 4]  208 	ld	a, e
-    000000D9 D6 68            [ 8]  209 	sub	a, #0x68
-    000000DB 7A               [ 4]  210 	ld	a, d
-    000000DC DE 01            [ 8]  211 	sbc	a, #0x01
-    000000DE 30 9D            [12]  212 	jr	NC, 00115$
-                                    213 ;src/main.c:76: printf("%d",global_colision_map[i]);
-    000000E0 21r00r00         [12]  214 	ld	hl, #_global_colision_map
-    000000E3 09               [ 8]  215 	add	hl, bc
-    000000E4 5E               [ 8]  216 	ld	e, (hl)
-    000000E5 AF               [ 4]  217 	xor	a, a
-    000000E6 C5               [16]  218 	push	bc
-    000000E7 57               [ 4]  219 	ld	d, a
-    000000E8 D5               [16]  220 	push	de
-    000000E9 11rF6r00         [12]  221 	ld	de, #___str_0
-    000000EC D5               [16]  222 	push	de
-    000000ED CDr00r00         [24]  223 	call	_printf
-    000000F0 E8 04            [16]  224 	add	sp, #4
-    000000F2 C1               [12]  225 	pop	bc
-                                    226 ;src/main.c:75: for(uint16_t i = 0; i<360; i++){
-    000000F3 03               [ 8]  227 	inc	bc
-                                    228 ;src/main.c:81: }
-    000000F4 18 E0            [12]  229 	jr	00118$
-    000000F6                        230 ___str_0:
-    000000F6 25 64                  231 	.ascii "%d"
-    000000F8 00                     232 	.db 0x00
-                                    233 	.area _CODE
-                                    234 	.area _INITIALIZER
-                                    235 	.area _CABS (ABS)
+                                     60 ;--------------------------------------------------------
+                                     61 ; code
+                                     62 ;--------------------------------------------------------
+                                     63 	.area _CODE
+                                     64 ;src/main.c:17: void init_gfx(void){
+                                     65 ;	---------------------------------
+                                     66 ; Function init_gfx
+                                     67 ; ---------------------------------
+    00000000                         68 _init_gfx::
+                                     69 ;src/main.c:19: set_sprite_data(0, 4, duck);
+    00000000 11r00r00         [12]   70 	ld	de, #_duck
+    00000003 D5               [16]   71 	push	de
+    00000004 21 00 04         [12]   72 	ld	hl, #0x400
+    00000007 E5               [16]   73 	push	hl
+    00000008 CDr00r00         [24]   74 	call	_set_sprite_data
+    0000000B E8 04            [16]   75 	add	sp, #4
+                                     76 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    0000000D 21r02r00         [12]   77 	ld	hl, #(_shadow_OAM + 2)
+    00000010 36 00            [12]   78 	ld	(hl), #0x00
+    00000012 21r06r00         [12]   79 	ld	hl, #(_shadow_OAM + 6)
+    00000015 36 01            [12]   80 	ld	(hl), #0x01
+    00000017 21r0Ar00         [12]   81 	ld	hl, #(_shadow_OAM + 10)
+    0000001A 36 02            [12]   82 	ld	(hl), #0x02
+    0000001C 21r0Er00         [12]   83 	ld	hl, #(_shadow_OAM + 14)
+    0000001F 36 03            [12]   84 	ld	(hl), #0x03
+                                     85 ;src/main.c:26: set_sprite_data(4, 4, selector);
+    00000021 11r00r00         [12]   86 	ld	de, #_selector
+    00000024 D5               [16]   87 	push	de
+    00000025 21 04 04         [12]   88 	ld	hl, #0x404
+    00000028 E5               [16]   89 	push	hl
+    00000029 CDr00r00         [24]   90 	call	_set_sprite_data
+    0000002C E8 04            [16]   91 	add	sp, #4
+                                     92 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    0000002E 21r12r00         [12]   93 	ld	hl, #(_shadow_OAM + 18)
+    00000031 36 04            [12]   94 	ld	(hl), #0x04
+    00000033 21r16r00         [12]   95 	ld	hl, #(_shadow_OAM + 22)
+    00000036 36 05            [12]   96 	ld	(hl), #0x05
+    00000038 21r1Ar00         [12]   97 	ld	hl, #(_shadow_OAM + 26)
+    0000003B 36 06            [12]   98 	ld	(hl), #0x06
+    0000003D 21r1Er00         [12]   99 	ld	hl, #(_shadow_OAM + 30)
+    00000040 36 07            [12]  100 	ld	(hl), #0x07
+                                    101 ;src/main.c:32: SHOW_SPRITES;
+    00000042 F0r00            [12]  102 	ldh	a, (_LCDC_REG + 0)
+    00000044 F6 02            [ 8]  103 	or	a, #0x02
+    00000046 E0r00            [12]  104 	ldh	(_LCDC_REG + 0), a
+                                    105 ;src/main.c:35: set_bkg_data(0, 28, map_tiles);
+    00000048 11r00r00         [12]  106 	ld	de, #_map_tiles
+    0000004B D5               [16]  107 	push	de
+    0000004C 21 00 1C         [12]  108 	ld	hl, #0x1c00
+    0000004F E5               [16]  109 	push	hl
+    00000050 CDr00r00         [24]  110 	call	_set_bkg_data
+    00000053 E8 04            [16]  111 	add	sp, #4
+                                    112 ;src/main.c:36: set_bkg_tiles(0,0,20,18,map1);
+    00000055 11r00r00         [12]  113 	ld	de, #_map1+0
+    00000058 D5               [16]  114 	push	de
+    00000059 D5               [16]  115 	push	de
+    0000005A 21 14 12         [12]  116 	ld	hl, #0x1214
+    0000005D E5               [16]  117 	push	hl
+    0000005E AF               [ 4]  118 	xor	a, a
+    0000005F 0F               [ 4]  119 	rrca
+    00000060 F5               [16]  120 	push	af
+    00000061 CDr00r00         [24]  121 	call	_set_bkg_tiles
+    00000064 E8 06            [16]  122 	add	sp, #6
+    00000066 D1               [12]  123 	pop	de
+                                    124 ;src/main.c:37: get_colision_from_map(map1, global_colision_map);
+    00000067 01r00r00         [12]  125 	ld	bc, #_global_colision_map
+    0000006A CDr00r00         [24]  126 	call	_get_colision_from_map
+                                    127 ;src/main.c:38: SHOW_BKG;
+    0000006D F0r00            [12]  128 	ldh	a, (_LCDC_REG + 0)
+    0000006F F6 01            [ 8]  129 	or	a, #0x01
+    00000071 E0r00            [12]  130 	ldh	(_LCDC_REG + 0), a
+                                    131 ;src/main.c:39: }
+    00000073 C9               [16]  132 	ret
+                                    133 ;src/main.c:41: void main(void)
+                                    134 ;	---------------------------------
+                                    135 ; Function main
+                                    136 ; ---------------------------------
+    00000074                        137 _main::
+                                    138 ;src/main.c:43: init_gfx();
+    00000074 CDr00r00         [24]  139 	call	_init_gfx
+                                    140 ;src/main.c:44: pointer_init(&s);
+    00000077 11r09r00         [12]  141 	ld	de, #_s
+    0000007A CDr00r00         [24]  142 	call	_pointer_init
+                                    143 ;src/main.c:45: global_game_state = STATE_GAME_SETTING;
+    0000007D 21r00r00         [12]  144 	ld	hl, #_global_game_state
+    00000080 36 02            [12]  145 	ld	(hl), #0x02
+                                    146 ;src/main.c:47: while(1) {
+    00000082                        147 00112$:
+                                    148 ;src/main.c:48: switch (global_game_state)
+    00000082 FAr00r00         [16]  149 	ld	a,(#_global_game_state)
+    00000085 FE 02            [ 8]  150 	cp	a,#0x02
+    00000087 28 06            [12]  151 	jr	Z, 00101$
+    00000089 D6 03            [ 8]  152 	sub	a, #0x03
+    0000008B 28 24            [12]  153 	jr	Z, 00106$
+    0000008D 18 3A            [12]  154 	jr	00110$
+                                    155 ;src/main.c:50: case STATE_GAME_SETTING:
+    0000008F                        156 00101$:
+                                    157 ;src/main.c:51: if(last_state != STATE_GAME_SETTING) {
+    0000008F FAr0Fr00         [16]  158 	ld	a, (#_last_state)
+    00000092 D6 02            [ 8]  159 	sub	a, #0x02
+    00000094 28 05            [12]  160 	jr	Z, 00103$
+                                    161 ;src/main.c:52: last_state = STATE_GAME_SETTING;
+    00000096 21r0Fr00         [12]  162 	ld	hl, #_last_state
+    00000099 36 02            [12]  163 	ld	(hl), #0x02
+    0000009B                        164 00103$:
+                                    165 ;src/main.c:54: update_pointer(&s);
+    0000009B 11r09r00         [12]  166 	ld	de, #_s
+    0000009E CDr00r00         [24]  167 	call	_update_pointer
+                                    168 ;src/main.c:55: if(joypad() & J_START){
+    000000A1 CDr00r00         [24]  169 	call	_joypad
+    000000A4 07               [ 4]  170 	rlca
+    000000A5 30 22            [12]  171 	jr	NC, 00110$
+                                    172 ;src/main.c:56: hide_pointer();
+    000000A7 CDr00r00         [24]  173 	call	_hide_pointer
+                                    174 ;src/main.c:57: update_game_state(STATE_GAME_RUNNING);
+    000000AA 3E 03            [ 8]  175 	ld	a, #0x03
+    000000AC CDr00r00         [24]  176 	call	_update_game_state
+                                    177 ;src/main.c:59: break;
+    000000AF 18 18            [12]  178 	jr	00110$
+                                    179 ;src/main.c:61: case STATE_GAME_RUNNING:
+    000000B1                        180 00106$:
+                                    181 ;src/main.c:62: if(last_state != STATE_GAME_RUNNING) {
+    000000B1 FAr0Fr00         [16]  182 	ld	a, (#_last_state)
+    000000B4 D6 03            [ 8]  183 	sub	a, #0x03
+    000000B6 28 0B            [12]  184 	jr	Z, 00108$
+                                    185 ;src/main.c:63: character_init(&p);
+    000000B8 11r00r00         [12]  186 	ld	de, #_p
+    000000BB CDr00r00         [24]  187 	call	_character_init
+                                    188 ;src/main.c:64: last_state = STATE_GAME_RUNNING;
+    000000BE 21r0Fr00         [12]  189 	ld	hl, #_last_state
+    000000C1 36 03            [12]  190 	ld	(hl), #0x03
+    000000C3                        191 00108$:
+                                    192 ;src/main.c:66: update_character(&p);
+    000000C3 11r00r00         [12]  193 	ld	de, #_p
+    000000C6 CDr00r00         [24]  194 	call	_update_character
+                                    195 ;src/main.c:82: }
+    000000C9                        196 00110$:
+                                    197 ;src/main.c:83: performantdelay(10);
+    000000C9 3E 0A            [ 8]  198 	ld	a, #0x0a
+    000000CB CDr00r00         [24]  199 	call	_performantdelay
+                                    200 ;src/main.c:85: }
+    000000CE 18 B2            [12]  201 	jr	00112$
+                                    202 	.area _CODE
+                                    203 	.area _INITIALIZER
+                                    204 	.area _CABS (ABS)

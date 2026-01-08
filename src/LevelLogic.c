@@ -4,7 +4,7 @@
 #include <gbdk/console.h>
 
 //variables globales
-GameState global_game_state = STATE_GAME_SETTING;
+GameState global_game_state;
 uint8_t global_colision_map[360] = {0};
 struct TileEvent global_events[10];
 uint16_t global_init_point;
@@ -26,6 +26,16 @@ void get_colision_from_map(const unsigned char in[], uint8_t out[]){
         }
     }
 }
+
+void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value){
+    if(tileindexBR < 360){
+        global_colision_map[tileindexBR] = new_value;
+        global_colision_map[tileindexBR-1] = new_value;
+        global_colision_map[tileindexBR-20] = new_value;
+        global_colision_map[tileindexBR-21] = new_value;
+    }
+}
+
 
 //get init point from colision map
 void get_init_point_from_map(uint8_t colision_map[360]){

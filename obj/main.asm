@@ -17,7 +17,6 @@
 	.globl _update_character
 	.globl _character_init
 	.globl _performantdelay
-	.globl _printf
 	.globl _set_sprite_data
 	.globl _set_bkg_tiles
 	.globl _set_bkg_data
@@ -141,95 +140,65 @@ _main::
 ;src/main.c:44: pointer_init(&s);
 	ld	de, #_s
 	call	_pointer_init
-;src/main.c:46: while(1) {
-00115$:
-;src/main.c:47: switch ( global_game_state)
+;src/main.c:45: global_game_state = STATE_GAME_SETTING;
+	ld	hl, #_global_game_state
+	ld	(hl), #0x02
+;src/main.c:47: while(1) {
+00112$:
+;src/main.c:48: switch (global_game_state)
 	ld	a,(#_global_game_state)
 	cp	a,#0x02
 	jr	Z, 00101$
 	sub	a, #0x03
 	jr	Z, 00106$
 	jr	00110$
-;src/main.c:49: case STATE_GAME_SETTING:
+;src/main.c:50: case STATE_GAME_SETTING:
 00101$:
-;src/main.c:50: if(last_state != STATE_GAME_SETTING) {
+;src/main.c:51: if(last_state != STATE_GAME_SETTING) {
 	ld	a, (#_last_state)
 	sub	a, #0x02
 	jr	Z, 00103$
-;src/main.c:51: last_state = STATE_GAME_SETTING;
+;src/main.c:52: last_state = STATE_GAME_SETTING;
 	ld	hl, #_last_state
 	ld	(hl), #0x02
 00103$:
-;src/main.c:53: update_pointer(&s);
+;src/main.c:54: update_pointer(&s);
 	ld	de, #_s
 	call	_update_pointer
-;src/main.c:54: if(joypad() & J_START){
+;src/main.c:55: if(joypad() & J_START){
 	call	_joypad
 	rlca
 	jr	NC, 00110$
-;src/main.c:55: hide_pointer(&s);
-	ld	de, #_s
+;src/main.c:56: hide_pointer();
 	call	_hide_pointer
-;src/main.c:56: update_game_state(STATE_GAME_RUNNING);
+;src/main.c:57: update_game_state(STATE_GAME_RUNNING);
 	ld	a, #0x03
 	call	_update_game_state
-;src/main.c:58: break;
+;src/main.c:59: break;
 	jr	00110$
-;src/main.c:60: case STATE_GAME_RUNNING:
+;src/main.c:61: case STATE_GAME_RUNNING:
 00106$:
-;src/main.c:61: if(last_state != STATE_GAME_RUNNING) {
+;src/main.c:62: if(last_state != STATE_GAME_RUNNING) {
 	ld	a, (#_last_state)
 	sub	a, #0x03
 	jr	Z, 00108$
-;src/main.c:62: character_init(&p);
+;src/main.c:63: character_init(&p);
 	ld	de, #_p
 	call	_character_init
-;src/main.c:63: last_state = STATE_GAME_RUNNING;
+;src/main.c:64: last_state = STATE_GAME_RUNNING;
 	ld	hl, #_last_state
 	ld	(hl), #0x03
 00108$:
-;src/main.c:65: update_character(&p);
+;src/main.c:66: update_character(&p);
 	ld	de, #_p
 	call	_update_character
-;src/main.c:70: }
+;src/main.c:82: }
 00110$:
-;src/main.c:71: performantdelay(10);
+;src/main.c:83: performantdelay(10);
 	ld	a, #0x0a
 	call	_performantdelay
-;src/main.c:74: if(joypad() & J_A){
-	call	_joypad
-	bit	4, a
-	jr	Z, 00115$
-;src/main.c:75: for(uint16_t i = 0; i<360; i++){
-	ld	bc, #0x0000
-00118$:
-	ld	e, c
-	ld	d, b
-	ld	a, e
-	sub	a, #0x68
-	ld	a, d
-	sbc	a, #0x01
-	jr	NC, 00115$
-;src/main.c:76: printf("%d",global_colision_map[i]);
-	ld	hl, #_global_colision_map
-	add	hl, bc
-	ld	e, (hl)
-	xor	a, a
-	push	bc
-	ld	d, a
-	push	de
-	ld	de, #___str_0
-	push	de
-	call	_printf
-	add	sp, #4
-	pop	bc
-;src/main.c:75: for(uint16_t i = 0; i<360; i++){
-	inc	bc
-;src/main.c:81: }
-	jr	00118$
-___str_0:
-	.ascii "%d"
-	.db 0x00
+;src/main.c:85: }
+	jr	00112$
 	.area _CODE
 	.area _INITIALIZER
 	.area _CABS (ABS)

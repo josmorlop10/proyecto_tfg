@@ -98,32 +98,6 @@ void flip_direction(Character* p){
     p->dir_y = - p->dir_y;
 }
 
-//DEBUG 
-void control_player(Character* p){
-
-    if(joypad() & J_UP) {
-        set_direction(p, 0, -1);
-        if(canplayermove(p)) {
-            movement_step_by_step(p);
-        }
-    } else if(joypad() & J_DOWN) {
-        set_direction(p, 0, 1);
-        if(canplayermove(p)) {
-            movement_step_by_step(p);
-        }
-    } else if(joypad() & J_LEFT) {
-        set_direction(p, -1, 0);
-        if(canplayermove(p)) {
-            movement_step_by_step(p);
-        }
-    } else if(joypad() & J_RIGHT) {
-        set_direction(p, 1, 0);
-        if(canplayermove(p)) {
-            movement_step_by_step(p);
-        }
-    }
-}
-
 void update_character(Character* p) { //devuelve las teclas actuales
 
      if(canplayermove(p)) {
@@ -132,7 +106,6 @@ void update_character(Character* p) { //devuelve las teclas actuales
     } else {
         flip_direction(p);
     } 
-    //control_player(p); //DEBUG
     move_character(p);
 }
 
