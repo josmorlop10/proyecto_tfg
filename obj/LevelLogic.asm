@@ -9,9 +9,11 @@
 ;--------------------------------------------------------
 	.globl _global_colision_map
 	.globl _global_game_state
+	.globl _global_init_point
 	.globl _global_events
 	.globl _update_game_state
 	.globl _get_colision_from_map
+	.globl _get_init_point_from_map
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -21,6 +23,8 @@
 	.area _DATA
 _global_events::
 	.ds 40
+_global_init_point::
+	.ds 2
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
@@ -49,16 +53,16 @@ _global_colision_map::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;src/LevelLogic.c:18: void update_game_state(GameState new_value){
+;src/LevelLogic.c:12: void update_game_state(GameState new_value){
 ;	---------------------------------
 ; Function update_game_state
 ; ---------------------------------
 _update_game_state::
 	ld	(#_global_game_state),a
-;src/LevelLogic.c:19: global_game_state = new_value;
-;src/LevelLogic.c:20: }
+;src/LevelLogic.c:13: global_game_state = new_value;
+;src/LevelLogic.c:14: }
 	ret
-;src/LevelLogic.c:23: void get_colision_from_map(const unsigned char in[], uint8_t out[]){
+;src/LevelLogic.c:17: void get_colision_from_map(const unsigned char in[], uint8_t out[]){
 ;	---------------------------------
 ; Function get_colision_from_map
 ; ---------------------------------
@@ -72,7 +76,7 @@ _get_colision_from_map::
 	ld	a, c
 	ld	(hl+), a
 	ld	(hl), b
-;src/LevelLogic.c:25: for(uint16_t i = 0; i<360; i++){
+;src/LevelLogic.c:19: for(uint16_t i = 0; i<360; i++){
 	ld	bc, #0x0000
 00113$:
 	ld	e, c
@@ -82,7 +86,7 @@ _get_colision_from_map::
 	ld	a, d
 	sbc	a, #0x01
 	jr	NC, 00115$
-;src/LevelLogic.c:26: if(in[i] >= 24 && in[i] <= 27){
+;src/LevelLogic.c:20: if(in[i] == 27){
 	ldhl	sp,	#3
 	ld	a,	(hl+)
 	ld	h, (hl)
@@ -90,10 +94,9 @@ _get_colision_from_map::
 	add	hl, bc
 	ld	e, l
 	ld	d, h
-;src/LevelLogic.c:28: } else if(in[i] >= 20 && in[i] <= 23){
 	ld	a, (de)
 	ldhl	sp,	#0
-;src/LevelLogic.c:27: out[i] = SOURCE;
+;src/LevelLogic.c:21: out[i] = SOURCE;
 	ld	(hl+), a
 	ld	a,	(hl+)
 	ld	h, (hl)
@@ -101,48 +104,85 @@ _get_colision_from_map::
 	add	hl, bc
 	ld	e, l
 	ld	d, h
-;src/LevelLogic.c:26: if(in[i] >= 24 && in[i] <= 27){
+;src/LevelLogic.c:20: if(in[i] == 27){
 	ldhl	sp,	#0
 	ld	a, (hl)
-	sub	a, #0x18
-	jr	C, 00108$
-	ld	a, #0x1b
-	sub	a, (hl)
-	jr	C, 00108$
-;src/LevelLogic.c:27: out[i] = SOURCE;
+	sub	a, #0x1b
+	jr	NZ, 00109$
+;src/LevelLogic.c:21: out[i] = SOURCE;
 	ld	a, #0x03
 	ld	(de), a
 	jr	00114$
-00108$:
-;src/LevelLogic.c:28: } else if(in[i] >= 20 && in[i] <= 23){
+00109$:
+;src/LevelLogic.c:22: } else if(in[i] >= 20 && in[i] <= 23){
 	ldhl	sp,	#0
 	ld	a, (hl)
 	sub	a, #0x14
-	jr	C, 00104$
+	jr	C, 00105$
 	ld	a, #0x17
 	sub	a, (hl)
-	jr	C, 00104$
-;src/LevelLogic.c:29: out[i] = DESTINATION;
+	jr	C, 00105$
+;src/LevelLogic.c:23: out[i] = DESTINATION;
 	ld	a, #0x04
 	ld	(de), a
 	jr	00114$
-00104$:
-;src/LevelLogic.c:30: } else if(in[i] >= UMBRAL_COLISION){
+00105$:
+;src/LevelLogic.c:24: } else if(in[i] >= UMBRAL_COLISION_UP && in[i] <= UMBRAL_COLISION_DOWN){
 	ldhl	sp,	#0
 	ld	a, (hl)
 	sub	a, #0x03
 	jr	C, 00114$
-;src/LevelLogic.c:31: out[i] = SOLID;
+	ld	a, #0x0f
+	sub	a, (hl)
+	jr	C, 00114$
+;src/LevelLogic.c:25: out[i] = SOLID;
 	ld	a, #0x01
 	ld	(de), a
 00114$:
-;src/LevelLogic.c:25: for(uint16_t i = 0; i<360; i++){
+;src/LevelLogic.c:19: for(uint16_t i = 0; i<360; i++){
 	inc	bc
 	jr	00113$
 00115$:
-;src/LevelLogic.c:34: }
+;src/LevelLogic.c:28: }
 	add	sp, #5
 	ret
+;src/LevelLogic.c:31: void get_init_point_from_map(){
+;	---------------------------------
+; Function get_init_point_from_map
+; ---------------------------------
+_get_init_point_from_map::
+;src/LevelLogic.c:32: for(uint16_t i = 0; i<360; i++){
+	ld	bc, #0x0000
+	ld	d, b
+	ld	e, c
+00105$:
+	ld	l, e
+	ld	h, d
+	ld	a, l
+	sub	a, #0x68
+	ld	a, h
+	sbc	a, #0x01
+	ret	NC
+;src/LevelLogic.c:33: if(global_colision_map[i] == SOURCE){
+	ld	hl, #_global_colision_map
+	add	hl, de
+	ld	a, (hl)
+	sub	a, #0x03
+	jr	NZ, 00106$
+;src/LevelLogic.c:34: global_init_point = i;
+	ld	hl, #_global_init_point
+	ld	a, c
+	ld	(hl+), a
+	ld	(hl), b
+;src/LevelLogic.c:35: break;
+	ret
+00106$:
+;src/LevelLogic.c:32: for(uint16_t i = 0; i<360; i++){
+	inc	de
+	ld	c, e
+	ld	b, d
+;src/LevelLogic.c:38: }
+	jr	00105$
 	.area _CODE
 	.area _INITIALIZER
 __xinit__global_game_state:

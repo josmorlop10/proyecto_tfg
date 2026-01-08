@@ -22,7 +22,6 @@ void init_gfx(void){
     set_sprite_tile(3,3);
     set_sprite_tile(4,4);
 
-    character_init(&p,80,40);
     SHOW_SPRITES;
 
     //map
@@ -51,6 +50,7 @@ void main(void)
 
         case STATE_GAME_RUNNING:
             if(last_state != STATE_GAME_RUNNING) {
+                character_init(&p);
                 last_state = STATE_GAME_RUNNING;
             }
             update_character(&p);

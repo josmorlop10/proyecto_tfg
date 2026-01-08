@@ -14,7 +14,7 @@ typedef struct {
 uint16_t tile_index_BR(Character* p);
 uint16_t next_tile_index_BR(Character* p);
 
-void character_init(Character* p, uint8_t start_x, uint8_t start_y);
+void character_init(Character* p);
 void update_character(Character* p);
 void move_character(Character* p);
 void set_direction(Character* p,  int8_t x, int8_t y);

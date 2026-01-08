@@ -1,3 +1,4 @@
+#include "LevelLogic.h"
 #include "Character.h"
 #include "Common.h"
 #include <stdio.h>
@@ -22,16 +23,20 @@ uint16_t next_tile_index_BR(Character* p){
     return next_tileindexBR;
 }
 
-
 void set_direction(Character* p,  int8_t x, int8_t y){
     p->dir_x = x;
     p->dir_y = y;
 }
 
 //Character
-void character_init(Character* p, uint8_t start_x, uint8_t start_y) {
-    p->x = start_x;
-    p->y = start_y;
+void character_init(Character* p) {
+
+    get_init_point_from_map();
+    uint8_t player_x = (global_init_point % 20) * 8 + 8; //columna
+    uint8_t player_y = (global_init_point / 20) * 8 + 16; //fila
+
+    p->x = player_x;
+    p->y = player_y;
     p->dir_x = 1;  
     p->dir_y = 0; 
     p->speed = 8;
