@@ -13,5 +13,7 @@ void move_pointer(Pointer* s);
 void control_pointer(Pointer* s);
 void update_pointer(Pointer* s);
 void hide_pointer(void);
+void place_object_at_pointer(uint8_t x, uint8_t y);
+void remove_object_at_pointer(uint8_t x, uint8_t y);
 
 #endif

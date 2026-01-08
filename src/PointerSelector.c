@@ -29,6 +29,15 @@ void place_object_at_pointer(uint8_t x, uint8_t y){
     change_bkg_tile_xy(tileindexBR, 3);
 }
 
+void remove_object_at_pointer(uint8_t x, uint8_t y){
+    uint8_t indexBRx = (x - 8) / 8; //señala la columna
+    uint8_t indexBRy = (y - 16) / 8; //señala la fila
+    uint16_t tileindexBR = 20 * indexBRy + indexBRx;
+    change_colision_map_at(tileindexBR, EMPTY);
+    change_bkg_tile_xy(tileindexBR, 0);
+}
+
+
 void control_pointer(Pointer* s){
 
     if(joypad() & J_UP) {
@@ -41,6 +50,8 @@ void control_pointer(Pointer* s){
         s->x += 8;
     } else if(joypad() & J_A) {
         place_object_at_pointer(s->x, s->y);
+    } else if(joypad() & J_B) {
+        remove_object_at_pointer(s->x, s->y);
     }
 }
 

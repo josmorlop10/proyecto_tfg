@@ -5,7 +5,7 @@
 
 //variables globales
 GameState global_game_state;
-uint8_t global_colision_map[360] = {0};
+uint8_t global_colision_map[360] = {EMPTY};
 struct TileEvent global_events[10];
 uint16_t global_init_point;
 

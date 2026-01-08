@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+#define EMPTY 0
 #define SOLID 1
 #define OBJECT 2
 #define SOURCE 3

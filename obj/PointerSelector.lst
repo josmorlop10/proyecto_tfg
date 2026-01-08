@@ -7,394 +7,527 @@
                                       7 ;--------------------------------------------------------
                                       8 ; Public variables in this module
                                       9 ;--------------------------------------------------------
-                                     10 	.globl _place_object_at_pointer
-                                     11 	.globl _joypad
-                                     12 	.globl _change_colision_map_at
-                                     13 	.globl _change_bkg_tile_xy
-                                     14 	.globl _pointer_init
-                                     15 	.globl _move_pointer
-                                     16 	.globl _control_pointer
-                                     17 	.globl _update_pointer
-                                     18 	.globl _hide_pointer
-                                     19 ;--------------------------------------------------------
-                                     20 ; special function registers
-                                     21 ;--------------------------------------------------------
+                                     10 	.globl _joypad
+                                     11 	.globl _change_colision_map_at
+                                     12 	.globl _change_bkg_tile_xy
+                                     13 	.globl _pointer_init
+                                     14 	.globl _move_pointer
+                                     15 	.globl _place_object_at_pointer
+                                     16 	.globl _remove_object_at_pointer
+                                     17 	.globl _control_pointer
+                                     18 	.globl _update_pointer
+                                     19 	.globl _hide_pointer
+                                     20 ;--------------------------------------------------------
+                                     21 ; special function registers
                                      22 ;--------------------------------------------------------
-                                     23 ; ram data
-                                     24 ;--------------------------------------------------------
-                                     25 	.area _DATA
-                                     26 ;--------------------------------------------------------
-                                     27 ; ram data
-                                     28 ;--------------------------------------------------------
-                                     29 	.area _INITIALIZED
-                                     30 ;--------------------------------------------------------
-                                     31 ; absolute external ram data
-                                     32 ;--------------------------------------------------------
-                                     33 	.area _DABS (ABS)
-                                     34 ;--------------------------------------------------------
-                                     35 ; global & static initialisations
-                                     36 ;--------------------------------------------------------
-                                     37 	.area _HOME
-                                     38 	.area _GSINIT
-                                     39 	.area _GSFINAL
-                                     40 	.area _GSINIT
-                                     41 ;--------------------------------------------------------
-                                     42 ; Home
-                                     43 ;--------------------------------------------------------
-                                     44 	.area _HOME
+                                     23 ;--------------------------------------------------------
+                                     24 ; ram data
+                                     25 ;--------------------------------------------------------
+                                     26 	.area _DATA
+                                     27 ;--------------------------------------------------------
+                                     28 ; ram data
+                                     29 ;--------------------------------------------------------
+                                     30 	.area _INITIALIZED
+                                     31 ;--------------------------------------------------------
+                                     32 ; absolute external ram data
+                                     33 ;--------------------------------------------------------
+                                     34 	.area _DABS (ABS)
+                                     35 ;--------------------------------------------------------
+                                     36 ; global & static initialisations
+                                     37 ;--------------------------------------------------------
+                                     38 	.area _HOME
+                                     39 	.area _GSINIT
+                                     40 	.area _GSFINAL
+                                     41 	.area _GSINIT
+                                     42 ;--------------------------------------------------------
+                                     43 ; Home
+                                     44 ;--------------------------------------------------------
                                      45 	.area _HOME
-                                     46 ;--------------------------------------------------------
-                                     47 ; code
-                                     48 ;--------------------------------------------------------
-                                     49 	.area _CODE
-                                     50 ;src/PointerSelector.c:8: void pointer_init(Pointer* s) {
-                                     51 ;	---------------------------------
-                                     52 ; Function pointer_init
-                                     53 ; ---------------------------------
-    00000000                         54 _pointer_init::
-                                     55 ;src/PointerSelector.c:9: s->x = 80;
-    00000000 3E 50            [ 8]   56 	ld	a, #0x50
-    00000002 12               [ 8]   57 	ld	(de), a
-                                     58 ;src/PointerSelector.c:10: s->y = 72;
-    00000003 6B               [ 4]   59 	ld	l, e
-    00000004 62               [ 4]   60 	ld	h, d
-    00000005 23               [ 8]   61 	inc	hl
-    00000006 36 48            [12]   62 	ld	(hl), #0x48
-                                     63 ;src/PointerSelector.c:11: for(uint8_t i = 4;i<=7;i++){
-    00000008 13               [ 8]   64 	inc	de
-    00000009 13               [ 8]   65 	inc	de
-    0000000A 0E 04            [ 8]   66 	ld	c, #0x04
-    0000000C                         67 00103$:
-    0000000C 3E 07            [ 8]   68 	ld	a, #0x07
-    0000000E 91               [ 4]   69 	sub	a, c
-    0000000F D8               [20]   70 	ret	C
-                                     71 ;src/PointerSelector.c:12: s->sprite_ids[i] = i;
-    00000010 69               [ 4]   72 	ld	l, c
-    00000011 26 00            [ 8]   73 	ld	h, #0x00
-    00000013 19               [ 8]   74 	add	hl, de
-    00000014 71               [ 8]   75 	ld	(hl), c
-                                     76 ;src/PointerSelector.c:11: for(uint8_t i = 4;i<=7;i++){
-    00000015 0C               [ 4]   77 	inc	c
-                                     78 ;src/PointerSelector.c:14: }
-    00000016 18 F4            [12]   79 	jr	00103$
-                                     80 ;src/PointerSelector.c:16: void move_pointer(Pointer* s) {
-                                     81 ;	---------------------------------
-                                     82 ; Function move_pointer
-                                     83 ; ---------------------------------
-    00000018                         84 _move_pointer::
-    00000018 3B               [ 8]   85 	dec	sp
-    00000019 3B               [ 8]   86 	dec	sp
-                                     87 ;src/PointerSelector.c:17: move_sprite(4, s->x- SPRITESIZE, s->y-SPRITESIZE);
-    0000001A 4B               [ 4]   88 	ld	c, e
-    0000001B 42               [ 4]   89 	ld	b, d
-    0000001C 03               [ 8]   90 	inc	bc
-    0000001D 0A               [ 8]   91 	ld	a, (bc)
-    0000001E C6 F8            [ 8]   92 	add	a, #0xf8
-    00000020 F8 00            [12]   93 	ldhl	sp,	#0
-    00000022 22               [ 8]   94 	ld	(hl+), a
-    00000023 1A               [ 8]   95 	ld	a, (de)
-    00000024 C6 F8            [ 8]   96 	add	a, #0xf8
-    00000026 77               [ 8]   97 	ld	(hl), a
-                                     98 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    00000027 21r10r00         [12]   99 	ld	hl, #(_shadow_OAM + 16)
-                                    100 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    0000002A E5               [16]  101 	push	hl
-    0000002B F8 02            [12]  102 	ldhl	sp,	#2
-    0000002D 7E               [ 8]  103 	ld	a, (hl)
-    0000002E E1               [12]  104 	pop	hl
-    0000002F 22               [ 8]  105 	ld	(hl+), a
-    00000030 E5               [16]  106 	push	hl
-    00000031 F8 03            [12]  107 	ldhl	sp,	#3
-    00000033 7E               [ 8]  108 	ld	a, (hl)
-    00000034 E1               [12]  109 	pop	hl
-    00000035 77               [ 8]  110 	ld	(hl), a
-                                    111 ;src/PointerSelector.c:18: move_sprite(5, s->x- SPRITESIZE, s->y);
-    00000036 0A               [ 8]  112 	ld	a, (bc)
-    00000037 F8 00            [12]  113 	ldhl	sp,	#0
-    00000039 22               [ 8]  114 	ld	(hl+), a
-    0000003A 1A               [ 8]  115 	ld	a, (de)
-    0000003B C6 F8            [ 8]  116 	add	a, #0xf8
-    0000003D 77               [ 8]  117 	ld	(hl), a
-                                    118 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    0000003E 21r14r00         [12]  119 	ld	hl, #(_shadow_OAM + 20)
-                                    120 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    00000041 E5               [16]  121 	push	hl
-    00000042 F8 02            [12]  122 	ldhl	sp,	#2
-    00000044 7E               [ 8]  123 	ld	a, (hl)
-    00000045 E1               [12]  124 	pop	hl
-    00000046 22               [ 8]  125 	ld	(hl+), a
-    00000047 E5               [16]  126 	push	hl
-    00000048 F8 03            [12]  127 	ldhl	sp,	#3
-    0000004A 7E               [ 8]  128 	ld	a, (hl)
-    0000004B E1               [12]  129 	pop	hl
-    0000004C 77               [ 8]  130 	ld	(hl), a
-                                    131 ;src/PointerSelector.c:19: move_sprite(6, s->x, s->y-SPRITESIZE);
-    0000004D 0A               [ 8]  132 	ld	a, (bc)
-    0000004E C6 F8            [ 8]  133 	add	a, #0xf8
-    00000050 F8 00            [12]  134 	ldhl	sp,	#0
-    00000052 22               [ 8]  135 	ld	(hl+), a
-    00000053 1A               [ 8]  136 	ld	a, (de)
-    00000054 77               [ 8]  137 	ld	(hl), a
-                                    138 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    00000055 21r18r00         [12]  139 	ld	hl, #(_shadow_OAM + 24)
-                                    140 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    00000058 E5               [16]  141 	push	hl
-    00000059 F8 02            [12]  142 	ldhl	sp,	#2
-    0000005B 7E               [ 8]  143 	ld	a, (hl)
-    0000005C E1               [12]  144 	pop	hl
-    0000005D 22               [ 8]  145 	ld	(hl+), a
-    0000005E E5               [16]  146 	push	hl
-    0000005F F8 03            [12]  147 	ldhl	sp,	#3
-    00000061 7E               [ 8]  148 	ld	a, (hl)
-    00000062 E1               [12]  149 	pop	hl
-    00000063 77               [ 8]  150 	ld	(hl), a
-                                    151 ;src/PointerSelector.c:20: move_sprite(7, s->x, s->y);
-    00000064 0A               [ 8]  152 	ld	a, (bc)
-    00000065 47               [ 4]  153 	ld	b, a
-    00000066 1A               [ 8]  154 	ld	a, (de)
-    00000067 4F               [ 4]  155 	ld	c, a
-                                    156 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    00000068 21r1Cr00         [12]  157 	ld	hl, #(_shadow_OAM + 28)
-                                    158 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    0000006B 78               [ 4]  159 	ld	a, b
-    0000006C 22               [ 8]  160 	ld	(hl+), a
-    0000006D 71               [ 8]  161 	ld	(hl), c
-                                    162 ;src/PointerSelector.c:20: move_sprite(7, s->x, s->y);
-                                    163 ;src/PointerSelector.c:22: }
-    0000006E 33               [ 8]  164 	inc	sp
-    0000006F 33               [ 8]  165 	inc	sp
-    00000070 C9               [16]  166 	ret
-                                    167 ;src/PointerSelector.c:24: void place_object_at_pointer(uint8_t x, uint8_t y){
-                                    168 ;	---------------------------------
-                                    169 ; Function place_object_at_pointer
-                                    170 ; ---------------------------------
-    00000071                        171 _place_object_at_pointer::
-    00000071 E8 FA            [16]  172 	add	sp, #-6
-    00000073 F8 05            [12]  173 	ldhl	sp,	#5
-    00000075 73               [ 8]  174 	ld	(hl), e
-                                    175 ;src/PointerSelector.c:25: uint8_t indexBRx = (x - 8) / 8; //señala la columna
-    00000076 F8 01            [12]  176 	ldhl	sp,	#1
-    00000078 22               [ 8]  177 	ld	(hl+), a
-    00000079 AF               [ 4]  178 	xor	a, a
-    0000007A 32               [ 8]  179 	ld	(hl-), a
-    0000007B 2A               [ 8]  180 	ld	a, (hl+)
-    0000007C 5F               [ 4]  181 	ld	e, a
-    0000007D 56               [ 8]  182 	ld	d, (hl)
-    0000007E 21 08 00         [12]  183 	ld	hl, #0x0008
-    00000081 7B               [ 4]  184 	ld	a, e
-    00000082 95               [ 4]  185 	sub	a, l
-    00000083 5F               [ 4]  186 	ld	e, a
-    00000084 7A               [ 4]  187 	ld	a, d
-    00000085 9C               [ 4]  188 	sbc	a, h
-    00000086 F8 04            [12]  189 	ldhl	sp,	#4
-    00000088 32               [ 8]  190 	ld	(hl-), a
-    00000089 73               [ 8]  191 	ld	(hl), e
-    0000008A 2A               [ 8]  192 	ld	a, (hl+)
-    0000008B 4F               [ 4]  193 	ld	c, a
-    0000008C 46               [ 8]  194 	ld	b, (hl)
-    0000008D CB 7E            [12]  195 	bit	7, (hl)
-    0000008F 28 0C            [12]  196 	jr	Z, 00103$
-    00000091 2B               [ 8]  197 	dec	hl
-    00000092 2B               [ 8]  198 	dec	hl
-    00000093 2B               [ 8]  199 	dec	hl
-    00000094 2A               [ 8]  200 	ld	a, (hl+)
-    00000095 5F               [ 4]  201 	ld	e, a
-    00000096 56               [ 8]  202 	ld	d, (hl)
-    00000097 21 FF FF         [12]  203 	ld	hl, #0xffff
-    0000009A 19               [ 8]  204 	add	hl, de
-    0000009B 4D               [ 4]  205 	ld	c, l
-    0000009C 44               [ 4]  206 	ld	b, h
-    0000009D                        207 00103$:
-    0000009D CB 28            [ 8]  208 	sra	b
-    0000009F CB 19            [ 8]  209 	rr	c
-    000000A1 CB 28            [ 8]  210 	sra	b
-    000000A3 CB 19            [ 8]  211 	rr	c
-    000000A5 CB 28            [ 8]  212 	sra	b
-    000000A7 CB 19            [ 8]  213 	rr	c
-    000000A9 F8 00            [12]  214 	ldhl	sp,	#0
-    000000AB 71               [ 8]  215 	ld	(hl), c
-                                    216 ;src/PointerSelector.c:26: uint8_t indexBRy = (y - 16) / 8; //señala la fila
-    000000AC F8 05            [12]  217 	ldhl	sp,	#5
-    000000AE 7E               [ 8]  218 	ld	a, (hl)
-    000000AF F8 01            [12]  219 	ldhl	sp,	#1
-    000000B1 22               [ 8]  220 	ld	(hl+), a
-    000000B2 AF               [ 4]  221 	xor	a, a
-    000000B3 32               [ 8]  222 	ld	(hl-), a
-    000000B4 2A               [ 8]  223 	ld	a, (hl+)
-    000000B5 5F               [ 4]  224 	ld	e, a
-    000000B6 56               [ 8]  225 	ld	d, (hl)
-    000000B7 21 10 00         [12]  226 	ld	hl, #0x0010
-    000000BA 7B               [ 4]  227 	ld	a, e
-    000000BB 95               [ 4]  228 	sub	a, l
-    000000BC 5F               [ 4]  229 	ld	e, a
-    000000BD 7A               [ 4]  230 	ld	a, d
-    000000BE 9C               [ 4]  231 	sbc	a, h
-    000000BF F8 04            [12]  232 	ldhl	sp,	#4
-    000000C1 32               [ 8]  233 	ld	(hl-), a
-    000000C2 73               [ 8]  234 	ld	(hl), e
-    000000C3 2A               [ 8]  235 	ld	a, (hl+)
-    000000C4 4F               [ 4]  236 	ld	c, a
-    000000C5 46               [ 8]  237 	ld	b, (hl)
-    000000C6 CB 7E            [12]  238 	bit	7, (hl)
-    000000C8 28 0C            [12]  239 	jr	Z, 00104$
-    000000CA 2B               [ 8]  240 	dec	hl
-    000000CB 2B               [ 8]  241 	dec	hl
-    000000CC 2B               [ 8]  242 	dec	hl
-    000000CD 2A               [ 8]  243 	ld	a, (hl+)
-    000000CE 5F               [ 4]  244 	ld	e, a
-    000000CF 56               [ 8]  245 	ld	d, (hl)
-    000000D0 21 F7 FF         [12]  246 	ld	hl, #0xfff7
-    000000D3 19               [ 8]  247 	add	hl, de
-    000000D4 4D               [ 4]  248 	ld	c, l
-    000000D5 44               [ 4]  249 	ld	b, h
-    000000D6                        250 00104$:
-    000000D6 CB 28            [ 8]  251 	sra	b
-    000000D8 CB 19            [ 8]  252 	rr	c
-    000000DA CB 28            [ 8]  253 	sra	b
-    000000DC CB 19            [ 8]  254 	rr	c
-    000000DE CB 28            [ 8]  255 	sra	b
-    000000E0 CB 19            [ 8]  256 	rr	c
-                                    257 ;src/PointerSelector.c:27: uint16_t tileindexBR = 20 * indexBRy + indexBRx;
-    000000E2 06 00            [ 8]  258 	ld	b, #0x00
-    000000E4 69               [ 4]  259 	ld	l, c
-    000000E5 60               [ 4]  260 	ld	h, b
-    000000E6 29               [ 8]  261 	add	hl, hl
-    000000E7 29               [ 8]  262 	add	hl, hl
-    000000E8 09               [ 8]  263 	add	hl, bc
-    000000E9 29               [ 8]  264 	add	hl, hl
-    000000EA 29               [ 8]  265 	add	hl, hl
-    000000EB 4D               [ 4]  266 	ld	c, l
-    000000EC 44               [ 4]  267 	ld	b, h
-    000000ED F8 00            [12]  268 	ldhl	sp,	#0
-    000000EF 7E               [ 8]  269 	ld	a, (hl)
-    000000F0 16 00            [ 8]  270 	ld	d, #0x00
-    000000F2 81               [ 4]  271 	add	a, c
-    000000F3 5F               [ 4]  272 	ld	e, a
-    000000F4 7A               [ 4]  273 	ld	a, d
-    000000F5 88               [ 4]  274 	adc	a, b
-    000000F6 57               [ 4]  275 	ld	d, a
-                                    276 ;src/PointerSelector.c:28: change_colision_map_at(tileindexBR, SOLID);
-    000000F7 D5               [16]  277 	push	de
-    000000F8 3E 01            [ 8]  278 	ld	a, #0x01
-    000000FA CDr00r00         [24]  279 	call	_change_colision_map_at
-    000000FD D1               [12]  280 	pop	de
-                                    281 ;src/PointerSelector.c:29: change_bkg_tile_xy(tileindexBR, 3);
-    000000FE 3E 03            [ 8]  282 	ld	a, #0x03
-    00000100 CDr00r00         [24]  283 	call	_change_bkg_tile_xy
-                                    284 ;src/PointerSelector.c:30: }
-    00000103 E8 06            [16]  285 	add	sp, #6
-    00000105 C9               [16]  286 	ret
-                                    287 ;src/PointerSelector.c:32: void control_pointer(Pointer* s){
-                                    288 ;	---------------------------------
-                                    289 ; Function control_pointer
-                                    290 ; ---------------------------------
-    00000106                        291 _control_pointer::
-    00000106 4B               [ 4]  292 	ld	c, e
-    00000107 42               [ 4]  293 	ld	b, d
-                                    294 ;src/PointerSelector.c:34: if(joypad() & J_UP) {
-    00000108 CDr00r00         [24]  295 	call	_joypad
-                                    296 ;src/PointerSelector.c:35: s->y -= 8;
-    0000010B 59               [ 4]  297 	ld	e, c
-    0000010C 50               [ 4]  298 	ld	d, b
-    0000010D 13               [ 8]  299 	inc	de
-                                    300 ;src/PointerSelector.c:34: if(joypad() & J_UP) {
-    0000010E CB 57            [ 8]  301 	bit	2, a
-    00000110 28 05            [12]  302 	jr	Z, 00113$
-                                    303 ;src/PointerSelector.c:35: s->y -= 8;
-    00000112 1A               [ 8]  304 	ld	a, (de)
-    00000113 C6 F8            [ 8]  305 	add	a, #0xf8
-    00000115 12               [ 8]  306 	ld	(de), a
-    00000116 C9               [16]  307 	ret
-    00000117                        308 00113$:
-                                    309 ;src/PointerSelector.c:36: } else if(joypad() & J_DOWN) {
-    00000117 D5               [16]  310 	push	de
-    00000118 CDr00r00         [24]  311 	call	_joypad
-    0000011B D1               [12]  312 	pop	de
-    0000011C CB 5F            [ 8]  313 	bit	3, a
-    0000011E 28 05            [12]  314 	jr	Z, 00110$
-                                    315 ;src/PointerSelector.c:37: s->y += 8;
-    00000120 1A               [ 8]  316 	ld	a, (de)
-    00000121 C6 08            [ 8]  317 	add	a, #0x08
-    00000123 12               [ 8]  318 	ld	(de), a
-    00000124 C9               [16]  319 	ret
-    00000125                        320 00110$:
-                                    321 ;src/PointerSelector.c:38: } else if(joypad() & J_LEFT) {
-    00000125 D5               [16]  322 	push	de
-    00000126 CDr00r00         [24]  323 	call	_joypad
-    00000129 D1               [12]  324 	pop	de
-                                    325 ;src/PointerSelector.c:39: s->x -= 8;
-                                    326 ;src/PointerSelector.c:38: } else if(joypad() & J_LEFT) {
-    0000012A CB 4F            [ 8]  327 	bit	1, a
-    0000012C 28 05            [12]  328 	jr	Z, 00107$
-                                    329 ;src/PointerSelector.c:39: s->x -= 8;
-    0000012E 0A               [ 8]  330 	ld	a, (bc)
-    0000012F C6 F8            [ 8]  331 	add	a, #0xf8
-    00000131 02               [ 8]  332 	ld	(bc), a
-    00000132 C9               [16]  333 	ret
-    00000133                        334 00107$:
-                                    335 ;src/PointerSelector.c:40: } else if(joypad() & J_RIGHT) {
-    00000133 D5               [16]  336 	push	de
-    00000134 CDr00r00         [24]  337 	call	_joypad
-    00000137 D1               [12]  338 	pop	de
-    00000138 0F               [ 4]  339 	rrca
-    00000139 30 05            [12]  340 	jr	NC, 00104$
-                                    341 ;src/PointerSelector.c:41: s->x += 8;
-    0000013B 0A               [ 8]  342 	ld	a, (bc)
-    0000013C C6 08            [ 8]  343 	add	a, #0x08
-    0000013E 02               [ 8]  344 	ld	(bc), a
-    0000013F C9               [16]  345 	ret
-    00000140                        346 00104$:
-                                    347 ;src/PointerSelector.c:42: } else if(joypad() & J_A) {
-    00000140 D5               [16]  348 	push	de
-    00000141 CDr00r00         [24]  349 	call	_joypad
-    00000144 D1               [12]  350 	pop	de
-    00000145 CB 67            [ 8]  351 	bit	4, a
-    00000147 C8               [20]  352 	ret	Z
-                                    353 ;src/PointerSelector.c:43: place_object_at_pointer(s->x, s->y);
-    00000148 1A               [ 8]  354 	ld	a, (de)
-    00000149 5F               [ 4]  355 	ld	e, a
-    0000014A 0A               [ 8]  356 	ld	a, (bc)
-                                    357 ;src/PointerSelector.c:45: }
-    0000014B C3r71r00         [16]  358 	jp	_place_object_at_pointer
-                                    359 ;src/PointerSelector.c:47: void update_pointer(Pointer* s) { 
-                                    360 ;	---------------------------------
-                                    361 ; Function update_pointer
-                                    362 ; ---------------------------------
-    0000014E                        363 _update_pointer::
-                                    364 ;src/PointerSelector.c:48: control_pointer(s);
-    0000014E D5               [16]  365 	push	de
-    0000014F CDr06r01         [24]  366 	call	_control_pointer
-    00000152 D1               [12]  367 	pop	de
-                                    368 ;src/PointerSelector.c:49: move_pointer(s);
-                                    369 ;src/PointerSelector.c:50: }
-    00000153 C3r18r00         [16]  370 	jp	_move_pointer
-                                    371 ;src/PointerSelector.c:52: void hide_pointer(void){
-                                    372 ;	---------------------------------
-                                    373 ; Function hide_pointer
-                                    374 ; ---------------------------------
-    00000156                        375 _hide_pointer::
-                                    376 ;src/PointerSelector.c:53: for(uint8_t i= 4; i<=7; i++){
-    00000156 0E 04            [ 8]  377 	ld	c, #0x04
-    00000158                        378 00104$:
-    00000158 3E 07            [ 8]  379 	ld	a, #0x07
-    0000015A 91               [ 4]  380 	sub	a, c
-    0000015B D8               [20]  381 	ret	C
-                                    382 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    0000015C 11r00r00         [12]  383 	ld	de, #_shadow_OAM+0
-    0000015F 69               [ 4]  384 	ld	l, c
-    00000160 AF               [ 4]  385 	xor	a, a
-    00000161 67               [ 4]  386 	ld	h, a
-    00000162 29               [ 8]  387 	add	hl, hl
-    00000163 29               [ 8]  388 	add	hl, hl
-    00000164 19               [ 8]  389 	add	hl, de
-                                    390 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    00000165 AF               [ 4]  391 	xor	a, a
-    00000166 22               [ 8]  392 	ld	(hl+), a
-    00000167 77               [ 8]  393 	ld	(hl), a
-                                    394 ;src/PointerSelector.c:53: for(uint8_t i= 4; i<=7; i++){
-    00000168 0C               [ 4]  395 	inc	c
-                                    396 ;src/PointerSelector.c:56: }
-    00000169 18 ED            [12]  397 	jr	00104$
-                                    398 	.area _CODE
-                                    399 	.area _INITIALIZER
-                                    400 	.area _CABS (ABS)
+                                     46 	.area _HOME
+                                     47 ;--------------------------------------------------------
+                                     48 ; code
+                                     49 ;--------------------------------------------------------
+                                     50 	.area _CODE
+                                     51 ;src/PointerSelector.c:8: void pointer_init(Pointer* s) {
+                                     52 ;	---------------------------------
+                                     53 ; Function pointer_init
+                                     54 ; ---------------------------------
+    00000000                         55 _pointer_init::
+                                     56 ;src/PointerSelector.c:9: s->x = 80;
+    00000000 3E 50            [ 8]   57 	ld	a, #0x50
+    00000002 12               [ 8]   58 	ld	(de), a
+                                     59 ;src/PointerSelector.c:10: s->y = 72;
+    00000003 6B               [ 4]   60 	ld	l, e
+    00000004 62               [ 4]   61 	ld	h, d
+    00000005 23               [ 8]   62 	inc	hl
+    00000006 36 48            [12]   63 	ld	(hl), #0x48
+                                     64 ;src/PointerSelector.c:11: for(uint8_t i = 4;i<=7;i++){
+    00000008 13               [ 8]   65 	inc	de
+    00000009 13               [ 8]   66 	inc	de
+    0000000A 0E 04            [ 8]   67 	ld	c, #0x04
+    0000000C                         68 00103$:
+    0000000C 3E 07            [ 8]   69 	ld	a, #0x07
+    0000000E 91               [ 4]   70 	sub	a, c
+    0000000F D8               [20]   71 	ret	C
+                                     72 ;src/PointerSelector.c:12: s->sprite_ids[i] = i;
+    00000010 69               [ 4]   73 	ld	l, c
+    00000011 26 00            [ 8]   74 	ld	h, #0x00
+    00000013 19               [ 8]   75 	add	hl, de
+    00000014 71               [ 8]   76 	ld	(hl), c
+                                     77 ;src/PointerSelector.c:11: for(uint8_t i = 4;i<=7;i++){
+    00000015 0C               [ 4]   78 	inc	c
+                                     79 ;src/PointerSelector.c:14: }
+    00000016 18 F4            [12]   80 	jr	00103$
+                                     81 ;src/PointerSelector.c:16: void move_pointer(Pointer* s) {
+                                     82 ;	---------------------------------
+                                     83 ; Function move_pointer
+                                     84 ; ---------------------------------
+    00000018                         85 _move_pointer::
+    00000018 3B               [ 8]   86 	dec	sp
+    00000019 3B               [ 8]   87 	dec	sp
+                                     88 ;src/PointerSelector.c:17: move_sprite(4, s->x- SPRITESIZE, s->y-SPRITESIZE);
+    0000001A 4B               [ 4]   89 	ld	c, e
+    0000001B 42               [ 4]   90 	ld	b, d
+    0000001C 03               [ 8]   91 	inc	bc
+    0000001D 0A               [ 8]   92 	ld	a, (bc)
+    0000001E C6 F8            [ 8]   93 	add	a, #0xf8
+    00000020 F8 00            [12]   94 	ldhl	sp,	#0
+    00000022 22               [ 8]   95 	ld	(hl+), a
+    00000023 1A               [ 8]   96 	ld	a, (de)
+    00000024 C6 F8            [ 8]   97 	add	a, #0xf8
+    00000026 77               [ 8]   98 	ld	(hl), a
+                                     99 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000027 21r10r00         [12]  100 	ld	hl, #(_shadow_OAM + 16)
+                                    101 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    0000002A E5               [16]  102 	push	hl
+    0000002B F8 02            [12]  103 	ldhl	sp,	#2
+    0000002D 7E               [ 8]  104 	ld	a, (hl)
+    0000002E E1               [12]  105 	pop	hl
+    0000002F 22               [ 8]  106 	ld	(hl+), a
+    00000030 E5               [16]  107 	push	hl
+    00000031 F8 03            [12]  108 	ldhl	sp,	#3
+    00000033 7E               [ 8]  109 	ld	a, (hl)
+    00000034 E1               [12]  110 	pop	hl
+    00000035 77               [ 8]  111 	ld	(hl), a
+                                    112 ;src/PointerSelector.c:18: move_sprite(5, s->x- SPRITESIZE, s->y);
+    00000036 0A               [ 8]  113 	ld	a, (bc)
+    00000037 F8 00            [12]  114 	ldhl	sp,	#0
+    00000039 22               [ 8]  115 	ld	(hl+), a
+    0000003A 1A               [ 8]  116 	ld	a, (de)
+    0000003B C6 F8            [ 8]  117 	add	a, #0xf8
+    0000003D 77               [ 8]  118 	ld	(hl), a
+                                    119 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    0000003E 21r14r00         [12]  120 	ld	hl, #(_shadow_OAM + 20)
+                                    121 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    00000041 E5               [16]  122 	push	hl
+    00000042 F8 02            [12]  123 	ldhl	sp,	#2
+    00000044 7E               [ 8]  124 	ld	a, (hl)
+    00000045 E1               [12]  125 	pop	hl
+    00000046 22               [ 8]  126 	ld	(hl+), a
+    00000047 E5               [16]  127 	push	hl
+    00000048 F8 03            [12]  128 	ldhl	sp,	#3
+    0000004A 7E               [ 8]  129 	ld	a, (hl)
+    0000004B E1               [12]  130 	pop	hl
+    0000004C 77               [ 8]  131 	ld	(hl), a
+                                    132 ;src/PointerSelector.c:19: move_sprite(6, s->x, s->y-SPRITESIZE);
+    0000004D 0A               [ 8]  133 	ld	a, (bc)
+    0000004E C6 F8            [ 8]  134 	add	a, #0xf8
+    00000050 F8 00            [12]  135 	ldhl	sp,	#0
+    00000052 22               [ 8]  136 	ld	(hl+), a
+    00000053 1A               [ 8]  137 	ld	a, (de)
+    00000054 77               [ 8]  138 	ld	(hl), a
+                                    139 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000055 21r18r00         [12]  140 	ld	hl, #(_shadow_OAM + 24)
+                                    141 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    00000058 E5               [16]  142 	push	hl
+    00000059 F8 02            [12]  143 	ldhl	sp,	#2
+    0000005B 7E               [ 8]  144 	ld	a, (hl)
+    0000005C E1               [12]  145 	pop	hl
+    0000005D 22               [ 8]  146 	ld	(hl+), a
+    0000005E E5               [16]  147 	push	hl
+    0000005F F8 03            [12]  148 	ldhl	sp,	#3
+    00000061 7E               [ 8]  149 	ld	a, (hl)
+    00000062 E1               [12]  150 	pop	hl
+    00000063 77               [ 8]  151 	ld	(hl), a
+                                    152 ;src/PointerSelector.c:20: move_sprite(7, s->x, s->y);
+    00000064 0A               [ 8]  153 	ld	a, (bc)
+    00000065 47               [ 4]  154 	ld	b, a
+    00000066 1A               [ 8]  155 	ld	a, (de)
+    00000067 4F               [ 4]  156 	ld	c, a
+                                    157 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000068 21r1Cr00         [12]  158 	ld	hl, #(_shadow_OAM + 28)
+                                    159 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    0000006B 78               [ 4]  160 	ld	a, b
+    0000006C 22               [ 8]  161 	ld	(hl+), a
+    0000006D 71               [ 8]  162 	ld	(hl), c
+                                    163 ;src/PointerSelector.c:20: move_sprite(7, s->x, s->y);
+                                    164 ;src/PointerSelector.c:22: }
+    0000006E 33               [ 8]  165 	inc	sp
+    0000006F 33               [ 8]  166 	inc	sp
+    00000070 C9               [16]  167 	ret
+                                    168 ;src/PointerSelector.c:24: void place_object_at_pointer(uint8_t x, uint8_t y){
+                                    169 ;	---------------------------------
+                                    170 ; Function place_object_at_pointer
+                                    171 ; ---------------------------------
+    00000071                        172 _place_object_at_pointer::
+    00000071 E8 FA            [16]  173 	add	sp, #-6
+    00000073 F8 05            [12]  174 	ldhl	sp,	#5
+    00000075 73               [ 8]  175 	ld	(hl), e
+                                    176 ;src/PointerSelector.c:25: uint8_t indexBRx = (x - 8) / 8; //señala la columna
+    00000076 F8 01            [12]  177 	ldhl	sp,	#1
+    00000078 22               [ 8]  178 	ld	(hl+), a
+    00000079 AF               [ 4]  179 	xor	a, a
+    0000007A 32               [ 8]  180 	ld	(hl-), a
+    0000007B 2A               [ 8]  181 	ld	a, (hl+)
+    0000007C 5F               [ 4]  182 	ld	e, a
+    0000007D 56               [ 8]  183 	ld	d, (hl)
+    0000007E 21 08 00         [12]  184 	ld	hl, #0x0008
+    00000081 7B               [ 4]  185 	ld	a, e
+    00000082 95               [ 4]  186 	sub	a, l
+    00000083 5F               [ 4]  187 	ld	e, a
+    00000084 7A               [ 4]  188 	ld	a, d
+    00000085 9C               [ 4]  189 	sbc	a, h
+    00000086 F8 04            [12]  190 	ldhl	sp,	#4
+    00000088 32               [ 8]  191 	ld	(hl-), a
+    00000089 73               [ 8]  192 	ld	(hl), e
+    0000008A 2A               [ 8]  193 	ld	a, (hl+)
+    0000008B 4F               [ 4]  194 	ld	c, a
+    0000008C 46               [ 8]  195 	ld	b, (hl)
+    0000008D CB 7E            [12]  196 	bit	7, (hl)
+    0000008F 28 0C            [12]  197 	jr	Z, 00103$
+    00000091 2B               [ 8]  198 	dec	hl
+    00000092 2B               [ 8]  199 	dec	hl
+    00000093 2B               [ 8]  200 	dec	hl
+    00000094 2A               [ 8]  201 	ld	a, (hl+)
+    00000095 5F               [ 4]  202 	ld	e, a
+    00000096 56               [ 8]  203 	ld	d, (hl)
+    00000097 21 FF FF         [12]  204 	ld	hl, #0xffff
+    0000009A 19               [ 8]  205 	add	hl, de
+    0000009B 4D               [ 4]  206 	ld	c, l
+    0000009C 44               [ 4]  207 	ld	b, h
+    0000009D                        208 00103$:
+    0000009D CB 28            [ 8]  209 	sra	b
+    0000009F CB 19            [ 8]  210 	rr	c
+    000000A1 CB 28            [ 8]  211 	sra	b
+    000000A3 CB 19            [ 8]  212 	rr	c
+    000000A5 CB 28            [ 8]  213 	sra	b
+    000000A7 CB 19            [ 8]  214 	rr	c
+    000000A9 F8 00            [12]  215 	ldhl	sp,	#0
+    000000AB 71               [ 8]  216 	ld	(hl), c
+                                    217 ;src/PointerSelector.c:26: uint8_t indexBRy = (y - 16) / 8; //señala la fila
+    000000AC F8 05            [12]  218 	ldhl	sp,	#5
+    000000AE 7E               [ 8]  219 	ld	a, (hl)
+    000000AF F8 01            [12]  220 	ldhl	sp,	#1
+    000000B1 22               [ 8]  221 	ld	(hl+), a
+    000000B2 AF               [ 4]  222 	xor	a, a
+    000000B3 32               [ 8]  223 	ld	(hl-), a
+    000000B4 2A               [ 8]  224 	ld	a, (hl+)
+    000000B5 5F               [ 4]  225 	ld	e, a
+    000000B6 56               [ 8]  226 	ld	d, (hl)
+    000000B7 21 10 00         [12]  227 	ld	hl, #0x0010
+    000000BA 7B               [ 4]  228 	ld	a, e
+    000000BB 95               [ 4]  229 	sub	a, l
+    000000BC 5F               [ 4]  230 	ld	e, a
+    000000BD 7A               [ 4]  231 	ld	a, d
+    000000BE 9C               [ 4]  232 	sbc	a, h
+    000000BF F8 04            [12]  233 	ldhl	sp,	#4
+    000000C1 32               [ 8]  234 	ld	(hl-), a
+    000000C2 73               [ 8]  235 	ld	(hl), e
+    000000C3 2A               [ 8]  236 	ld	a, (hl+)
+    000000C4 4F               [ 4]  237 	ld	c, a
+    000000C5 46               [ 8]  238 	ld	b, (hl)
+    000000C6 CB 7E            [12]  239 	bit	7, (hl)
+    000000C8 28 0C            [12]  240 	jr	Z, 00104$
+    000000CA 2B               [ 8]  241 	dec	hl
+    000000CB 2B               [ 8]  242 	dec	hl
+    000000CC 2B               [ 8]  243 	dec	hl
+    000000CD 2A               [ 8]  244 	ld	a, (hl+)
+    000000CE 5F               [ 4]  245 	ld	e, a
+    000000CF 56               [ 8]  246 	ld	d, (hl)
+    000000D0 21 F7 FF         [12]  247 	ld	hl, #0xfff7
+    000000D3 19               [ 8]  248 	add	hl, de
+    000000D4 4D               [ 4]  249 	ld	c, l
+    000000D5 44               [ 4]  250 	ld	b, h
+    000000D6                        251 00104$:
+    000000D6 CB 28            [ 8]  252 	sra	b
+    000000D8 CB 19            [ 8]  253 	rr	c
+    000000DA CB 28            [ 8]  254 	sra	b
+    000000DC CB 19            [ 8]  255 	rr	c
+    000000DE CB 28            [ 8]  256 	sra	b
+    000000E0 CB 19            [ 8]  257 	rr	c
+                                    258 ;src/PointerSelector.c:27: uint16_t tileindexBR = 20 * indexBRy + indexBRx;
+    000000E2 06 00            [ 8]  259 	ld	b, #0x00
+    000000E4 69               [ 4]  260 	ld	l, c
+    000000E5 60               [ 4]  261 	ld	h, b
+    000000E6 29               [ 8]  262 	add	hl, hl
+    000000E7 29               [ 8]  263 	add	hl, hl
+    000000E8 09               [ 8]  264 	add	hl, bc
+    000000E9 29               [ 8]  265 	add	hl, hl
+    000000EA 29               [ 8]  266 	add	hl, hl
+    000000EB 4D               [ 4]  267 	ld	c, l
+    000000EC 44               [ 4]  268 	ld	b, h
+    000000ED F8 00            [12]  269 	ldhl	sp,	#0
+    000000EF 7E               [ 8]  270 	ld	a, (hl)
+    000000F0 16 00            [ 8]  271 	ld	d, #0x00
+    000000F2 81               [ 4]  272 	add	a, c
+    000000F3 5F               [ 4]  273 	ld	e, a
+    000000F4 7A               [ 4]  274 	ld	a, d
+    000000F5 88               [ 4]  275 	adc	a, b
+    000000F6 57               [ 4]  276 	ld	d, a
+                                    277 ;src/PointerSelector.c:28: change_colision_map_at(tileindexBR, SOLID);
+    000000F7 D5               [16]  278 	push	de
+    000000F8 3E 01            [ 8]  279 	ld	a, #0x01
+    000000FA CDr00r00         [24]  280 	call	_change_colision_map_at
+    000000FD D1               [12]  281 	pop	de
+                                    282 ;src/PointerSelector.c:29: change_bkg_tile_xy(tileindexBR, 3);
+    000000FE 3E 03            [ 8]  283 	ld	a, #0x03
+    00000100 CDr00r00         [24]  284 	call	_change_bkg_tile_xy
+                                    285 ;src/PointerSelector.c:30: }
+    00000103 E8 06            [16]  286 	add	sp, #6
+    00000105 C9               [16]  287 	ret
+                                    288 ;src/PointerSelector.c:32: void remove_object_at_pointer(uint8_t x, uint8_t y){
+                                    289 ;	---------------------------------
+                                    290 ; Function remove_object_at_pointer
+                                    291 ; ---------------------------------
+    00000106                        292 _remove_object_at_pointer::
+    00000106 E8 FA            [16]  293 	add	sp, #-6
+    00000108 F8 05            [12]  294 	ldhl	sp,	#5
+    0000010A 73               [ 8]  295 	ld	(hl), e
+                                    296 ;src/PointerSelector.c:33: uint8_t indexBRx = (x - 8) / 8; //señala la columna
+    0000010B F8 01            [12]  297 	ldhl	sp,	#1
+    0000010D 22               [ 8]  298 	ld	(hl+), a
+    0000010E AF               [ 4]  299 	xor	a, a
+    0000010F 32               [ 8]  300 	ld	(hl-), a
+    00000110 2A               [ 8]  301 	ld	a, (hl+)
+    00000111 5F               [ 4]  302 	ld	e, a
+    00000112 56               [ 8]  303 	ld	d, (hl)
+    00000113 21 08 00         [12]  304 	ld	hl, #0x0008
+    00000116 7B               [ 4]  305 	ld	a, e
+    00000117 95               [ 4]  306 	sub	a, l
+    00000118 5F               [ 4]  307 	ld	e, a
+    00000119 7A               [ 4]  308 	ld	a, d
+    0000011A 9C               [ 4]  309 	sbc	a, h
+    0000011B F8 04            [12]  310 	ldhl	sp,	#4
+    0000011D 32               [ 8]  311 	ld	(hl-), a
+    0000011E 73               [ 8]  312 	ld	(hl), e
+    0000011F 2A               [ 8]  313 	ld	a, (hl+)
+    00000120 4F               [ 4]  314 	ld	c, a
+    00000121 46               [ 8]  315 	ld	b, (hl)
+    00000122 CB 7E            [12]  316 	bit	7, (hl)
+    00000124 28 0C            [12]  317 	jr	Z, 00103$
+    00000126 2B               [ 8]  318 	dec	hl
+    00000127 2B               [ 8]  319 	dec	hl
+    00000128 2B               [ 8]  320 	dec	hl
+    00000129 2A               [ 8]  321 	ld	a, (hl+)
+    0000012A 5F               [ 4]  322 	ld	e, a
+    0000012B 56               [ 8]  323 	ld	d, (hl)
+    0000012C 21 FF FF         [12]  324 	ld	hl, #0xffff
+    0000012F 19               [ 8]  325 	add	hl, de
+    00000130 4D               [ 4]  326 	ld	c, l
+    00000131 44               [ 4]  327 	ld	b, h
+    00000132                        328 00103$:
+    00000132 CB 28            [ 8]  329 	sra	b
+    00000134 CB 19            [ 8]  330 	rr	c
+    00000136 CB 28            [ 8]  331 	sra	b
+    00000138 CB 19            [ 8]  332 	rr	c
+    0000013A CB 28            [ 8]  333 	sra	b
+    0000013C CB 19            [ 8]  334 	rr	c
+    0000013E F8 00            [12]  335 	ldhl	sp,	#0
+    00000140 71               [ 8]  336 	ld	(hl), c
+                                    337 ;src/PointerSelector.c:34: uint8_t indexBRy = (y - 16) / 8; //señala la fila
+    00000141 F8 05            [12]  338 	ldhl	sp,	#5
+    00000143 7E               [ 8]  339 	ld	a, (hl)
+    00000144 F8 01            [12]  340 	ldhl	sp,	#1
+    00000146 22               [ 8]  341 	ld	(hl+), a
+    00000147 AF               [ 4]  342 	xor	a, a
+    00000148 32               [ 8]  343 	ld	(hl-), a
+    00000149 2A               [ 8]  344 	ld	a, (hl+)
+    0000014A 5F               [ 4]  345 	ld	e, a
+    0000014B 56               [ 8]  346 	ld	d, (hl)
+    0000014C 21 10 00         [12]  347 	ld	hl, #0x0010
+    0000014F 7B               [ 4]  348 	ld	a, e
+    00000150 95               [ 4]  349 	sub	a, l
+    00000151 5F               [ 4]  350 	ld	e, a
+    00000152 7A               [ 4]  351 	ld	a, d
+    00000153 9C               [ 4]  352 	sbc	a, h
+    00000154 F8 04            [12]  353 	ldhl	sp,	#4
+    00000156 32               [ 8]  354 	ld	(hl-), a
+    00000157 73               [ 8]  355 	ld	(hl), e
+    00000158 2A               [ 8]  356 	ld	a, (hl+)
+    00000159 4F               [ 4]  357 	ld	c, a
+    0000015A 46               [ 8]  358 	ld	b, (hl)
+    0000015B CB 7E            [12]  359 	bit	7, (hl)
+    0000015D 28 0C            [12]  360 	jr	Z, 00104$
+    0000015F 2B               [ 8]  361 	dec	hl
+    00000160 2B               [ 8]  362 	dec	hl
+    00000161 2B               [ 8]  363 	dec	hl
+    00000162 2A               [ 8]  364 	ld	a, (hl+)
+    00000163 5F               [ 4]  365 	ld	e, a
+    00000164 56               [ 8]  366 	ld	d, (hl)
+    00000165 21 F7 FF         [12]  367 	ld	hl, #0xfff7
+    00000168 19               [ 8]  368 	add	hl, de
+    00000169 4D               [ 4]  369 	ld	c, l
+    0000016A 44               [ 4]  370 	ld	b, h
+    0000016B                        371 00104$:
+    0000016B CB 28            [ 8]  372 	sra	b
+    0000016D CB 19            [ 8]  373 	rr	c
+    0000016F CB 28            [ 8]  374 	sra	b
+    00000171 CB 19            [ 8]  375 	rr	c
+    00000173 CB 28            [ 8]  376 	sra	b
+    00000175 CB 19            [ 8]  377 	rr	c
+                                    378 ;src/PointerSelector.c:35: uint16_t tileindexBR = 20 * indexBRy + indexBRx;
+    00000177 06 00            [ 8]  379 	ld	b, #0x00
+    00000179 69               [ 4]  380 	ld	l, c
+    0000017A 60               [ 4]  381 	ld	h, b
+    0000017B 29               [ 8]  382 	add	hl, hl
+    0000017C 29               [ 8]  383 	add	hl, hl
+    0000017D 09               [ 8]  384 	add	hl, bc
+    0000017E 29               [ 8]  385 	add	hl, hl
+    0000017F 29               [ 8]  386 	add	hl, hl
+    00000180 4D               [ 4]  387 	ld	c, l
+    00000181 44               [ 4]  388 	ld	b, h
+    00000182 F8 00            [12]  389 	ldhl	sp,	#0
+    00000184 7E               [ 8]  390 	ld	a, (hl)
+    00000185 16 00            [ 8]  391 	ld	d, #0x00
+    00000187 81               [ 4]  392 	add	a, c
+    00000188 5F               [ 4]  393 	ld	e, a
+    00000189 7A               [ 4]  394 	ld	a, d
+    0000018A 88               [ 4]  395 	adc	a, b
+    0000018B 57               [ 4]  396 	ld	d, a
+                                    397 ;src/PointerSelector.c:36: change_colision_map_at(tileindexBR, EMPTY);
+    0000018C D5               [16]  398 	push	de
+    0000018D AF               [ 4]  399 	xor	a, a
+    0000018E CDr00r00         [24]  400 	call	_change_colision_map_at
+    00000191 D1               [12]  401 	pop	de
+                                    402 ;src/PointerSelector.c:37: change_bkg_tile_xy(tileindexBR, 0);
+    00000192 AF               [ 4]  403 	xor	a, a
+    00000193 CDr00r00         [24]  404 	call	_change_bkg_tile_xy
+                                    405 ;src/PointerSelector.c:38: }
+    00000196 E8 06            [16]  406 	add	sp, #6
+    00000198 C9               [16]  407 	ret
+                                    408 ;src/PointerSelector.c:41: void control_pointer(Pointer* s){
+                                    409 ;	---------------------------------
+                                    410 ; Function control_pointer
+                                    411 ; ---------------------------------
+    00000199                        412 _control_pointer::
+    00000199 4B               [ 4]  413 	ld	c, e
+    0000019A 42               [ 4]  414 	ld	b, d
+                                    415 ;src/PointerSelector.c:43: if(joypad() & J_UP) {
+    0000019B CDr00r00         [24]  416 	call	_joypad
+                                    417 ;src/PointerSelector.c:44: s->y -= 8;
+    0000019E 59               [ 4]  418 	ld	e, c
+    0000019F 50               [ 4]  419 	ld	d, b
+    000001A0 13               [ 8]  420 	inc	de
+                                    421 ;src/PointerSelector.c:43: if(joypad() & J_UP) {
+    000001A1 CB 57            [ 8]  422 	bit	2, a
+    000001A3 28 05            [12]  423 	jr	Z, 00116$
+                                    424 ;src/PointerSelector.c:44: s->y -= 8;
+    000001A5 1A               [ 8]  425 	ld	a, (de)
+    000001A6 C6 F8            [ 8]  426 	add	a, #0xf8
+    000001A8 12               [ 8]  427 	ld	(de), a
+    000001A9 C9               [16]  428 	ret
+    000001AA                        429 00116$:
+                                    430 ;src/PointerSelector.c:45: } else if(joypad() & J_DOWN) {
+    000001AA D5               [16]  431 	push	de
+    000001AB CDr00r00         [24]  432 	call	_joypad
+    000001AE D1               [12]  433 	pop	de
+    000001AF CB 5F            [ 8]  434 	bit	3, a
+    000001B1 28 05            [12]  435 	jr	Z, 00113$
+                                    436 ;src/PointerSelector.c:46: s->y += 8;
+    000001B3 1A               [ 8]  437 	ld	a, (de)
+    000001B4 C6 08            [ 8]  438 	add	a, #0x08
+    000001B6 12               [ 8]  439 	ld	(de), a
+    000001B7 C9               [16]  440 	ret
+    000001B8                        441 00113$:
+                                    442 ;src/PointerSelector.c:47: } else if(joypad() & J_LEFT) {
+    000001B8 D5               [16]  443 	push	de
+    000001B9 CDr00r00         [24]  444 	call	_joypad
+    000001BC D1               [12]  445 	pop	de
+                                    446 ;src/PointerSelector.c:48: s->x -= 8;
+                                    447 ;src/PointerSelector.c:47: } else if(joypad() & J_LEFT) {
+    000001BD CB 4F            [ 8]  448 	bit	1, a
+    000001BF 28 05            [12]  449 	jr	Z, 00110$
+                                    450 ;src/PointerSelector.c:48: s->x -= 8;
+    000001C1 0A               [ 8]  451 	ld	a, (bc)
+    000001C2 C6 F8            [ 8]  452 	add	a, #0xf8
+    000001C4 02               [ 8]  453 	ld	(bc), a
+    000001C5 C9               [16]  454 	ret
+    000001C6                        455 00110$:
+                                    456 ;src/PointerSelector.c:49: } else if(joypad() & J_RIGHT) {
+    000001C6 D5               [16]  457 	push	de
+    000001C7 CDr00r00         [24]  458 	call	_joypad
+    000001CA D1               [12]  459 	pop	de
+    000001CB 0F               [ 4]  460 	rrca
+    000001CC 30 05            [12]  461 	jr	NC, 00107$
+                                    462 ;src/PointerSelector.c:50: s->x += 8;
+    000001CE 0A               [ 8]  463 	ld	a, (bc)
+    000001CF C6 08            [ 8]  464 	add	a, #0x08
+    000001D1 02               [ 8]  465 	ld	(bc), a
+    000001D2 C9               [16]  466 	ret
+    000001D3                        467 00107$:
+                                    468 ;src/PointerSelector.c:51: } else if(joypad() & J_A) {
+    000001D3 D5               [16]  469 	push	de
+    000001D4 CDr00r00         [24]  470 	call	_joypad
+    000001D7 D1               [12]  471 	pop	de
+    000001D8 CB 67            [ 8]  472 	bit	4, a
+    000001DA 28 06            [12]  473 	jr	Z, 00104$
+                                    474 ;src/PointerSelector.c:52: place_object_at_pointer(s->x, s->y);
+    000001DC 1A               [ 8]  475 	ld	a, (de)
+    000001DD 5F               [ 4]  476 	ld	e, a
+    000001DE 0A               [ 8]  477 	ld	a, (bc)
+    000001DF C3r71r00         [16]  478 	jp	_place_object_at_pointer
+    000001E2                        479 00104$:
+                                    480 ;src/PointerSelector.c:53: } else if(joypad() & J_B) {
+    000001E2 D5               [16]  481 	push	de
+    000001E3 CDr00r00         [24]  482 	call	_joypad
+    000001E6 D1               [12]  483 	pop	de
+    000001E7 CB 6F            [ 8]  484 	bit	5, a
+    000001E9 C8               [20]  485 	ret	Z
+                                    486 ;src/PointerSelector.c:54: remove_object_at_pointer(s->x, s->y);
+    000001EA 1A               [ 8]  487 	ld	a, (de)
+    000001EB 5F               [ 4]  488 	ld	e, a
+    000001EC 0A               [ 8]  489 	ld	a, (bc)
+                                    490 ;src/PointerSelector.c:56: }
+    000001ED C3r06r01         [16]  491 	jp	_remove_object_at_pointer
+                                    492 ;src/PointerSelector.c:58: void update_pointer(Pointer* s) { 
+                                    493 ;	---------------------------------
+                                    494 ; Function update_pointer
+                                    495 ; ---------------------------------
+    000001F0                        496 _update_pointer::
+                                    497 ;src/PointerSelector.c:59: control_pointer(s);
+    000001F0 D5               [16]  498 	push	de
+    000001F1 CDr99r01         [24]  499 	call	_control_pointer
+    000001F4 D1               [12]  500 	pop	de
+                                    501 ;src/PointerSelector.c:60: move_pointer(s);
+                                    502 ;src/PointerSelector.c:61: }
+    000001F5 C3r18r00         [16]  503 	jp	_move_pointer
+                                    504 ;src/PointerSelector.c:63: void hide_pointer(void){
+                                    505 ;	---------------------------------
+                                    506 ; Function hide_pointer
+                                    507 ; ---------------------------------
+    000001F8                        508 _hide_pointer::
+                                    509 ;src/PointerSelector.c:64: for(uint8_t i= 4; i<=7; i++){
+    000001F8 0E 04            [ 8]  510 	ld	c, #0x04
+    000001FA                        511 00104$:
+    000001FA 3E 07            [ 8]  512 	ld	a, #0x07
+    000001FC 91               [ 4]  513 	sub	a, c
+    000001FD D8               [20]  514 	ret	C
+                                    515 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000001FE 11r00r00         [12]  516 	ld	de, #_shadow_OAM+0
+    00000201 69               [ 4]  517 	ld	l, c
+    00000202 AF               [ 4]  518 	xor	a, a
+    00000203 67               [ 4]  519 	ld	h, a
+    00000204 29               [ 8]  520 	add	hl, hl
+    00000205 29               [ 8]  521 	add	hl, hl
+    00000206 19               [ 8]  522 	add	hl, de
+                                    523 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    00000207 AF               [ 4]  524 	xor	a, a
+    00000208 22               [ 8]  525 	ld	(hl+), a
+    00000209 77               [ 8]  526 	ld	(hl), a
+                                    527 ;src/PointerSelector.c:64: for(uint8_t i= 4; i<=7; i++){
+    0000020A 0C               [ 4]  528 	inc	c
+                                    529 ;src/PointerSelector.c:67: }
+    0000020B 18 ED            [12]  530 	jr	00104$
+                                    531 	.area _CODE
+                                    532 	.area _INITIALIZER
+                                    533 	.area _CABS (ABS)
