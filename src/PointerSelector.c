@@ -6,7 +6,6 @@
 void pointer_init(Pointer* s) {
     s->x = 80;
     s->y = 72;
-
     for(uint8_t i = 4;i<=7;i++){
         s->sprite_ids[i] = i;
     }
@@ -37,5 +36,11 @@ void control_pointer(Pointer* s){
 void update_pointer(Pointer* s) { 
     control_pointer(s);
     move_pointer(s);
+}
+
+void hide_pointer(Pointer* s){
+    for(uint8_t i= 4; i<=7; i++){
+        move_sprite(i, 0, 0);
+    }
 }
 

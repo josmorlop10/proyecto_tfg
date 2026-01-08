@@ -52,6 +52,7 @@ void main(void)
             }
             update_pointer(&s);
             if(joypad() & J_START){
+                hide_pointer(&s);
                 update_game_state(STATE_GAME_RUNNING);
             }
             break;

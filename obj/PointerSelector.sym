@@ -8,6 +8,7 @@ Symbol Table
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
   0 _control_pointer                                                00000071 GR
+  0 _hide_pointer                                                   000000AE GR
     _joypad                                                         ******** GX
   0 _move_pointer                                                   00000018 GR
   0 _pointer_init                                                   00000000 GR
@@ -20,7 +21,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       AE   flags    0
+   0 _CODE                                      size       C3   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

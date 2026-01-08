@@ -9,6 +9,7 @@
 ;--------------------------------------------------------
 	.globl _main
 	.globl _init_gfx
+	.globl _hide_pointer
 	.globl _update_pointer
 	.globl _pointer_init
 	.globl _get_colision_from_map
@@ -166,37 +167,40 @@ _main::
 	call	_joypad
 	rlca
 	jr	NC, 00110$
-;src/main.c:55: update_game_state(STATE_GAME_RUNNING);
+;src/main.c:55: hide_pointer(&s);
+	ld	de, #_s
+	call	_hide_pointer
+;src/main.c:56: update_game_state(STATE_GAME_RUNNING);
 	ld	a, #0x03
 	call	_update_game_state
-;src/main.c:57: break;
+;src/main.c:58: break;
 	jr	00110$
-;src/main.c:59: case STATE_GAME_RUNNING:
+;src/main.c:60: case STATE_GAME_RUNNING:
 00106$:
-;src/main.c:60: if(last_state != STATE_GAME_RUNNING) {
+;src/main.c:61: if(last_state != STATE_GAME_RUNNING) {
 	ld	a, (#_last_state)
 	sub	a, #0x03
 	jr	Z, 00108$
-;src/main.c:61: character_init(&p);
+;src/main.c:62: character_init(&p);
 	ld	de, #_p
 	call	_character_init
-;src/main.c:62: last_state = STATE_GAME_RUNNING;
+;src/main.c:63: last_state = STATE_GAME_RUNNING;
 	ld	hl, #_last_state
 	ld	(hl), #0x03
 00108$:
-;src/main.c:64: update_character(&p);
+;src/main.c:65: update_character(&p);
 	ld	de, #_p
 	call	_update_character
-;src/main.c:69: }
+;src/main.c:70: }
 00110$:
-;src/main.c:70: performantdelay(10);
+;src/main.c:71: performantdelay(10);
 	ld	a, #0x0a
 	call	_performantdelay
-;src/main.c:73: if(joypad() & J_A){
+;src/main.c:74: if(joypad() & J_A){
 	call	_joypad
 	bit	4, a
 	jr	Z, 00115$
-;src/main.c:74: for(uint16_t i = 0; i<360; i++){
+;src/main.c:75: for(uint16_t i = 0; i<360; i++){
 	ld	bc, #0x0000
 00118$:
 	ld	e, c
@@ -206,7 +210,7 @@ _main::
 	ld	a, d
 	sbc	a, #0x01
 	jr	NC, 00115$
-;src/main.c:75: printf("%d",global_colision_map[i]);
+;src/main.c:76: printf("%d",global_colision_map[i]);
 	ld	hl, #_global_colision_map
 	add	hl, bc
 	ld	e, (hl)
@@ -219,9 +223,9 @@ _main::
 	call	_printf
 	add	sp, #4
 	pop	bc
-;src/main.c:74: for(uint16_t i = 0; i<360; i++){
+;src/main.c:75: for(uint16_t i = 0; i<360; i++){
 	inc	bc
-;src/main.c:80: }
+;src/main.c:81: }
 	jr	00118$
 ___str_0:
 	.ascii "%d"

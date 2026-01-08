@@ -1,12 +1,13 @@
 XL4
-H 9 areas 7 global symbols
+H 9 areas 8 global symbols
 M PointerSelector
 S .__.ABS. Def00000000
 S _shadow_OAM Ref00000000
 S _joypad Ref00000000
-A _CODE size AE flags 0 addr 0
+A _CODE size C3 flags 0 addr 0
 S _control_pointer Def00000071
 S _update_pointer Def000000A6
+S _hide_pointer Def000000AE
 S _pointer_init Def00000000
 S _move_pointer Def00000018
 A _DATA size 0 flags 0 addr 0
@@ -67,3 +68,13 @@ T A6 00 00 00
 R 00 00 00 00
 T A6 00 00 00 D5 CD 71 00 D1 C3 18 00
 R 00 00 00 00 00 06 00 00 00 0A 00 00
+T AE 00 00 00
+R 00 00 00 00
+T AE 00 00 00 0E 04
+R 00 00 00 00
+T B0 00 00 00
+R 00 00 00 00
+T B0 00 00 00 3E 07 91 D8 11 00 00 69 AF 67 29 29
+R 00 00 00 00 02 09 01 00
+T BC 00 00 00 19 AF 22 77 0C 18 ED
+R 00 00 00 00
