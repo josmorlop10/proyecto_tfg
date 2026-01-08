@@ -8,19 +8,26 @@
 #include "Headers/Common.h"
 #include "Headers/Character.h"
 #include "Headers/LevelLogic.h"
+#include "Headers/PointerSelector.h"
 
 Character p;
-
+Pointer s;
 GameState last_state;
 
 void init_gfx(void){
     //player
-    set_sprite_data(0, 5, duck);
+    set_sprite_data(0, 4, duck);
     set_sprite_tile(0,0);
     set_sprite_tile(1,1);
     set_sprite_tile(2,2);
     set_sprite_tile(3,3);
+
+    //pointer
+    set_sprite_data(4, 4, selector);
     set_sprite_tile(4,4);
+    set_sprite_tile(5,5);
+    set_sprite_tile(6,6);
+    set_sprite_tile(7,7);
 
     SHOW_SPRITES;
 
@@ -34,6 +41,7 @@ void init_gfx(void){
 void main(void)
 {   
     init_gfx();
+    pointer_init(&s);
 
     while(1) {
         switch ( global_game_state)
@@ -42,7 +50,7 @@ void main(void)
             if(last_state != STATE_GAME_SETTING) {
                 last_state = STATE_GAME_SETTING;
             }
-
+            update_pointer(&s);
             if(joypad() & J_START){
                 update_game_state(STATE_GAME_RUNNING);
             }
@@ -67,5 +75,6 @@ void main(void)
                 printf("%d",global_colision_map[i]);
             }
         }
+
     }
 }

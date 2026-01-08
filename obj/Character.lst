@@ -912,23 +912,17 @@
     000003DA 56               [ 8]  912 	ld	d, (hl)
     000003DB CDrDCr02         [24]  913 	call	_flip_direction
     000003DE                        914 00103$:
-                                    915 ;src/Character.c:135: control_player(p); //DEBUG
+                                    915 ;src/Character.c:136: move_character(p);
     000003DE F8 04            [12]  916 	ldhl	sp,	#4
     000003E0 2A               [ 8]  917 	ld	a, (hl+)
     000003E1 5F               [ 4]  918 	ld	e, a
     000003E2 56               [ 8]  919 	ld	d, (hl)
-    000003E3 CDrEBr02         [24]  920 	call	_control_player
-                                    921 ;src/Character.c:136: move_character(p);
-    000003E6 F8 04            [12]  922 	ldhl	sp,	#4
-    000003E8 2A               [ 8]  923 	ld	a, (hl+)
-    000003E9 5F               [ 4]  924 	ld	e, a
-    000003EA 56               [ 8]  925 	ld	d, (hl)
-    000003EB CDrC1r01         [24]  926 	call	_move_character
-                                    927 ;src/Character.c:137: }
-    000003EE E8 06            [16]  928 	add	sp, #6
-    000003F0 C9               [16]  929 	ret
-                                    930 	.area _CODE
-                                    931 	.area _INITIALIZER
-    00000000                        932 __xinit__debug:
-    00000000 00                     933 	.db #0x00	; 0
-                                    934 	.area _CABS (ABS)
+    000003E3 CDrC1r01         [24]  920 	call	_move_character
+                                    921 ;src/Character.c:137: }
+    000003E6 E8 06            [16]  922 	add	sp, #6
+    000003E8 C9               [16]  923 	ret
+                                    924 	.area _CODE
+                                    925 	.area _INITIALIZER
+    00000000                        926 __xinit__debug:
+    00000000 00                     927 	.db #0x00	; 0
+                                    928 	.area _CABS (ABS)

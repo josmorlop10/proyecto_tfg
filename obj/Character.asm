@@ -912,12 +912,6 @@ _update_character::
 	ld	d, (hl)
 	call	_flip_direction
 00103$:
-;src/Character.c:135: control_player(p); //DEBUG
-	ldhl	sp,	#4
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	call	_control_player
 ;src/Character.c:136: move_character(p);
 	ldhl	sp,	#4
 	ld	a, (hl+)
