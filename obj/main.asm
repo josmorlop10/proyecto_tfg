@@ -56,12 +56,12 @@ _last_state::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;src/main.c:17: void init_gfx(void){
+;src/main.c:16: void init_gfx(void){
 ;	---------------------------------
 ; Function init_gfx
 ; ---------------------------------
 _init_gfx::
-;src/main.c:19: set_sprite_data(0, 5, duck);
+;src/main.c:18: set_sprite_data(0, 5, duck);
 	ld	de, #_duck
 	push	de
 	ld	hl, #0x500
@@ -79,25 +79,25 @@ _init_gfx::
 	ld	(hl), #0x03
 	ld	hl, #(_shadow_OAM + 18)
 	ld	(hl), #0x04
-;src/main.c:26: character_init(&p,80,40);
+;src/main.c:25: character_init(&p,80,40);
 	ld	a, #0x28
 	push	af
 	inc	sp
 	ld	a, #0x50
 	ld	de, #_p
 	call	_character_init
-;src/main.c:27: SHOW_SPRITES;
+;src/main.c:26: SHOW_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x02
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:30: set_bkg_data(0, 28, map_tiles);
+;src/main.c:29: set_bkg_data(0, 28, map_tiles);
 	ld	de, #_map_tiles
 	push	de
 	ld	hl, #0x1c00
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;src/main.c:31: set_bkg_tiles(0,0,20,18,map1);
+;src/main.c:30: set_bkg_tiles(0,0,20,18,map1);
 	ld	de, #_map1+0
 	push	de
 	push	de
@@ -109,73 +109,73 @@ _init_gfx::
 	call	_set_bkg_tiles
 	add	sp, #6
 	pop	de
-;src/main.c:32: get_colision_from_map(map1, global_colision_map);
+;src/main.c:31: get_colision_from_map(map1, global_colision_map);
 	ld	bc, #_global_colision_map
 	call	_get_colision_from_map
-;src/main.c:33: SHOW_BKG;
+;src/main.c:32: SHOW_BKG;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x01
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:34: }
+;src/main.c:33: }
 	ret
-;src/main.c:36: void main(void)
+;src/main.c:35: void main(void)
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
 _main::
-;src/main.c:38: init_gfx();
+;src/main.c:37: init_gfx();
 	call	_init_gfx
-;src/main.c:40: while(1) {
+;src/main.c:39: while(1) {
 00115$:
-;src/main.c:41: switch ( global_game_state)
+;src/main.c:40: switch ( global_game_state)
 	ld	a,(#_global_game_state)
 	cp	a,#0x02
 	jr	Z, 00101$
 	sub	a, #0x03
 	jr	Z, 00106$
 	jr	00110$
-;src/main.c:43: case STATE_GAME_SETTING:
+;src/main.c:42: case STATE_GAME_SETTING:
 00101$:
-;src/main.c:44: if(last_state != STATE_GAME_SETTING) {
+;src/main.c:43: if(last_state != STATE_GAME_SETTING) {
 	ld	a, (#_last_state)
 	sub	a, #0x02
 	jr	Z, 00103$
-;src/main.c:45: last_state = STATE_GAME_SETTING;
+;src/main.c:44: last_state = STATE_GAME_SETTING;
 	ld	hl, #_last_state
 	ld	(hl), #0x02
 00103$:
-;src/main.c:48: if(joypad() & J_START){
+;src/main.c:47: if(joypad() & J_START){
 	call	_joypad
 	rlca
 	jr	NC, 00110$
-;src/main.c:49: update_game_state(STATE_GAME_RUNNING);
+;src/main.c:48: update_game_state(STATE_GAME_RUNNING);
 	ld	a, #0x03
 	call	_update_game_state
-;src/main.c:51: break;
+;src/main.c:50: break;
 	jr	00110$
-;src/main.c:53: case STATE_GAME_RUNNING:
+;src/main.c:52: case STATE_GAME_RUNNING:
 00106$:
-;src/main.c:54: if(last_state != STATE_GAME_RUNNING) {
+;src/main.c:53: if(last_state != STATE_GAME_RUNNING) {
 	ld	a, (#_last_state)
 	sub	a, #0x03
 	jr	Z, 00108$
-;src/main.c:55: last_state = STATE_GAME_RUNNING;
+;src/main.c:54: last_state = STATE_GAME_RUNNING;
 	ld	hl, #_last_state
 	ld	(hl), #0x03
 00108$:
-;src/main.c:57: update_character(&p);
+;src/main.c:56: update_character(&p);
 	ld	de, #_p
 	call	_update_character
-;src/main.c:62: }
+;src/main.c:61: }
 00110$:
-;src/main.c:63: performantdelay(10);
+;src/main.c:62: performantdelay(10);
 	ld	a, #0x0a
 	call	_performantdelay
-;src/main.c:66: if(joypad() & J_A){
+;src/main.c:65: if(joypad() & J_A){
 	call	_joypad
 	bit	4, a
 	jr	Z, 00115$
-;src/main.c:67: for(uint16_t i = 0; i<360; i++){
+;src/main.c:66: for(uint16_t i = 0; i<360; i++){
 	ld	bc, #0x0000
 00118$:
 	ld	e, c
@@ -185,7 +185,7 @@ _main::
 	ld	a, d
 	sbc	a, #0x01
 	jr	NC, 00115$
-;src/main.c:68: printf("%d",global_colision_map[i]);
+;src/main.c:67: printf("%d",global_colision_map[i]);
 	ld	hl, #_global_colision_map
 	add	hl, bc
 	ld	e, (hl)
@@ -198,9 +198,9 @@ _main::
 	call	_printf
 	add	sp, #4
 	pop	bc
-;src/main.c:67: for(uint16_t i = 0; i<360; i++){
+;src/main.c:66: for(uint16_t i = 0; i<360; i++){
 	inc	bc
-;src/main.c:72: }
+;src/main.c:71: }
 	jr	00118$
 ___str_0:
 	.ascii "%d"

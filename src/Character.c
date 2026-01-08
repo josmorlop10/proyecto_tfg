@@ -32,8 +32,8 @@ void set_direction(Character* p,  int8_t x, int8_t y){
 void character_init(Character* p, uint8_t start_x, uint8_t start_y) {
     p->x = start_x;
     p->y = start_y;
-    p->dir_x = 0;  
-    p->dir_y = 1; 
+    p->dir_x = 1;  
+    p->dir_y = 0; 
     p->speed = 8;
     for(uint8_t i = 0;i<=3;i++){
         p->sprite_ids[i] = i;

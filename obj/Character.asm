@@ -356,14 +356,14 @@ _character_init::
 	ldhl	sp,	#2
 	ld	a, (hl)
 	ld	(bc), a
-;src/Character.c:35: p->dir_x = 0;  
+;src/Character.c:35: p->dir_x = 1;  
 	ld	hl, #0x0006
 	add	hl, de
-	ld	(hl), #0x00
-;src/Character.c:36: p->dir_y = 1; 
+	ld	(hl), #0x01
+;src/Character.c:36: p->dir_y = 0; 
 	ld	hl, #0x0007
 	add	hl, de
-	ld	(hl), #0x01
+	ld	(hl), #0x00
 ;src/Character.c:37: p->speed = 8;
 	ld	hl, #0x0008
 	add	hl, de
