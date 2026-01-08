@@ -8,11 +8,10 @@ typedef struct {
     uint8_t x, y;
     int8_t dir_x, dir_y; 
     int8_t speed;
+    //atributos derivados
+    uint16_t tileindexBR;
+    uint16_t next_tileindexBR;
 } Character;
-
-//atributos derivados.
-uint16_t tile_index_BR(Character* p);
-uint16_t next_tile_index_BR(Character* p);
 
 void character_init(Character* p);
 void update_character(Character* p);

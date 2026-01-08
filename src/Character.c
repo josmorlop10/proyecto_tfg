@@ -6,23 +6,6 @@
 
 uint8_t debug = 0;
 
-//atributos derivados.
-uint16_t tile_index_BR(Character* p){
-    uint8_t indexBRx = (p->x - 8) / 8; //señala la columna
-    uint8_t indexBRy = (p->y - 16) / 8; //señala la fila
-    uint16_t tileindexBR = 20 * (indexBRy) + (indexBRx);
-
-    return tileindexBR;
-}
-
-uint16_t next_tile_index_BR(Character* p){
-    uint8_t next_indexBRx = (p->x - 8 + SPRITESIZE * p->dir_x) / 8; //señala la columna
-    uint8_t next_indexBRy = (p->y - 16 + SPRITESIZE * p->dir_y) / 8; //señala la fila
-    uint16_t next_tileindexBR = 20 * (next_indexBRy) + (next_indexBRx);
-
-    return next_tileindexBR;
-}
-
 void set_direction(Character* p,  int8_t x, int8_t y){
     p->dir_x = x;
     p->dir_y = y;
@@ -43,6 +26,8 @@ void character_init(Character* p) {
     for(uint8_t i = 0;i<=3;i++){
         p->sprite_ids[i] = i;
     }
+    p->tileindexBR = 0;
+    p->next_tileindexBR = 0;
 }
 
 void move_character(Character* p) {
@@ -64,7 +49,7 @@ void movement_step_by_step(Character* p){
 
 uint8_t canplayermove(Character* p){
     //devuelve 1 si el personaje puede andar, y 0 si no puede
-    uint16_t tileindexBR = next_tile_index_BR(p);
+    uint16_t tileindexBR = p->next_tileindexBR;
     uint16_t tileindexTL = tileindexBR -21;
     uint16_t tileindexTR = tileindexBR -20;
     uint16_t tileindexBL = tileindexBR -1;
@@ -99,6 +84,9 @@ void flip_direction(Character* p){
 }
 
 void update_character(Character* p) { //devuelve las teclas actuales
+
+    p->tileindexBR = tileindex_from_xy(p->x, p->y);
+    p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
 
      if(canplayermove(p)) {
         p->x += p->speed * p->dir_x;
