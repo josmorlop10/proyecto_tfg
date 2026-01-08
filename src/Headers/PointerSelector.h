@@ -9,7 +9,6 @@ typedef struct {
     uint16_t tileindexBR;
 } Pointer;
 
-uint16_t calculate_pointer_tileindexBR(Pointer* s);
 void pointer_init(Pointer* s);
 void move_pointer(Pointer* s);
 void control_pointer(Pointer* s);

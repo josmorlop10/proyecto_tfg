@@ -14,13 +14,14 @@ Symbol Table
     _change_colision_map_at                                         ******** GX
   0 _control_pointer                                                000001C1 GR
     _global_colision_map                                            ******** GX
-  0 _hide_pointer                                                   00000238 GR
+  0 _hide_pointer                                                   00000244 GR
     _joypad                                                         ******** GX
   0 _move_pointer                                                   000000BE GR
   0 _place_object_at_pointer                                        00000117 GR
   0 _pointer_init                                                   00000094 GR
   0 _remove_object_at_pointer                                       00000133 GR
     _shadow_OAM                                                     ******** GX
+    _tileindex_from_xy                                              ******** GX
   0 _update_pointer                                                 00000222 GR
 
 
@@ -29,7 +30,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      24D   flags    0
+   0 _CODE                                      size      259   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

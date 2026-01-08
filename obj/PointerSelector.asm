@@ -11,6 +11,7 @@
 	.globl _all_zero_below_pointer
 	.globl _joypad
 	.globl _change_colision_map_at
+	.globl _tileindex_from_xy
 	.globl _change_bkg_tile_xy
 	.globl _calculate_pointer_tileindexBR
 	.globl _pointer_init
@@ -576,22 +577,34 @@ _control_pointer::
 ; Function update_pointer
 ; ---------------------------------
 _update_pointer::
-;src/PointerSelector.c:79: s->tileindexBR = calculate_pointer_tileindexBR(s);
+	ld	c, e
+	ld	b, d
+;src/PointerSelector.c:79: s->tileindexBR = tileindex_from_xy(s->x, s->y);
 	ld	hl, #0x0006
-	add	hl, de
+	add	hl, bc
+	ld	e, c
+	ld	d, b
+	inc	de
+	ld	a, (de)
+	ld	e, a
+	ld	a, (bc)
 	push	hl
-	push	de
-	call	_calculate_pointer_tileindexBR
-	pop	de
+	push	bc
+	call	_tileindex_from_xy
+	ld	e, c
+	ld	d, b
+	pop	bc
 	pop	hl
-	ld	a, c
+	ld	a, e
 	ld	(hl+), a
-	ld	(hl), b
+	ld	(hl), d
 ;src/PointerSelector.c:80: control_pointer(s);
-	push	de
+	push	bc
+	ld	e, c
+	ld	d, b
 	call	_control_pointer
-	pop	de
 ;src/PointerSelector.c:81: move_pointer(s);
+	pop	de
 ;src/PointerSelector.c:82: }
 	jp	_move_pointer
 ;src/PointerSelector.c:84: void hide_pointer(void){

@@ -4,13 +4,6 @@
 #include <gb/gb.h>
 #include <stdio.h>
 
-uint16_t calculate_pointer_tileindexBR(Pointer* s){
-    uint8_t indexBRx = (s->x - 8) / 8; //señala la columna
-    uint8_t indexBRy = (s->y - 16) / 8; //señala la fila
-    uint16_t tileindexBR = 20 * indexBRy + indexBRx;
-    return tileindexBR;
-}
-
 void pointer_init(Pointer* s) {
     s->x = 80;
     s->y = 72;
@@ -76,7 +69,7 @@ void control_pointer(Pointer* s){
 }
 
 void update_pointer(Pointer* s) { 
-    s->tileindexBR = calculate_pointer_tileindexBR(s);
+    s->tileindexBR = tileindex_from_xy(s->x, s->y);
     control_pointer(s);
     move_pointer(s);
 }
