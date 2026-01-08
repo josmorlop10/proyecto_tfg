@@ -345,8 +345,9 @@ _set_direction::
 ; ---------------------------------
 _character_init::
 	dec	sp
-;src/Character.c:34: get_init_point_from_map();
+;src/Character.c:34: get_init_point_from_map(global_colision_map);
 	push	de
+	ld	de, #_global_colision_map
 	call	_get_init_point_from_map
 	pop	de
 ;src/Character.c:35: uint8_t player_x = (global_init_point % 20) * 8 + 8; //columna

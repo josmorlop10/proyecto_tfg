@@ -146,43 +146,55 @@ _get_colision_from_map::
 ;src/LevelLogic.c:28: }
 	add	sp, #5
 	ret
-;src/LevelLogic.c:31: void get_init_point_from_map(){
+;src/LevelLogic.c:31: void get_init_point_from_map(uint8_t colision_map[360]){
 ;	---------------------------------
 ; Function get_init_point_from_map
 ; ---------------------------------
 _get_init_point_from_map::
+	dec	sp
+	dec	sp
 ;src/LevelLogic.c:32: for(uint16_t i = 0; i<360; i++){
+	xor	a, a
+	ldhl	sp,	#0
+	ld	(hl+), a
+	ld	(hl), a
 	ld	bc, #0x0000
-	ld	d, b
-	ld	e, c
 00105$:
-	ld	l, e
-	ld	h, d
+	ld	l, c
+	ld	h, b
 	ld	a, l
 	sub	a, #0x68
 	ld	a, h
 	sbc	a, #0x01
-	ret	NC
-;src/LevelLogic.c:33: if(global_colision_map[i] == SOURCE){
-	ld	hl, #_global_colision_map
+	jr	NC, 00107$
+;src/LevelLogic.c:33: if(colision_map[i] == SOURCE){
+	ld	l, c
+	ld	h, b
 	add	hl, de
 	ld	a, (hl)
 	sub	a, #0x03
 	jr	NZ, 00106$
 ;src/LevelLogic.c:34: global_init_point = i;
-	ld	hl, #_global_init_point
-	ld	a, c
-	ld	(hl+), a
-	ld	(hl), b
+	ldhl	sp,	#0
+	ld	a, (hl)
+	ld	(#_global_init_point),a
+	ldhl	sp,	#1
+	ld	a, (hl)
+	ld	(#_global_init_point + 1),a
 ;src/LevelLogic.c:35: break;
-	ret
+	jr	00107$
 00106$:
 ;src/LevelLogic.c:32: for(uint16_t i = 0; i<360; i++){
-	inc	de
-	ld	c, e
-	ld	b, d
-;src/LevelLogic.c:38: }
+	inc	bc
+	inc	sp
+	inc	sp
+	push	bc
 	jr	00105$
+00107$:
+;src/LevelLogic.c:38: }
+	inc	sp
+	inc	sp
+	ret
 	.area _CODE
 	.area _INITIALIZER
 __xinit__global_game_state:

@@ -28,9 +28,9 @@ void get_colision_from_map(const unsigned char in[], uint8_t out[]){
 }
 
 //get init point from colision map
-void get_init_point_from_map(){
+void get_init_point_from_map(uint8_t colision_map[360]){
      for(uint16_t i = 0; i<360; i++){
-          if(global_colision_map[i] == SOURCE){
+          if(colision_map[i] == SOURCE){
                global_init_point = i;
                break;
           }

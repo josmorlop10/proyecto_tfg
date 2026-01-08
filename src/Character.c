@@ -31,7 +31,7 @@ void set_direction(Character* p,  int8_t x, int8_t y){
 //Character
 void character_init(Character* p) {
 
-    get_init_point_from_map();
+    get_init_point_from_map(global_colision_map);
     uint8_t player_x = (global_init_point % 20) * 8 + 8; //columna
     uint8_t player_y = (global_init_point / 20) * 8 + 16; //fila
 

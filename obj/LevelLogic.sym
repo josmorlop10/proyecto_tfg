@@ -23,7 +23,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       84   flags    0
+   0 _CODE                                      size       94   flags    0
    1 _DATA                                      size       2A   flags    0
    2 _INITIALIZED                               size      169   flags    0
    3 _DABS                                      size        0   flags    8
