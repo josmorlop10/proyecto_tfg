@@ -4,6 +4,12 @@
 #include <gb/gb.h>
 #include <stdio.h>
 
+uint16_t calculate_pointer_tileindexBR(Pointer* s){
+    uint8_t indexBRx = (s->x - 8) / 8; //señala la columna
+    uint8_t indexBRy = (s->y - 16) / 8; //señala la fila
+    uint16_t tileindexBR = 20 * indexBRy + indexBRx;
+    return tileindexBR;
+}
 
 void pointer_init(Pointer* s) {
     s->x = 80;
@@ -11,6 +17,7 @@ void pointer_init(Pointer* s) {
     for(uint8_t i = 4;i<=7;i++){
         s->sprite_ids[i] = i;
     }
+    s->tileindexBR = 0;
 }
 
 void move_pointer(Pointer* s) {
@@ -21,22 +28,31 @@ void move_pointer(Pointer* s) {
 
 }
 
-void place_object_at_pointer(uint8_t x, uint8_t y){
-    uint8_t indexBRx = (x - 8) / 8; //señala la columna
-    uint8_t indexBRy = (y - 16) / 8; //señala la fila
-    uint16_t tileindexBR = 20 * indexBRy + indexBRx;
-    change_colision_map_at(tileindexBR, SOLID);
-    change_bkg_tile_xy(tileindexBR, 3);
+void place_object_at_pointer(Pointer* s){
+    change_colision_map_at(s->tileindexBR, SOLID);
+    change_bkg_tile_xy(s->tileindexBR, 3);
 }
 
-void remove_object_at_pointer(uint8_t x, uint8_t y){
-    uint8_t indexBRx = (x - 8) / 8; //señala la columna
-    uint8_t indexBRy = (y - 16) / 8; //señala la fila
-    uint16_t tileindexBR = 20 * indexBRy + indexBRx;
-    change_colision_map_at(tileindexBR, EMPTY);
-    change_bkg_tile_xy(tileindexBR, 0);
+void remove_object_at_pointer(Pointer* s){
+    change_colision_map_at(s->tileindexBR, EMPTY);
+    change_bkg_tile_xy(s->tileindexBR, 0);
 }
 
+uint8_t all_zero_below_pointer(Pointer* s){
+    return (global_colision_map[s->tileindexBR] == EMPTY) 
+           && (global_colision_map[s->tileindexBR-1] == EMPTY)
+           && (global_colision_map[s->tileindexBR-20] == EMPTY)
+           && (global_colision_map[s->tileindexBR-21] == EMPTY);
+}
+
+uint8_t all_disj_zero_below_pointer(Pointer* s){
+    //TODO esto hay q cambiarlo. Logicamente no tiene sentido pues dos
+    // tiles pueden ser disitntos yy borras la mitad de cada uno
+    return (global_colision_map[s->tileindexBR] != EMPTY) 
+           && (global_colision_map[s->tileindexBR-1] != EMPTY)
+           && (global_colision_map[s->tileindexBR-20] != EMPTY)
+           && (global_colision_map[s->tileindexBR-21] != EMPTY);
+}
 
 void control_pointer(Pointer* s){
 
@@ -49,13 +65,18 @@ void control_pointer(Pointer* s){
     } else if(joypad() & J_RIGHT) {
         s->x += 8;
     } else if(joypad() & J_A) {
-        place_object_at_pointer(s->x, s->y);
+        if(all_zero_below_pointer(s)){
+            place_object_at_pointer(s);
+        }
     } else if(joypad() & J_B) {
-        remove_object_at_pointer(s->x, s->y);
+        if(all_disj_zero_below_pointer(s)){
+            remove_object_at_pointer(s);
+        }
     }
 }
 
 void update_pointer(Pointer* s) { 
+    s->tileindexBR = calculate_pointer_tileindexBR(s);
     control_pointer(s);
     move_pointer(s);
 }
