@@ -1,0 +1,30 @@
+XL4
+H 9 areas 2 global symbols
+M duck
+S .__.ABS. Def00000000
+A _CODE size 50 flags 0 addr 0
+S _duck Def00000000
+A _DATA size 0 flags 0 addr 0
+A _INITIALIZED size 0 flags 0 addr 0
+A _DABS size 0 flags 8 addr 0
+A _HOME size 0 flags 0 addr 0
+A _GSINIT size 0 flags 0 addr 0
+A _GSFINAL size 0 flags 0 addr 0
+A _INITIALIZER size 0 flags 0 addr 0
+A _CABS size 0 flags 8 addr 0
+T 00 00 00 00
+R 00 00 00 00
+T 00 00 00 00 20 00 1E 20 83 1C 7D 82 0F 70 16 09
+R 00 00 00 00
+T 0C 00 00 00 3E 01 32 0D 2F 10 29 16 38 07 38 07
+R 00 00 00 00
+T 18 00 00 00 1E 03 0D 03 00 01 00 00 00 00 00 00
+R 00 00 00 00
+T 24 00 00 00 C0 00 F0 00 F8 00 48 B0 DC B0 DC B0
+R 00 00 00 00
+T 30 00 00 00 FC 00 FC 00 78 87 00 FF 00 FC E0 E0
+R 00 00 00 00
+T 3C 00 00 00 00 C0 00 00 00 00 00 00 00 00 00 00
+R 00 00 00 00
+T 48 00 00 00 00 00 00 00 00 00 00 00
+R 00 00 00 00
