@@ -15,6 +15,8 @@ typedef enum {
     STATE_SELECTION,
     STATE_GAME_SETTING,
     STATE_GAME_RUNNING,
+    STATE_GAME_PAUSED,
+    STATE_GAME_OVER
 } GameState;
 
 struct TileEvent {
