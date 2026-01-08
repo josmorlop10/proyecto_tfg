@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "gb.h": "c",
+        "direction.h": "c",
+        "stdint.h": "c",
+        "common.h": "c",
+        "map_tiles.h": "c",
+        "selector.h": "c",
+        "*.bin": "c"
+    },
+    "C_Cpp.errorSquiggles": "enabled"
+}

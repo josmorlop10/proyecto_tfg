@@ -13,7 +13,6 @@ Character p;
 
 GameState last_state;
 
-// No definir global_current_state aquí, solo usar extern desde Selector.h
 void init_gfx(void){
     //player
     set_sprite_data(0, 5, duck);
