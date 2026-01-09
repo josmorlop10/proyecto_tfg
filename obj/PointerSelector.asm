@@ -8,6 +8,7 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _joypad
+	.globl _move_foward_block_id
 	.globl _change_colision_map_BR
 	.globl _change_colision_map_at
 	.globl _tileindex_from_xy
@@ -392,25 +393,25 @@ _control_pointer::
 	inc	de
 ;src/PointerSelector.c:55: if(joypad() & J_UP) {
 	bit	2, a
-	jr	Z, 00121$
+	jr	Z, 00124$
 ;src/PointerSelector.c:56: s->y -= 8;
 	ld	a, (de)
 	add	a, #0xf8
 	ld	(de), a
 	ret
-00121$:
+00124$:
 ;src/PointerSelector.c:57: } else if(joypad() & J_DOWN) {
 	push	de
 	call	_joypad
 	pop	de
 	bit	3, a
-	jr	Z, 00118$
+	jr	Z, 00121$
 ;src/PointerSelector.c:58: s->y += 8;
 	ld	a, (de)
 	add	a, #0x08
 	ld	(de), a
 	ret
-00118$:
+00121$:
 ;src/PointerSelector.c:59: } else if(joypad() & J_LEFT) {
 	call	_joypad
 ;src/PointerSelector.c:60: s->x -= 8;
@@ -418,27 +419,27 @@ _control_pointer::
 	ld	h, b
 ;src/PointerSelector.c:59: } else if(joypad() & J_LEFT) {
 	bit	1, a
-	jr	Z, 00115$
+	jr	Z, 00118$
 ;src/PointerSelector.c:60: s->x -= 8;
 	ld	a, (hl)
 	add	a, #0xf8
 	ld	(hl), a
 	ret
-00115$:
+00118$:
 ;src/PointerSelector.c:61: } else if(joypad() & J_RIGHT) {
 	call	_joypad
 	rrca
-	jr	NC, 00112$
+	jr	NC, 00115$
 ;src/PointerSelector.c:62: s->x += 8;
 	ld	a, (hl)
 	add	a, #0x08
 	ld	(hl), a
 	ret
-00112$:
+00115$:
 ;src/PointerSelector.c:63: } else if(joypad() & J_A) {
 	call	_joypad
 	bit	4, a
-	jr	Z, 00109$
+	jr	Z, 00112$
 ;src/PointerSelector.c:64: if(block_is_not_placed_below(s) 
 	push	bc
 	ld	e, c
@@ -464,11 +465,11 @@ _control_pointer::
 	ld	e, c
 	ld	d, b
 	jp	_place_object_at_pointer
-00109$:
+00112$:
 ;src/PointerSelector.c:68: } else if(joypad() & J_B) {
 	call	_joypad
 	bit	5, a
-	ret	Z
+	jr	Z, 00109$
 ;src/PointerSelector.c:69: if(block_is_placed_below(s)){
 	push	bc
 	ld	e, c
@@ -480,16 +481,23 @@ _control_pointer::
 ;src/PointerSelector.c:70: remove_object_at_pointer(s);
 	ld	e, c
 	ld	d, b
-;src/PointerSelector.c:73: }
 	jp	_remove_object_at_pointer
-;src/PointerSelector.c:75: void update_pointer(Pointer* s) { 
+00109$:
+;src/PointerSelector.c:72: } else if(joypad() & J_SELECT) {
+	call	_joypad
+	bit	6, a
+;src/PointerSelector.c:73: move_foward_block_id();
+	jp	NZ, _move_foward_block_id
+;src/PointerSelector.c:75: }
+	ret
+;src/PointerSelector.c:77: void update_pointer(Pointer* s) { 
 ;	---------------------------------
 ; Function update_pointer
 ; ---------------------------------
 _update_pointer::
 	ld	c, e
 	ld	b, d
-;src/PointerSelector.c:76: s->tileindexBR = tileindex_from_xy(s->x, s->y);
+;src/PointerSelector.c:78: s->tileindexBR = tileindex_from_xy(s->x, s->y);
 	ld	hl, #0x0006
 	add	hl, bc
 	ld	e, c
@@ -508,21 +516,21 @@ _update_pointer::
 	ld	a, e
 	ld	(hl+), a
 	ld	(hl), d
-;src/PointerSelector.c:77: control_pointer(s);
+;src/PointerSelector.c:79: control_pointer(s);
 	push	bc
 	ld	e, c
 	ld	d, b
 	call	_control_pointer
-;src/PointerSelector.c:78: move_pointer(s);
+;src/PointerSelector.c:80: move_pointer(s);
 	pop	de
-;src/PointerSelector.c:79: }
+;src/PointerSelector.c:81: }
 	jp	_move_pointer
-;src/PointerSelector.c:81: void hide_pointer(void){
+;src/PointerSelector.c:83: void hide_pointer(void){
 ;	---------------------------------
 ; Function hide_pointer
 ; ---------------------------------
 _hide_pointer::
-;src/PointerSelector.c:82: for(uint8_t i= 4; i<=7; i++){
+;src/PointerSelector.c:84: for(uint8_t i= 4; i<=7; i++){
 	ld	c, #0x04
 00104$:
 	ld	a, #0x07
@@ -540,9 +548,9 @@ _hide_pointer::
 	xor	a, a
 	ld	(hl+), a
 	ld	(hl), a
-;src/PointerSelector.c:82: for(uint8_t i= 4; i<=7; i++){
+;src/PointerSelector.c:84: for(uint8_t i= 4; i<=7; i++){
 	inc	c
-;src/PointerSelector.c:85: }
+;src/PointerSelector.c:87: }
 	jr	00104$
 	.area _CODE
 	.area _INITIALIZER

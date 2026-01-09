@@ -20,14 +20,16 @@ Symbol Table
   1 _global_game_state                                              00000000 GR
   1 _global_init_point                                              00000029 GR
   2 _global_selected_block                                          0000016C GR
+  0 _move_foward_block_id                                           000000EE GR
   0 _update_game_state                                              00000000 GR
+
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       EE   flags    0
+   0 _CODE                                      size       F9   flags    0
    1 _DATA                                      size       2B   flags    0
    2 _INITIALIZED                               size      16D   flags    0
    3 _DABS                                      size        0   flags    8

@@ -489,11 +489,11 @@ _canplayermove::
 	jr	00111$
 ;src/Character.c:69: case RIGHT:
 00106$:
-;src/Character.c:70: set_direction(p, 0, 1);
-	ld	a, #0x01
+;src/Character.c:70: set_direction(p, 1, 0);
+	xor	a, a
 	push	af
 	inc	sp
-	xor	a, a
+	ld	a, #0x01
 	ldhl	sp,	#9
 	ld	e, (hl)
 	inc	hl

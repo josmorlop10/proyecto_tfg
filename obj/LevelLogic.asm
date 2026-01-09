@@ -7,7 +7,6 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
-	.globl _change_colision_map_BR
 	.globl _global_selected_block
 	.globl _global_blocks_available
 	.globl _global_colision_map
@@ -17,7 +16,9 @@
 	.globl _update_game_state
 	.globl _get_colision_from_map
 	.globl _change_colision_map_at
+	.globl _change_colision_map_BR
 	.globl _get_init_point_from_map
+	.globl _move_foward_block_id
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -288,6 +289,22 @@ _get_init_point_from_map::
 ;src/LevelLogic.c:56: }
 	inc	sp
 	inc	sp
+	ret
+;src/LevelLogic.c:58: void move_foward_block_id(void){
+;	---------------------------------
+; Function move_foward_block_id
+; ---------------------------------
+_move_foward_block_id::
+;src/LevelLogic.c:59: global_selected_block++;
+	ld	hl, #_global_selected_block
+	inc	(hl)
+;src/LevelLogic.c:60: if(global_selected_block >= 4){
+	ld	a, (hl)
+	sub	a, #0x04
+	ret	C
+;src/LevelLogic.c:61: global_selected_block = 0;
+	ld	(hl), #0x00
+;src/LevelLogic.c:63: }
 	ret
 	.area _CODE
 	.area _INITIALIZER

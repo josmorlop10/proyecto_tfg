@@ -69,6 +69,8 @@ void control_pointer(Pointer* s){
         if(block_is_placed_below(s)){
             remove_object_at_pointer(s);
         }
+    } else if(joypad() & J_SELECT) {
+        move_foward_block_id();
     }
 }
 

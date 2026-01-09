@@ -489,11 +489,11 @@
     000001EC 18 3A            [12]  489 	jr	00111$
                                     490 ;src/Character.c:69: case RIGHT:
     000001EE                        491 00106$:
-                                    492 ;src/Character.c:70: set_direction(p, 0, 1);
-    000001EE 3E 01            [ 8]  493 	ld	a, #0x01
-    000001F0 F5               [16]  494 	push	af
-    000001F1 33               [ 8]  495 	inc	sp
-    000001F2 AF               [ 4]  496 	xor	a, a
+                                    492 ;src/Character.c:70: set_direction(p, 1, 0);
+    000001EE AF               [ 4]  493 	xor	a, a
+    000001EF F5               [16]  494 	push	af
+    000001F0 33               [ 8]  495 	inc	sp
+    000001F1 3E 01            [ 8]  496 	ld	a, #0x01
     000001F3 F8 09            [12]  497 	ldhl	sp,	#9
     000001F5 5E               [ 8]  498 	ld	e, (hl)
     000001F6 23               [ 8]  499 	inc	hl

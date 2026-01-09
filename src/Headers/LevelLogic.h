@@ -50,7 +50,7 @@ void get_colision_from_map(const unsigned char in[], uint8_t out[]);
 void get_init_point_from_map(uint8_t colision_map[360]);
 void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value);
 void change_colision_map_BR(uint16_t tileindexBR, uint8_t new_value);
-
+void move_foward_block_id(void);
 
 
 #endif

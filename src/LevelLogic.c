@@ -54,3 +54,11 @@ void get_init_point_from_map(uint8_t colision_map[360]){
           }
      }
 }
+
+void move_foward_block_id(void){
+    global_selected_block++;
+    if(global_selected_block >= 4){
+        global_selected_block = 0;
+    }
+}
+
