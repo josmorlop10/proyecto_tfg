@@ -1,23 +1,26 @@
 XL4
-H 9 areas 9 global symbols
+H 9 areas C global symbols
 M LevelLogic
 S .__.ABS. Def00000000
-A _CODE size DF flags 0 addr 0
+A _CODE size EE flags 0 addr 0
 S _get_colision_from_map Def00000004
+S _change_colision_map_BR Def000000AC
 S _change_colision_map_at Def00000061
 S _update_game_state Def00000000
-S _get_init_point_from_map Def000000AC
+S _get_init_point_from_map Def000000BB
 A _DATA size 2B flags 0 addr 0
 S _global_events Def00000001
 S _global_game_state Def00000000
 S _global_init_point Def00000029
-A _INITIALIZED size 168 flags 0 addr 0
+A _INITIALIZED size 16D flags 0 addr 0
+S _global_selected_block Def0000016C
 S _global_colision_map Def00000000
+S _global_blocks_available Def00000168
 A _DABS size 0 flags 8 addr 0
 A _HOME size 0 flags 0 addr 0
 A _GSINIT size 0 flags 0 addr 0
 A _GSFINAL size 0 flags 0 addr 0
-A _INITIALIZER size 168 flags 0 addr 0
+A _INITIALIZER size 16D flags 0 addr 0
 A _CABS size 0 flags 8 addr 0
 T 00 00 00 00
 R 00 00 01 00
@@ -34,6 +37,14 @@ R 00 00 01 00
 T 00 00 00 00
 R 00 00 02 00
 T 00 00 00 00
+R 00 00 02 00
+T 68 01 00 00
+R 00 00 02 00
+T 68 01 00 00
+R 00 00 02 00
+T 6C 01 00 00
+R 00 00 02 00
+T 6C 01 00 00
 R 00 00 02 00
 T 00 00 00 00
 R 00 00 00 00
@@ -97,23 +108,29 @@ T AA 00 00 00 33 C9
 R 00 00 00 00
 T AC 00 00 00
 R 00 00 00 00
-T AC 00 00 00 3B 3B AF F8 00 22 77 01 00 00
+T AC 00 00 00 4F 7B 6A D6 68 7D DE 01 D0 21 00 00
+R 00 00 00 00 00 0E 02 00
+T B8 00 00 00 19 71 C9
 R 00 00 00 00
-T B6 00 00 00
+T BB 00 00 00
 R 00 00 00 00
-T B6 00 00 00 69 60 7D D6 68 7C DE 01 30 1C 69 60
+T BB 00 00 00 3B 3B AF F8 00 22 77 01 00 00
 R 00 00 00 00
-T C2 00 00 00 19 7E D6 03 20 0E F8 00 7E EA 29 00
+T C5 00 00 00
+R 00 00 00 00
+T C5 00 00 00 69 60 7D D6 68 7C DE 01 30 1C 69 60
+R 00 00 00 00
+T D1 00 00 00 19 7E D6 03 20 0E F8 00 7E EA 29 00
 R 00 00 00 00 00 0E 01 00
-T CE 00 00 00 F8 01 7E EA 2A 00 18 06
+T DD 00 00 00 F8 01 7E EA 2A 00 18 06
 R 00 00 00 00 00 08 01 00
-T D6 00 00 00
+T E5 00 00 00
 R 00 00 00 00
-T D6 00 00 00 03 33 33 C5 18 DA
+T E5 00 00 00 03 33 33 C5 18 DA
 R 00 00 00 00
-T DC 00 00 00
+T EB 00 00 00
 R 00 00 00 00
-T DC 00 00 00 33 33 C9
+T EB 00 00 00 33 33 C9
 R 00 00 00 00
 T 00 00 00 00
 R 00 00 07 00
@@ -176,4 +193,12 @@ R 00 00 07 00
 T 50 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 R 00 00 07 00
 T 5C 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+R 00 00 07 00
+T 68 01 00 00
+R 00 00 07 00
+T 68 01 00 00 02 02 02 02
+R 00 00 07 00
+T 6C 01 00 00
+R 00 00 07 00
+T 6C 01 00 00 00
 R 00 00 07 00

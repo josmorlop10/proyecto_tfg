@@ -9,6 +9,9 @@ uint8_t global_colision_map[360] = {EMPTY};
 struct TileEvent global_events[10];
 uint16_t global_init_point;
 
+uint8_t global_blocks_available[4] = {2,2,2,2}; //MOCKUP. Change later
+uint8_t global_selected_block = 0;
+
 void update_game_state(GameState new_value){
      global_game_state = new_value;
 }
@@ -36,6 +39,11 @@ void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value){
     }
 }
 
+void change_colision_map_BR(uint16_t tileindexBR, uint8_t new_value){
+    if(tileindexBR < 360){
+        global_colision_map[tileindexBR] = new_value;
+    }
+}
 
 //get init point from colision map
 void get_init_point_from_map(uint8_t colision_map[360]){

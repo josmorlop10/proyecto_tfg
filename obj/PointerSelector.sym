@@ -7,22 +7,24 @@ Symbol Table
     .__.ABS.                                                    =   00000000 G
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
-  0 _all_disj_zero_below_pointer                                    00000187 GR
-  0 _all_zero_below_pointer                                         0000014D GR
-  0 _calculate_pointer_tileindexBR                                  00000000 GR
+  0 _block_is_not_placed_below                                      000000CF GR
+  0 _block_is_placed_below                                          00000109 GR
     _change_bkg_tile_xy                                             ******** GX
+    _change_colision_map_BR                                         ******** GX
     _change_colision_map_at                                         ******** GX
-  0 _control_pointer                                                000001C1 GR
+  0 _control_pointer                                                00000148 GR
+    _global_blocks_available                                        ******** GX
     _global_colision_map                                            ******** GX
-  0 _hide_pointer                                                   00000244 GR
+    _global_selected_block                                          ******** GX
+  0 _hide_pointer                                                   000001DD GR
     _joypad                                                         ******** GX
-  0 _move_pointer                                                   000000BE GR
-  0 _place_object_at_pointer                                        00000117 GR
-  0 _pointer_init                                                   00000094 GR
-  0 _remove_object_at_pointer                                       00000133 GR
+  0 _move_pointer                                                   0000002A GR
+  0 _place_object_at_pointer                                        00000083 GR
+  0 _pointer_init                                                   00000000 GR
+  0 _remove_object_at_pointer                                       000000B5 GR
     _shadow_OAM                                                     ******** GX
     _tileindex_from_xy                                              ******** GX
-  0 _update_pointer                                                 00000222 GR
+  0 _update_pointer                                                 000001BB GR
 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
@@ -30,7 +32,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      259   flags    0
+   0 _CODE                                      size      1F2   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

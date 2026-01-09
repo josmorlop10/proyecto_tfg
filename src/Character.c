@@ -1,6 +1,7 @@
 #include "Headers/LevelLogic.h"
 #include "Headers/Character.h"
 #include "Headers/Common.h"
+#include "Headers/EventManagement.h"
 #include <stdio.h>
 #include <gb/gb.h>
 
@@ -63,17 +64,23 @@ uint8_t canplayermove(Character* p){
         return 0;
     }
     //comprobar eventos 
-    /* 
-    if (global_colision_map[tileindexTL] == OBJECT){
-        return event_management(tileindexTL);
-    } else if ((global_colision_map[tileindexTR] == OBJECT)){
-        return event_management(tileindexTR);
-    } else if ((global_colision_map[tileindexBR] == OBJECT)){
-        return event_management(tileindexBR);
-    } else if ((global_colision_map[tileindexBL] == OBJECT)){
-        return event_management(tileindexBL); 
-
-    }  */
+    uint8_t event = player_tileBR_over_a_block(p->tileindexBR);
+    switch(event){
+        case RIGHT:
+            set_direction(p, 1, 0);
+            break;
+        case LEFT:
+            set_direction(p, -1, 0);
+            break;
+        case UP:
+            set_direction(p, 0, -1);
+            break;
+        case DOWN:
+            set_direction(p, 0, 1);
+            break;
+        default:
+            break;
+    }
 
     return 1;
 }

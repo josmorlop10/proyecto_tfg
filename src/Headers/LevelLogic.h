@@ -3,13 +3,26 @@
 
 #include <stdint.h>
 
-#define EMPTY 0
-#define SOLID 1
-#define OBJECT 2
-#define SOURCE 3
-#define DESTINATION 4
+//COLISION VALUES
+#define EMPTY 0 //no colision
+#define SOLID 1 //colision
+#define OBJECT 2 //valor nulo para objetos (objetos te encuentras, bloques los pones)
+#define SOURCE 3 //punto de inicio
+#define DESTINATION 4 //punto de llegada
+#define BLOCK  5 //valor nulo para bloques (objetos te encuentras, bloques los pones)
+#define RIGHT 6
+#define LEFT 7
+#define UP 8
+#define DOWN 9
+
 #define UMBRAL_COLISION_UP 3
 #define UMBRAL_COLISION_DOWN 15
+
+//Global variable for block selected.Indicará la cantidad de bloques disponibles.
+//Siendo index 1 = DER, 2= IZQ, 3=ARRIBA, 4=ABAJO (+6 por los "define" de arriba)
+extern uint8_t global_blocks_available[4];
+//indica el indice del array
+extern uint8_t global_selected_block;
 
 typedef enum {
     STATE_MENU,
@@ -36,7 +49,8 @@ void update_game_state(GameState new_value);
 void get_colision_from_map(const unsigned char in[], uint8_t out[]);
 void get_init_point_from_map(uint8_t colision_map[360]);
 void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value);
-void change_bkg_tiles(uint16_t tileindexBR);
+void change_colision_map_BR(uint16_t tileindexBR, uint8_t new_value);
+
 
 
 #endif

@@ -14,23 +14,25 @@ Symbol Table
   0 _canplayermove                                                  0000014F GR
   0 _character_init                                                 00000013 GR
   2 _debug                                                          00000000 GR
-  0 _flip_direction                                                 000001B1 GR
+  0 _flip_direction                                                 0000022D GR
     _get_init_point_from_map                                        ******** GX
     _global_colision_map                                            ******** GX
     _global_init_point                                              ******** GX
   0 _move_character                                                 0000008C GR
   0 _movement_step_by_step                                          000000EC GR
+    _player_tileBR_over_a_block                                     ******** GX
   0 _set_direction                                                  00000000 GR
     _shadow_OAM                                                     ******** GX
     _tileindex_from_xy                                              ******** GX
-  0 _update_character                                               000001C0 GR
+  0 _update_character                                               0000023C GR
+
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      2D9   flags    0
+   0 _CODE                                      size      355   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        1   flags    0
    3 _DABS                                      size        0   flags    8
