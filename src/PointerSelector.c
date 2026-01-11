@@ -39,13 +39,11 @@ void place_object_at_pointer(Pointer* s, uint8_t block_type){
     global_blocks_available[global_selected_block]--;
 }
 
-void remove_object_at_pointer(Pointer* s){
-    //TODO: hay un fallo. Al borrar un bloque, el contador que subirá sera
-    //el del bloque seleccionado, no el del bloque que se ha borrado.
-
+void remove_object_at_pointer(Pointer* s, uint8_t block_type){
+  
     change_colision_map_at(s->tileindexBR, EMPTY);
     change_bkg_tile_xy(s->tileindexBR, 0);
-    global_blocks_available[global_selected_block]++;
+    global_blocks_available[block_type]++;
 }
 
 uint8_t block_is_not_placed_below(Pointer* s){
@@ -59,11 +57,16 @@ uint8_t block_is_placed_below(Pointer* s){
 
     //comprobar que, abajo a la derecha, el numero está entre 5 (der) y 9(abajo) ambos incluidos
     //comprobar que el resto es distinto de EMPTY
-
-    return (global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=DOWN) 
+    //devuelbe el bloque si es que hay un bloque. 
+    //Si no devuelve 0
+    uint8_t res = 0;
+    if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=DOWN) 
            && (global_colision_map[s->tileindexBR-1] != EMPTY)
            && (global_colision_map[s->tileindexBR-20] != EMPTY)
-           && (global_colision_map[s->tileindexBR-21] != EMPTY);
+           && (global_colision_map[s->tileindexBR-21] != EMPTY)){
+                res = global_colision_map[s->tileindexBR];
+           }
+    return res;
 }
 
 void control_pointer(Pointer* s){
@@ -90,8 +93,9 @@ void control_pointer(Pointer* s){
             place_object_at_pointer(s, global_selected_block + 6);
         }
     } else if(joypad() & J_B) {
-        if(block_is_placed_below(s)){
-            remove_object_at_pointer(s);
+        uint8_t block = block_is_placed_below(s);
+        if(block>=6){
+            remove_object_at_pointer(s, block - 6);
         }
     } else if(joypad() & J_SELECT) {
         move_foward_block_id();
