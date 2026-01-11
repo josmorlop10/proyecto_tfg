@@ -9,19 +9,19 @@ Symbol Table
     .__.H$L.                                                    =   00000000 L
     __divuint                                                       ******** GX
     __moduint                                                       ******** GX
+  0 _change_bkg_tile_16x16                                          000000F7 GR
   0 _change_bkg_tile_xy                                             00000095 GR
   0 _performantdelay                                                00000000 GR
     _set_bkg_tiles                                                  ******** GX
   0 _tileindex_from_xy                                              0000000C GR
     _wait_vbl_done                                                  ******** GX
 
-
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       F7   flags    0
+   0 _CODE                                      size      173   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

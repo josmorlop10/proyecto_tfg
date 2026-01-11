@@ -35,7 +35,7 @@ uint8_t can_pointer_move(Pointer* s, int8_t dir_x, int8_t dir_y){
 void place_object_at_pointer(Pointer* s, uint8_t block_type){
     change_colision_map_at(s->tileindexBR, BLOCK);
     change_colision_map_BR(s->tileindexBR, block_type);
-    change_bkg_tile_xy(s->tileindexBR, global_selected_block + 16);
+    change_bkg_tile_16x16(s->tileindexBR, global_selected_block * 4 + 31);
     global_blocks_available[global_selected_block]--;
 }
 
