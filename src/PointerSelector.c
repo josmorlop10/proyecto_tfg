@@ -25,7 +25,7 @@ uint8_t can_pointer_move(Pointer* s, int8_t dir_x, int8_t dir_y){
     uint8_t new_x = s->x + dir_x*SPRITESIZE;
     uint8_t new_y = s->y + dir_y*SPRITESIZE;
 
-    if(new_x < 28 || new_x > 148 || new_y < 40 || new_y > 136){
+    if(new_x < 20 || new_x > 156 || new_y < 32 || new_y > 120){
         return 0;
     }
     return 1;

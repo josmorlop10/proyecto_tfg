@@ -21,18 +21,19 @@ Symbol Table
   0 _move_character                                                 0000008C GR
   0 _movement_step_by_step                                          000000EC GR
     _player_tileBR_over_a_block                                     ******** GX
+    _player_tileBR_over_destination                                 ******** GX
   0 _set_direction                                                  00000000 GR
     _shadow_OAM                                                     ******** GX
     _tileindex_from_xy                                              ******** GX
   0 _update_character                                               0000023C GR
-
+    _update_game_state                                              ******** GX
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      355   flags    0
+   0 _CODE                                      size      36C   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        1   flags    0
    3 _DABS                                      size        0   flags    8

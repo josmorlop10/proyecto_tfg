@@ -92,10 +92,15 @@ void flip_direction(Character* p){
 
 void update_character(Character* p) { //devuelve las teclas actuales
 
+    if(player_tileBR_over_destination(p->tileindexBR)){
+        update_game_state(STATE_GAME_OVER);
+        return;
+    }
+
     p->tileindexBR = tileindex_from_xy(p->x, p->y);
     p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
 
-     if(canplayermove(p)) {
+    if(canplayermove(p)) {
         p->x += p->speed * p->dir_x;
         p->y += p->speed * p->dir_y;
     } else {

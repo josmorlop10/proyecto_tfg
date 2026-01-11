@@ -215,17 +215,17 @@ _can_pointer_move::
 	add	a, a
 	add	a, e
 	ld	b, a
-;src/PointerSelector.c:28: if(new_x < 28 || new_x > 148 || new_y < 40 || new_y > 136){
+;src/PointerSelector.c:28: if(new_x < 20 || new_x > 156 || new_y < 32 || new_y > 120){
 	ld	a, c
-	sub	a, #0x1c
+	sub	a, #0x14
 	jr	C, 00101$
-	ld	a, #0x94
+	ld	a, #0x9c
 	sub	a, c
 	jr	C, 00101$
 	ld	a, b
-	sub	a, #0x28
+	sub	a, #0x20
 	jr	C, 00101$
-	ld	a, #0x88
+	ld	a, #0x78
 	sub	a, b
 	jr	NC, 00102$
 00101$:

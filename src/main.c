@@ -50,6 +50,7 @@ void main(void)
         {
         case STATE_GAME_SETTING:
             if(last_state != STATE_GAME_SETTING) {
+                init_gfx();
                 last_state = STATE_GAME_SETTING;
             }
             update_pointer(&s);
@@ -77,7 +78,17 @@ void main(void)
             */
            
             break;
-            
+        
+        case STATE_GAME_OVER:
+            if(last_state != STATE_GAME_OVER) {
+                last_state = STATE_GAME_OVER;
+                printf("You WIN!\nPress start to try again");
+            }
+            if(joypad() & J_START){
+                update_game_state(STATE_GAME_SETTING);
+            }
+            break;
+
         default:
             break;
         }

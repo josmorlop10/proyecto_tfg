@@ -9,9 +9,11 @@
 ;--------------------------------------------------------
 	.globl _flip_direction
 	.globl _movement_step_by_step
+	.globl _player_tileBR_over_destination
 	.globl _player_tileBR_over_a_block
 	.globl _tileindex_from_xy
 	.globl _get_init_point_from_map
+	.globl _update_game_state
 	.globl _debug
 	.globl _set_direction
 	.globl _character_init
@@ -577,7 +579,7 @@ _update_character::
 	ldhl	sp,	#11
 	ld	a, e
 	ld	(hl+), a
-;src/Character.c:95: p->tileindexBR = tileindex_from_xy(p->x, p->y);
+;src/Character.c:95: if(player_tileBR_over_destination(p->tileindexBR)){
 	ld	a, d
 	ld	(hl-), a
 	ld	a, (hl+)
@@ -585,8 +587,27 @@ _update_character::
 	ld	d, (hl)
 	ld	hl, #0x0009
 	add	hl, de
-	ld	c, l
-	ld	b, h
+	ld	c,l
+	ld	b,h
+	ld	a,	(hl+)
+	ld	h, (hl)
+	ld	l, a
+	push	bc
+	ld	e, l
+	ld	d, h
+	call	_player_tileBR_over_destination
+	ld	e, a
+	pop	bc
+	ld	a, e
+	or	a, a
+	jr	Z, 00102$
+;src/Character.c:96: update_game_state(STATE_GAME_OVER);
+	ld	a, #0x05
+	call	_update_game_state
+;src/Character.c:97: return;
+	jp	00106$
+00102$:
+;src/Character.c:100: p->tileindexBR = tileindex_from_xy(p->x, p->y);
 	ldhl	sp,#11
 	ld	a, (hl+)
 	ld	e, a
@@ -636,7 +657,7 @@ _update_character::
 	inc	bc
 	ld	a, d
 	ld	(bc), a
-;src/Character.c:96: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
+;src/Character.c:101: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
 	ldhl	sp,#11
 	ld	a, (hl+)
 	ld	e, a
@@ -712,15 +733,15 @@ _update_character::
 	ld	a, c
 	ld	(hl+), a
 	ld	(hl), b
-;src/Character.c:98: if(canplayermove(p)) {
+;src/Character.c:103: if(canplayermove(p)) {
 	ldhl	sp,	#11
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
 	call	_canplayermove
 	or	a, a
-	jr	Z, 00102$
-;src/Character.c:99: p->x += p->speed * p->dir_x;
+	jr	Z, 00104$
+;src/Character.c:104: p->x += p->speed * p->dir_x;
 	ldhl	sp,#4
 	ld	a, (hl+)
 	ld	e, a
@@ -758,7 +779,7 @@ _update_character::
 	ld	h, (hl)
 	ld	l, e
 	ld	(hl), a
-;src/Character.c:100: p->y += p->speed * p->dir_y;
+;src/Character.c:105: p->y += p->speed * p->dir_y;
 	ldhl	sp,#2
 	ld	a, (hl+)
 	ld	e, a
@@ -785,22 +806,23 @@ _update_character::
 	ld	h, (hl)
 	ld	l, e
 	ld	(hl), a
-	jr	00103$
-00102$:
-;src/Character.c:102: flip_direction(p);
+	jr	00105$
+00104$:
+;src/Character.c:107: flip_direction(p);
 	ldhl	sp,	#11
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
 	call	_flip_direction
-00103$:
-;src/Character.c:104: move_character(p);
+00105$:
+;src/Character.c:109: move_character(p);
 	ldhl	sp,	#11
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
 	call	_move_character
-;src/Character.c:105: }
+00106$:
+;src/Character.c:110: }
 	add	sp, #13
 	ret
 	.area _CODE

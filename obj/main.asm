@@ -17,6 +17,7 @@
 	.globl _update_character
 	.globl _character_init
 	.globl _performantdelay
+	.globl _printf
 	.globl _set_sprite_data
 	.globl _set_bkg_tiles
 	.globl _set_bkg_data
@@ -144,61 +145,94 @@ _main::
 	ld	hl, #_global_game_state
 	ld	(hl), #0x02
 ;src/main.c:48: while(1) {
-00112$:
+00117$:
 ;src/main.c:49: switch (global_game_state)
 	ld	a,(#_global_game_state)
 	cp	a,#0x02
 	jr	Z, 00101$
-	sub	a, #0x03
+	cp	a,#0x03
 	jr	Z, 00106$
-	jr	00110$
+	sub	a, #0x05
+	jr	Z, 00109$
+	jr	00115$
 ;src/main.c:51: case STATE_GAME_SETTING:
 00101$:
 ;src/main.c:52: if(last_state != STATE_GAME_SETTING) {
 	ld	a, (#_last_state)
 	sub	a, #0x02
 	jr	Z, 00103$
-;src/main.c:53: last_state = STATE_GAME_SETTING;
+;src/main.c:53: init_gfx();
+	call	_init_gfx
+;src/main.c:54: last_state = STATE_GAME_SETTING;
 	ld	hl, #_last_state
 	ld	(hl), #0x02
 00103$:
-;src/main.c:55: update_pointer(&s);
+;src/main.c:56: update_pointer(&s);
 	ld	de, #_s
 	call	_update_pointer
-;src/main.c:56: if(joypad() & J_START){
+;src/main.c:57: if(joypad() & J_START){
 	call	_joypad
 	rlca
-	jr	NC, 00110$
-;src/main.c:57: hide_pointer();
+	jr	NC, 00115$
+;src/main.c:58: hide_pointer();
 	call	_hide_pointer
-;src/main.c:58: update_game_state(STATE_GAME_RUNNING);
+;src/main.c:59: update_game_state(STATE_GAME_RUNNING);
 	ld	a, #0x03
 	call	_update_game_state
-;src/main.c:60: break;
-	jr	00110$
-;src/main.c:62: case STATE_GAME_RUNNING:
+;src/main.c:61: break;
+	jr	00115$
+;src/main.c:63: case STATE_GAME_RUNNING:
 00106$:
-;src/main.c:63: if(last_state != STATE_GAME_RUNNING) {
+;src/main.c:64: if(last_state != STATE_GAME_RUNNING) {
 	ld	a, (#_last_state)
 	sub	a, #0x03
 	jr	Z, 00108$
-;src/main.c:64: character_init(&p);
+;src/main.c:65: character_init(&p);
 	ld	de, #_p
 	call	_character_init
-;src/main.c:65: last_state = STATE_GAME_RUNNING;
+;src/main.c:66: last_state = STATE_GAME_RUNNING;
 	ld	hl, #_last_state
 	ld	(hl), #0x03
 00108$:
-;src/main.c:67: update_character(&p);
+;src/main.c:68: update_character(&p);
 	ld	de, #_p
 	call	_update_character
-;src/main.c:83: }
-00110$:
-;src/main.c:84: performantdelay(10);
+;src/main.c:80: break;
+	jr	00115$
+;src/main.c:82: case STATE_GAME_OVER:
+00109$:
+;src/main.c:83: if(last_state != STATE_GAME_OVER) {
+	ld	a, (#_last_state)
+	sub	a, #0x05
+	jr	Z, 00111$
+;src/main.c:84: last_state = STATE_GAME_OVER;
+	ld	hl, #_last_state
+	ld	(hl), #0x05
+;src/main.c:85: printf("You WIN!\nPress start to try again");
+	ld	de, #___str_0
+	push	de
+	call	_printf
+	pop	hl
+00111$:
+;src/main.c:87: if(joypad() & J_START){
+	call	_joypad
+	rlca
+	jr	NC, 00115$
+;src/main.c:88: update_game_state(STATE_GAME_SETTING);
+	ld	a, #0x02
+	call	_update_game_state
+;src/main.c:94: }
+00115$:
+;src/main.c:95: performantdelay(10);
 	ld	a, #0x0a
 	call	_performantdelay
-;src/main.c:86: }
-	jr	00112$
+;src/main.c:97: }
+	jr	00117$
+___str_0:
+	.ascii "You WIN!"
+	.db 0x0a
+	.ascii "Press start to try again"
+	.db 0x00
 	.area _CODE
 	.area _INITIALIZER
 	.area _CABS (ABS)

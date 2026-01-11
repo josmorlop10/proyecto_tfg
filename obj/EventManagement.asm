@@ -8,6 +8,7 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _player_tileBR_over_a_block
+	.globl _player_tileBR_over_destination
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -57,6 +58,56 @@ _player_tileBR_over_a_block::
 ;src/EventManagement.c:12: return 0;
 	xor	a, a
 ;src/EventManagement.c:14: }
+	ret
+;src/EventManagement.c:16: uint8_t player_tileBR_over_destination(uint16_t tileindexBR){
+;	---------------------------------
+; Function player_tileBR_over_destination
+; ---------------------------------
+_player_tileBR_over_destination::
+;src/EventManagement.c:17: if(global_colision_map[tileindexBR] == DESTINATION &&
+	ld	bc, #_global_colision_map+0
+	ld	l, c
+	ld	h, b
+	add	hl, de
+	ld	a, (hl)
+	sub	a, #0x04
+	jr	NZ, 00102$
+;src/EventManagement.c:18: global_colision_map[tileindexBR-1] == DESTINATION &&
+	ld	l, e
+	ld	h, d
+	dec	hl
+	add	hl, bc
+	ld	a, (hl)
+	sub	a, #0x04
+	jr	NZ, 00102$
+;src/EventManagement.c:19: global_colision_map[tileindexBR-20] == DESTINATION &&
+	ld	a, e
+	add	a, #0xec
+	ld	l, a
+	ld	a, d
+	adc	a, #0xff
+	ld	h, a
+	add	hl, bc
+	ld	a, (hl)
+	sub	a, #0x04
+	jr	NZ, 00102$
+;src/EventManagement.c:20: global_colision_map[tileindexBR-21] == DESTINATION){
+	ld	a, e
+	add	a, #0xeb
+	ld	l, a
+	ld	a, d
+	adc	a, #0xff
+	ld	h, a
+	add	hl, bc
+	ld	a, (hl)
+	sub	a, #0x04
+;src/EventManagement.c:21: return 1;
+;src/EventManagement.c:23: return 0;
+	ld	a, #0x01
+	ret	Z
+00102$:
+	xor	a, a
+;src/EventManagement.c:25: }
 	ret
 	.area _CODE
 	.area _INITIALIZER
