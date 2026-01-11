@@ -21,6 +21,17 @@ void move_pointer(Pointer* s) {
 
 }
 
+uint8_t can_pointer_move(Pointer* s, int8_t dir_x, int8_t dir_y){
+    uint8_t new_x = s->x + dir_x*SPRITESIZE;
+    uint8_t new_y = s->y + dir_y*SPRITESIZE;
+
+    if(new_x < 28 || new_x > 148 || new_y < 40 || new_y > 136){
+        return 0;
+    }
+    return 1;
+
+}
+
 void place_object_at_pointer(Pointer* s, uint8_t block_type){
     change_colision_map_at(s->tileindexBR, BLOCK);
     change_colision_map_BR(s->tileindexBR, block_type);
@@ -29,6 +40,9 @@ void place_object_at_pointer(Pointer* s, uint8_t block_type){
 }
 
 void remove_object_at_pointer(Pointer* s){
+    //TODO: hay un fallo. Al borrar un bloque, el contador que subirá sera
+    //el del bloque seleccionado, no el del bloque que se ha borrado.
+
     change_colision_map_at(s->tileindexBR, EMPTY);
     change_bkg_tile_xy(s->tileindexBR, 0);
     global_blocks_available[global_selected_block]++;
@@ -55,13 +69,21 @@ uint8_t block_is_placed_below(Pointer* s){
 void control_pointer(Pointer* s){
 
     if(joypad() & J_UP) {
-        s->y -= 8;
+        if (can_pointer_move(s, 0, -1)){
+            s->y -= 8;
+        }
     } else if(joypad() & J_DOWN) {
-        s->y += 8;
+        if (can_pointer_move(s, 0, 1)){
+            s->y += 8;
+        }
     } else if(joypad() & J_LEFT) {
-        s->x -= 8;
+        if (can_pointer_move(s, -1, 0)){
+            s->x -= 8;
+        }
     } else if(joypad() & J_RIGHT) {
-        s->x += 8;
+        if (can_pointer_move(s, 1, 0)){
+            s->x += 8;
+        }
     } else if(joypad() & J_A) {
         if(block_is_not_placed_below(s) 
         && (global_blocks_available[global_selected_block]>0)){
@@ -77,6 +99,7 @@ void control_pointer(Pointer* s){
     }
 }
 
+//TODO:TEMPORAL
 void print_counter(void){
     uint8_t tile_id = global_selected_block + 16;
     set_bkg_tiles(1, 1, 1, 1, &tile_id);
