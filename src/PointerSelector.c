@@ -24,12 +24,14 @@ void move_pointer(Pointer* s) {
 void place_object_at_pointer(Pointer* s, uint8_t block_type){
     change_colision_map_at(s->tileindexBR, BLOCK);
     change_colision_map_BR(s->tileindexBR, block_type);
-    change_bkg_tile_xy(s->tileindexBR, 3);
+    change_bkg_tile_xy(s->tileindexBR, global_selected_block + 16);
+    global_blocks_available[global_selected_block]--;
 }
 
 void remove_object_at_pointer(Pointer* s){
     change_colision_map_at(s->tileindexBR, EMPTY);
     change_bkg_tile_xy(s->tileindexBR, 0);
+    global_blocks_available[global_selected_block]++;
 }
 
 uint8_t block_is_not_placed_below(Pointer* s){
@@ -71,7 +73,13 @@ void control_pointer(Pointer* s){
         }
     } else if(joypad() & J_SELECT) {
         move_foward_block_id();
+        print_counter();
     }
+}
+
+void print_counter(void){
+    uint8_t tile_id = global_selected_block + 16;
+    set_bkg_tiles(1, 1, 1, 1, &tile_id);
 }
 
 void update_pointer(Pointer* s) { 

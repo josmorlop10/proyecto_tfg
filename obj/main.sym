@@ -16,14 +16,14 @@ Symbol Table
     _hide_pointer                                                   ******** GX
   0 _init_gfx                                                       00000000 GR
     _joypad                                                         ******** GX
-  1 _last_state                                                     0000000F GR
+  1 _last_state                                                     00000015 GR
   0 _main                                                           00000074 GR
     _map1                                                           ******** GX
     _map_tiles                                                      ******** GX
   1 _p                                                              00000000 GR
     _performantdelay                                                ******** GX
     _pointer_init                                                   ******** GX
-  1 _s                                                              00000009 GR
+  1 _s                                                              0000000D GR
     _selector                                                       ******** GX
     _set_bkg_data                                                   ******** GX
     _set_bkg_tiles                                                  ******** GX
@@ -40,7 +40,7 @@ Hexadecimal [32-Bits]
 Area Table
 
    0 _CODE                                      size       D0   flags    0
-   1 _DATA                                      size       10   flags    0
+   1 _DATA                                      size       16   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8
    4 _HOME                                      size        0   flags    0

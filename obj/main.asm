@@ -32,9 +32,9 @@
 ;--------------------------------------------------------
 	.area _DATA
 _p::
-	.ds 9
+	.ds 13
 _s::
-	.ds 6
+	.ds 8
 _last_state::
 	.ds 1
 ;--------------------------------------------------------
@@ -98,18 +98,18 @@ _init_gfx::
 	ld	(hl), #0x06
 	ld	hl, #(_shadow_OAM + 30)
 	ld	(hl), #0x07
-;src/main.c:32: SHOW_SPRITES;
+;src/main.c:33: SHOW_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x02
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:35: set_bkg_data(0, 28, map_tiles);
+;src/main.c:36: set_bkg_data(0, 44, map_tiles);
 	ld	de, #_map_tiles
 	push	de
-	ld	hl, #0x1c00
+	ld	hl, #0x2c00
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;src/main.c:36: set_bkg_tiles(0,0,20,18,map1);
+;src/main.c:37: set_bkg_tiles(0,0,20,18,map1);
 	ld	de, #_map1+0
 	push	de
 	push	de
@@ -121,83 +121,83 @@ _init_gfx::
 	call	_set_bkg_tiles
 	add	sp, #6
 	pop	de
-;src/main.c:37: get_colision_from_map(map1, global_colision_map);
+;src/main.c:38: get_colision_from_map(map1, global_colision_map);
 	ld	bc, #_global_colision_map
 	call	_get_colision_from_map
-;src/main.c:38: SHOW_BKG;
+;src/main.c:39: SHOW_BKG;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x01
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:39: }
+;src/main.c:40: }
 	ret
-;src/main.c:41: void main(void)
+;src/main.c:42: void main(void)
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
 _main::
-;src/main.c:43: init_gfx();
+;src/main.c:44: init_gfx();
 	call	_init_gfx
-;src/main.c:44: pointer_init(&s);
+;src/main.c:45: pointer_init(&s);
 	ld	de, #_s
 	call	_pointer_init
-;src/main.c:45: global_game_state = STATE_GAME_SETTING;
+;src/main.c:46: global_game_state = STATE_GAME_SETTING;
 	ld	hl, #_global_game_state
 	ld	(hl), #0x02
-;src/main.c:47: while(1) {
+;src/main.c:48: while(1) {
 00112$:
-;src/main.c:48: switch (global_game_state)
+;src/main.c:49: switch (global_game_state)
 	ld	a,(#_global_game_state)
 	cp	a,#0x02
 	jr	Z, 00101$
 	sub	a, #0x03
 	jr	Z, 00106$
 	jr	00110$
-;src/main.c:50: case STATE_GAME_SETTING:
+;src/main.c:51: case STATE_GAME_SETTING:
 00101$:
-;src/main.c:51: if(last_state != STATE_GAME_SETTING) {
+;src/main.c:52: if(last_state != STATE_GAME_SETTING) {
 	ld	a, (#_last_state)
 	sub	a, #0x02
 	jr	Z, 00103$
-;src/main.c:52: last_state = STATE_GAME_SETTING;
+;src/main.c:53: last_state = STATE_GAME_SETTING;
 	ld	hl, #_last_state
 	ld	(hl), #0x02
 00103$:
-;src/main.c:54: update_pointer(&s);
+;src/main.c:55: update_pointer(&s);
 	ld	de, #_s
 	call	_update_pointer
-;src/main.c:55: if(joypad() & J_START){
+;src/main.c:56: if(joypad() & J_START){
 	call	_joypad
 	rlca
 	jr	NC, 00110$
-;src/main.c:56: hide_pointer();
+;src/main.c:57: hide_pointer();
 	call	_hide_pointer
-;src/main.c:57: update_game_state(STATE_GAME_RUNNING);
+;src/main.c:58: update_game_state(STATE_GAME_RUNNING);
 	ld	a, #0x03
 	call	_update_game_state
-;src/main.c:59: break;
+;src/main.c:60: break;
 	jr	00110$
-;src/main.c:61: case STATE_GAME_RUNNING:
+;src/main.c:62: case STATE_GAME_RUNNING:
 00106$:
-;src/main.c:62: if(last_state != STATE_GAME_RUNNING) {
+;src/main.c:63: if(last_state != STATE_GAME_RUNNING) {
 	ld	a, (#_last_state)
 	sub	a, #0x03
 	jr	Z, 00108$
-;src/main.c:63: character_init(&p);
+;src/main.c:64: character_init(&p);
 	ld	de, #_p
 	call	_character_init
-;src/main.c:64: last_state = STATE_GAME_RUNNING;
+;src/main.c:65: last_state = STATE_GAME_RUNNING;
 	ld	hl, #_last_state
 	ld	(hl), #0x03
 00108$:
-;src/main.c:66: update_character(&p);
+;src/main.c:67: update_character(&p);
 	ld	de, #_p
 	call	_update_character
-;src/main.c:82: }
+;src/main.c:83: }
 00110$:
-;src/main.c:83: performantdelay(10);
+;src/main.c:84: performantdelay(10);
 	ld	a, #0x0a
 	call	_performantdelay
-;src/main.c:85: }
+;src/main.c:86: }
 	jr	00112$
 	.area _CODE
 	.area _INITIALIZER

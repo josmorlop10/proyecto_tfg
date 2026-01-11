@@ -29,10 +29,11 @@ void init_gfx(void){
     set_sprite_tile(6,6);
     set_sprite_tile(7,7);
 
+
     SHOW_SPRITES;
 
     //map
-    set_bkg_data(0, 28, map_tiles);
+    set_bkg_data(0, 44, map_tiles);
     set_bkg_tiles(0,0,20,18,map1);
     get_colision_from_map(map1, global_colision_map);
     SHOW_BKG;
