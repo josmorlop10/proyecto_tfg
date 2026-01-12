@@ -9,19 +9,23 @@ Symbol Table
     .__.H$L.                                                    =   00000000 L
   7 __xinit__global_blocks_available                                00000168 R
   7 __xinit__global_colision_map                                    00000000 R
+  7 __xinit__global_levels_array                                    0000016D R
   7 __xinit__global_selected_block                                  0000016C R
-  0 _change_colision_map_BR                                         000000AC GR
-  0 _change_colision_map_at                                         00000061 GR
-  0 _get_colision_from_map                                          00000004 GR
-  0 _get_init_point_from_map                                        000000BB GR
+  0 _change_colision_map_BR                                         000000E2 GR
+  0 _change_colision_map_at                                         00000097 GR
+  0 _get_colision_from_map                                          0000003A GR
+  0 _get_init_point_from_map                                        000000F1 GR
   2 _global_blocks_available                                        00000168 GR
   2 _global_colision_map                                            00000000 GR
   1 _global_events                                                  00000001 GR
   1 _global_game_state                                              00000000 GR
   1 _global_init_point                                              00000029 GR
+  2 _global_levels_array                                            0000016D GR
   2 _global_selected_block                                          0000016C GR
-  0 _move_foward_block_id                                           000000EE GR
-  0 _update_game_state                                              00000000 GR
+  0 _init_level                                                     00000000 GR
+    _map1                                                           ******** GX
+  0 _move_foward_block_id                                           00000124 GR
+  0 _update_game_state                                              00000036 GR
 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
@@ -29,13 +33,13 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       F9   flags    0
+   0 _CODE                                      size      12F   flags    0
    1 _DATA                                      size       2B   flags    0
-   2 _INITIALIZED                               size      16D   flags    0
+   2 _INITIALIZED                               size      16F   flags    0
    3 _DABS                                      size        0   flags    8
    4 _HOME                                      size        0   flags    0
    5 _GSINIT                                    size        0   flags    0
    6 _GSFINAL                                   size        0   flags    0
-   7 _INITIALIZER                               size      16D   flags    0
+   7 _INITIALIZER                               size      16F   flags    0
    8 _CABS                                      size        0   flags    8
 

@@ -31,11 +31,9 @@ void init_gfx(void){
 
 
     SHOW_SPRITES;
-
     //map
     set_bkg_data(0, 44, map_tiles);
     set_bkg_tiles(0,0,20,18,map1);
-    get_colision_from_map(map1, global_colision_map);
     SHOW_BKG;
 }
 
@@ -51,6 +49,8 @@ void main(void)
         case STATE_GAME_SETTING:
             if(last_state != STATE_GAME_SETTING) {
                 init_gfx();
+                init_level(0);
+                get_colision_from_map(map1, global_colision_map);
                 last_state = STATE_GAME_SETTING;
             }
             update_pointer(&s);

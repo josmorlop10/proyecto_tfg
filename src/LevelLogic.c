@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <gb/gb.h>
 #include <gbdk/console.h>
+#include "../res/map1.h"
+#include "../res/map_tiles.h"
 
 //variables globales
 GameState global_game_state;
@@ -11,6 +13,23 @@ uint16_t global_init_point;
 
 uint8_t global_blocks_available[4] = {2,2,2,2}; //MOCKUP. Change later
 uint8_t global_selected_block = 0;
+
+const unsigned char* global_levels_array[] = {map1};
+
+void init_level(uint8_t level_number){
+
+    if(level_number >= sizeof(global_levels_array)){
+        level_number = level_number % sizeof(global_levels_array);
+    }
+    //map
+    for(uint16_t i = 0; i<360; i++){
+        global_colision_map[i] = EMPTY;
+    }
+
+    get_colision_from_map(global_levels_array[level_number], global_colision_map);
+    get_init_point_from_map(global_colision_map);
+
+}
 
 void update_game_state(GameState new_value){
      global_game_state = new_value;

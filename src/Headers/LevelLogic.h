@@ -23,6 +23,9 @@
 extern uint8_t global_blocks_available[4];
 //indica el indice del array
 extern uint8_t global_selected_block;
+//variable global array de niveles disponibles (o mapas)
+extern const unsigned char* global_levels_array[];
+
 
 typedef enum {
     STATE_MENU,
@@ -51,6 +54,7 @@ void get_init_point_from_map(uint8_t colision_map[360]);
 void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value);
 void change_colision_map_BR(uint16_t tileindexBR, uint8_t new_value);
 void move_foward_block_id(void);
+void init_level(uint8_t level_number);
 
 
 #endif

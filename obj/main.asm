@@ -12,6 +12,7 @@
 	.globl _hide_pointer
 	.globl _update_pointer
 	.globl _pointer_init
+	.globl _init_level
 	.globl _get_colision_from_map
 	.globl _update_game_state
 	.globl _update_character
@@ -103,16 +104,15 @@ _init_gfx::
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x02
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:36: set_bkg_data(0, 44, map_tiles);
+;src/main.c:35: set_bkg_data(0, 44, map_tiles);
 	ld	de, #_map_tiles
 	push	de
 	ld	hl, #0x2c00
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;src/main.c:37: set_bkg_tiles(0,0,20,18,map1);
-	ld	de, #_map1+0
-	push	de
+;src/main.c:36: set_bkg_tiles(0,0,20,18,map1);
+	ld	de, #_map1
 	push	de
 	ld	hl, #0x1214
 	push	hl
@@ -121,32 +121,28 @@ _init_gfx::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-	pop	de
-;src/main.c:38: get_colision_from_map(map1, global_colision_map);
-	ld	bc, #_global_colision_map
-	call	_get_colision_from_map
-;src/main.c:39: SHOW_BKG;
+;src/main.c:37: SHOW_BKG;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x01
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:40: }
+;src/main.c:38: }
 	ret
-;src/main.c:42: void main(void)
+;src/main.c:40: void main(void)
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
 _main::
-;src/main.c:44: init_gfx();
+;src/main.c:42: init_gfx();
 	call	_init_gfx
-;src/main.c:45: pointer_init(&s);
+;src/main.c:43: pointer_init(&s);
 	ld	de, #_s
 	call	_pointer_init
-;src/main.c:46: global_game_state = STATE_GAME_SETTING;
+;src/main.c:44: global_game_state = STATE_GAME_SETTING;
 	ld	hl, #_global_game_state
 	ld	(hl), #0x02
-;src/main.c:48: while(1) {
+;src/main.c:46: while(1) {
 00117$:
-;src/main.c:49: switch (global_game_state)
+;src/main.c:47: switch (global_game_state)
 	ld	a,(#_global_game_state)
 	cp	a,#0x02
 	jr	Z, 00101$
@@ -155,14 +151,21 @@ _main::
 	sub	a, #0x05
 	jr	Z, 00109$
 	jr	00115$
-;src/main.c:51: case STATE_GAME_SETTING:
+;src/main.c:49: case STATE_GAME_SETTING:
 00101$:
-;src/main.c:52: if(last_state != STATE_GAME_SETTING) {
+;src/main.c:50: if(last_state != STATE_GAME_SETTING) {
 	ld	a, (#_last_state)
 	sub	a, #0x02
 	jr	Z, 00103$
-;src/main.c:53: init_gfx();
+;src/main.c:51: init_gfx();
 	call	_init_gfx
+;src/main.c:52: init_level(0);
+	xor	a, a
+	call	_init_level
+;src/main.c:53: get_colision_from_map(map1, global_colision_map);
+	ld	bc, #_global_colision_map
+	ld	de, #_map1
+	call	_get_colision_from_map
 ;src/main.c:54: last_state = STATE_GAME_SETTING;
 	ld	hl, #_last_state
 	ld	(hl), #0x02
@@ -227,7 +230,7 @@ _main::
 	ld	a, #0x0a
 	call	_performantdelay
 ;src/main.c:97: }
-	jr	00117$
+	jp	00117$
 ___str_0:
 	.ascii "You WIN!"
 	.db 0x0a
