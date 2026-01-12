@@ -5,6 +5,7 @@
 #include "../res/duck.h"
 #include "../res/map1.h" 
 #include "../res/map_tiles.h" 
+#include "../res/object_sprites.h"
 #include "Headers/Common.h"
 #include "Headers/Character.h"
 #include "Headers/LevelLogic.h"
@@ -29,7 +30,9 @@ void init_gfx(void){
     set_sprite_tile(6,6);
     set_sprite_tile(7,7);
 
-
+    //objects
+    set_sprite_data(8,1,object_sprites);
+    set_sprite_tile(8,8);
     SHOW_SPRITES;
     //map
     set_bkg_data(0, 44, map_tiles);
@@ -54,6 +57,7 @@ void main(void)
                 last_state = STATE_GAME_SETTING;
             }
             update_pointer(&s);
+            move_sprite(8,76,28);
             if(joypad() & J_START){
                 hide_pointer();
                 update_game_state(STATE_GAME_RUNNING);

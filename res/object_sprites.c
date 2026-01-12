@@ -1,8 +1,8 @@
 /*
 
- MAP_TILES.H
+ OBJECT_SPRITES.C
 
- Include File.
+ Tile Source File.
 
  Info:
   Form                 : All tiles as one unit.
@@ -10,7 +10,7 @@
   Compression          : None.
   Counter              : None.
   Tile size            : 8 x 8
-  Tiles                : 0 to 48
+  Tiles                : 0 to 1
 
   Palette colors       : None.
   SGB Palette          : None.
@@ -22,14 +22,13 @@
 
 */
 
-#ifndef __map_tiles_h_INCLUDE
-#define __map_tiles_h_INCLUDE
-
-/* Bank of tiles. */
-#define map_tilesBank 0
 /* Start of tile array. */
-extern const unsigned char map_tiles[];
+const unsigned char object_sprites[] =
+{
+  0x7E,0x00,0x81,0x3D,0x81,0x5B,0x81,0x67,
+  0x81,0x67,0x81,0x5B,0x81,0x3D,0x7E,0x7E,
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+};
 
-#endif
-
-/* End of MAP_TILES.H */
+/* End of OBJECT_SPRITES.C */
