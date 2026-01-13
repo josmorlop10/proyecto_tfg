@@ -10,6 +10,7 @@
 #include "Headers/Character.h"
 #include "Headers/LevelLogic.h"
 #include "Headers/PointerSelector.h"
+#include "Headers/Object.h"
 
 Character p;
 Pointer s;
@@ -44,6 +45,7 @@ void main(void)
 {   
     init_gfx();
     pointer_init(&s);
+
     global_game_state = STATE_GAME_SETTING;
     
     while(1) {
@@ -54,10 +56,11 @@ void main(void)
                 init_gfx();
                 init_level(0);
                 get_colision_from_map(map1, global_colision_map);
+
+                print_objects_in_screen();
                 last_state = STATE_GAME_SETTING;
             }
             update_pointer(&s);
-            move_sprite(8,76,28);
             if(joypad() & J_START){
                 hide_pointer();
                 update_game_state(STATE_GAME_RUNNING);

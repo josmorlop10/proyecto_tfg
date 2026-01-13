@@ -8,7 +8,7 @@ Symbol Table
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
     _LCDC_REG                                                       ******** GX
-  0 ___str_0                                                        0000011E R
+  0 ___str_0                                                        00000113 R
     _character_init                                                 ******** GX
     _duck                                                           ******** GX
     _get_colision_from_map                                          ******** GX
@@ -18,7 +18,7 @@ Symbol Table
   0 _init_gfx                                                       00000000 GR
     _init_level                                                     ******** GX
     _joypad                                                         ******** GX
-  1 _last_state                                                     00000015 GR
+  1 _last_state                                                     00000017 GR
   0 _main                                                           0000007E GR
     _map1                                                           ******** GX
     _map_tiles                                                      ******** GX
@@ -26,8 +26,9 @@ Symbol Table
   1 _p                                                              00000000 GR
     _performantdelay                                                ******** GX
     _pointer_init                                                   ******** GX
+    _print_objects_in_screen                                        ******** GX
     _printf                                                         ******** GX
-  1 _s                                                              0000000D GR
+  1 _s                                                              0000000F GR
     _selector                                                       ******** GX
     _set_bkg_data                                                   ******** GX
     _set_bkg_tiles                                                  ******** GX
@@ -37,13 +38,14 @@ Symbol Table
     _update_game_state                                              ******** GX
     _update_pointer                                                 ******** GX
 
+
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      140   flags    0
-   1 _DATA                                      size       16   flags    0
+   0 _CODE                                      size      135   flags    0
+   1 _DATA                                      size       18   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8
    4 _HOME                                      size        0   flags    0

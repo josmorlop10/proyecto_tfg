@@ -53,40 +53,40 @@ _debug::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;src/Character.c:10: void set_direction(Character* p,  int8_t x, int8_t y){
+;src/Character.c:11: void set_direction(Character* p,  int8_t x, int8_t y){
 ;	---------------------------------
 ; Function set_direction
 ; ---------------------------------
 _set_direction::
 	ld	c, a
-;src/Character.c:11: p->dir_x = x;
-	ld	hl, #0x0006
+;src/Character.c:12: p->dir_x = x;
+	ld	hl, #0x0008
 	add	hl, de
 	ld	(hl), c
-;src/Character.c:12: p->dir_y = y;
-	ld	hl, #0x0007
+;src/Character.c:13: p->dir_y = y;
+	ld	hl, #0x0009
 	add	hl, de
 	ld	c, l
 	ld	b, h
 	ldhl	sp,	#2
 	ld	a, (hl)
 	ld	(bc), a
-;src/Character.c:13: }
+;src/Character.c:14: }
 	pop	hl
 	inc	sp
 	jp	(hl)
-;src/Character.c:16: void character_init(Character* p) {
+;src/Character.c:17: void character_init(Character* p) {
 ;	---------------------------------
 ; Function character_init
 ; ---------------------------------
 _character_init::
 	dec	sp
-;src/Character.c:18: get_init_point_from_map(global_colision_map);
+;src/Character.c:19: get_init_point_from_map(global_colision_map);
 	push	de
 	ld	de, #_global_colision_map
 	call	_get_init_point_from_map
 	pop	de
-;src/Character.c:19: uint8_t player_x = (global_init_point % 20) * 8 + 8; //columna
+;src/Character.c:20: uint8_t player_x = (global_init_point % 20) * 8 + 8; //columna
 	ld	a, (_global_init_point)
 	ld	l, a
 	ld	a, (_global_init_point + 1)
@@ -108,7 +108,7 @@ _character_init::
 	ldhl	sp,	#2
 	ld	(hl), a
 	pop	hl
-;src/Character.c:20: uint8_t player_y = (global_init_point / 20) * 8 + 16; //fila
+;src/Character.c:21: uint8_t player_y = (global_init_point / 20) * 8 + 16; //fila
 	push	de
 	ld	bc, #0x0014
 	ld	e, l
@@ -121,7 +121,7 @@ _character_init::
 	add	a, a
 	add	a, #0x10
 	ld	c, a
-;src/Character.c:22: p->x = player_x;
+;src/Character.c:23: p->x = player_x;
 	ld	hl, #0x0004
 	add	hl, de
 	push	hl
@@ -129,60 +129,68 @@ _character_init::
 	ld	a, (hl)
 	pop	hl
 	ld	(hl), a
-;src/Character.c:23: p->y = player_y;
+;src/Character.c:24: p->y = player_y;
 	ld	hl, #0x0005
 	add	hl, de
 	ld	(hl), c
-;src/Character.c:24: p->dir_x = 1;  
+;src/Character.c:25: p->w = 16;
 	ld	hl, #0x0006
 	add	hl, de
-	ld	(hl), #0x01
-;src/Character.c:25: p->dir_y = 0; 
+	ld	(hl), #0x10
+;src/Character.c:26: p->h = 16;
 	ld	hl, #0x0007
 	add	hl, de
-	ld	(hl), #0x00
-;src/Character.c:26: p->speed = 8;
+	ld	(hl), #0x10
+;src/Character.c:27: p->dir_x = 1;  
 	ld	hl, #0x0008
 	add	hl, de
+	ld	(hl), #0x01
+;src/Character.c:28: p->dir_y = 0; 
+	ld	hl, #0x0009
+	add	hl, de
+	ld	(hl), #0x00
+;src/Character.c:29: p->speed = 8;
+	ld	hl, #0x000a
+	add	hl, de
 	ld	(hl), #0x08
-;src/Character.c:27: for(uint8_t i = 0;i<=3;i++){
+;src/Character.c:30: for(uint8_t i = 0;i<=3;i++){
 	ld	c, #0x00
 00103$:
 	ld	a, #0x03
 	sub	a, c
 	jr	C, 00101$
-;src/Character.c:28: p->sprite_ids[i] = i;
+;src/Character.c:31: p->sprite_ids[i] = i;
 	ld	l, c
 	ld	h, #0x00
 	add	hl, de
 	ld	(hl), c
-;src/Character.c:27: for(uint8_t i = 0;i<=3;i++){
+;src/Character.c:30: for(uint8_t i = 0;i<=3;i++){
 	inc	c
 	jr	00103$
 00101$:
-;src/Character.c:30: p->tileindexBR = 0;
-	ld	hl, #0x0009
-	add	hl, de
-	xor	a, a
-	ld	(hl+), a
-	ld	(hl), a
-;src/Character.c:31: p->next_tileindexBR = 0;
+;src/Character.c:33: p->tileindexBR = 0;
 	ld	hl, #0x000b
 	add	hl, de
 	xor	a, a
 	ld	(hl+), a
 	ld	(hl), a
-;src/Character.c:32: }
+;src/Character.c:34: p->next_tileindexBR = 0;
+	ld	hl, #0x000d
+	add	hl, de
+	xor	a, a
+	ld	(hl+), a
+	ld	(hl), a
+;src/Character.c:35: }
 	inc	sp
 	ret
-;src/Character.c:34: void move_character(Character* p) {
+;src/Character.c:37: void move_character(Character* p) {
 ;	---------------------------------
 ; Function move_character
 ; ---------------------------------
 _move_character::
 	dec	sp
 	dec	sp
-;src/Character.c:36: move_sprite(0, p->x-SPRITESIZE, p->y-SPRITESIZE);
+;src/Character.c:39: move_sprite(0, p->x-SPRITESIZE, p->y-SPRITESIZE);
 	ld	hl, #0x0005
 	add	hl, de
 	ld	c, l
@@ -211,7 +219,7 @@ _move_character::
 	ld	a, (hl)
 	pop	hl
 	ld	(hl), a
-;src/Character.c:37: move_sprite(1, p->x-SPRITESIZE, p->y);
+;src/Character.c:40: move_sprite(1, p->x-SPRITESIZE, p->y);
 	ld	a, (bc)
 	ldhl	sp,	#0
 	ld	(hl+), a
@@ -231,7 +239,7 @@ _move_character::
 	ld	a, (hl)
 	pop	hl
 	ld	(hl), a
-;src/Character.c:38: move_sprite(2, p->x, p->y-SPRITESIZE);
+;src/Character.c:41: move_sprite(2, p->x, p->y-SPRITESIZE);
 	ld	a, (bc)
 	add	a, #0xf8
 	ldhl	sp,	#0
@@ -251,7 +259,7 @@ _move_character::
 	ld	a, (hl)
 	pop	hl
 	ld	(hl), a
-;src/Character.c:39: move_sprite(3, p->x, p->y);
+;src/Character.c:42: move_sprite(3, p->x, p->y);
 	ld	a, (bc)
 	ld	b, a
 	ld	a, (de)
@@ -262,12 +270,12 @@ _move_character::
 	ld	a, b
 	ld	(hl+), a
 	ld	(hl), c
-;src/Character.c:39: move_sprite(3, p->x, p->y);
-;src/Character.c:41: }
+;src/Character.c:42: move_sprite(3, p->x, p->y);
+;src/Character.c:44: }
 	inc	sp
 	inc	sp
 	ret
-;src/Character.c:43: void movement_step_by_step(Character* p){
+;src/Character.c:46: void movement_step_by_step(Character* p){
 ;	---------------------------------
 ; Function movement_step_by_step
 ; ---------------------------------
@@ -276,13 +284,13 @@ _movement_step_by_step::
 	ldhl	sp,	#4
 	ld	a, e
 	ld	(hl+), a
-;src/Character.c:45: for(uint8_t i = 0; i < SPRITESIZE; i++) {
+;src/Character.c:48: for(uint8_t i = 0; i < SPRITESIZE; i++) {
 	ld	a, d
 	ld	(hl-), a
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
-	ld	hl, #0x0007
+	ld	hl, #0x0009
 	add	hl, de
 	inc	sp
 	inc	sp
@@ -291,7 +299,7 @@ _movement_step_by_step::
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
-	ld	hl, #0x0006
+	ld	hl, #0x0008
 	add	hl, de
 	push	hl
 	ld	a, l
@@ -308,7 +316,7 @@ _movement_step_by_step::
 	ld	a, (hl)
 	sub	a, #0x08
 	jr	NC, 00105$
-;src/Character.c:46: p->y += 1 * p->dir_y;
+;src/Character.c:49: p->y += 1 * p->dir_y;
 	dec	hl
 	dec	hl
 	ld	a, (hl+)
@@ -327,7 +335,7 @@ _movement_step_by_step::
 	pop	af
 	add	a, l
 	ld	(bc), a
-;src/Character.c:47: p->x += 1 * p->dir_x;
+;src/Character.c:50: p->x += 1 * p->dir_x;
 	ldhl	sp,#4
 	ld	a, (hl+)
 	ld	e, a
@@ -347,15 +355,15 @@ _movement_step_by_step::
 	pop	af
 	add	a, l
 	ld	(bc), a
-;src/Character.c:45: for(uint8_t i = 0; i < SPRITESIZE; i++) {
+;src/Character.c:48: for(uint8_t i = 0; i < SPRITESIZE; i++) {
 	ldhl	sp,	#6
 	inc	(hl)
 	jr	00103$
 00105$:
-;src/Character.c:49: }
+;src/Character.c:52: }
 	add	sp, #7
 	ret
-;src/Character.c:51: uint8_t canplayermove(Character* p){
+;src/Character.c:54: uint8_t canplayermove(Character* p){
 ;	---------------------------------
 ; Function canplayermove
 ; ---------------------------------
@@ -364,13 +372,13 @@ _canplayermove::
 	ldhl	sp,	#8
 	ld	a, e
 	ld	(hl+), a
-;src/Character.c:53: uint16_t tileindexBR = p->next_tileindexBR;
+;src/Character.c:56: uint16_t tileindexBR = p->next_tileindexBR;
 	ld	a, d
 	ld	(hl-), a
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
-	ld	hl, #0x000b
+	ld	hl, #0x000d
 	add	hl, de
 	ld	c, l
 	ld	b, h
@@ -381,7 +389,7 @@ _canplayermove::
 	ld	(hl+), a
 	inc	de
 	ld	a, (de)
-;src/Character.c:54: uint16_t tileindexTL = tileindexBR -21;
+;src/Character.c:57: uint16_t tileindexTL = tileindexBR -21;
 	ld	(hl+), a
 	pop	bc
 	push	bc
@@ -392,7 +400,7 @@ _canplayermove::
 	adc	a, #0xff
 	ld	(hl), e
 	inc	hl
-;src/Character.c:55: uint16_t tileindexTR = tileindexBR -20;
+;src/Character.c:58: uint16_t tileindexTR = tileindexBR -20;
 	ld	(hl+), a
 	ld	a, c
 	add	a, #0xec
@@ -401,13 +409,13 @@ _canplayermove::
 	adc	a, #0xff
 	ld	(hl), e
 	inc	hl
-;src/Character.c:56: uint16_t tileindexBL = tileindexBR -1;
+;src/Character.c:59: uint16_t tileindexBL = tileindexBR -1;
 	ld	(hl+), a
 	dec	bc
 	ld	a, c
 	ld	(hl+), a
 	ld	(hl), b
-;src/Character.c:59: if ((global_colision_map[tileindexTL] == SOLID) || 
+;src/Character.c:62: if ((global_colision_map[tileindexTL] == SOLID) || 
 	ld	de, #_global_colision_map
 	ldhl	sp,	#2
 	ld	a,	(hl+)
@@ -419,7 +427,7 @@ _canplayermove::
 	ld	a, (bc)
 	dec	a
 	jr	Z, 00101$
-;src/Character.c:60: (global_colision_map[tileindexTR] == SOLID) || 
+;src/Character.c:63: (global_colision_map[tileindexTR] == SOLID) || 
 	ld	de, #_global_colision_map
 	ldhl	sp,	#4
 	ld	a,	(hl+)
@@ -431,7 +439,7 @@ _canplayermove::
 	ld	a, (bc)
 	dec	a
 	jr	Z, 00101$
-;src/Character.c:61: (global_colision_map[tileindexBL] == SOLID) ||
+;src/Character.c:64: (global_colision_map[tileindexBL] == SOLID) ||
 	ld	de, #_global_colision_map
 	ldhl	sp,	#6
 	ld	a,	(hl+)
@@ -443,7 +451,7 @@ _canplayermove::
 	ld	a, (bc)
 	dec	a
 	jr	Z, 00101$
-;src/Character.c:62: (global_colision_map[tileindexBR] == SOLID))
+;src/Character.c:65: (global_colision_map[tileindexBR] == SOLID))
 	ld	de, #_global_colision_map
 	pop	hl
 	push	hl
@@ -454,16 +462,16 @@ _canplayermove::
 	dec	a
 	jr	NZ, 00102$
 00101$:
-;src/Character.c:64: return 0;
+;src/Character.c:67: return 0;
 	xor	a, a
 	jr	00112$
 00102$:
-;src/Character.c:67: uint8_t event = player_tileBR_over_a_block(p->tileindexBR);
+;src/Character.c:70: uint8_t event = player_tileBR_over_a_block(p->tileindexBR);
 	ldhl	sp,#8
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
-	ld	hl, #0x0009
+	ld	hl, #0x000b
 	add	hl, de
 	ld	a, (hl+)
 	ld	c, a
@@ -471,7 +479,7 @@ _canplayermove::
 	ld	e, c
 	ld	d, a
 	call	_player_tileBR_over_a_block
-;src/Character.c:68: switch(event){
+;src/Character.c:71: switch(event){
 	ldhl	sp,#7
 	ld	(hl), a
 	sub	a, #0x06
@@ -489,27 +497,13 @@ _canplayermove::
 	sub	a, #0x09
 	jr	Z, 00109$
 	jr	00111$
-;src/Character.c:69: case RIGHT:
+;src/Character.c:72: case RIGHT:
 00106$:
-;src/Character.c:70: set_direction(p, 1, 0);
+;src/Character.c:73: set_direction(p, 1, 0);
 	xor	a, a
 	push	af
 	inc	sp
 	ld	a, #0x01
-	ldhl	sp,	#9
-	ld	e, (hl)
-	inc	hl
-	ld	d, (hl)
-	call	_set_direction
-;src/Character.c:71: break;
-	jr	00111$
-;src/Character.c:72: case LEFT:
-00107$:
-;src/Character.c:73: set_direction(p, -1, 0);
-	xor	a, a
-	push	af
-	inc	sp
-	ld	a, #0xff
 	ldhl	sp,	#9
 	ld	e, (hl)
 	inc	hl
@@ -517,9 +511,23 @@ _canplayermove::
 	call	_set_direction
 ;src/Character.c:74: break;
 	jr	00111$
-;src/Character.c:75: case UP:
+;src/Character.c:75: case LEFT:
+00107$:
+;src/Character.c:76: set_direction(p, -1, 0);
+	xor	a, a
+	push	af
+	inc	sp
+	ld	a, #0xff
+	ldhl	sp,	#9
+	ld	e, (hl)
+	inc	hl
+	ld	d, (hl)
+	call	_set_direction
+;src/Character.c:77: break;
+	jr	00111$
+;src/Character.c:78: case UP:
 00108$:
-;src/Character.c:76: set_direction(p, 0, -1);
+;src/Character.c:79: set_direction(p, 0, -1);
 	ld	a, #0xff
 	push	af
 	inc	sp
@@ -529,11 +537,11 @@ _canplayermove::
 	inc	hl
 	ld	d, (hl)
 	call	_set_direction
-;src/Character.c:77: break;
+;src/Character.c:80: break;
 	jr	00111$
-;src/Character.c:78: case DOWN:
+;src/Character.c:81: case DOWN:
 00109$:
-;src/Character.c:79: set_direction(p, 0, 1);
+;src/Character.c:82: set_direction(p, 0, 1);
 	ld	a, #0x01
 	push	af
 	inc	sp
@@ -543,34 +551,34 @@ _canplayermove::
 	inc	hl
 	ld	d, (hl)
 	call	_set_direction
-;src/Character.c:83: }
+;src/Character.c:86: }
 00111$:
-;src/Character.c:85: return 1;
+;src/Character.c:88: return 1;
 	ld	a, #0x01
 00112$:
-;src/Character.c:86: }
+;src/Character.c:89: }
 	add	sp, #10
 	ret
-;src/Character.c:88: void flip_direction(Character* p){
+;src/Character.c:91: void flip_direction(Character* p){
 ;	---------------------------------
 ; Function flip_direction
 ; ---------------------------------
 _flip_direction::
-;src/Character.c:89: p->dir_x = - p->dir_x;
-	ld	hl, #0x0006
+;src/Character.c:92: p->dir_x = - p->dir_x;
+	ld	hl, #0x0008
 	add	hl, de
 	xor	a, a
 	sub	a, (hl)
 	ld	(hl), a
-;src/Character.c:90: p->dir_y = - p->dir_y;
-	ld	hl, #0x0007
+;src/Character.c:93: p->dir_y = - p->dir_y;
+	ld	hl, #0x0009
 	add	hl, de
 	xor	a, a
 	sub	a, (hl)
 	ld	(hl), a
-;src/Character.c:91: }
+;src/Character.c:94: }
 	ret
-;src/Character.c:93: void update_character(Character* p) { //devuelve las teclas actuales
+;src/Character.c:96: void update_character(Character* p) { //devuelve las teclas actuales
 ;	---------------------------------
 ; Function update_character
 ; ---------------------------------
@@ -579,13 +587,13 @@ _update_character::
 	ldhl	sp,	#11
 	ld	a, e
 	ld	(hl+), a
-;src/Character.c:95: if(player_tileBR_over_destination(p->tileindexBR)){
+;src/Character.c:98: if(player_tileBR_over_destination(p->tileindexBR)){
 	ld	a, d
 	ld	(hl-), a
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
-	ld	hl, #0x0009
+	ld	hl, #0x000b
 	add	hl, de
 	ld	c,l
 	ld	b,h
@@ -601,13 +609,13 @@ _update_character::
 	ld	a, e
 	or	a, a
 	jr	Z, 00102$
-;src/Character.c:96: update_game_state(STATE_GAME_OVER);
+;src/Character.c:99: update_game_state(STATE_GAME_OVER);
 	ld	a, #0x05
 	call	_update_game_state
-;src/Character.c:97: return;
+;src/Character.c:100: return;
 	jp	00106$
 00102$:
-;src/Character.c:100: p->tileindexBR = tileindex_from_xy(p->x, p->y);
+;src/Character.c:103: p->tileindexBR = tileindex_from_xy(p->x, p->y);
 	ldhl	sp,#11
 	ld	a, (hl+)
 	ld	e, a
@@ -657,12 +665,12 @@ _update_character::
 	inc	bc
 	ld	a, d
 	ld	(bc), a
-;src/Character.c:101: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
+;src/Character.c:104: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
 	ldhl	sp,#11
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
-	ld	hl, #0x000b
+	ld	hl, #0x000d
 	add	hl, de
 	inc	sp
 	inc	sp
@@ -677,7 +685,7 @@ _update_character::
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
-	ld	hl, #0x0007
+	ld	hl, #0x0009
 	add	hl, de
 	push	hl
 	ld	a, l
@@ -708,7 +716,7 @@ _update_character::
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
-	ld	hl, #0x0006
+	ld	hl, #0x0008
 	add	hl, de
 	push	hl
 	ld	a, l
@@ -733,7 +741,7 @@ _update_character::
 	ld	a, c
 	ld	(hl+), a
 	ld	(hl), b
-;src/Character.c:103: if(canplayermove(p)) {
+;src/Character.c:106: if(canplayermove(p)) {
 	ldhl	sp,	#11
 	ld	a, (hl+)
 	ld	e, a
@@ -741,7 +749,7 @@ _update_character::
 	call	_canplayermove
 	or	a, a
 	jr	Z, 00104$
-;src/Character.c:104: p->x += p->speed * p->dir_x;
+;src/Character.c:107: p->x += p->speed * p->dir_x;
 	ldhl	sp,#4
 	ld	a, (hl+)
 	ld	e, a
@@ -752,7 +760,7 @@ _update_character::
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
-	ld	hl, #0x0008
+	ld	hl, #0x000a
 	add	hl, de
 	ld	c, l
 	ld	b, h
@@ -779,7 +787,7 @@ _update_character::
 	ld	h, (hl)
 	ld	l, e
 	ld	(hl), a
-;src/Character.c:105: p->y += p->speed * p->dir_y;
+;src/Character.c:108: p->y += p->speed * p->dir_y;
 	ldhl	sp,#2
 	ld	a, (hl+)
 	ld	e, a
@@ -808,21 +816,21 @@ _update_character::
 	ld	(hl), a
 	jr	00105$
 00104$:
-;src/Character.c:107: flip_direction(p);
+;src/Character.c:110: flip_direction(p);
 	ldhl	sp,	#11
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
 	call	_flip_direction
 00105$:
-;src/Character.c:109: move_character(p);
+;src/Character.c:112: move_character(p);
 	ldhl	sp,	#11
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
 	call	_move_character
 00106$:
-;src/Character.c:110: }
+;src/Character.c:113: }
 	add	sp, #13
 	ret
 	.area _CODE

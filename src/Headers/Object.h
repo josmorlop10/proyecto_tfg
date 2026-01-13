@@ -3,18 +3,15 @@
 
 #include <stdint.h>
 
-typedef struct {
-    int8_t sprite_id;
-    //las posiciones x e y de los objetos no pueden ser aleatorias. Deben ser
-    //de la forma 4 + k*8, para que esté dento del grid. 
-    uint8_t x, y;
-    uint8_t weight,height;
+#define OBJECT_SIZE 8
+#define NUMBER_OF_OBJECTS 2
 
-} Object;
+//OBJECT TYPES;
+#define NO_ACTION 8
 
-void init_object(void);
-void update_object(void);
-void check_colision(Object o, uint8_t px, uint8_t py);
+extern uint8_t global_object_information[3*NUMBER_OF_OBJECTS];
 
+void print_objects_in_screen(void);
+void hide_object(uint8_t i);
 
 #endif
