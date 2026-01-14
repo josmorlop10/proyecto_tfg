@@ -19,6 +19,7 @@ Symbol Table
     _get_init_point_from_map                                        ******** GX
     _global_colision_map                                            ******** GX
     _global_init_point                                              ******** GX
+    _hide_object                                                    ******** GX
   0 _move_character                                                 00000098 GR
   0 _movement_step_by_step                                          000000F8 GR
     _player_tileBR_over_a_block                                     ******** GX
@@ -35,7 +36,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      3C0   flags    0
+   0 _CODE                                      size      3CA   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        1   flags    0
    3 _DABS                                      size        0   flags    8

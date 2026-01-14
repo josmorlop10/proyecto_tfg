@@ -32,8 +32,9 @@ void init_gfx(void){
     set_sprite_tile(7,7);
 
     //objects
-    set_sprite_data(8,1,object_sprites);
+    set_sprite_data(8,2,object_sprites);
     set_sprite_tile(8,8);
+    set_sprite_tile(9,9);
     SHOW_SPRITES;
 
     //map

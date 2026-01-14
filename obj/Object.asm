@@ -7,6 +7,7 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
+	.globl _check_colision_of_sprites
 	.globl _global_object_information
 	.globl _print_objects_in_screen
 	.globl _hide_object
@@ -44,20 +45,20 @@ _global_object_information::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;src/Object.c:7: void print_objects_in_screen(void){
+;src/Object.c:8: void print_objects_in_screen(void){
 ;	---------------------------------
 ; Function print_objects_in_screen
 ; ---------------------------------
 _print_objects_in_screen::
 	dec	sp
 	dec	sp
-;src/Object.c:12: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+;src/Object.c:13: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
 	ld	c, #0x00
 00105$:
 	ld	a, c
 	sub	a, #0x02
 	jr	NC, 00107$
-;src/Object.c:13: obj_x = global_object_information[3*e];
+;src/Object.c:14: obj_x = global_object_information[3*e];
 	ld	l, c
 	ld	h, #0x00
 	ld	e, l
@@ -69,7 +70,7 @@ _print_objects_in_screen::
 	ld	a, (hl)
 	ldhl	sp,	#0
 	ld	(hl), a
-;src/Object.c:14: obj_y = global_object_information[3*e + 1];
+;src/Object.c:15: obj_y = global_object_information[3*e + 1];
 	ld	a, c
 	ld	e, a
 	add	a, a
@@ -83,7 +84,7 @@ _print_objects_in_screen::
 	ld	a, (hl)
 	ldhl	sp,	#1
 	ld	(hl), a
-;src/Object.c:15: obj_type = global_object_information[3*e + 2];
+;src/Object.c:16: obj_type = global_object_information[3*e + 2];
 	inc	b
 	inc	b
 	ld	l, b
@@ -91,7 +92,7 @@ _print_objects_in_screen::
 	ld	de, #_global_object_information
 	add	hl, de
 	ld	d, (hl)
-;src/Object.c:17: set_sprite_tile(8+e,obj_type);
+;src/Object.c:18: set_sprite_tile(8+e,obj_type);
 	ld	a, c
 	add	a, #0x08
 	ld	e, a
@@ -111,7 +112,7 @@ _print_objects_in_screen::
 	inc	hl
 	inc	hl
 	ld	(hl), d
-;src/Object.c:18: move_sprite(8+e, obj_x, obj_y);
+;src/Object.c:19: move_sprite(8+e, obj_x, obj_y);
 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
 	xor	a, a
 	ld	l, e
@@ -131,21 +132,21 @@ _print_objects_in_screen::
 	inc	de
 	ld	a, (hl)
 	ld	(de), a
-;src/Object.c:12: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+;src/Object.c:13: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
 	inc	c
 	jr	00105$
 00107$:
-;src/Object.c:20: }
+;src/Object.c:21: }
 	inc	sp
 	inc	sp
 	ret
-;src/Object.c:22: void hide_object(uint8_t i){
+;src/Object.c:23: void hide_object(uint8_t i){
 ;	---------------------------------
 ; Function hide_object
 ; ---------------------------------
 _hide_object::
 	ld	c, a
-;src/Object.c:23: global_object_information[i*NUMBER_OF_OBJECTS] = 0;
+;src/Object.c:24: global_object_information[i*NUMBER_OF_OBJECTS] = 0;
 	ld	de, #_global_object_information+0
 	ld	l, c
 	xor	a, a
@@ -153,7 +154,7 @@ _hide_object::
 	add	hl, hl
 	add	hl, de
 	ld	(hl), #0x00
-;src/Object.c:24: global_object_information[i*NUMBER_OF_OBJECTS+1] = 0;
+;src/Object.c:25: global_object_information[i*NUMBER_OF_OBJECTS+1] = 0;
 	ld	a, c
 	add	a, a
 	inc	a
@@ -163,7 +164,7 @@ _hide_object::
 	ld	h, a
 	add	hl, de
 	ld	(hl), #0x00
-;src/Object.c:25: move_sprite(8+i, 0, 0);
+;src/Object.c:26: move_sprite(8+i, 0, 0);
 	ld	a, c
 	add	a, #0x08
 	ld	e, a
@@ -179,182 +180,100 @@ _hide_object::
 	xor	a, a
 	ld	(hl+), a
 	ld	(hl), a
-;src/Object.c:25: move_sprite(8+i, 0, 0);
-;src/Object.c:26: }
+;src/Object.c:26: move_sprite(8+i, 0, 0);
+;src/Object.c:27: }
 	ret
-;src/Object.c:28: uint8_t check_colision_with_object(uint8_t x, uint8_t y, uint8_t w, uint8_t h){
+;src/Object.c:29: uint8_t check_colision_with_object(uint8_t x, uint8_t y, uint8_t w, uint8_t h){
 ;	---------------------------------
 ; Function check_colision_with_object
 ; ---------------------------------
 _check_colision_with_object::
-	add	sp, #-12
-	ldhl	sp,	#10
+	add	sp, #-4
+	ldhl	sp,	#3
 	ld	(hl-), a
 	ld	(hl), e
-;src/Object.c:32: uint8_t res = 0;
-	ldhl	sp,	#0
-;src/Object.c:34: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
-	xor	a, a
-	ld	(hl+), a
-	ld	(hl), a
-	ldhl	sp,	#11
-	ld	(hl), #0x00
-00108$:
-	ldhl	sp,	#11
-	ld	a, (hl)
+;src/Object.c:33: uint8_t res = 0;
+;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+	ld	bc, #0x0
+00105$:
+	ld	a, b
 	sub	a, #0x02
-	jp	NC, 00106$
-;src/Object.c:35: obj_x = global_object_information[3*e];
-	ld	c, (hl)
-	ld	b, #0x00
-	ld	l, c
-	ld	h, b
-	add	hl, hl
-	add	hl, bc
-	ld	de, #_global_object_information
-	add	hl, de
-	ld	c, (hl)
-;src/Object.c:36: obj_y = global_object_information[3*e + 1];
-	ldhl	sp,	#11
-	ld	a, (hl)
-	ld	e, a
-	add	a, a
-	add	a, e
-	ld	b, a
+	jr	NC, 00103$
+;src/Object.c:36: obj_x = global_object_information[3*e];
 	ld	l, b
-	inc	l
 	ld	h, #0x00
-	ld	de, #_global_object_information
-	add	hl, de
-	ld	a, (hl)
-	ldhl	sp,	#8
-	ld	(hl), a
-;src/Object.c:37: obj_type = global_object_information[3*e + 2];
-	ld	l, b
-	inc	l
-	inc	l
-	ld	h, #0x00
-	ld	de, #_global_object_information
-	add	hl, de
-	ld	a, (hl)
-	ldhl	sp,	#2
-	ld	(hl), a
-;src/Object.c:40: if( x < obj_x + OBJECT_SIZE && x + w > obj_x && y < obj_y + OBJECT_SIZE && y + h > obj_y ){
-	ldhl	sp,	#4
-	ld	a, c
-	ld	(hl+), a
-	xor	a, a
-	ld	(hl-), a
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	ld	hl, #0x0008
-	add	hl, de
-	ld	c, l
-	ld	b, h
-	ldhl	sp,	#10
-	ld	a, (hl)
-	ldhl	sp,	#6
-	ld	(hl+), a
-	xor	a, a
-	ld	(hl-), a
-	ld	a, (hl+)
-	sub	a, c
-	ld	a, (hl)
-	sbc	a, b
-	jr	NC, 00109$
-	ldhl	sp,	#14
-	ld	c, (hl)
-	ld	b, #0x00
-	ldhl	sp,	#6
-	ld	a,	(hl+)
-	ld	h, (hl)
-	ld	l, a
-	add	hl, bc
-	ld	c, l
-	ld	b, h
-	ldhl	sp,	#4
-	ld	a, (hl+)
-	sub	a, c
-	ld	a, (hl)
-	sbc	a, b
-	jr	NC, 00109$
-	ldhl	sp,	#8
-	ld	a, (hl)
-	ldhl	sp,	#3
-	ld	(hl+), a
-	xor	a, a
-	ld	(hl-), a
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	ld	hl, #0x0008
-	add	hl, de
-	ld	c, l
-	ld	b, h
-	ldhl	sp,	#9
-	ld	a, (hl)
-	ldhl	sp,	#5
-	ld	(hl+), a
-	xor	a, a
-	ld	(hl-), a
-	ld	a, (hl+)
-	sub	a, c
-	ld	a, (hl)
-	sbc	a, b
-	jr	NC, 00109$
-	ldhl	sp,	#15
-	ld	c, (hl)
-	ld	b, #0x00
-	ldhl	sp,	#5
-	ld	a,	(hl+)
-	ld	h, (hl)
-	ld	l, a
-	add	hl, bc
-	push	hl
-	ld	a, l
-	ldhl	sp,	#9
-	ld	(hl), a
-	pop	hl
-	ld	a, h
-	ldhl	sp,	#8
-	ld	(hl), a
-	ldhl	sp,	#3
 	ld	e, l
 	ld	d, h
-	ldhl	sp,	#7
-	ld	a, (de)
-	inc	de
-	sub	a, (hl)
-	inc	hl
-	ld	a, (de)
-	sbc	a, (hl)
-	jr	NC, 00109$
-;src/Object.c:41: hide_object(e);
-	ldhl	sp,	#1
+	add	hl, hl
+	add	hl, de
+	ld	de, #_global_object_information
+	add	hl, de
 	ld	a, (hl)
-	call	_hide_object
-;src/Object.c:42: res = obj_type;
-	ldhl	sp,	#2
-	ld	a, (hl-)
-	dec	hl
-	ld	(hl), a
-;src/Object.c:43: break;
-	jr	00106$
-00109$:
-;src/Object.c:34: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
-	ldhl	sp,	#11
-	inc	(hl)
-	ld	a, (hl)
-	ldhl	sp,	#1
-	ld	(hl), a
-	jp	00108$
-00106$:
-;src/Object.c:47: return res;
 	ldhl	sp,	#0
+	ld	(hl), a
+;src/Object.c:37: obj_y = global_object_information[3*e + 1];
+	ld	l, b
+	ld	e, l
+	add	hl, hl
+	add	hl, de
+	ld	a, l
+	inc	a
+	add	a, #<(_global_object_information)
+	ld	e, a
+	ld	a, #0x00
+	adc	a, #>(_global_object_information)
+	ld	d, a
+	ld	a, (de)
+	ld	e, a
+;src/Object.c:38: obj_type = global_object_information[3*e + 2];
+	ld	a, l
+	inc	a
+	inc	a
+	add	a, #<(_global_object_information)
+	ld	l, a
+	ld	a, #0x00
+	adc	a, #>(_global_object_information)
+	ld	h, a
 	ld	a, (hl)
+	ldhl	sp,	#1
+	ld	(hl), a
+;src/Object.c:41: if(check_colision_of_sprites(obj_x,obj_y,OBJECT_SIZE, OBJECT_SIZE,
+	push	bc
+	ldhl	sp,	#9
+	ld	a, (hl-)
+	ld	b, a
+	ld	c, (hl)
+	push	bc
+	ldhl	sp,	#6
+	ld	a, (hl+)
+	push	af
+	inc	sp
+	ld	h, (hl)
+	ld	l, #0x08
+	push	hl
+	ld	a, #0x08
+	push	af
+	inc	sp
+	ldhl	sp,	#8
+	ld	a, (hl)
+	call	_check_colision_of_sprites
+	pop	bc
+	or	a, a
+	jr	Z, 00106$
+;src/Object.c:43: res = obj_type;
+	ldhl	sp,	#1
+	ld	c, (hl)
+;src/Object.c:44: break;
+	jr	00103$
+00106$:
+;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+	inc	b
+	jr	00105$
+00103$:
+;src/Object.c:47: return res;
+	ld	a, c
 ;src/Object.c:48: }
-	add	sp, #12
+	add	sp, #4
 	pop	hl
 	pop	bc
 	jp	(hl)
@@ -366,5 +285,5 @@ __xinit__global_object_information:
 	.db #0x08	; 8
 	.db #0x5c	; 92
 	.db #0x1c	; 28
-	.db #0x08	; 8
+	.db #0x09	; 9
 	.area _CABS (ABS)

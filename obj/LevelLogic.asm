@@ -7,6 +7,7 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
+	.globl _check_colision_of_sprites
 	.globl _global_levels_array
 	.globl _global_selected_block
 	.globl _global_blocks_available
@@ -293,14 +294,127 @@ _change_colision_map_BR::
 	ld	(hl), c
 ;src/LevelLogic.c:65: }
 	ret
-;src/LevelLogic.c:68: void get_init_point_from_map(uint8_t colision_map[360]){
+;src/LevelLogic.c:67: uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah, uint8_t bx, uint8_t by, uint8_t bw, uint8_t bh){
+;	---------------------------------
+; Function check_colision_of_sprites
+; ---------------------------------
+_check_colision_of_sprites::
+	add	sp, #-6
+	ld	c, a
+	ldhl	sp,	#5
+	ld	(hl), e
+;src/LevelLogic.c:68: uint8_t res = 0; //no colision of sprites
+	ldhl	sp,	#0
+	ld	(hl), #0x00
+;src/LevelLogic.c:70: if(ax < bx + bw &&
+	ldhl	sp,	#10
+	ld	a, (hl)
+	ldhl	sp,	#1
+	ld	(hl+), a
+	ld	(hl), #0x00
+	ldhl	sp,	#12
+	ld	e, (hl)
+	ld	d, #0x00
+	ldhl	sp,	#1
+	ld	a,	(hl+)
+	ld	h, (hl)
+	ld	l, a
+	add	hl, de
+	push	hl
+	ld	a, l
+	ldhl	sp,	#5
+	ld	(hl), a
+	pop	hl
+	ld	a, h
+	ldhl	sp,	#4
+	ld	(hl-), a
+	ld	b, #0x00
+	ld	a, c
+	sub	a, (hl)
+	inc	hl
+	ld	a, b
+	sbc	a, (hl)
+	jr	NC, 00102$
+;src/LevelLogic.c:71: ax + aw > bx &&
+	ldhl	sp,	#8
+	ld	a, (hl)
+	ld	e, #0x00
+	add	a, c
+	ld	c, a
+	ld	a, e
+	adc	a, b
+	ld	b, a
+	ldhl	sp,	#1
+	ld	a, (hl+)
+	sub	a, c
+	ld	a, (hl)
+	sbc	a, b
+	jr	NC, 00102$
+;src/LevelLogic.c:72: ay < by + bh &&
+	ldhl	sp,	#11
+	ld	a, (hl)
+	ldhl	sp,	#1
+	ld	(hl+), a
+	ld	(hl), #0x00
+	ldhl	sp,	#13
+	ld	c, (hl)
+	ld	b, #0x00
+	ldhl	sp,	#1
+	ld	a,	(hl+)
+	ld	h, (hl)
+	ld	l, a
+	add	hl, bc
+	ld	c, l
+	ld	b, h
+	ldhl	sp,	#5
+	ld	a, (hl-)
+	dec	hl
+	ld	(hl+), a
+	xor	a, a
+	ld	(hl-), a
+	ld	a, (hl+)
+	sub	a, c
+	ld	a, (hl)
+	sbc	a, b
+	jr	NC, 00102$
+;src/LevelLogic.c:73: ay + ah > by){
+	ldhl	sp,	#9
+	ld	c, (hl)
+	ld	b, #0x00
+	ldhl	sp,	#3
+	ld	a,	(hl+)
+	ld	h, (hl)
+	ld	l, a
+	add	hl, bc
+	ld	c, l
+	ld	b, h
+	ldhl	sp,	#1
+	ld	a, (hl+)
+	sub	a, c
+	ld	a, (hl)
+	sbc	a, b
+	jr	NC, 00102$
+;src/LevelLogic.c:74: res = 1;
+	dec	hl
+	dec	hl
+	ld	(hl), #0x01
+00102$:
+;src/LevelLogic.c:76: return res;
+	ldhl	sp,	#0
+	ld	a, (hl)
+;src/LevelLogic.c:77: }
+	add	sp, #6
+	pop	hl
+	add	sp, #6
+	jp	(hl)
+;src/LevelLogic.c:80: void get_init_point_from_map(uint8_t colision_map[360]){
 ;	---------------------------------
 ; Function get_init_point_from_map
 ; ---------------------------------
 _get_init_point_from_map::
 	dec	sp
 	dec	sp
-;src/LevelLogic.c:69: for(uint16_t i = 0; i<360; i++){
+;src/LevelLogic.c:81: for(uint16_t i = 0; i<360; i++){
 	xor	a, a
 	ldhl	sp,	#0
 	ld	(hl+), a
@@ -314,49 +428,49 @@ _get_init_point_from_map::
 	ld	a, h
 	sbc	a, #0x01
 	jr	NC, 00107$
-;src/LevelLogic.c:70: if(colision_map[i] == SOURCE){
+;src/LevelLogic.c:82: if(colision_map[i] == SOURCE){
 	ld	l, c
 	ld	h, b
 	add	hl, de
 	ld	a, (hl)
 	sub	a, #0x03
 	jr	NZ, 00106$
-;src/LevelLogic.c:71: global_init_point = i;
+;src/LevelLogic.c:83: global_init_point = i;
 	ldhl	sp,	#0
 	ld	a, (hl)
 	ld	(#_global_init_point),a
 	ldhl	sp,	#1
 	ld	a, (hl)
 	ld	(#_global_init_point + 1),a
-;src/LevelLogic.c:72: break;
+;src/LevelLogic.c:84: break;
 	jr	00107$
 00106$:
-;src/LevelLogic.c:69: for(uint16_t i = 0; i<360; i++){
+;src/LevelLogic.c:81: for(uint16_t i = 0; i<360; i++){
 	inc	bc
 	inc	sp
 	inc	sp
 	push	bc
 	jr	00105$
 00107$:
-;src/LevelLogic.c:75: }
+;src/LevelLogic.c:87: }
 	inc	sp
 	inc	sp
 	ret
-;src/LevelLogic.c:77: void move_foward_block_id(void){
+;src/LevelLogic.c:89: void move_foward_block_id(void){
 ;	---------------------------------
 ; Function move_foward_block_id
 ; ---------------------------------
 _move_foward_block_id::
-;src/LevelLogic.c:78: global_selected_block++;
+;src/LevelLogic.c:90: global_selected_block++;
 	ld	hl, #_global_selected_block
 	inc	(hl)
-;src/LevelLogic.c:79: if(global_selected_block >= 4){
+;src/LevelLogic.c:91: if(global_selected_block >= 4){
 	ld	a, (hl)
 	sub	a, #0x04
 	ret	C
-;src/LevelLogic.c:80: global_selected_block = 0;
+;src/LevelLogic.c:92: global_selected_block = 0;
 	ld	(hl), #0x00
-;src/LevelLogic.c:82: }
+;src/LevelLogic.c:94: }
 	ret
 	.area _CODE
 	.area _INITIALIZER

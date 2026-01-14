@@ -55,6 +55,7 @@ void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value);
 void change_colision_map_BR(uint16_t tileindexBR, uint8_t new_value);
 void move_foward_block_id(void);
 void init_level(uint8_t level_number);
+uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah, uint8_t bx, uint8_t by, uint8_t bw, uint8_t bh);
 
 
 #endif

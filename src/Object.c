@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <gb/gb.h>
 #include "Headers/Object.h"
+#include "Headers/LevelLogic.h"
 
-uint8_t global_object_information[3*NUMBER_OF_OBJECTS] = {84, 28, 8, 92, 28, 8};
+uint8_t global_object_information[3*NUMBER_OF_OBJECTS] = {84, 28, 8, 92, 28, 9};
 
 void print_objects_in_screen(void){
 
@@ -37,12 +38,11 @@ uint8_t check_colision_with_object(uint8_t x, uint8_t y, uint8_t w, uint8_t h){
         obj_type = global_object_information[3*e + 2];
 
         //Axis Aligned Bounding box (AABB)
-        if( x < obj_x + OBJECT_SIZE && x + w > obj_x && y < obj_y + OBJECT_SIZE && y + h > obj_y ){
-            hide_object(e);
+        if(check_colision_of_sprites(obj_x,obj_y,OBJECT_SIZE, OBJECT_SIZE,
+        x, y, w, h)){
             res = obj_type;
             break;
         }
-        
     }
     return res;
 }

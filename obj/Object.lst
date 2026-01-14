@@ -7,364 +7,283 @@
                                       7 ;--------------------------------------------------------
                                       8 ; Public variables in this module
                                       9 ;--------------------------------------------------------
-                                     10 	.globl _global_object_information
-                                     11 	.globl _print_objects_in_screen
-                                     12 	.globl _hide_object
-                                     13 	.globl _check_colision_with_object
-                                     14 ;--------------------------------------------------------
-                                     15 ; special function registers
-                                     16 ;--------------------------------------------------------
+                                     10 	.globl _check_colision_of_sprites
+                                     11 	.globl _global_object_information
+                                     12 	.globl _print_objects_in_screen
+                                     13 	.globl _hide_object
+                                     14 	.globl _check_colision_with_object
+                                     15 ;--------------------------------------------------------
+                                     16 ; special function registers
                                      17 ;--------------------------------------------------------
-                                     18 ; ram data
-                                     19 ;--------------------------------------------------------
-                                     20 	.area _DATA
-                                     21 ;--------------------------------------------------------
-                                     22 ; ram data
-                                     23 ;--------------------------------------------------------
-                                     24 	.area _INITIALIZED
-    00000000                         25 _global_object_information::
-    00000000                         26 	.ds 6
-                                     27 ;--------------------------------------------------------
-                                     28 ; absolute external ram data
-                                     29 ;--------------------------------------------------------
-                                     30 	.area _DABS (ABS)
-                                     31 ;--------------------------------------------------------
-                                     32 ; global & static initialisations
-                                     33 ;--------------------------------------------------------
-                                     34 	.area _HOME
-                                     35 	.area _GSINIT
-                                     36 	.area _GSFINAL
-                                     37 	.area _GSINIT
-                                     38 ;--------------------------------------------------------
-                                     39 ; Home
-                                     40 ;--------------------------------------------------------
-                                     41 	.area _HOME
+                                     18 ;--------------------------------------------------------
+                                     19 ; ram data
+                                     20 ;--------------------------------------------------------
+                                     21 	.area _DATA
+                                     22 ;--------------------------------------------------------
+                                     23 ; ram data
+                                     24 ;--------------------------------------------------------
+                                     25 	.area _INITIALIZED
+    00000000                         26 _global_object_information::
+    00000000                         27 	.ds 6
+                                     28 ;--------------------------------------------------------
+                                     29 ; absolute external ram data
+                                     30 ;--------------------------------------------------------
+                                     31 	.area _DABS (ABS)
+                                     32 ;--------------------------------------------------------
+                                     33 ; global & static initialisations
+                                     34 ;--------------------------------------------------------
+                                     35 	.area _HOME
+                                     36 	.area _GSINIT
+                                     37 	.area _GSFINAL
+                                     38 	.area _GSINIT
+                                     39 ;--------------------------------------------------------
+                                     40 ; Home
+                                     41 ;--------------------------------------------------------
                                      42 	.area _HOME
-                                     43 ;--------------------------------------------------------
-                                     44 ; code
-                                     45 ;--------------------------------------------------------
-                                     46 	.area _CODE
-                                     47 ;src/Object.c:7: void print_objects_in_screen(void){
-                                     48 ;	---------------------------------
-                                     49 ; Function print_objects_in_screen
-                                     50 ; ---------------------------------
-    00000000                         51 _print_objects_in_screen::
-    00000000 3B               [ 8]   52 	dec	sp
-    00000001 3B               [ 8]   53 	dec	sp
-                                     54 ;src/Object.c:12: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
-    00000002 0E 00            [ 8]   55 	ld	c, #0x00
-    00000004                         56 00105$:
-    00000004 79               [ 4]   57 	ld	a, c
-    00000005 D6 02            [ 8]   58 	sub	a, #0x02
-    00000007 30 56            [12]   59 	jr	NC, 00107$
-                                     60 ;src/Object.c:13: obj_x = global_object_information[3*e];
-    00000009 69               [ 4]   61 	ld	l, c
-    0000000A 26 00            [ 8]   62 	ld	h, #0x00
-    0000000C 5D               [ 4]   63 	ld	e, l
-    0000000D 54               [ 4]   64 	ld	d, h
-    0000000E 29               [ 8]   65 	add	hl, hl
-    0000000F 19               [ 8]   66 	add	hl, de
-    00000010 11r00r00         [12]   67 	ld	de, #_global_object_information
-    00000013 19               [ 8]   68 	add	hl, de
-    00000014 7E               [ 8]   69 	ld	a, (hl)
-    00000015 F8 00            [12]   70 	ldhl	sp,	#0
-    00000017 77               [ 8]   71 	ld	(hl), a
-                                     72 ;src/Object.c:14: obj_y = global_object_information[3*e + 1];
-    00000018 79               [ 4]   73 	ld	a, c
-    00000019 5F               [ 4]   74 	ld	e, a
-    0000001A 87               [ 4]   75 	add	a, a
-    0000001B 83               [ 4]   76 	add	a, e
-    0000001C 47               [ 4]   77 	ld	b, a
-    0000001D 68               [ 4]   78 	ld	l, b
-    0000001E 2C               [ 4]   79 	inc	l
-    0000001F 26 00            [ 8]   80 	ld	h, #0x00
-    00000021 11r00r00         [12]   81 	ld	de, #_global_object_information
-    00000024 19               [ 8]   82 	add	hl, de
-    00000025 7E               [ 8]   83 	ld	a, (hl)
-    00000026 F8 01            [12]   84 	ldhl	sp,	#1
-    00000028 77               [ 8]   85 	ld	(hl), a
-                                     86 ;src/Object.c:15: obj_type = global_object_information[3*e + 2];
-    00000029 04               [ 4]   87 	inc	b
-    0000002A 04               [ 4]   88 	inc	b
-    0000002B 68               [ 4]   89 	ld	l, b
-    0000002C 26 00            [ 8]   90 	ld	h, #0x00
-    0000002E 11r00r00         [12]   91 	ld	de, #_global_object_information
-    00000031 19               [ 8]   92 	add	hl, de
-    00000032 56               [ 8]   93 	ld	d, (hl)
-                                     94 ;src/Object.c:17: set_sprite_tile(8+e,obj_type);
-    00000033 79               [ 4]   95 	ld	a, c
-    00000034 C6 08            [ 8]   96 	add	a, #0x08
-    00000036 5F               [ 4]   97 	ld	e, a
-    00000037 43               [ 4]   98 	ld	b, e
-                                     99 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
-    00000038 AF               [ 4]  100 	xor	a, a
-    00000039 68               [ 4]  101 	ld	l, b
-    0000003A 67               [ 4]  102 	ld	h, a
-    0000003B 29               [ 8]  103 	add	hl, hl
-    0000003C 29               [ 8]  104 	add	hl, hl
-    0000003D 3Er00            [ 8]  105 	ld	a, #<(_shadow_OAM)
-    0000003F 85               [ 4]  106 	add	a, l
-    00000040 6F               [ 4]  107 	ld	l, a
-    00000041 3Es00            [ 8]  108 	ld	a, #>(_shadow_OAM)
-    00000043 8C               [ 4]  109 	adc	a, h
-    00000044 67               [ 4]  110 	ld	h, a
-    00000045 23               [ 8]  111 	inc	hl
-    00000046 23               [ 8]  112 	inc	hl
-    00000047 72               [ 8]  113 	ld	(hl), d
-                                    114 ;src/Object.c:18: move_sprite(8+e, obj_x, obj_y);
-                                    115 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    00000048 AF               [ 4]  116 	xor	a, a
-    00000049 6B               [ 4]  117 	ld	l, e
-    0000004A 67               [ 4]  118 	ld	h, a
-    0000004B 29               [ 8]  119 	add	hl, hl
-    0000004C 29               [ 8]  120 	add	hl, hl
-    0000004D 7D               [ 4]  121 	ld	a, l
-    0000004E C6r00            [ 8]  122 	add	a, #<(_shadow_OAM)
-    00000050 5F               [ 4]  123 	ld	e, a
-    00000051 7C               [ 4]  124 	ld	a, h
-    00000052 CEs00            [ 8]  125 	adc	a, #>(_shadow_OAM)
-    00000054 57               [ 4]  126 	ld	d, a
-                                    127 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    00000055 F8 01            [12]  128 	ldhl	sp,	#1
-    00000057 3A               [ 8]  129 	ld	a, (hl-)
-    00000058 12               [ 8]  130 	ld	(de), a
-    00000059 13               [ 8]  131 	inc	de
-    0000005A 7E               [ 8]  132 	ld	a, (hl)
-    0000005B 12               [ 8]  133 	ld	(de), a
-                                    134 ;src/Object.c:12: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
-    0000005C 0C               [ 4]  135 	inc	c
-    0000005D 18 A5            [12]  136 	jr	00105$
-    0000005F                        137 00107$:
-                                    138 ;src/Object.c:20: }
-    0000005F 33               [ 8]  139 	inc	sp
-    00000060 33               [ 8]  140 	inc	sp
-    00000061 C9               [16]  141 	ret
-                                    142 ;src/Object.c:22: void hide_object(uint8_t i){
-                                    143 ;	---------------------------------
-                                    144 ; Function hide_object
-                                    145 ; ---------------------------------
-    00000062                        146 _hide_object::
-    00000062 4F               [ 4]  147 	ld	c, a
-                                    148 ;src/Object.c:23: global_object_information[i*NUMBER_OF_OBJECTS] = 0;
-    00000063 11r00r00         [12]  149 	ld	de, #_global_object_information+0
-    00000066 69               [ 4]  150 	ld	l, c
-    00000067 AF               [ 4]  151 	xor	a, a
-    00000068 67               [ 4]  152 	ld	h, a
-    00000069 29               [ 8]  153 	add	hl, hl
-    0000006A 19               [ 8]  154 	add	hl, de
-    0000006B 36 00            [12]  155 	ld	(hl), #0x00
-                                    156 ;src/Object.c:24: global_object_information[i*NUMBER_OF_OBJECTS+1] = 0;
-    0000006D 79               [ 4]  157 	ld	a, c
-    0000006E 87               [ 4]  158 	add	a, a
-    0000006F 3C               [ 4]  159 	inc	a
-    00000070 6F               [ 4]  160 	ld	l, a
-    00000071 07               [ 4]  161 	rlca
-    00000072 9F               [ 4]  162 	sbc	a, a
-    00000073 67               [ 4]  163 	ld	h, a
-    00000074 19               [ 8]  164 	add	hl, de
-    00000075 36 00            [12]  165 	ld	(hl), #0x00
-                                    166 ;src/Object.c:25: move_sprite(8+i, 0, 0);
-    00000077 79               [ 4]  167 	ld	a, c
-    00000078 C6 08            [ 8]  168 	add	a, #0x08
-    0000007A 5F               [ 4]  169 	ld	e, a
-                                    170 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    0000007B 01r00r00         [12]  171 	ld	bc, #_shadow_OAM+0
-    0000007E AF               [ 4]  172 	xor	a, a
-    0000007F 6B               [ 4]  173 	ld	l, e
-    00000080 67               [ 4]  174 	ld	h, a
-    00000081 29               [ 8]  175 	add	hl, hl
-    00000082 29               [ 8]  176 	add	hl, hl
-    00000083 09               [ 8]  177 	add	hl, bc
-                                    178 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    00000084 AF               [ 4]  179 	xor	a, a
-    00000085 22               [ 8]  180 	ld	(hl+), a
-    00000086 77               [ 8]  181 	ld	(hl), a
-                                    182 ;src/Object.c:25: move_sprite(8+i, 0, 0);
-                                    183 ;src/Object.c:26: }
-    00000087 C9               [16]  184 	ret
-                                    185 ;src/Object.c:28: uint8_t check_colision_with_object(uint8_t x, uint8_t y, uint8_t w, uint8_t h){
-                                    186 ;	---------------------------------
-                                    187 ; Function check_colision_with_object
-                                    188 ; ---------------------------------
-    00000088                        189 _check_colision_with_object::
-    00000088 E8 F4            [16]  190 	add	sp, #-12
-    0000008A F8 0A            [12]  191 	ldhl	sp,	#10
-    0000008C 32               [ 8]  192 	ld	(hl-), a
-    0000008D 73               [ 8]  193 	ld	(hl), e
-                                    194 ;src/Object.c:32: uint8_t res = 0;
-    0000008E F8 00            [12]  195 	ldhl	sp,	#0
-                                    196 ;src/Object.c:34: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
-    00000090 AF               [ 4]  197 	xor	a, a
-    00000091 22               [ 8]  198 	ld	(hl+), a
-    00000092 77               [ 8]  199 	ld	(hl), a
-    00000093 F8 0B            [12]  200 	ldhl	sp,	#11
-    00000095 36 00            [12]  201 	ld	(hl), #0x00
-    00000097                        202 00108$:
-    00000097 F8 0B            [12]  203 	ldhl	sp,	#11
-    00000099 7E               [ 8]  204 	ld	a, (hl)
-    0000009A D6 02            [ 8]  205 	sub	a, #0x02
-    0000009C D2r56r01         [16]  206 	jp	NC, 00106$
-                                    207 ;src/Object.c:35: obj_x = global_object_information[3*e];
-    0000009F 4E               [ 8]  208 	ld	c, (hl)
-    000000A0 06 00            [ 8]  209 	ld	b, #0x00
-    000000A2 69               [ 4]  210 	ld	l, c
-    000000A3 60               [ 4]  211 	ld	h, b
-    000000A4 29               [ 8]  212 	add	hl, hl
-    000000A5 09               [ 8]  213 	add	hl, bc
-    000000A6 11r00r00         [12]  214 	ld	de, #_global_object_information
-    000000A9 19               [ 8]  215 	add	hl, de
-    000000AA 4E               [ 8]  216 	ld	c, (hl)
-                                    217 ;src/Object.c:36: obj_y = global_object_information[3*e + 1];
-    000000AB F8 0B            [12]  218 	ldhl	sp,	#11
-    000000AD 7E               [ 8]  219 	ld	a, (hl)
-    000000AE 5F               [ 4]  220 	ld	e, a
-    000000AF 87               [ 4]  221 	add	a, a
-    000000B0 83               [ 4]  222 	add	a, e
-    000000B1 47               [ 4]  223 	ld	b, a
-    000000B2 68               [ 4]  224 	ld	l, b
-    000000B3 2C               [ 4]  225 	inc	l
-    000000B4 26 00            [ 8]  226 	ld	h, #0x00
-    000000B6 11r00r00         [12]  227 	ld	de, #_global_object_information
-    000000B9 19               [ 8]  228 	add	hl, de
-    000000BA 7E               [ 8]  229 	ld	a, (hl)
-    000000BB F8 08            [12]  230 	ldhl	sp,	#8
-    000000BD 77               [ 8]  231 	ld	(hl), a
-                                    232 ;src/Object.c:37: obj_type = global_object_information[3*e + 2];
-    000000BE 68               [ 4]  233 	ld	l, b
-    000000BF 2C               [ 4]  234 	inc	l
-    000000C0 2C               [ 4]  235 	inc	l
-    000000C1 26 00            [ 8]  236 	ld	h, #0x00
-    000000C3 11r00r00         [12]  237 	ld	de, #_global_object_information
-    000000C6 19               [ 8]  238 	add	hl, de
-    000000C7 7E               [ 8]  239 	ld	a, (hl)
-    000000C8 F8 02            [12]  240 	ldhl	sp,	#2
-    000000CA 77               [ 8]  241 	ld	(hl), a
-                                    242 ;src/Object.c:40: if( x < obj_x + OBJECT_SIZE && x + w > obj_x && y < obj_y + OBJECT_SIZE && y + h > obj_y ){
-    000000CB F8 04            [12]  243 	ldhl	sp,	#4
-    000000CD 79               [ 4]  244 	ld	a, c
-    000000CE 22               [ 8]  245 	ld	(hl+), a
-    000000CF AF               [ 4]  246 	xor	a, a
-    000000D0 32               [ 8]  247 	ld	(hl-), a
-    000000D1 2A               [ 8]  248 	ld	a, (hl+)
-    000000D2 5F               [ 4]  249 	ld	e, a
-    000000D3 56               [ 8]  250 	ld	d, (hl)
-    000000D4 21 08 00         [12]  251 	ld	hl, #0x0008
-    000000D7 19               [ 8]  252 	add	hl, de
-    000000D8 4D               [ 4]  253 	ld	c, l
-    000000D9 44               [ 4]  254 	ld	b, h
-    000000DA F8 0A            [12]  255 	ldhl	sp,	#10
-    000000DC 7E               [ 8]  256 	ld	a, (hl)
-    000000DD F8 06            [12]  257 	ldhl	sp,	#6
-    000000DF 22               [ 8]  258 	ld	(hl+), a
-    000000E0 AF               [ 4]  259 	xor	a, a
-    000000E1 32               [ 8]  260 	ld	(hl-), a
-    000000E2 2A               [ 8]  261 	ld	a, (hl+)
-    000000E3 91               [ 4]  262 	sub	a, c
-    000000E4 7E               [ 8]  263 	ld	a, (hl)
-    000000E5 98               [ 4]  264 	sbc	a, b
-    000000E6 30 64            [12]  265 	jr	NC, 00109$
-    000000E8 F8 0E            [12]  266 	ldhl	sp,	#14
-    000000EA 4E               [ 8]  267 	ld	c, (hl)
-    000000EB 06 00            [ 8]  268 	ld	b, #0x00
-    000000ED F8 06            [12]  269 	ldhl	sp,	#6
-    000000EF 2A               [ 8]  270 	ld	a,	(hl+)
-    000000F0 66               [ 8]  271 	ld	h, (hl)
-    000000F1 6F               [ 4]  272 	ld	l, a
-    000000F2 09               [ 8]  273 	add	hl, bc
-    000000F3 4D               [ 4]  274 	ld	c, l
-    000000F4 44               [ 4]  275 	ld	b, h
-    000000F5 F8 04            [12]  276 	ldhl	sp,	#4
-    000000F7 2A               [ 8]  277 	ld	a, (hl+)
-    000000F8 91               [ 4]  278 	sub	a, c
-    000000F9 7E               [ 8]  279 	ld	a, (hl)
-    000000FA 98               [ 4]  280 	sbc	a, b
-    000000FB 30 4F            [12]  281 	jr	NC, 00109$
-    000000FD F8 08            [12]  282 	ldhl	sp,	#8
-    000000FF 7E               [ 8]  283 	ld	a, (hl)
-    00000100 F8 03            [12]  284 	ldhl	sp,	#3
-    00000102 22               [ 8]  285 	ld	(hl+), a
-    00000103 AF               [ 4]  286 	xor	a, a
-    00000104 32               [ 8]  287 	ld	(hl-), a
-    00000105 2A               [ 8]  288 	ld	a, (hl+)
-    00000106 5F               [ 4]  289 	ld	e, a
-    00000107 56               [ 8]  290 	ld	d, (hl)
-    00000108 21 08 00         [12]  291 	ld	hl, #0x0008
-    0000010B 19               [ 8]  292 	add	hl, de
-    0000010C 4D               [ 4]  293 	ld	c, l
-    0000010D 44               [ 4]  294 	ld	b, h
-    0000010E F8 09            [12]  295 	ldhl	sp,	#9
-    00000110 7E               [ 8]  296 	ld	a, (hl)
-    00000111 F8 05            [12]  297 	ldhl	sp,	#5
-    00000113 22               [ 8]  298 	ld	(hl+), a
-    00000114 AF               [ 4]  299 	xor	a, a
-    00000115 32               [ 8]  300 	ld	(hl-), a
-    00000116 2A               [ 8]  301 	ld	a, (hl+)
-    00000117 91               [ 4]  302 	sub	a, c
-    00000118 7E               [ 8]  303 	ld	a, (hl)
-    00000119 98               [ 4]  304 	sbc	a, b
-    0000011A 30 30            [12]  305 	jr	NC, 00109$
-    0000011C F8 0F            [12]  306 	ldhl	sp,	#15
-    0000011E 4E               [ 8]  307 	ld	c, (hl)
-    0000011F 06 00            [ 8]  308 	ld	b, #0x00
-    00000121 F8 05            [12]  309 	ldhl	sp,	#5
-    00000123 2A               [ 8]  310 	ld	a,	(hl+)
-    00000124 66               [ 8]  311 	ld	h, (hl)
-    00000125 6F               [ 4]  312 	ld	l, a
-    00000126 09               [ 8]  313 	add	hl, bc
-    00000127 E5               [16]  314 	push	hl
-    00000128 7D               [ 4]  315 	ld	a, l
-    00000129 F8 09            [12]  316 	ldhl	sp,	#9
-    0000012B 77               [ 8]  317 	ld	(hl), a
-    0000012C E1               [12]  318 	pop	hl
-    0000012D 7C               [ 4]  319 	ld	a, h
-    0000012E F8 08            [12]  320 	ldhl	sp,	#8
-    00000130 77               [ 8]  321 	ld	(hl), a
-    00000131 F8 03            [12]  322 	ldhl	sp,	#3
-    00000133 5D               [ 4]  323 	ld	e, l
-    00000134 54               [ 4]  324 	ld	d, h
-    00000135 F8 07            [12]  325 	ldhl	sp,	#7
-    00000137 1A               [ 8]  326 	ld	a, (de)
-    00000138 13               [ 8]  327 	inc	de
-    00000139 96               [ 8]  328 	sub	a, (hl)
-    0000013A 23               [ 8]  329 	inc	hl
-    0000013B 1A               [ 8]  330 	ld	a, (de)
-    0000013C 9E               [ 8]  331 	sbc	a, (hl)
-    0000013D 30 0D            [12]  332 	jr	NC, 00109$
-                                    333 ;src/Object.c:41: hide_object(e);
-    0000013F F8 01            [12]  334 	ldhl	sp,	#1
-    00000141 7E               [ 8]  335 	ld	a, (hl)
-    00000142 CDr62r00         [24]  336 	call	_hide_object
-                                    337 ;src/Object.c:42: res = obj_type;
-    00000145 F8 02            [12]  338 	ldhl	sp,	#2
-    00000147 3A               [ 8]  339 	ld	a, (hl-)
-    00000148 2B               [ 8]  340 	dec	hl
-    00000149 77               [ 8]  341 	ld	(hl), a
-                                    342 ;src/Object.c:43: break;
-    0000014A 18 0A            [12]  343 	jr	00106$
-    0000014C                        344 00109$:
-                                    345 ;src/Object.c:34: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
-    0000014C F8 0B            [12]  346 	ldhl	sp,	#11
-    0000014E 34               [12]  347 	inc	(hl)
-    0000014F 7E               [ 8]  348 	ld	a, (hl)
-    00000150 F8 01            [12]  349 	ldhl	sp,	#1
-    00000152 77               [ 8]  350 	ld	(hl), a
-    00000153 C3r97r00         [16]  351 	jp	00108$
-    00000156                        352 00106$:
-                                    353 ;src/Object.c:47: return res;
-    00000156 F8 00            [12]  354 	ldhl	sp,	#0
-    00000158 7E               [ 8]  355 	ld	a, (hl)
-                                    356 ;src/Object.c:48: }
-    00000159 E8 0C            [16]  357 	add	sp, #12
-    0000015B E1               [12]  358 	pop	hl
-    0000015C C1               [12]  359 	pop	bc
-    0000015D E9               [ 4]  360 	jp	(hl)
-                                    361 	.area _CODE
-                                    362 	.area _INITIALIZER
-    00000000                        363 __xinit__global_object_information:
-    00000000 54                     364 	.db #0x54	; 84	'T'
-    00000001 1C                     365 	.db #0x1c	; 28
-    00000002 08                     366 	.db #0x08	; 8
-    00000003 5C                     367 	.db #0x5c	; 92
-    00000004 1C                     368 	.db #0x1c	; 28
-    00000005 08                     369 	.db #0x08	; 8
-                                    370 	.area _CABS (ABS)
+                                     43 	.area _HOME
+                                     44 ;--------------------------------------------------------
+                                     45 ; code
+                                     46 ;--------------------------------------------------------
+                                     47 	.area _CODE
+                                     48 ;src/Object.c:8: void print_objects_in_screen(void){
+                                     49 ;	---------------------------------
+                                     50 ; Function print_objects_in_screen
+                                     51 ; ---------------------------------
+    00000000                         52 _print_objects_in_screen::
+    00000000 3B               [ 8]   53 	dec	sp
+    00000001 3B               [ 8]   54 	dec	sp
+                                     55 ;src/Object.c:13: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+    00000002 0E 00            [ 8]   56 	ld	c, #0x00
+    00000004                         57 00105$:
+    00000004 79               [ 4]   58 	ld	a, c
+    00000005 D6 02            [ 8]   59 	sub	a, #0x02
+    00000007 30 56            [12]   60 	jr	NC, 00107$
+                                     61 ;src/Object.c:14: obj_x = global_object_information[3*e];
+    00000009 69               [ 4]   62 	ld	l, c
+    0000000A 26 00            [ 8]   63 	ld	h, #0x00
+    0000000C 5D               [ 4]   64 	ld	e, l
+    0000000D 54               [ 4]   65 	ld	d, h
+    0000000E 29               [ 8]   66 	add	hl, hl
+    0000000F 19               [ 8]   67 	add	hl, de
+    00000010 11r00r00         [12]   68 	ld	de, #_global_object_information
+    00000013 19               [ 8]   69 	add	hl, de
+    00000014 7E               [ 8]   70 	ld	a, (hl)
+    00000015 F8 00            [12]   71 	ldhl	sp,	#0
+    00000017 77               [ 8]   72 	ld	(hl), a
+                                     73 ;src/Object.c:15: obj_y = global_object_information[3*e + 1];
+    00000018 79               [ 4]   74 	ld	a, c
+    00000019 5F               [ 4]   75 	ld	e, a
+    0000001A 87               [ 4]   76 	add	a, a
+    0000001B 83               [ 4]   77 	add	a, e
+    0000001C 47               [ 4]   78 	ld	b, a
+    0000001D 68               [ 4]   79 	ld	l, b
+    0000001E 2C               [ 4]   80 	inc	l
+    0000001F 26 00            [ 8]   81 	ld	h, #0x00
+    00000021 11r00r00         [12]   82 	ld	de, #_global_object_information
+    00000024 19               [ 8]   83 	add	hl, de
+    00000025 7E               [ 8]   84 	ld	a, (hl)
+    00000026 F8 01            [12]   85 	ldhl	sp,	#1
+    00000028 77               [ 8]   86 	ld	(hl), a
+                                     87 ;src/Object.c:16: obj_type = global_object_information[3*e + 2];
+    00000029 04               [ 4]   88 	inc	b
+    0000002A 04               [ 4]   89 	inc	b
+    0000002B 68               [ 4]   90 	ld	l, b
+    0000002C 26 00            [ 8]   91 	ld	h, #0x00
+    0000002E 11r00r00         [12]   92 	ld	de, #_global_object_information
+    00000031 19               [ 8]   93 	add	hl, de
+    00000032 56               [ 8]   94 	ld	d, (hl)
+                                     95 ;src/Object.c:18: set_sprite_tile(8+e,obj_type);
+    00000033 79               [ 4]   96 	ld	a, c
+    00000034 C6 08            [ 8]   97 	add	a, #0x08
+    00000036 5F               [ 4]   98 	ld	e, a
+    00000037 43               [ 4]   99 	ld	b, e
+                                    100 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    00000038 AF               [ 4]  101 	xor	a, a
+    00000039 68               [ 4]  102 	ld	l, b
+    0000003A 67               [ 4]  103 	ld	h, a
+    0000003B 29               [ 8]  104 	add	hl, hl
+    0000003C 29               [ 8]  105 	add	hl, hl
+    0000003D 3Er00            [ 8]  106 	ld	a, #<(_shadow_OAM)
+    0000003F 85               [ 4]  107 	add	a, l
+    00000040 6F               [ 4]  108 	ld	l, a
+    00000041 3Es00            [ 8]  109 	ld	a, #>(_shadow_OAM)
+    00000043 8C               [ 4]  110 	adc	a, h
+    00000044 67               [ 4]  111 	ld	h, a
+    00000045 23               [ 8]  112 	inc	hl
+    00000046 23               [ 8]  113 	inc	hl
+    00000047 72               [ 8]  114 	ld	(hl), d
+                                    115 ;src/Object.c:19: move_sprite(8+e, obj_x, obj_y);
+                                    116 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000048 AF               [ 4]  117 	xor	a, a
+    00000049 6B               [ 4]  118 	ld	l, e
+    0000004A 67               [ 4]  119 	ld	h, a
+    0000004B 29               [ 8]  120 	add	hl, hl
+    0000004C 29               [ 8]  121 	add	hl, hl
+    0000004D 7D               [ 4]  122 	ld	a, l
+    0000004E C6r00            [ 8]  123 	add	a, #<(_shadow_OAM)
+    00000050 5F               [ 4]  124 	ld	e, a
+    00000051 7C               [ 4]  125 	ld	a, h
+    00000052 CEs00            [ 8]  126 	adc	a, #>(_shadow_OAM)
+    00000054 57               [ 4]  127 	ld	d, a
+                                    128 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    00000055 F8 01            [12]  129 	ldhl	sp,	#1
+    00000057 3A               [ 8]  130 	ld	a, (hl-)
+    00000058 12               [ 8]  131 	ld	(de), a
+    00000059 13               [ 8]  132 	inc	de
+    0000005A 7E               [ 8]  133 	ld	a, (hl)
+    0000005B 12               [ 8]  134 	ld	(de), a
+                                    135 ;src/Object.c:13: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+    0000005C 0C               [ 4]  136 	inc	c
+    0000005D 18 A5            [12]  137 	jr	00105$
+    0000005F                        138 00107$:
+                                    139 ;src/Object.c:21: }
+    0000005F 33               [ 8]  140 	inc	sp
+    00000060 33               [ 8]  141 	inc	sp
+    00000061 C9               [16]  142 	ret
+                                    143 ;src/Object.c:23: void hide_object(uint8_t i){
+                                    144 ;	---------------------------------
+                                    145 ; Function hide_object
+                                    146 ; ---------------------------------
+    00000062                        147 _hide_object::
+    00000062 4F               [ 4]  148 	ld	c, a
+                                    149 ;src/Object.c:24: global_object_information[i*NUMBER_OF_OBJECTS] = 0;
+    00000063 11r00r00         [12]  150 	ld	de, #_global_object_information+0
+    00000066 69               [ 4]  151 	ld	l, c
+    00000067 AF               [ 4]  152 	xor	a, a
+    00000068 67               [ 4]  153 	ld	h, a
+    00000069 29               [ 8]  154 	add	hl, hl
+    0000006A 19               [ 8]  155 	add	hl, de
+    0000006B 36 00            [12]  156 	ld	(hl), #0x00
+                                    157 ;src/Object.c:25: global_object_information[i*NUMBER_OF_OBJECTS+1] = 0;
+    0000006D 79               [ 4]  158 	ld	a, c
+    0000006E 87               [ 4]  159 	add	a, a
+    0000006F 3C               [ 4]  160 	inc	a
+    00000070 6F               [ 4]  161 	ld	l, a
+    00000071 07               [ 4]  162 	rlca
+    00000072 9F               [ 4]  163 	sbc	a, a
+    00000073 67               [ 4]  164 	ld	h, a
+    00000074 19               [ 8]  165 	add	hl, de
+    00000075 36 00            [12]  166 	ld	(hl), #0x00
+                                    167 ;src/Object.c:26: move_sprite(8+i, 0, 0);
+    00000077 79               [ 4]  168 	ld	a, c
+    00000078 C6 08            [ 8]  169 	add	a, #0x08
+    0000007A 5F               [ 4]  170 	ld	e, a
+                                    171 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    0000007B 01r00r00         [12]  172 	ld	bc, #_shadow_OAM+0
+    0000007E AF               [ 4]  173 	xor	a, a
+    0000007F 6B               [ 4]  174 	ld	l, e
+    00000080 67               [ 4]  175 	ld	h, a
+    00000081 29               [ 8]  176 	add	hl, hl
+    00000082 29               [ 8]  177 	add	hl, hl
+    00000083 09               [ 8]  178 	add	hl, bc
+                                    179 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    00000084 AF               [ 4]  180 	xor	a, a
+    00000085 22               [ 8]  181 	ld	(hl+), a
+    00000086 77               [ 8]  182 	ld	(hl), a
+                                    183 ;src/Object.c:26: move_sprite(8+i, 0, 0);
+                                    184 ;src/Object.c:27: }
+    00000087 C9               [16]  185 	ret
+                                    186 ;src/Object.c:29: uint8_t check_colision_with_object(uint8_t x, uint8_t y, uint8_t w, uint8_t h){
+                                    187 ;	---------------------------------
+                                    188 ; Function check_colision_with_object
+                                    189 ; ---------------------------------
+    00000088                        190 _check_colision_with_object::
+    00000088 E8 FC            [16]  191 	add	sp, #-4
+    0000008A F8 03            [12]  192 	ldhl	sp,	#3
+    0000008C 32               [ 8]  193 	ld	(hl-), a
+    0000008D 73               [ 8]  194 	ld	(hl), e
+                                    195 ;src/Object.c:33: uint8_t res = 0;
+                                    196 ;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+    0000008E 01 00 00         [12]  197 	ld	bc, #0x0
+    00000091                        198 00105$:
+    00000091 78               [ 4]  199 	ld	a, b
+    00000092 D6 02            [ 8]  200 	sub	a, #0x02
+    00000094 30 54            [12]  201 	jr	NC, 00103$
+                                    202 ;src/Object.c:36: obj_x = global_object_information[3*e];
+    00000096 68               [ 4]  203 	ld	l, b
+    00000097 26 00            [ 8]  204 	ld	h, #0x00
+    00000099 5D               [ 4]  205 	ld	e, l
+    0000009A 54               [ 4]  206 	ld	d, h
+    0000009B 29               [ 8]  207 	add	hl, hl
+    0000009C 19               [ 8]  208 	add	hl, de
+    0000009D 11r00r00         [12]  209 	ld	de, #_global_object_information
+    000000A0 19               [ 8]  210 	add	hl, de
+    000000A1 7E               [ 8]  211 	ld	a, (hl)
+    000000A2 F8 00            [12]  212 	ldhl	sp,	#0
+    000000A4 77               [ 8]  213 	ld	(hl), a
+                                    214 ;src/Object.c:37: obj_y = global_object_information[3*e + 1];
+    000000A5 68               [ 4]  215 	ld	l, b
+    000000A6 5D               [ 4]  216 	ld	e, l
+    000000A7 29               [ 8]  217 	add	hl, hl
+    000000A8 19               [ 8]  218 	add	hl, de
+    000000A9 7D               [ 4]  219 	ld	a, l
+    000000AA 3C               [ 4]  220 	inc	a
+    000000AB C6r00            [ 8]  221 	add	a, #<(_global_object_information)
+    000000AD 5F               [ 4]  222 	ld	e, a
+    000000AE 3E 00            [ 8]  223 	ld	a, #0x00
+    000000B0 CEs00            [ 8]  224 	adc	a, #>(_global_object_information)
+    000000B2 57               [ 4]  225 	ld	d, a
+    000000B3 1A               [ 8]  226 	ld	a, (de)
+    000000B4 5F               [ 4]  227 	ld	e, a
+                                    228 ;src/Object.c:38: obj_type = global_object_information[3*e + 2];
+    000000B5 7D               [ 4]  229 	ld	a, l
+    000000B6 3C               [ 4]  230 	inc	a
+    000000B7 3C               [ 4]  231 	inc	a
+    000000B8 C6r00            [ 8]  232 	add	a, #<(_global_object_information)
+    000000BA 6F               [ 4]  233 	ld	l, a
+    000000BB 3E 00            [ 8]  234 	ld	a, #0x00
+    000000BD CEs00            [ 8]  235 	adc	a, #>(_global_object_information)
+    000000BF 67               [ 4]  236 	ld	h, a
+    000000C0 7E               [ 8]  237 	ld	a, (hl)
+    000000C1 F8 01            [12]  238 	ldhl	sp,	#1
+    000000C3 77               [ 8]  239 	ld	(hl), a
+                                    240 ;src/Object.c:41: if(check_colision_of_sprites(obj_x,obj_y,OBJECT_SIZE, OBJECT_SIZE,
+    000000C4 C5               [16]  241 	push	bc
+    000000C5 F8 09            [12]  242 	ldhl	sp,	#9
+    000000C7 3A               [ 8]  243 	ld	a, (hl-)
+    000000C8 47               [ 4]  244 	ld	b, a
+    000000C9 4E               [ 8]  245 	ld	c, (hl)
+    000000CA C5               [16]  246 	push	bc
+    000000CB F8 06            [12]  247 	ldhl	sp,	#6
+    000000CD 2A               [ 8]  248 	ld	a, (hl+)
+    000000CE F5               [16]  249 	push	af
+    000000CF 33               [ 8]  250 	inc	sp
+    000000D0 66               [ 8]  251 	ld	h, (hl)
+    000000D1 2E 08            [ 8]  252 	ld	l, #0x08
+    000000D3 E5               [16]  253 	push	hl
+    000000D4 3E 08            [ 8]  254 	ld	a, #0x08
+    000000D6 F5               [16]  255 	push	af
+    000000D7 33               [ 8]  256 	inc	sp
+    000000D8 F8 08            [12]  257 	ldhl	sp,	#8
+    000000DA 7E               [ 8]  258 	ld	a, (hl)
+    000000DB CDr00r00         [24]  259 	call	_check_colision_of_sprites
+    000000DE C1               [12]  260 	pop	bc
+    000000DF B7               [ 4]  261 	or	a, a
+    000000E0 28 05            [12]  262 	jr	Z, 00106$
+                                    263 ;src/Object.c:43: res = obj_type;
+    000000E2 F8 01            [12]  264 	ldhl	sp,	#1
+    000000E4 4E               [ 8]  265 	ld	c, (hl)
+                                    266 ;src/Object.c:44: break;
+    000000E5 18 03            [12]  267 	jr	00103$
+    000000E7                        268 00106$:
+                                    269 ;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+    000000E7 04               [ 4]  270 	inc	b
+    000000E8 18 A7            [12]  271 	jr	00105$
+    000000EA                        272 00103$:
+                                    273 ;src/Object.c:47: return res;
+    000000EA 79               [ 4]  274 	ld	a, c
+                                    275 ;src/Object.c:48: }
+    000000EB E8 04            [16]  276 	add	sp, #4
+    000000ED E1               [12]  277 	pop	hl
+    000000EE C1               [12]  278 	pop	bc
+    000000EF E9               [ 4]  279 	jp	(hl)
+                                    280 	.area _CODE
+                                    281 	.area _INITIALIZER
+    00000000                        282 __xinit__global_object_information:
+    00000000 54                     283 	.db #0x54	; 84	'T'
+    00000001 1C                     284 	.db #0x1c	; 28
+    00000002 08                     285 	.db #0x08	; 8
+    00000003 5C                     286 	.db #0x5c	; 92
+    00000004 1C                     287 	.db #0x1c	; 28
+    00000005 09                     288 	.db #0x09	; 9
+                                    289 	.area _CABS (ABS)

@@ -10,6 +10,7 @@
 	.globl _flip_direction
 	.globl _movement_step_by_step
 	.globl _check_colision_with_object
+	.globl _hide_object
 	.globl _player_tileBR_over_destination
 	.globl _player_tileBR_over_a_block
 	.globl _tileindex_from_xy
@@ -587,7 +588,7 @@ _update_character::
 	add	sp, #-12
 	ld	c, e
 	ld	b, d
-;src/Character.c:98: check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
+;src/Character.c:98: uint8_t colision = check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
 	ld	hl, #0x0007
 	add	hl, bc
 	ld	a, (hl)
@@ -644,7 +645,16 @@ _update_character::
 	ld	e, (hl)
 	call	_check_colision_with_object
 	pop	bc
-;src/Character.c:100: if(player_tileBR_over_destination(p->tileindexBR)){
+;src/Character.c:99: if(colision>0){
+;src/Character.c:100: hide_object(colision-8);
+	or	a,a
+	jr	Z, 00102$
+	add	a, #0xf8
+	push	bc
+	call	_hide_object
+	pop	bc
+00102$:
+;src/Character.c:103: if(player_tileBR_over_destination(p->tileindexBR)){
 	ld	hl, #0x000b
 	add	hl, bc
 	push	hl
@@ -668,14 +678,14 @@ _update_character::
 	call	_player_tileBR_over_destination
 	pop	bc
 	or	a, a
-	jr	Z, 00102$
-;src/Character.c:101: update_game_state(STATE_GAME_OVER);
+	jr	Z, 00104$
+;src/Character.c:104: update_game_state(STATE_GAME_OVER);
 	ld	a, #0x05
 	call	_update_game_state
-;src/Character.c:102: return;
-	jp	00106$
-00102$:
-;src/Character.c:105: p->tileindexBR = tileindex_from_xy(p->x, p->y);
+;src/Character.c:105: return;
+	jp	00108$
+00104$:
+;src/Character.c:108: p->tileindexBR = tileindex_from_xy(p->x, p->y);
 	pop	de
 	push	de
 	ld	a, (de)
@@ -706,7 +716,7 @@ _update_character::
 	inc	de
 	ld	a, (hl)
 	ld	(de), a
-;src/Character.c:106: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
+;src/Character.c:109: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
 	ld	hl, #0x000d
 	add	hl, bc
 	push	hl
@@ -791,15 +801,15 @@ _update_character::
 	inc	de
 	ld	a, (hl)
 	ld	(de), a
-;src/Character.c:108: if(canplayermove(p)) {
+;src/Character.c:111: if(canplayermove(p)) {
 	push	bc
 	ld	e, c
 	ld	d, b
 	call	_canplayermove
 	pop	bc
 	or	a, a
-	jr	Z, 00104$
-;src/Character.c:109: p->x += p->speed * p->dir_x;
+	jr	Z, 00106$
+;src/Character.c:112: p->x += p->speed * p->dir_x;
 	ldhl	sp,#2
 	ld	a, (hl+)
 	ld	e, a
@@ -844,7 +854,7 @@ _update_character::
 	ld	h, (hl)
 	ld	l, e
 	ld	(hl), a
-;src/Character.c:110: p->y += p->speed * p->dir_y;
+;src/Character.c:113: p->y += p->speed * p->dir_y;
 	pop	de
 	push	de
 	ld	a, (de)
@@ -877,21 +887,21 @@ _update_character::
 	pop	hl
 	push	hl
 	ld	(hl), a
-	jr	00105$
-00104$:
-;src/Character.c:112: flip_direction(p);
+	jr	00107$
+00106$:
+;src/Character.c:115: flip_direction(p);
 	push	bc
 	ld	e, c
 	ld	d, b
 	call	_flip_direction
 	pop	bc
-00105$:
-;src/Character.c:114: move_character(p);
+00107$:
+;src/Character.c:117: move_character(p);
 	ld	e, c
 	ld	d, b
 	call	_move_character
-00106$:
-;src/Character.c:115: }
+00108$:
+;src/Character.c:118: }
 	add	sp, #12
 	ret
 	.area _CODE

@@ -64,6 +64,18 @@ void change_colision_map_BR(uint16_t tileindexBR, uint8_t new_value){
     }
 }
 
+uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah, uint8_t bx, uint8_t by, uint8_t bw, uint8_t bh){
+        uint8_t res = 0; //no colision of sprites
+            //Axis Aligned Bounding box (AABB)
+            if(ax < bx + bw &&
+            ax + aw > bx &&
+            ay < by + bh &&
+            ay + ah > by){
+                res = 1;
+            }
+        return res;
+}
+
 //get init point from colision map
 void get_init_point_from_map(uint8_t colision_map[360]){
      for(uint16_t i = 0; i<360; i++){
