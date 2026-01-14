@@ -2,14 +2,22 @@
 #include <gb/gb.h>
 #include "Headers/Object.h"
 
-uint8_t global_object_information[3*NUMBER_OF_OBJECTS] = {84, 26, 8, 92, 26, 8};
+uint8_t global_object_information[3*NUMBER_OF_OBJECTS] = {84, 28, 8, 92, 28, 8};
 
 void print_objects_in_screen(void){
+    //Todo: Se está imprimiendo solo el ultimo de los sprites, pues 
+    //usan el mismo tile creo
+
+    uint8_t obj_x;
+    uint8_t obj_y;
+    uint8_t obj_type;
     for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
-        uint8_t obj_x = global_object_information[3*e];
-        uint8_t obj_y = global_object_information[3*e + 1];
-        uint8_t obj_type = global_object_information[3*e + 2];
-        move_sprite(obj_type, obj_x, obj_y);
+        obj_x = global_object_information[3*e];
+        obj_y = global_object_information[3*e + 1];
+        obj_type = global_object_information[3*e + 2];
+        
+        set_sprite_tile(8+e,obj_type);
+        move_sprite(8+e, obj_x, obj_y);
     }
 }
 

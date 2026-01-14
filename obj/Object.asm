@@ -50,13 +50,13 @@ _global_object_information::
 _print_objects_in_screen::
 	dec	sp
 	dec	sp
-;src/Object.c:8: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+;src/Object.c:14: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
 	ld	c, #0x00
-00104$:
+00105$:
 	ld	a, c
 	sub	a, #0x02
-	jr	NC, 00106$
-;src/Object.c:9: uint8_t obj_x = global_object_information[3*e];
+	jr	NC, 00107$
+;src/Object.c:15: obj_x = global_object_information[3*e];
 	ld	l, c
 	ld	h, #0x00
 	ld	e, l
@@ -68,7 +68,7 @@ _print_objects_in_screen::
 	ld	a, (hl)
 	ldhl	sp,	#0
 	ld	(hl), a
-;src/Object.c:10: uint8_t obj_y = global_object_information[3*e + 1];
+;src/Object.c:16: obj_y = global_object_information[3*e + 1];
 	ld	a, c
 	ld	e, a
 	add	a, a
@@ -82,24 +82,47 @@ _print_objects_in_screen::
 	ld	a, (hl)
 	ldhl	sp,	#1
 	ld	(hl), a
-;src/Object.c:11: uint8_t obj_type = global_object_information[3*e + 2];
+;src/Object.c:17: obj_type = global_object_information[3*e + 2];
 	inc	b
 	inc	b
 	ld	l, b
 	ld	h, #0x00
 	ld	de, #_global_object_information
 	add	hl, de
-	ld	b, (hl)
-;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-	ld	de, #_shadow_OAM+0
+	ld	d, (hl)
+;src/Object.c:19: set_sprite_tile(8+e,obj_type);
+	ld	a, c
+	add	a, #0x08
+	ld	e, a
+	ld	b, e
+;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
 	xor	a, a
 	ld	l, b
 	ld	h, a
 	add	hl, hl
 	add	hl, hl
-	add	hl, de
-	ld	e, l
-	ld	d, h
+	ld	a, #<(_shadow_OAM)
+	add	a, l
+	ld	l, a
+	ld	a, #>(_shadow_OAM)
+	adc	a, h
+	ld	h, a
+	inc	hl
+	inc	hl
+	ld	(hl), d
+;src/Object.c:20: move_sprite(8+e, obj_x, obj_y);
+;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+	xor	a, a
+	ld	l, e
+	ld	h, a
+	add	hl, hl
+	add	hl, hl
+	ld	a, l
+	add	a, #<(_shadow_OAM)
+	ld	e, a
+	ld	a, h
+	adc	a, #>(_shadow_OAM)
+	ld	d, a
 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
 	ldhl	sp,	#1
 	ld	a, (hl-)
@@ -107,21 +130,21 @@ _print_objects_in_screen::
 	inc	de
 	ld	a, (hl)
 	ld	(de), a
-;src/Object.c:8: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+;src/Object.c:14: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
 	inc	c
-	jr	00104$
-00106$:
-;src/Object.c:14: }
+	jr	00105$
+00107$:
+;src/Object.c:22: }
 	inc	sp
 	inc	sp
 	ret
-;src/Object.c:16: void hide_object(uint8_t i){
+;src/Object.c:24: void hide_object(uint8_t i){
 ;	---------------------------------
 ; Function hide_object
 ; ---------------------------------
 _hide_object::
 	ld	e, a
-;src/Object.c:17: global_object_information[i*NUMBER_OF_OBJECTS] = 0;
+;src/Object.c:25: global_object_information[i*NUMBER_OF_OBJECTS] = 0;
 	ld	bc, #_global_object_information+0
 	ld	l, e
 	xor	a, a
@@ -129,7 +152,7 @@ _hide_object::
 	add	hl, hl
 	add	hl, bc
 	ld	(hl), #0x00
-;src/Object.c:18: global_object_information[i*NUMBER_OF_OBJECTS+1] = 0;
+;src/Object.c:26: global_object_information[i*NUMBER_OF_OBJECTS+1] = 0;
 	ld	a, e
 	add	a, a
 	inc	a
@@ -139,15 +162,15 @@ _hide_object::
 	ld	h, a
 	add	hl, bc
 	ld	(hl), #0x00
-;src/Object.c:19: }
+;src/Object.c:27: }
 	ret
 	.area _CODE
 	.area _INITIALIZER
 __xinit__global_object_information:
 	.db #0x54	; 84	'T'
-	.db #0x1a	; 26
+	.db #0x1c	; 28
 	.db #0x08	; 8
 	.db #0x5c	; 92
-	.db #0x1a	; 26
+	.db #0x1c	; 28
 	.db #0x08	; 8
 	.area _CABS (ABS)

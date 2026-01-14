@@ -115,14 +115,14 @@
     00000054 F0r00            [12]  115 	ldh	a, (_LCDC_REG + 0)
     00000056 F6 02            [ 8]  116 	or	a, #0x02
     00000058 E0r00            [12]  117 	ldh	(_LCDC_REG + 0), a
-                                    118 ;src/main.c:39: set_bkg_data(0, 44, map_tiles);
+                                    118 ;src/main.c:40: set_bkg_data(0, 44, map_tiles);
     0000005A 11r00r00         [12]  119 	ld	de, #_map_tiles
     0000005D D5               [16]  120 	push	de
     0000005E 21 00 2C         [12]  121 	ld	hl, #0x2c00
     00000061 E5               [16]  122 	push	hl
     00000062 CDr00r00         [24]  123 	call	_set_bkg_data
     00000065 E8 04            [16]  124 	add	sp, #4
-                                    125 ;src/main.c:40: set_bkg_tiles(0,0,20,18,map1);
+                                    125 ;src/main.c:41: set_bkg_tiles(0,0,20,18,map1);
     00000067 11r00r00         [12]  126 	ld	de, #_map1
     0000006A D5               [16]  127 	push	de
     0000006B 21 14 12         [12]  128 	ld	hl, #0x1214
@@ -132,28 +132,28 @@
     00000071 F5               [16]  132 	push	af
     00000072 CDr00r00         [24]  133 	call	_set_bkg_tiles
     00000075 E8 06            [16]  134 	add	sp, #6
-                                    135 ;src/main.c:41: SHOW_BKG;
+                                    135 ;src/main.c:42: SHOW_BKG;
     00000077 F0r00            [12]  136 	ldh	a, (_LCDC_REG + 0)
     00000079 F6 01            [ 8]  137 	or	a, #0x01
     0000007B E0r00            [12]  138 	ldh	(_LCDC_REG + 0), a
-                                    139 ;src/main.c:42: }
+                                    139 ;src/main.c:43: }
     0000007D C9               [16]  140 	ret
-                                    141 ;src/main.c:44: void main(void)
+                                    141 ;src/main.c:45: void main(void)
                                     142 ;	---------------------------------
                                     143 ; Function main
                                     144 ; ---------------------------------
     0000007E                        145 _main::
-                                    146 ;src/main.c:46: init_gfx();
+                                    146 ;src/main.c:47: init_gfx();
     0000007E CDr00r00         [24]  147 	call	_init_gfx
-                                    148 ;src/main.c:47: pointer_init(&s);
+                                    148 ;src/main.c:48: pointer_init(&s);
     00000081 11r0Fr00         [12]  149 	ld	de, #_s
     00000084 CDr00r00         [24]  150 	call	_pointer_init
-                                    151 ;src/main.c:49: global_game_state = STATE_GAME_SETTING;
+                                    151 ;src/main.c:50: global_game_state = STATE_GAME_SETTING;
     00000087 21r00r00         [12]  152 	ld	hl, #_global_game_state
     0000008A 36 02            [12]  153 	ld	(hl), #0x02
-                                    154 ;src/main.c:51: while(1) {
+                                    154 ;src/main.c:52: while(1) {
     0000008C                        155 00117$:
-                                    156 ;src/main.c:52: switch (global_game_state)
+                                    156 ;src/main.c:53: switch (global_game_state)
     0000008C FAr00r00         [16]  157 	ld	a,(#_global_game_state)
     0000008F FE 02            [ 8]  158 	cp	a,#0x02
     00000091 28 0A            [12]  159 	jr	Z, 00101$
@@ -162,87 +162,87 @@
     00000097 D6 05            [ 8]  162 	sub	a, #0x05
     00000099 28 51            [12]  163 	jr	Z, 00109$
     0000009B 18 6E            [12]  164 	jr	00115$
-                                    165 ;src/main.c:54: case STATE_GAME_SETTING:
+                                    165 ;src/main.c:55: case STATE_GAME_SETTING:
     0000009D                        166 00101$:
-                                    167 ;src/main.c:55: if(last_state != STATE_GAME_SETTING) {
+                                    167 ;src/main.c:56: if(last_state != STATE_GAME_SETTING) {
     0000009D FAr17r00         [16]  168 	ld	a, (#_last_state)
     000000A0 D6 02            [ 8]  169 	sub	a, #0x02
     000000A2 28 18            [12]  170 	jr	Z, 00103$
-                                    171 ;src/main.c:56: init_gfx();
+                                    171 ;src/main.c:57: init_gfx();
     000000A4 CDr00r00         [24]  172 	call	_init_gfx
-                                    173 ;src/main.c:57: init_level(0);
+                                    173 ;src/main.c:58: init_level(0);
     000000A7 AF               [ 4]  174 	xor	a, a
     000000A8 CDr00r00         [24]  175 	call	_init_level
-                                    176 ;src/main.c:58: get_colision_from_map(map1, global_colision_map);
+                                    176 ;src/main.c:59: get_colision_from_map(map1, global_colision_map);
     000000AB 01r00r00         [12]  177 	ld	bc, #_global_colision_map
     000000AE 11r00r00         [12]  178 	ld	de, #_map1
     000000B1 CDr00r00         [24]  179 	call	_get_colision_from_map
-                                    180 ;src/main.c:60: print_objects_in_screen();
+                                    180 ;src/main.c:61: print_objects_in_screen();
     000000B4 CDr00r00         [24]  181 	call	_print_objects_in_screen
-                                    182 ;src/main.c:61: last_state = STATE_GAME_SETTING;
+                                    182 ;src/main.c:62: last_state = STATE_GAME_SETTING;
     000000B7 21r17r00         [12]  183 	ld	hl, #_last_state
     000000BA 36 02            [12]  184 	ld	(hl), #0x02
     000000BC                        185 00103$:
-                                    186 ;src/main.c:63: update_pointer(&s);
+                                    186 ;src/main.c:64: update_pointer(&s);
     000000BC 11r0Fr00         [12]  187 	ld	de, #_s
     000000BF CDr00r00         [24]  188 	call	_update_pointer
-                                    189 ;src/main.c:64: if(joypad() & J_START){
+                                    189 ;src/main.c:65: if(joypad() & J_START){
     000000C2 CDr00r00         [24]  190 	call	_joypad
     000000C5 07               [ 4]  191 	rlca
     000000C6 30 43            [12]  192 	jr	NC, 00115$
-                                    193 ;src/main.c:65: hide_pointer();
+                                    193 ;src/main.c:66: hide_pointer();
     000000C8 CDr00r00         [24]  194 	call	_hide_pointer
-                                    195 ;src/main.c:66: update_game_state(STATE_GAME_RUNNING);
+                                    195 ;src/main.c:67: update_game_state(STATE_GAME_RUNNING);
     000000CB 3E 03            [ 8]  196 	ld	a, #0x03
     000000CD CDr00r00         [24]  197 	call	_update_game_state
-                                    198 ;src/main.c:68: break;
+                                    198 ;src/main.c:69: break;
     000000D0 18 39            [12]  199 	jr	00115$
-                                    200 ;src/main.c:70: case STATE_GAME_RUNNING:
+                                    200 ;src/main.c:71: case STATE_GAME_RUNNING:
     000000D2                        201 00106$:
-                                    202 ;src/main.c:71: if(last_state != STATE_GAME_RUNNING) {
+                                    202 ;src/main.c:72: if(last_state != STATE_GAME_RUNNING) {
     000000D2 FAr17r00         [16]  203 	ld	a, (#_last_state)
     000000D5 D6 03            [ 8]  204 	sub	a, #0x03
     000000D7 28 0B            [12]  205 	jr	Z, 00108$
-                                    206 ;src/main.c:72: character_init(&p);
+                                    206 ;src/main.c:73: character_init(&p);
     000000D9 11r00r00         [12]  207 	ld	de, #_p
     000000DC CDr00r00         [24]  208 	call	_character_init
-                                    209 ;src/main.c:73: last_state = STATE_GAME_RUNNING;
+                                    209 ;src/main.c:74: last_state = STATE_GAME_RUNNING;
     000000DF 21r17r00         [12]  210 	ld	hl, #_last_state
     000000E2 36 03            [12]  211 	ld	(hl), #0x03
     000000E4                        212 00108$:
-                                    213 ;src/main.c:75: update_character(&p);
+                                    213 ;src/main.c:76: update_character(&p);
     000000E4 11r00r00         [12]  214 	ld	de, #_p
     000000E7 CDr00r00         [24]  215 	call	_update_character
-                                    216 ;src/main.c:87: break;
+                                    216 ;src/main.c:88: break;
     000000EA 18 1F            [12]  217 	jr	00115$
-                                    218 ;src/main.c:89: case STATE_GAME_OVER:
+                                    218 ;src/main.c:90: case STATE_GAME_OVER:
     000000EC                        219 00109$:
-                                    220 ;src/main.c:90: if(last_state != STATE_GAME_OVER) {
+                                    220 ;src/main.c:91: if(last_state != STATE_GAME_OVER) {
     000000EC FAr17r00         [16]  221 	ld	a, (#_last_state)
     000000EF D6 05            [ 8]  222 	sub	a, #0x05
     000000F1 28 0D            [12]  223 	jr	Z, 00111$
-                                    224 ;src/main.c:91: last_state = STATE_GAME_OVER;
+                                    224 ;src/main.c:92: last_state = STATE_GAME_OVER;
     000000F3 21r17r00         [12]  225 	ld	hl, #_last_state
     000000F6 36 05            [12]  226 	ld	(hl), #0x05
-                                    227 ;src/main.c:92: printf("You WIN!\nPress start to try again");
+                                    227 ;src/main.c:93: printf("You WIN!\nPress start to try again");
     000000F8 11r13r01         [12]  228 	ld	de, #___str_0
     000000FB D5               [16]  229 	push	de
     000000FC CDr00r00         [24]  230 	call	_printf
     000000FF E1               [12]  231 	pop	hl
     00000100                        232 00111$:
-                                    233 ;src/main.c:94: if(joypad() & J_START){
+                                    233 ;src/main.c:95: if(joypad() & J_START){
     00000100 CDr00r00         [24]  234 	call	_joypad
     00000103 07               [ 4]  235 	rlca
     00000104 30 05            [12]  236 	jr	NC, 00115$
-                                    237 ;src/main.c:95: update_game_state(STATE_GAME_SETTING);
+                                    237 ;src/main.c:96: update_game_state(STATE_GAME_SETTING);
     00000106 3E 02            [ 8]  238 	ld	a, #0x02
     00000108 CDr00r00         [24]  239 	call	_update_game_state
-                                    240 ;src/main.c:101: }
+                                    240 ;src/main.c:102: }
     0000010B                        241 00115$:
-                                    242 ;src/main.c:102: performantdelay(10);
+                                    242 ;src/main.c:103: performantdelay(10);
     0000010B 3E 0A            [ 8]  243 	ld	a, #0x0a
     0000010D CDr00r00         [24]  244 	call	_performantdelay
-                                    245 ;src/main.c:104: }
+                                    245 ;src/main.c:105: }
     00000110 C3r8Cr00         [16]  246 	jp	00117$
     00000113                        247 ___str_0:
     00000113 59 6F 75 20 57 49 4E   248 	.ascii "You WIN!"
