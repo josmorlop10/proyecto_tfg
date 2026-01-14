@@ -91,7 +91,7 @@ void control_pointer(Pointer* s){
     } else if(joypad() & J_A) {
         if(block_is_not_placed_below(s) 
         && (global_blocks_available[global_selected_block]>0)
-        && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1) , 16, 16) == 0){
+        && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1) , 16, 16) == 255){
             place_object_at_pointer(s, global_selected_block + 6);
         }
     } else if(joypad() & J_B) {

@@ -191,10 +191,14 @@ _check_colision_with_object::
 	add	sp, #-4
 	ldhl	sp,	#3
 	ld	(hl-), a
-	ld	(hl), e
-;src/Object.c:33: uint8_t res = 0;
+;src/Object.c:33: uint8_t res = 255;
 ;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
-	ld	bc, #0x0
+	ld	a, e
+	ld	(hl-), a
+	dec	hl
+	ld	c, #0xff
+	ld	(hl), #0x00
+	ld	b, #0x00
 00105$:
 	ld	a, b
 	sub	a, #0x02
@@ -209,34 +213,18 @@ _check_colision_with_object::
 	ld	de, #_global_object_information
 	add	hl, de
 	ld	a, (hl)
-	ldhl	sp,	#0
+	ldhl	sp,	#1
 	ld	(hl), a
 ;src/Object.c:37: obj_y = global_object_information[3*e + 1];
 	ld	l, b
 	ld	e, l
 	add	hl, hl
 	add	hl, de
-	ld	a, l
-	inc	a
-	add	a, #<(_global_object_information)
-	ld	e, a
-	ld	a, #0x00
-	adc	a, #>(_global_object_information)
-	ld	d, a
-	ld	a, (de)
-	ld	e, a
-;src/Object.c:38: obj_type = global_object_information[3*e + 2];
-	ld	a, l
-	inc	a
-	inc	a
-	add	a, #<(_global_object_information)
-	ld	l, a
-	ld	a, #0x00
-	adc	a, #>(_global_object_information)
-	ld	h, a
-	ld	a, (hl)
-	ldhl	sp,	#1
-	ld	(hl), a
+	inc	l
+	ld	h, #0x00
+	ld	de, #_global_object_information
+	add	hl, de
+	ld	e, (hl)
 ;src/Object.c:41: if(check_colision_of_sprites(obj_x,obj_y,OBJECT_SIZE, OBJECT_SIZE,
 	push	bc
 	ldhl	sp,	#9
@@ -248,26 +236,29 @@ _check_colision_with_object::
 	ld	a, (hl+)
 	push	af
 	inc	sp
-	ld	h, (hl)
-	ld	l, #0x08
-	push	hl
+	ld	a, (hl-)
+	dec	hl
+	ld	b, a
+	ld	c, #0x08
+	push	bc
 	ld	a, #0x08
 	push	af
 	inc	sp
-	ldhl	sp,	#8
 	ld	a, (hl)
 	call	_check_colision_of_sprites
 	pop	bc
 	or	a, a
 	jr	Z, 00106$
-;src/Object.c:43: res = obj_type;
-	ldhl	sp,	#1
+;src/Object.c:43: res = e;
+	ldhl	sp,	#0
 	ld	c, (hl)
 ;src/Object.c:44: break;
 	jr	00103$
 00106$:
 ;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
 	inc	b
+	ldhl	sp,	#0
+	ld	(hl), b
 	jr	00105$
 00103$:
 ;src/Object.c:47: return res;
@@ -282,8 +273,8 @@ _check_colision_with_object::
 __xinit__global_object_information:
 	.db #0x54	; 84	'T'
 	.db #0x1c	; 28
-	.db #0x08	; 8
+	.db #0x0d	; 13
 	.db #0x5c	; 92
 	.db #0x1c	; 28
-	.db #0x09	; 9
+	.db #0x10	; 16
 	.area _CABS (ABS)

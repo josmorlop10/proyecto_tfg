@@ -634,7 +634,7 @@
     00000275 1A               [ 8]  634 	ld	a, (de)
     00000276 B7               [ 4]  635 	or	a, a
     00000277 28 53            [12]  636 	jr	Z, 00135$
-                                    637 ;src/PointerSelector.c:94: && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1) , 16, 16) == 0){
+                                    637 ;src/PointerSelector.c:94: && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1) , 16, 16) == 255){
     00000279 0A               [ 8]  638 	ld	a, (bc)
     0000027A C6 F8            [ 8]  639 	add	a, #0xf8
     0000027C 4F               [ 4]  640 	ld	c, a
@@ -650,7 +650,7 @@
     00000289 33               [ 8]  650 	inc	sp
     0000028A 59               [ 4]  651 	ld	e, c
     0000028B CDr00r00         [24]  652 	call	_check_colision_with_object
-    0000028E B7               [ 4]  653 	or	a, a
+    0000028E 3C               [ 4]  653 	inc	a
     0000028F 20 3B            [12]  654 	jr	NZ, 00135$
                                     655 ;src/PointerSelector.c:95: place_object_at_pointer(s, global_selected_block + 6);
     00000291 FAr00r00         [16]  656 	ld	a, (_global_selected_block)

@@ -588,7 +588,7 @@ _update_character::
 	add	sp, #-12
 	ld	c, e
 	ld	b, d
-;src/Character.c:98: uint8_t colision = check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
+;src/Character.c:98: uint8_t object_index_in_array = check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
 	ld	hl, #0x0007
 	add	hl, bc
 	ld	a, (hl)
@@ -645,16 +645,15 @@ _update_character::
 	ld	e, (hl)
 	call	_check_colision_with_object
 	pop	bc
-;src/Character.c:99: if(colision>0){
-;src/Character.c:100: hide_object(colision-8);
-	or	a,a
+;src/Character.c:99: if(object_index_in_array != 255){ //TODO no funciona correctamente. Debe pasar a hide object
+	cp	a, #0xff
 	jr	Z, 00102$
-	add	a, #0xf8
+;src/Character.c:101: hide_object(object_index_in_array);
 	push	bc
 	call	_hide_object
 	pop	bc
 00102$:
-;src/Character.c:103: if(player_tileBR_over_destination(p->tileindexBR)){
+;src/Character.c:104: if(player_tileBR_over_destination(p->tileindexBR)){
 	ld	hl, #0x000b
 	add	hl, bc
 	push	hl
@@ -679,13 +678,13 @@ _update_character::
 	pop	bc
 	or	a, a
 	jr	Z, 00104$
-;src/Character.c:104: update_game_state(STATE_GAME_OVER);
+;src/Character.c:105: update_game_state(STATE_GAME_OVER);
 	ld	a, #0x05
 	call	_update_game_state
-;src/Character.c:105: return;
+;src/Character.c:106: return;
 	jp	00108$
 00104$:
-;src/Character.c:108: p->tileindexBR = tileindex_from_xy(p->x, p->y);
+;src/Character.c:109: p->tileindexBR = tileindex_from_xy(p->x, p->y);
 	pop	de
 	push	de
 	ld	a, (de)
@@ -716,7 +715,7 @@ _update_character::
 	inc	de
 	ld	a, (hl)
 	ld	(de), a
-;src/Character.c:109: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
+;src/Character.c:110: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
 	ld	hl, #0x000d
 	add	hl, bc
 	push	hl
@@ -801,7 +800,7 @@ _update_character::
 	inc	de
 	ld	a, (hl)
 	ld	(de), a
-;src/Character.c:111: if(canplayermove(p)) {
+;src/Character.c:112: if(canplayermove(p)) {
 	push	bc
 	ld	e, c
 	ld	d, b
@@ -809,7 +808,7 @@ _update_character::
 	pop	bc
 	or	a, a
 	jr	Z, 00106$
-;src/Character.c:112: p->x += p->speed * p->dir_x;
+;src/Character.c:113: p->x += p->speed * p->dir_x;
 	ldhl	sp,#2
 	ld	a, (hl+)
 	ld	e, a
@@ -854,7 +853,7 @@ _update_character::
 	ld	h, (hl)
 	ld	l, e
 	ld	(hl), a
-;src/Character.c:113: p->y += p->speed * p->dir_y;
+;src/Character.c:114: p->y += p->speed * p->dir_y;
 	pop	de
 	push	de
 	ld	a, (de)
@@ -889,19 +888,19 @@ _update_character::
 	ld	(hl), a
 	jr	00107$
 00106$:
-;src/Character.c:115: flip_direction(p);
+;src/Character.c:116: flip_direction(p);
 	push	bc
 	ld	e, c
 	ld	d, b
 	call	_flip_direction
 	pop	bc
 00107$:
-;src/Character.c:117: move_character(p);
+;src/Character.c:118: move_character(p);
 	ld	e, c
 	ld	d, b
 	call	_move_character
 00108$:
-;src/Character.c:118: }
+;src/Character.c:119: }
 	add	sp, #12
 	ret
 	.area _CODE

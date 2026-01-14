@@ -95,9 +95,9 @@ void flip_direction(Character* p){
 
 void update_character(Character* p) { //devuelve las teclas actuales
 
-    uint8_t colision = check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
-    if(colision>0){
-        hide_object(colision-8);
+    uint8_t object_index_in_array = check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
+    if(object_index_in_array != 255){ 
+        hide_object(object_index_in_array);
     }
 
     if(player_tileBR_over_destination(p->tileindexBR)){

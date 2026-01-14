@@ -3,7 +3,7 @@
 #include "Headers/Object.h"
 #include "Headers/LevelLogic.h"
 
-uint8_t global_object_information[3*NUMBER_OF_OBJECTS] = {84, 28, 8, 92, 28, 9};
+uint8_t global_object_information[3*NUMBER_OF_OBJECTS] = {84, 28, GO_DOWN, 92, 28, DEAD};
 
 void print_objects_in_screen(void){
 
@@ -30,7 +30,7 @@ uint8_t check_colision_with_object(uint8_t x, uint8_t y, uint8_t w, uint8_t h){
     uint8_t obj_x;
     uint8_t obj_y;
     uint8_t obj_type;
-    uint8_t res = 0;
+    uint8_t res = 255;
 
     for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
         obj_x = global_object_information[3*e];
@@ -40,7 +40,7 @@ uint8_t check_colision_with_object(uint8_t x, uint8_t y, uint8_t w, uint8_t h){
         //Axis Aligned Bounding box (AABB)
         if(check_colision_of_sprites(obj_x,obj_y,OBJECT_SIZE, OBJECT_SIZE,
         x, y, w, h)){
-            res = obj_type;
+            res = e;
             break;
         }
     }

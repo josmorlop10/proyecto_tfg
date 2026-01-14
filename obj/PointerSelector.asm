@@ -634,7 +634,7 @@ _control_pointer::
 	ld	a, (de)
 	or	a, a
 	jr	Z, 00135$
-;src/PointerSelector.c:94: && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1) , 16, 16) == 0){
+;src/PointerSelector.c:94: && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1) , 16, 16) == 255){
 	ld	a, (bc)
 	add	a, #0xf8
 	ld	c, a
@@ -650,7 +650,7 @@ _control_pointer::
 	inc	sp
 	ld	e, c
 	call	_check_colision_with_object
-	or	a, a
+	inc	a
 	jr	NZ, 00135$
 ;src/PointerSelector.c:95: place_object_at_pointer(s, global_selected_block + 6);
 	ld	a, (_global_selected_block)
