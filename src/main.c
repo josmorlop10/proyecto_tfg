@@ -35,7 +35,7 @@ void init_gfx(void){
     set_sprite_data(8,1,object_sprites);
     set_sprite_tile(8,8);
     SHOW_SPRITES;
-    
+
     //map
     set_bkg_data(0, 44, map_tiles);
     set_bkg_tiles(0,0,20,18,map1);

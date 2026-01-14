@@ -13,5 +13,7 @@ extern uint8_t global_object_information[3*NUMBER_OF_OBJECTS];
 
 void print_objects_in_screen(void);
 void hide_object(uint8_t i);
+uint8_t check_colision_with_object(uint8_t x, uint8_t y, uint8_t w, uint8_t h);
+
 
 #endif

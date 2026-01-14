@@ -95,6 +95,8 @@ void flip_direction(Character* p){
 
 void update_character(Character* p) { //devuelve las teclas actuales
 
+    check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
+
     if(player_tileBR_over_destination(p->tileindexBR)){
         update_game_state(STATE_GAME_OVER);
         return;

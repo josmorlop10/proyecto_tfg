@@ -8,17 +8,19 @@ Symbol Table
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
   7 __xinit__global_object_information                              00000000 R
+  0 _check_colision_with_object                                     00000088 GR
   2 _global_object_information                                      00000000 GR
   0 _hide_object                                                    00000062 GR
   0 _print_objects_in_screen                                        00000000 GR
     _shadow_OAM                                                     ******** GX
+
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       78   flags    0
+   0 _CODE                                      size      15E   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        6   flags    0
    3 _DABS                                      size        0   flags    8

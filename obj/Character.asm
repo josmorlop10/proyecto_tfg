@@ -9,6 +9,7 @@
 ;--------------------------------------------------------
 	.globl _flip_direction
 	.globl _movement_step_by_step
+	.globl _check_colision_with_object
 	.globl _player_tileBR_over_destination
 	.globl _player_tileBR_over_a_block
 	.globl _tileindex_from_xy
@@ -583,45 +584,37 @@ _flip_direction::
 ; Function update_character
 ; ---------------------------------
 _update_character::
-	add	sp, #-13
-	ldhl	sp,	#11
-	ld	a, e
-	ld	(hl+), a
-;src/Character.c:98: if(player_tileBR_over_destination(p->tileindexBR)){
-	ld	a, d
-	ld	(hl-), a
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	ld	hl, #0x000b
-	add	hl, de
-	ld	c,l
-	ld	b,h
-	ld	a,	(hl+)
-	ld	h, (hl)
-	ld	l, a
-	push	bc
+	add	sp, #-12
+	ld	c, e
+	ld	b, d
+;src/Character.c:98: check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
+	ld	hl, #0x0007
+	add	hl, bc
+	ld	a, (hl)
+	ldhl	sp,	#9
+	ld	(hl), a
+	ld	hl, #0x0006
+	add	hl, bc
+	ld	a, (hl)
+	ldhl	sp,	#10
+	ld	(hl), a
+	ld	hl, #0x0005
+	add	hl, bc
+	inc	sp
+	inc	sp
 	ld	e, l
 	ld	d, h
-	call	_player_tileBR_over_destination
-	ld	e, a
-	pop	bc
-	ld	a, e
-	or	a, a
-	jr	Z, 00102$
-;src/Character.c:99: update_game_state(STATE_GAME_OVER);
-	ld	a, #0x05
-	call	_update_game_state
-;src/Character.c:100: return;
-	jp	00106$
-00102$:
-;src/Character.c:103: p->tileindexBR = tileindex_from_xy(p->x, p->y);
-	ldhl	sp,#11
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	ld	hl, #0x0005
-	add	hl, de
+	push	de
+	ld	a, (de)
+	ldhl	sp,	#9
+	ld	e, (hl)
+	inc	hl
+	inc	hl
+	srl	e
+	sub	a, e
+	ld	(hl), a
+	ld	hl, #0x0004
+	add	hl, bc
 	push	hl
 	ld	a, l
 	ldhl	sp,	#4
@@ -635,89 +628,25 @@ _update_character::
 	ld	d, (hl)
 	ld	a, (de)
 	ldhl	sp,	#10
-	ld	(hl+), a
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	ld	hl, #0x0004
-	add	hl, de
-	push	hl
-	ld	a, l
-	ldhl	sp,	#6
-	ld	(hl), a
-	pop	hl
-	ld	a, h
-	ldhl	sp,	#5
-	ld	(hl-), a
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	ld	a, (de)
-	push	bc
-	ldhl	sp,	#12
 	ld	e, (hl)
-	call	_tileindex_from_xy
-	ld	e, c
-	ld	d, b
+	dec	hl
+	srl	e
+	sub	a, e
+	push	bc
+	ld	h, (hl)
+	push	hl
+	inc	sp
+	ldhl	sp,	#13
+	ld	h, (hl)
+	push	hl
+	inc	sp
+	ldhl	sp,	#15
+	ld	e, (hl)
+	call	_check_colision_with_object
 	pop	bc
-	ld	a, e
-	ld	(bc), a
-	inc	bc
-	ld	a, d
-	ld	(bc), a
-;src/Character.c:104: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
-	ldhl	sp,#11
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	ld	hl, #0x000d
-	add	hl, de
-	inc	sp
-	inc	sp
-	push	hl
-	ldhl	sp,#2
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	ld	a, (de)
-	ld	c, a
-	ldhl	sp,#11
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	ld	hl, #0x0009
-	add	hl, de
-	push	hl
-	ld	a, l
-	ldhl	sp,	#8
-	ld	(hl), a
-	pop	hl
-	ld	a, h
-	ldhl	sp,	#7
-	ld	(hl-), a
-	ld	a, (hl+)
-	ld	e, a
-	ld	a, (hl-)
-	dec	hl
-	dec	hl
-	ld	d, a
-	ld	a, (de)
-	add	a, a
-	add	a, a
-	add	a, a
-	add	a, c
-	ld	c, a
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	ld	a, (de)
-	ld	b, a
-	ldhl	sp,#11
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	ld	hl, #0x0008
-	add	hl, de
+;src/Character.c:100: if(player_tileBR_over_destination(p->tileindexBR)){
+	ld	hl, #0x000b
+	add	hl, bc
 	push	hl
 	ld	a, l
 	ldhl	sp,	#10
@@ -730,42 +659,170 @@ _update_character::
 	ld	e, a
 	ld	d, (hl)
 	ld	a, (de)
-	add	a, a
-	add	a, a
-	add	a, a
-	add	a, b
-	ld	e, c
+	ld	l, a
+	inc	de
+	ld	a, (de)
+	push	bc
+	ld	e, l
+	ld	d, a
+	call	_player_tileBR_over_destination
+	pop	bc
+	or	a, a
+	jr	Z, 00102$
+;src/Character.c:101: update_game_state(STATE_GAME_OVER);
+	ld	a, #0x05
+	call	_update_game_state
+;src/Character.c:102: return;
+	jp	00106$
+00102$:
+;src/Character.c:105: p->tileindexBR = tileindex_from_xy(p->x, p->y);
+	pop	de
+	push	de
+	ld	a, (de)
+	ldhl	sp,#2
+	ld	e, (hl)
+	inc	hl
+	ld	d, (hl)
+	push	af
+	ld	a, (de)
+	ld	l, a
+	pop	af
+	push	bc
+	ld	e, a
+	ld	a, l
 	call	_tileindex_from_xy
-	pop	hl
-	push	hl
+	ldhl	sp,	#12
 	ld	a, c
 	ld	(hl+), a
 	ld	(hl), b
-;src/Character.c:106: if(canplayermove(p)) {
-	ldhl	sp,	#11
+	pop	bc
+	ldhl	sp,	#8
 	ld	a, (hl+)
 	ld	e, a
-	ld	d, (hl)
-	call	_canplayermove
-	or	a, a
-	jr	Z, 00104$
-;src/Character.c:107: p->x += p->speed * p->dir_x;
-	ldhl	sp,#4
+	ld	a, (hl+)
+	ld	d, a
+	ld	a, (hl+)
+	ld	(de), a
+	inc	de
+	ld	a, (hl)
+	ld	(de), a
+;src/Character.c:106: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
+	ld	hl, #0x000d
+	add	hl, bc
+	push	hl
+	ld	a, l
+	ldhl	sp,	#6
+	ld	(hl), a
+	pop	hl
+	ld	a, h
+	ldhl	sp,	#5
+	ld	(hl), a
+	pop	de
+	push	de
+	ld	a, (de)
+	ldhl	sp,	#11
+	ld	(hl), a
+	ld	hl, #0x0009
+	add	hl, bc
+	push	hl
+	ld	a, l
+	ldhl	sp,	#8
+	ld	(hl), a
+	pop	hl
+	ld	a, h
+	ldhl	sp,	#7
+	ld	(hl-), a
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
 	ld	a, (de)
-	ldhl	sp,	#10
-	ld	(hl+), a
+	add	a, a
+	add	a, a
+	add	a, a
+	ldhl	sp,	#11
+	ld	e, (hl)
+	add	a, e
+	ldhl	sp,	#8
+	ld	(hl), a
+	ldhl	sp,#2
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
+	ld	a, (de)
+	ldhl	sp,	#9
+	ld	(hl), a
+	ld	hl, #0x0008
+	add	hl, bc
+	push	hl
+	ld	a, l
+	ldhl	sp,	#12
+	ld	(hl), a
+	pop	hl
+	ld	a, h
+	ldhl	sp,	#11
+	ld	(hl-), a
+	ld	a, (hl+)
+	ld	e, a
+	ld	a, (hl-)
+	dec	hl
+	ld	d, a
+	ld	a, (de)
+	add	a, a
+	add	a, a
+	add	a, a
+	ld	e, (hl)
+	dec	hl
+	add	a, e
+	push	bc
+	ld	e, (hl)
+	call	_tileindex_from_xy
+	ldhl	sp,	#10
+	ld	a, c
+	ld	(hl+), a
+	ld	(hl), b
+	pop	bc
+	ldhl	sp,	#4
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	ldhl	sp,	#8
+	ld	a, (hl+)
+	ld	(de), a
+	inc	de
+	ld	a, (hl)
+	ld	(de), a
+;src/Character.c:108: if(canplayermove(p)) {
+	push	bc
+	ld	e, c
+	ld	d, b
+	call	_canplayermove
+	pop	bc
+	or	a, a
+	jr	Z, 00104$
+;src/Character.c:109: p->x += p->speed * p->dir_x;
+	ldhl	sp,#2
+	ld	a, (hl+)
+	ld	e, a
+	ld	a, (hl+)
+	inc	hl
+	ld	d, a
+	ld	a, (de)
+	ld	(hl), a
 	ld	hl, #0x000a
-	add	hl, de
-	ld	c, l
-	ld	b, h
-	ld	a, (bc)
-	ldhl	sp,#8
+	add	hl, bc
+	push	hl
+	ld	a, l
+	ldhl	sp,	#10
+	ld	(hl), a
+	pop	hl
+	ld	a, h
+	ldhl	sp,	#9
+	ld	(hl-), a
+	ld	a, (hl+)
+	ld	e, a
+	ld	a, (hl+)
+	ld	d, a
+	ld	a, (de)
 	ld	e, (hl)
 	inc	hl
 	ld	d, (hl)
@@ -778,60 +835,64 @@ _update_character::
 	call	__mulschar
 	ld	a, c
 	pop	bc
-	ldhl	sp,	#10
+	ldhl	sp,	#5
 	ld	e, (hl)
 	add	a, e
-	ldhl	sp,	#4
-	ld	e, (hl)
-	inc	hl
-	ld	h, (hl)
-	ld	l, e
-	ld	(hl), a
-;src/Character.c:108: p->y += p->speed * p->dir_y;
-	ldhl	sp,#2
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	ld	a, (de)
-	ldhl	sp,	#10
-	ld	(hl), a
-	ld	a, (bc)
-	ld	c, a
-	ldhl	sp,#6
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
-	ld	a, (de)
-	ld	e, a
-	ld	a, c
-	call	__mulschar
-	ldhl	sp,	#10
-	ld	a, (hl)
-	add	a, c
 	ldhl	sp,	#2
 	ld	e, (hl)
 	inc	hl
 	ld	h, (hl)
 	ld	l, e
 	ld	(hl), a
+;src/Character.c:110: p->y += p->speed * p->dir_y;
+	pop	de
+	push	de
+	ld	a, (de)
+	ldhl	sp,	#11
+	ld	(hl-), a
+	dec	hl
+	dec	hl
+	ld	a, (hl+)
+	ld	e, a
+	ld	a, (hl-)
+	dec	hl
+	dec	hl
+	ld	d, a
+	ld	a, (de)
+	ld	e, (hl)
+	inc	hl
+	ld	d, (hl)
+	push	af
+	ld	a, (de)
+	ld	l, a
+	pop	af
+	push	bc
+	ld	e, l
+	call	__mulschar
+	ld	a, c
+	pop	bc
+	ldhl	sp,	#11
+	ld	e, (hl)
+	add	a, e
+	pop	hl
+	push	hl
+	ld	(hl), a
 	jr	00105$
 00104$:
-;src/Character.c:110: flip_direction(p);
-	ldhl	sp,	#11
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
+;src/Character.c:112: flip_direction(p);
+	push	bc
+	ld	e, c
+	ld	d, b
 	call	_flip_direction
+	pop	bc
 00105$:
-;src/Character.c:112: move_character(p);
-	ldhl	sp,	#11
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
+;src/Character.c:114: move_character(p);
+	ld	e, c
+	ld	d, b
 	call	_move_character
 00106$:
-;src/Character.c:113: }
-	add	sp, #13
+;src/Character.c:115: }
+	add	sp, #12
 	ret
 	.area _CODE
 	.area _INITIALIZER

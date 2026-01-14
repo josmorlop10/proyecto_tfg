@@ -9,832 +9,893 @@
                                       9 ;--------------------------------------------------------
                                      10 	.globl _flip_direction
                                      11 	.globl _movement_step_by_step
-                                     12 	.globl _player_tileBR_over_destination
-                                     13 	.globl _player_tileBR_over_a_block
-                                     14 	.globl _tileindex_from_xy
-                                     15 	.globl _get_init_point_from_map
-                                     16 	.globl _update_game_state
-                                     17 	.globl _debug
-                                     18 	.globl _set_direction
-                                     19 	.globl _character_init
-                                     20 	.globl _move_character
-                                     21 	.globl _canplayermove
-                                     22 	.globl _update_character
-                                     23 ;--------------------------------------------------------
-                                     24 ; special function registers
-                                     25 ;--------------------------------------------------------
+                                     12 	.globl _check_colision_with_object
+                                     13 	.globl _player_tileBR_over_destination
+                                     14 	.globl _player_tileBR_over_a_block
+                                     15 	.globl _tileindex_from_xy
+                                     16 	.globl _get_init_point_from_map
+                                     17 	.globl _update_game_state
+                                     18 	.globl _debug
+                                     19 	.globl _set_direction
+                                     20 	.globl _character_init
+                                     21 	.globl _move_character
+                                     22 	.globl _canplayermove
+                                     23 	.globl _update_character
+                                     24 ;--------------------------------------------------------
+                                     25 ; special function registers
                                      26 ;--------------------------------------------------------
-                                     27 ; ram data
-                                     28 ;--------------------------------------------------------
-                                     29 	.area _DATA
-                                     30 ;--------------------------------------------------------
-                                     31 ; ram data
-                                     32 ;--------------------------------------------------------
-                                     33 	.area _INITIALIZED
-    00000000                         34 _debug::
-    00000000                         35 	.ds 1
-                                     36 ;--------------------------------------------------------
-                                     37 ; absolute external ram data
-                                     38 ;--------------------------------------------------------
-                                     39 	.area _DABS (ABS)
-                                     40 ;--------------------------------------------------------
-                                     41 ; global & static initialisations
-                                     42 ;--------------------------------------------------------
-                                     43 	.area _HOME
-                                     44 	.area _GSINIT
-                                     45 	.area _GSFINAL
-                                     46 	.area _GSINIT
-                                     47 ;--------------------------------------------------------
-                                     48 ; Home
-                                     49 ;--------------------------------------------------------
-                                     50 	.area _HOME
+                                     27 ;--------------------------------------------------------
+                                     28 ; ram data
+                                     29 ;--------------------------------------------------------
+                                     30 	.area _DATA
+                                     31 ;--------------------------------------------------------
+                                     32 ; ram data
+                                     33 ;--------------------------------------------------------
+                                     34 	.area _INITIALIZED
+    00000000                         35 _debug::
+    00000000                         36 	.ds 1
+                                     37 ;--------------------------------------------------------
+                                     38 ; absolute external ram data
+                                     39 ;--------------------------------------------------------
+                                     40 	.area _DABS (ABS)
+                                     41 ;--------------------------------------------------------
+                                     42 ; global & static initialisations
+                                     43 ;--------------------------------------------------------
+                                     44 	.area _HOME
+                                     45 	.area _GSINIT
+                                     46 	.area _GSFINAL
+                                     47 	.area _GSINIT
+                                     48 ;--------------------------------------------------------
+                                     49 ; Home
+                                     50 ;--------------------------------------------------------
                                      51 	.area _HOME
-                                     52 ;--------------------------------------------------------
-                                     53 ; code
-                                     54 ;--------------------------------------------------------
-                                     55 	.area _CODE
-                                     56 ;src/Character.c:11: void set_direction(Character* p,  int8_t x, int8_t y){
-                                     57 ;	---------------------------------
-                                     58 ; Function set_direction
-                                     59 ; ---------------------------------
-    00000000                         60 _set_direction::
-    00000000 4F               [ 4]   61 	ld	c, a
-                                     62 ;src/Character.c:12: p->dir_x = x;
-    00000001 21 08 00         [12]   63 	ld	hl, #0x0008
-    00000004 19               [ 8]   64 	add	hl, de
-    00000005 71               [ 8]   65 	ld	(hl), c
-                                     66 ;src/Character.c:13: p->dir_y = y;
-    00000006 21 09 00         [12]   67 	ld	hl, #0x0009
-    00000009 19               [ 8]   68 	add	hl, de
-    0000000A 4D               [ 4]   69 	ld	c, l
-    0000000B 44               [ 4]   70 	ld	b, h
-    0000000C F8 02            [12]   71 	ldhl	sp,	#2
-    0000000E 7E               [ 8]   72 	ld	a, (hl)
-    0000000F 02               [ 8]   73 	ld	(bc), a
-                                     74 ;src/Character.c:14: }
-    00000010 E1               [12]   75 	pop	hl
-    00000011 33               [ 8]   76 	inc	sp
-    00000012 E9               [ 4]   77 	jp	(hl)
-                                     78 ;src/Character.c:17: void character_init(Character* p) {
-                                     79 ;	---------------------------------
-                                     80 ; Function character_init
-                                     81 ; ---------------------------------
-    00000013                         82 _character_init::
-    00000013 3B               [ 8]   83 	dec	sp
-                                     84 ;src/Character.c:19: get_init_point_from_map(global_colision_map);
-    00000014 D5               [16]   85 	push	de
-    00000015 11r00r00         [12]   86 	ld	de, #_global_colision_map
-    00000018 CDr00r00         [24]   87 	call	_get_init_point_from_map
-    0000001B D1               [12]   88 	pop	de
-                                     89 ;src/Character.c:20: uint8_t player_x = (global_init_point % 20) * 8 + 8; //columna
-    0000001C FAr00r00         [16]   90 	ld	a, (_global_init_point)
-    0000001F 6F               [ 4]   91 	ld	l, a
-    00000020 FAr01r00         [16]   92 	ld	a, (_global_init_point + 1)
-    00000023 67               [ 4]   93 	ld	h, a
-    00000024 E5               [16]   94 	push	hl
-    00000025 D5               [16]   95 	push	de
-    00000026 01 14 00         [12]   96 	ld	bc, #0x0014
-    00000029 5D               [ 4]   97 	ld	e, l
-    0000002A 54               [ 4]   98 	ld	d, h
-    0000002B CDr00r00         [24]   99 	call	__moduint
-    0000002E D1               [12]  100 	pop	de
-    0000002F E1               [12]  101 	pop	hl
-    00000030 79               [ 4]  102 	ld	a, c
-    00000031 87               [ 4]  103 	add	a, a
-    00000032 87               [ 4]  104 	add	a, a
-    00000033 87               [ 4]  105 	add	a, a
-    00000034 C6 08            [ 8]  106 	add	a, #0x08
-    00000036 E5               [16]  107 	push	hl
-    00000037 F8 02            [12]  108 	ldhl	sp,	#2
-    00000039 77               [ 8]  109 	ld	(hl), a
-    0000003A E1               [12]  110 	pop	hl
-                                    111 ;src/Character.c:21: uint8_t player_y = (global_init_point / 20) * 8 + 16; //fila
-    0000003B D5               [16]  112 	push	de
-    0000003C 01 14 00         [12]  113 	ld	bc, #0x0014
-    0000003F 5D               [ 4]  114 	ld	e, l
-    00000040 54               [ 4]  115 	ld	d, h
-    00000041 CDr00r00         [24]  116 	call	__divuint
-    00000044 D1               [12]  117 	pop	de
-    00000045 79               [ 4]  118 	ld	a, c
-    00000046 87               [ 4]  119 	add	a, a
-    00000047 87               [ 4]  120 	add	a, a
-    00000048 87               [ 4]  121 	add	a, a
-    00000049 C6 10            [ 8]  122 	add	a, #0x10
-    0000004B 4F               [ 4]  123 	ld	c, a
-                                    124 ;src/Character.c:23: p->x = player_x;
-    0000004C 21 04 00         [12]  125 	ld	hl, #0x0004
-    0000004F 19               [ 8]  126 	add	hl, de
-    00000050 E5               [16]  127 	push	hl
-    00000051 F8 02            [12]  128 	ldhl	sp,	#2
-    00000053 7E               [ 8]  129 	ld	a, (hl)
-    00000054 E1               [12]  130 	pop	hl
-    00000055 77               [ 8]  131 	ld	(hl), a
-                                    132 ;src/Character.c:24: p->y = player_y;
-    00000056 21 05 00         [12]  133 	ld	hl, #0x0005
-    00000059 19               [ 8]  134 	add	hl, de
-    0000005A 71               [ 8]  135 	ld	(hl), c
-                                    136 ;src/Character.c:25: p->w = 16;
-    0000005B 21 06 00         [12]  137 	ld	hl, #0x0006
-    0000005E 19               [ 8]  138 	add	hl, de
-    0000005F 36 10            [12]  139 	ld	(hl), #0x10
-                                    140 ;src/Character.c:26: p->h = 16;
-    00000061 21 07 00         [12]  141 	ld	hl, #0x0007
-    00000064 19               [ 8]  142 	add	hl, de
-    00000065 36 10            [12]  143 	ld	(hl), #0x10
-                                    144 ;src/Character.c:27: p->dir_x = 1;  
-    00000067 21 08 00         [12]  145 	ld	hl, #0x0008
-    0000006A 19               [ 8]  146 	add	hl, de
-    0000006B 36 01            [12]  147 	ld	(hl), #0x01
-                                    148 ;src/Character.c:28: p->dir_y = 0; 
-    0000006D 21 09 00         [12]  149 	ld	hl, #0x0009
-    00000070 19               [ 8]  150 	add	hl, de
-    00000071 36 00            [12]  151 	ld	(hl), #0x00
-                                    152 ;src/Character.c:29: p->speed = 8;
-    00000073 21 0A 00         [12]  153 	ld	hl, #0x000a
-    00000076 19               [ 8]  154 	add	hl, de
-    00000077 36 08            [12]  155 	ld	(hl), #0x08
-                                    156 ;src/Character.c:30: for(uint8_t i = 0;i<=3;i++){
-    00000079 0E 00            [ 8]  157 	ld	c, #0x00
-    0000007B                        158 00103$:
-    0000007B 3E 03            [ 8]  159 	ld	a, #0x03
-    0000007D 91               [ 4]  160 	sub	a, c
-    0000007E 38 08            [12]  161 	jr	C, 00101$
-                                    162 ;src/Character.c:31: p->sprite_ids[i] = i;
-    00000080 69               [ 4]  163 	ld	l, c
-    00000081 26 00            [ 8]  164 	ld	h, #0x00
-    00000083 19               [ 8]  165 	add	hl, de
-    00000084 71               [ 8]  166 	ld	(hl), c
-                                    167 ;src/Character.c:30: for(uint8_t i = 0;i<=3;i++){
-    00000085 0C               [ 4]  168 	inc	c
-    00000086 18 F3            [12]  169 	jr	00103$
-    00000088                        170 00101$:
-                                    171 ;src/Character.c:33: p->tileindexBR = 0;
-    00000088 21 0B 00         [12]  172 	ld	hl, #0x000b
-    0000008B 19               [ 8]  173 	add	hl, de
-    0000008C AF               [ 4]  174 	xor	a, a
-    0000008D 22               [ 8]  175 	ld	(hl+), a
-    0000008E 77               [ 8]  176 	ld	(hl), a
-                                    177 ;src/Character.c:34: p->next_tileindexBR = 0;
-    0000008F 21 0D 00         [12]  178 	ld	hl, #0x000d
-    00000092 19               [ 8]  179 	add	hl, de
-    00000093 AF               [ 4]  180 	xor	a, a
-    00000094 22               [ 8]  181 	ld	(hl+), a
-    00000095 77               [ 8]  182 	ld	(hl), a
-                                    183 ;src/Character.c:35: }
-    00000096 33               [ 8]  184 	inc	sp
-    00000097 C9               [16]  185 	ret
-                                    186 ;src/Character.c:37: void move_character(Character* p) {
-                                    187 ;	---------------------------------
-                                    188 ; Function move_character
-                                    189 ; ---------------------------------
-    00000098                        190 _move_character::
-    00000098 3B               [ 8]  191 	dec	sp
-    00000099 3B               [ 8]  192 	dec	sp
-                                    193 ;src/Character.c:39: move_sprite(0, p->x-SPRITESIZE, p->y-SPRITESIZE);
-    0000009A 21 05 00         [12]  194 	ld	hl, #0x0005
-    0000009D 19               [ 8]  195 	add	hl, de
-    0000009E 4D               [ 4]  196 	ld	c, l
-    0000009F 44               [ 4]  197 	ld	b, h
-    000000A0 0A               [ 8]  198 	ld	a, (bc)
-    000000A1 C6 F8            [ 8]  199 	add	a, #0xf8
-    000000A3 F8 00            [12]  200 	ldhl	sp,	#0
-    000000A5 22               [ 8]  201 	ld	(hl+), a
-    000000A6 13               [ 8]  202 	inc	de
-    000000A7 13               [ 8]  203 	inc	de
-    000000A8 13               [ 8]  204 	inc	de
-    000000A9 13               [ 8]  205 	inc	de
-    000000AA 1A               [ 8]  206 	ld	a, (de)
-    000000AB C6 F8            [ 8]  207 	add	a, #0xf8
-    000000AD 77               [ 8]  208 	ld	(hl), a
-                                    209 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    000000AE 21r00r00         [12]  210 	ld	hl, #_shadow_OAM
-                                    211 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    000000B1 E5               [16]  212 	push	hl
-    000000B2 F8 02            [12]  213 	ldhl	sp,	#2
-    000000B4 7E               [ 8]  214 	ld	a, (hl)
-    000000B5 E1               [12]  215 	pop	hl
-    000000B6 22               [ 8]  216 	ld	(hl+), a
-    000000B7 E5               [16]  217 	push	hl
-    000000B8 F8 03            [12]  218 	ldhl	sp,	#3
-    000000BA 7E               [ 8]  219 	ld	a, (hl)
-    000000BB E1               [12]  220 	pop	hl
-    000000BC 77               [ 8]  221 	ld	(hl), a
-                                    222 ;src/Character.c:40: move_sprite(1, p->x-SPRITESIZE, p->y);
-    000000BD 0A               [ 8]  223 	ld	a, (bc)
-    000000BE F8 00            [12]  224 	ldhl	sp,	#0
-    000000C0 22               [ 8]  225 	ld	(hl+), a
-    000000C1 1A               [ 8]  226 	ld	a, (de)
-    000000C2 C6 F8            [ 8]  227 	add	a, #0xf8
-    000000C4 77               [ 8]  228 	ld	(hl), a
-                                    229 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    000000C5 21r04r00         [12]  230 	ld	hl, #(_shadow_OAM + 4)
-                                    231 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    000000C8 E5               [16]  232 	push	hl
-    000000C9 F8 02            [12]  233 	ldhl	sp,	#2
-    000000CB 7E               [ 8]  234 	ld	a, (hl)
-    000000CC E1               [12]  235 	pop	hl
-    000000CD 22               [ 8]  236 	ld	(hl+), a
-    000000CE E5               [16]  237 	push	hl
-    000000CF F8 03            [12]  238 	ldhl	sp,	#3
-    000000D1 7E               [ 8]  239 	ld	a, (hl)
-    000000D2 E1               [12]  240 	pop	hl
-    000000D3 77               [ 8]  241 	ld	(hl), a
-                                    242 ;src/Character.c:41: move_sprite(2, p->x, p->y-SPRITESIZE);
-    000000D4 0A               [ 8]  243 	ld	a, (bc)
-    000000D5 C6 F8            [ 8]  244 	add	a, #0xf8
-    000000D7 F8 00            [12]  245 	ldhl	sp,	#0
-    000000D9 22               [ 8]  246 	ld	(hl+), a
-    000000DA 1A               [ 8]  247 	ld	a, (de)
-    000000DB 77               [ 8]  248 	ld	(hl), a
-                                    249 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    000000DC 21r08r00         [12]  250 	ld	hl, #(_shadow_OAM + 8)
-                                    251 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    000000DF E5               [16]  252 	push	hl
-    000000E0 F8 02            [12]  253 	ldhl	sp,	#2
-    000000E2 7E               [ 8]  254 	ld	a, (hl)
-    000000E3 E1               [12]  255 	pop	hl
-    000000E4 22               [ 8]  256 	ld	(hl+), a
-    000000E5 E5               [16]  257 	push	hl
-    000000E6 F8 03            [12]  258 	ldhl	sp,	#3
-    000000E8 7E               [ 8]  259 	ld	a, (hl)
-    000000E9 E1               [12]  260 	pop	hl
-    000000EA 77               [ 8]  261 	ld	(hl), a
-                                    262 ;src/Character.c:42: move_sprite(3, p->x, p->y);
-    000000EB 0A               [ 8]  263 	ld	a, (bc)
-    000000EC 47               [ 4]  264 	ld	b, a
-    000000ED 1A               [ 8]  265 	ld	a, (de)
-    000000EE 4F               [ 4]  266 	ld	c, a
-                                    267 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    000000EF 21r0Cr00         [12]  268 	ld	hl, #(_shadow_OAM + 12)
-                                    269 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    000000F2 78               [ 4]  270 	ld	a, b
-    000000F3 22               [ 8]  271 	ld	(hl+), a
-    000000F4 71               [ 8]  272 	ld	(hl), c
-                                    273 ;src/Character.c:42: move_sprite(3, p->x, p->y);
-                                    274 ;src/Character.c:44: }
-    000000F5 33               [ 8]  275 	inc	sp
-    000000F6 33               [ 8]  276 	inc	sp
-    000000F7 C9               [16]  277 	ret
-                                    278 ;src/Character.c:46: void movement_step_by_step(Character* p){
-                                    279 ;	---------------------------------
-                                    280 ; Function movement_step_by_step
-                                    281 ; ---------------------------------
-    000000F8                        282 _movement_step_by_step::
-    000000F8 E8 F9            [16]  283 	add	sp, #-7
-    000000FA F8 04            [12]  284 	ldhl	sp,	#4
-    000000FC 7B               [ 4]  285 	ld	a, e
-    000000FD 22               [ 8]  286 	ld	(hl+), a
-                                    287 ;src/Character.c:48: for(uint8_t i = 0; i < SPRITESIZE; i++) {
-    000000FE 7A               [ 4]  288 	ld	a, d
-    000000FF 32               [ 8]  289 	ld	(hl-), a
-    00000100 2A               [ 8]  290 	ld	a, (hl+)
-    00000101 5F               [ 4]  291 	ld	e, a
-    00000102 56               [ 8]  292 	ld	d, (hl)
-    00000103 21 09 00         [12]  293 	ld	hl, #0x0009
-    00000106 19               [ 8]  294 	add	hl, de
-    00000107 33               [ 8]  295 	inc	sp
-    00000108 33               [ 8]  296 	inc	sp
-    00000109 E5               [16]  297 	push	hl
-    0000010A F8 04            [12]  298 	ldhl	sp,#4
-    0000010C 2A               [ 8]  299 	ld	a, (hl+)
-    0000010D 5F               [ 4]  300 	ld	e, a
-    0000010E 56               [ 8]  301 	ld	d, (hl)
-    0000010F 21 08 00         [12]  302 	ld	hl, #0x0008
-    00000112 19               [ 8]  303 	add	hl, de
-    00000113 E5               [16]  304 	push	hl
-    00000114 7D               [ 4]  305 	ld	a, l
-    00000115 F8 04            [12]  306 	ldhl	sp,	#4
-    00000117 77               [ 8]  307 	ld	(hl), a
-    00000118 E1               [12]  308 	pop	hl
-    00000119 7C               [ 4]  309 	ld	a, h
-    0000011A F8 03            [12]  310 	ldhl	sp,	#3
-    0000011C 77               [ 8]  311 	ld	(hl), a
-    0000011D F8 06            [12]  312 	ldhl	sp,	#6
-    0000011F 36 00            [12]  313 	ld	(hl), #0x00
-    00000121                        314 00103$:
-    00000121 F8 06            [12]  315 	ldhl	sp,	#6
-    00000123 7E               [ 8]  316 	ld	a, (hl)
-    00000124 D6 08            [ 8]  317 	sub	a, #0x08
-    00000126 30 30            [12]  318 	jr	NC, 00105$
-                                    319 ;src/Character.c:49: p->y += 1 * p->dir_y;
-    00000128 2B               [ 8]  320 	dec	hl
-    00000129 2B               [ 8]  321 	dec	hl
-    0000012A 2A               [ 8]  322 	ld	a, (hl+)
-    0000012B 5F               [ 4]  323 	ld	e, a
-    0000012C 56               [ 8]  324 	ld	d, (hl)
-    0000012D 21 05 00         [12]  325 	ld	hl, #0x0005
-    00000130 19               [ 8]  326 	add	hl, de
-    00000131 4D               [ 4]  327 	ld	c, l
-    00000132 44               [ 4]  328 	ld	b, h
-    00000133 0A               [ 8]  329 	ld	a, (bc)
-    00000134 D1               [12]  330 	pop	de
-    00000135 D5               [16]  331 	push	de
-    00000136 F5               [16]  332 	push	af
-    00000137 1A               [ 8]  333 	ld	a, (de)
-    00000138 6F               [ 4]  334 	ld	l, a
-    00000139 F1               [12]  335 	pop	af
-    0000013A 85               [ 4]  336 	add	a, l
-    0000013B 02               [ 8]  337 	ld	(bc), a
-                                    338 ;src/Character.c:50: p->x += 1 * p->dir_x;
-    0000013C F8 04            [12]  339 	ldhl	sp,#4
-    0000013E 2A               [ 8]  340 	ld	a, (hl+)
-    0000013F 5F               [ 4]  341 	ld	e, a
-    00000140 56               [ 8]  342 	ld	d, (hl)
-    00000141 21 04 00         [12]  343 	ld	hl, #0x0004
-    00000144 19               [ 8]  344 	add	hl, de
-    00000145 4D               [ 4]  345 	ld	c, l
-    00000146 44               [ 4]  346 	ld	b, h
-    00000147 0A               [ 8]  347 	ld	a, (bc)
-    00000148 F8 02            [12]  348 	ldhl	sp,#2
-    0000014A 5E               [ 8]  349 	ld	e, (hl)
-    0000014B 23               [ 8]  350 	inc	hl
-    0000014C 56               [ 8]  351 	ld	d, (hl)
-    0000014D F5               [16]  352 	push	af
-    0000014E 1A               [ 8]  353 	ld	a, (de)
-    0000014F 6F               [ 4]  354 	ld	l, a
-    00000150 F1               [12]  355 	pop	af
-    00000151 85               [ 4]  356 	add	a, l
-    00000152 02               [ 8]  357 	ld	(bc), a
-                                    358 ;src/Character.c:48: for(uint8_t i = 0; i < SPRITESIZE; i++) {
-    00000153 F8 06            [12]  359 	ldhl	sp,	#6
-    00000155 34               [12]  360 	inc	(hl)
-    00000156 18 C9            [12]  361 	jr	00103$
-    00000158                        362 00105$:
-                                    363 ;src/Character.c:52: }
-    00000158 E8 07            [16]  364 	add	sp, #7
-    0000015A C9               [16]  365 	ret
-                                    366 ;src/Character.c:54: uint8_t canplayermove(Character* p){
-                                    367 ;	---------------------------------
-                                    368 ; Function canplayermove
-                                    369 ; ---------------------------------
-    0000015B                        370 _canplayermove::
-    0000015B E8 F6            [16]  371 	add	sp, #-10
-    0000015D F8 08            [12]  372 	ldhl	sp,	#8
-    0000015F 7B               [ 4]  373 	ld	a, e
-    00000160 22               [ 8]  374 	ld	(hl+), a
-                                    375 ;src/Character.c:56: uint16_t tileindexBR = p->next_tileindexBR;
-    00000161 7A               [ 4]  376 	ld	a, d
-    00000162 32               [ 8]  377 	ld	(hl-), a
-    00000163 2A               [ 8]  378 	ld	a, (hl+)
-    00000164 5F               [ 4]  379 	ld	e, a
-    00000165 56               [ 8]  380 	ld	d, (hl)
-    00000166 21 0D 00         [12]  381 	ld	hl, #0x000d
-    00000169 19               [ 8]  382 	add	hl, de
-    0000016A 4D               [ 4]  383 	ld	c, l
-    0000016B 44               [ 4]  384 	ld	b, h
-    0000016C 59               [ 4]  385 	ld	e, c
-    0000016D 50               [ 4]  386 	ld	d, b
-    0000016E 1A               [ 8]  387 	ld	a, (de)
-    0000016F F8 00            [12]  388 	ldhl	sp,	#0
-    00000171 22               [ 8]  389 	ld	(hl+), a
-    00000172 13               [ 8]  390 	inc	de
-    00000173 1A               [ 8]  391 	ld	a, (de)
-                                    392 ;src/Character.c:57: uint16_t tileindexTL = tileindexBR -21;
-    00000174 22               [ 8]  393 	ld	(hl+), a
-    00000175 C1               [12]  394 	pop	bc
-    00000176 C5               [16]  395 	push	bc
-    00000177 79               [ 4]  396 	ld	a, c
-    00000178 C6 EB            [ 8]  397 	add	a, #0xeb
-    0000017A 5F               [ 4]  398 	ld	e, a
-    0000017B 78               [ 4]  399 	ld	a, b
-    0000017C CE FF            [ 8]  400 	adc	a, #0xff
-    0000017E 73               [ 8]  401 	ld	(hl), e
-    0000017F 23               [ 8]  402 	inc	hl
-                                    403 ;src/Character.c:58: uint16_t tileindexTR = tileindexBR -20;
-    00000180 22               [ 8]  404 	ld	(hl+), a
-    00000181 79               [ 4]  405 	ld	a, c
-    00000182 C6 EC            [ 8]  406 	add	a, #0xec
-    00000184 5F               [ 4]  407 	ld	e, a
-    00000185 78               [ 4]  408 	ld	a, b
-    00000186 CE FF            [ 8]  409 	adc	a, #0xff
-    00000188 73               [ 8]  410 	ld	(hl), e
-    00000189 23               [ 8]  411 	inc	hl
-                                    412 ;src/Character.c:59: uint16_t tileindexBL = tileindexBR -1;
-    0000018A 22               [ 8]  413 	ld	(hl+), a
-    0000018B 0B               [ 8]  414 	dec	bc
-    0000018C 79               [ 4]  415 	ld	a, c
-    0000018D 22               [ 8]  416 	ld	(hl+), a
-    0000018E 70               [ 8]  417 	ld	(hl), b
-                                    418 ;src/Character.c:62: if ((global_colision_map[tileindexTL] == SOLID) || 
-    0000018F 11r00r00         [12]  419 	ld	de, #_global_colision_map
-    00000192 F8 02            [12]  420 	ldhl	sp,	#2
-    00000194 2A               [ 8]  421 	ld	a,	(hl+)
-    00000195 66               [ 8]  422 	ld	h, (hl)
-    00000196 6F               [ 4]  423 	ld	l, a
-    00000197 19               [ 8]  424 	add	hl, de
-    00000198 4D               [ 4]  425 	ld	c, l
-    00000199 44               [ 4]  426 	ld	b, h
-    0000019A 0A               [ 8]  427 	ld	a, (bc)
-    0000019B 3D               [ 4]  428 	dec	a
-    0000019C 28 2A            [12]  429 	jr	Z, 00101$
-                                    430 ;src/Character.c:63: (global_colision_map[tileindexTR] == SOLID) || 
-    0000019E 11r00r00         [12]  431 	ld	de, #_global_colision_map
-    000001A1 F8 04            [12]  432 	ldhl	sp,	#4
-    000001A3 2A               [ 8]  433 	ld	a,	(hl+)
-    000001A4 66               [ 8]  434 	ld	h, (hl)
-    000001A5 6F               [ 4]  435 	ld	l, a
-    000001A6 19               [ 8]  436 	add	hl, de
-    000001A7 4D               [ 4]  437 	ld	c, l
-    000001A8 44               [ 4]  438 	ld	b, h
-    000001A9 0A               [ 8]  439 	ld	a, (bc)
-    000001AA 3D               [ 4]  440 	dec	a
-    000001AB 28 1B            [12]  441 	jr	Z, 00101$
-                                    442 ;src/Character.c:64: (global_colision_map[tileindexBL] == SOLID) ||
-    000001AD 11r00r00         [12]  443 	ld	de, #_global_colision_map
-    000001B0 F8 06            [12]  444 	ldhl	sp,	#6
-    000001B2 2A               [ 8]  445 	ld	a,	(hl+)
-    000001B3 66               [ 8]  446 	ld	h, (hl)
-    000001B4 6F               [ 4]  447 	ld	l, a
-    000001B5 19               [ 8]  448 	add	hl, de
-    000001B6 4D               [ 4]  449 	ld	c, l
-    000001B7 44               [ 4]  450 	ld	b, h
-    000001B8 0A               [ 8]  451 	ld	a, (bc)
-    000001B9 3D               [ 4]  452 	dec	a
-    000001BA 28 0C            [12]  453 	jr	Z, 00101$
-                                    454 ;src/Character.c:65: (global_colision_map[tileindexBR] == SOLID))
-    000001BC 11r00r00         [12]  455 	ld	de, #_global_colision_map
-    000001BF E1               [12]  456 	pop	hl
-    000001C0 E5               [16]  457 	push	hl
-    000001C1 19               [ 8]  458 	add	hl, de
-    000001C2 4D               [ 4]  459 	ld	c, l
-    000001C3 44               [ 4]  460 	ld	b, h
-    000001C4 0A               [ 8]  461 	ld	a, (bc)
-    000001C5 3D               [ 4]  462 	dec	a
-    000001C6 20 03            [12]  463 	jr	NZ, 00102$
-    000001C8                        464 00101$:
-                                    465 ;src/Character.c:67: return 0;
-    000001C8 AF               [ 4]  466 	xor	a, a
-    000001C9 18 6B            [12]  467 	jr	00112$
-    000001CB                        468 00102$:
-                                    469 ;src/Character.c:70: uint8_t event = player_tileBR_over_a_block(p->tileindexBR);
-    000001CB F8 08            [12]  470 	ldhl	sp,#8
-    000001CD 2A               [ 8]  471 	ld	a, (hl+)
-    000001CE 5F               [ 4]  472 	ld	e, a
-    000001CF 56               [ 8]  473 	ld	d, (hl)
-    000001D0 21 0B 00         [12]  474 	ld	hl, #0x000b
-    000001D3 19               [ 8]  475 	add	hl, de
-    000001D4 2A               [ 8]  476 	ld	a, (hl+)
-    000001D5 4F               [ 4]  477 	ld	c, a
-    000001D6 7E               [ 8]  478 	ld	a, (hl)
-    000001D7 59               [ 4]  479 	ld	e, c
-    000001D8 57               [ 4]  480 	ld	d, a
-    000001D9 CDr00r00         [24]  481 	call	_player_tileBR_over_a_block
-                                    482 ;src/Character.c:71: switch(event){
-    000001DC F8 07            [12]  483 	ldhl	sp,#7
-    000001DE 77               [ 8]  484 	ld	(hl), a
-    000001DF D6 06            [ 8]  485 	sub	a, #0x06
-    000001E1 28 17            [12]  486 	jr	Z, 00106$
-    000001E3 F8 07            [12]  487 	ldhl	sp,	#7
-    000001E5 7E               [ 8]  488 	ld	a, (hl)
-    000001E6 D6 07            [ 8]  489 	sub	a, #0x07
-    000001E8 28 1F            [12]  490 	jr	Z, 00107$
-    000001EA F8 07            [12]  491 	ldhl	sp,	#7
-    000001EC 7E               [ 8]  492 	ld	a, (hl)
-    000001ED D6 08            [ 8]  493 	sub	a, #0x08
-    000001EF 28 27            [12]  494 	jr	Z, 00108$
-    000001F1 F8 07            [12]  495 	ldhl	sp,	#7
-    000001F3 7E               [ 8]  496 	ld	a, (hl)
-    000001F4 D6 09            [ 8]  497 	sub	a, #0x09
-    000001F6 28 2F            [12]  498 	jr	Z, 00109$
-    000001F8 18 3A            [12]  499 	jr	00111$
-                                    500 ;src/Character.c:72: case RIGHT:
-    000001FA                        501 00106$:
-                                    502 ;src/Character.c:73: set_direction(p, 1, 0);
-    000001FA AF               [ 4]  503 	xor	a, a
-    000001FB F5               [16]  504 	push	af
-    000001FC 33               [ 8]  505 	inc	sp
-    000001FD 3E 01            [ 8]  506 	ld	a, #0x01
-    000001FF F8 09            [12]  507 	ldhl	sp,	#9
-    00000201 5E               [ 8]  508 	ld	e, (hl)
-    00000202 23               [ 8]  509 	inc	hl
-    00000203 56               [ 8]  510 	ld	d, (hl)
-    00000204 CDr00r00         [24]  511 	call	_set_direction
-                                    512 ;src/Character.c:74: break;
-    00000207 18 2B            [12]  513 	jr	00111$
-                                    514 ;src/Character.c:75: case LEFT:
-    00000209                        515 00107$:
-                                    516 ;src/Character.c:76: set_direction(p, -1, 0);
-    00000209 AF               [ 4]  517 	xor	a, a
-    0000020A F5               [16]  518 	push	af
-    0000020B 33               [ 8]  519 	inc	sp
-    0000020C 3E FF            [ 8]  520 	ld	a, #0xff
-    0000020E F8 09            [12]  521 	ldhl	sp,	#9
-    00000210 5E               [ 8]  522 	ld	e, (hl)
-    00000211 23               [ 8]  523 	inc	hl
-    00000212 56               [ 8]  524 	ld	d, (hl)
-    00000213 CDr00r00         [24]  525 	call	_set_direction
-                                    526 ;src/Character.c:77: break;
-    00000216 18 1C            [12]  527 	jr	00111$
-                                    528 ;src/Character.c:78: case UP:
-    00000218                        529 00108$:
-                                    530 ;src/Character.c:79: set_direction(p, 0, -1);
-    00000218 3E FF            [ 8]  531 	ld	a, #0xff
-    0000021A F5               [16]  532 	push	af
-    0000021B 33               [ 8]  533 	inc	sp
-    0000021C AF               [ 4]  534 	xor	a, a
-    0000021D F8 09            [12]  535 	ldhl	sp,	#9
-    0000021F 5E               [ 8]  536 	ld	e, (hl)
-    00000220 23               [ 8]  537 	inc	hl
-    00000221 56               [ 8]  538 	ld	d, (hl)
-    00000222 CDr00r00         [24]  539 	call	_set_direction
-                                    540 ;src/Character.c:80: break;
-    00000225 18 0D            [12]  541 	jr	00111$
-                                    542 ;src/Character.c:81: case DOWN:
-    00000227                        543 00109$:
-                                    544 ;src/Character.c:82: set_direction(p, 0, 1);
-    00000227 3E 01            [ 8]  545 	ld	a, #0x01
-    00000229 F5               [16]  546 	push	af
-    0000022A 33               [ 8]  547 	inc	sp
-    0000022B AF               [ 4]  548 	xor	a, a
-    0000022C F8 09            [12]  549 	ldhl	sp,	#9
-    0000022E 5E               [ 8]  550 	ld	e, (hl)
-    0000022F 23               [ 8]  551 	inc	hl
-    00000230 56               [ 8]  552 	ld	d, (hl)
-    00000231 CDr00r00         [24]  553 	call	_set_direction
-                                    554 ;src/Character.c:86: }
-    00000234                        555 00111$:
-                                    556 ;src/Character.c:88: return 1;
-    00000234 3E 01            [ 8]  557 	ld	a, #0x01
-    00000236                        558 00112$:
-                                    559 ;src/Character.c:89: }
-    00000236 E8 0A            [16]  560 	add	sp, #10
-    00000238 C9               [16]  561 	ret
-                                    562 ;src/Character.c:91: void flip_direction(Character* p){
-                                    563 ;	---------------------------------
-                                    564 ; Function flip_direction
-                                    565 ; ---------------------------------
-    00000239                        566 _flip_direction::
-                                    567 ;src/Character.c:92: p->dir_x = - p->dir_x;
-    00000239 21 08 00         [12]  568 	ld	hl, #0x0008
-    0000023C 19               [ 8]  569 	add	hl, de
-    0000023D AF               [ 4]  570 	xor	a, a
-    0000023E 96               [ 8]  571 	sub	a, (hl)
-    0000023F 77               [ 8]  572 	ld	(hl), a
-                                    573 ;src/Character.c:93: p->dir_y = - p->dir_y;
-    00000240 21 09 00         [12]  574 	ld	hl, #0x0009
-    00000243 19               [ 8]  575 	add	hl, de
-    00000244 AF               [ 4]  576 	xor	a, a
-    00000245 96               [ 8]  577 	sub	a, (hl)
-    00000246 77               [ 8]  578 	ld	(hl), a
-                                    579 ;src/Character.c:94: }
-    00000247 C9               [16]  580 	ret
-                                    581 ;src/Character.c:96: void update_character(Character* p) { //devuelve las teclas actuales
-                                    582 ;	---------------------------------
-                                    583 ; Function update_character
-                                    584 ; ---------------------------------
-    00000248                        585 _update_character::
-    00000248 E8 F3            [16]  586 	add	sp, #-13
-    0000024A F8 0B            [12]  587 	ldhl	sp,	#11
-    0000024C 7B               [ 4]  588 	ld	a, e
-    0000024D 22               [ 8]  589 	ld	(hl+), a
-                                    590 ;src/Character.c:98: if(player_tileBR_over_destination(p->tileindexBR)){
-    0000024E 7A               [ 4]  591 	ld	a, d
-    0000024F 32               [ 8]  592 	ld	(hl-), a
-    00000250 2A               [ 8]  593 	ld	a, (hl+)
-    00000251 5F               [ 4]  594 	ld	e, a
-    00000252 56               [ 8]  595 	ld	d, (hl)
-    00000253 21 0B 00         [12]  596 	ld	hl, #0x000b
-    00000256 19               [ 8]  597 	add	hl, de
-    00000257 4D               [ 4]  598 	ld	c,l
-    00000258 44               [ 4]  599 	ld	b,h
-    00000259 2A               [ 8]  600 	ld	a,	(hl+)
-    0000025A 66               [ 8]  601 	ld	h, (hl)
-    0000025B 6F               [ 4]  602 	ld	l, a
-    0000025C C5               [16]  603 	push	bc
-    0000025D 5D               [ 4]  604 	ld	e, l
-    0000025E 54               [ 4]  605 	ld	d, h
-    0000025F CDr00r00         [24]  606 	call	_player_tileBR_over_destination
-    00000262 5F               [ 4]  607 	ld	e, a
-    00000263 C1               [12]  608 	pop	bc
-    00000264 7B               [ 4]  609 	ld	a, e
-    00000265 B7               [ 4]  610 	or	a, a
-    00000266 28 08            [12]  611 	jr	Z, 00102$
-                                    612 ;src/Character.c:99: update_game_state(STATE_GAME_OVER);
-    00000268 3E 05            [ 8]  613 	ld	a, #0x05
-    0000026A CDr00r00         [24]  614 	call	_update_game_state
-                                    615 ;src/Character.c:100: return;
-    0000026D C3r75r03         [16]  616 	jp	00106$
-    00000270                        617 00102$:
-                                    618 ;src/Character.c:103: p->tileindexBR = tileindex_from_xy(p->x, p->y);
-    00000270 F8 0B            [12]  619 	ldhl	sp,#11
-    00000272 2A               [ 8]  620 	ld	a, (hl+)
-    00000273 5F               [ 4]  621 	ld	e, a
-    00000274 56               [ 8]  622 	ld	d, (hl)
-    00000275 21 05 00         [12]  623 	ld	hl, #0x0005
-    00000278 19               [ 8]  624 	add	hl, de
-    00000279 E5               [16]  625 	push	hl
-    0000027A 7D               [ 4]  626 	ld	a, l
-    0000027B F8 04            [12]  627 	ldhl	sp,	#4
-    0000027D 77               [ 8]  628 	ld	(hl), a
-    0000027E E1               [12]  629 	pop	hl
-    0000027F 7C               [ 4]  630 	ld	a, h
-    00000280 F8 03            [12]  631 	ldhl	sp,	#3
-    00000282 32               [ 8]  632 	ld	(hl-), a
-    00000283 2A               [ 8]  633 	ld	a, (hl+)
-    00000284 5F               [ 4]  634 	ld	e, a
-    00000285 56               [ 8]  635 	ld	d, (hl)
-    00000286 1A               [ 8]  636 	ld	a, (de)
-    00000287 F8 0A            [12]  637 	ldhl	sp,	#10
-    00000289 22               [ 8]  638 	ld	(hl+), a
-    0000028A 2A               [ 8]  639 	ld	a, (hl+)
-    0000028B 5F               [ 4]  640 	ld	e, a
-    0000028C 56               [ 8]  641 	ld	d, (hl)
-    0000028D 21 04 00         [12]  642 	ld	hl, #0x0004
-    00000290 19               [ 8]  643 	add	hl, de
-    00000291 E5               [16]  644 	push	hl
-    00000292 7D               [ 4]  645 	ld	a, l
-    00000293 F8 06            [12]  646 	ldhl	sp,	#6
-    00000295 77               [ 8]  647 	ld	(hl), a
-    00000296 E1               [12]  648 	pop	hl
-    00000297 7C               [ 4]  649 	ld	a, h
-    00000298 F8 05            [12]  650 	ldhl	sp,	#5
-    0000029A 32               [ 8]  651 	ld	(hl-), a
-    0000029B 2A               [ 8]  652 	ld	a, (hl+)
-    0000029C 5F               [ 4]  653 	ld	e, a
-    0000029D 56               [ 8]  654 	ld	d, (hl)
-    0000029E 1A               [ 8]  655 	ld	a, (de)
-    0000029F C5               [16]  656 	push	bc
-    000002A0 F8 0C            [12]  657 	ldhl	sp,	#12
-    000002A2 5E               [ 8]  658 	ld	e, (hl)
-    000002A3 CDr00r00         [24]  659 	call	_tileindex_from_xy
-    000002A6 59               [ 4]  660 	ld	e, c
-    000002A7 50               [ 4]  661 	ld	d, b
-    000002A8 C1               [12]  662 	pop	bc
-    000002A9 7B               [ 4]  663 	ld	a, e
-    000002AA 02               [ 8]  664 	ld	(bc), a
-    000002AB 03               [ 8]  665 	inc	bc
-    000002AC 7A               [ 4]  666 	ld	a, d
-    000002AD 02               [ 8]  667 	ld	(bc), a
-                                    668 ;src/Character.c:104: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
-    000002AE F8 0B            [12]  669 	ldhl	sp,#11
-    000002B0 2A               [ 8]  670 	ld	a, (hl+)
-    000002B1 5F               [ 4]  671 	ld	e, a
-    000002B2 56               [ 8]  672 	ld	d, (hl)
-    000002B3 21 0D 00         [12]  673 	ld	hl, #0x000d
-    000002B6 19               [ 8]  674 	add	hl, de
-    000002B7 33               [ 8]  675 	inc	sp
-    000002B8 33               [ 8]  676 	inc	sp
-    000002B9 E5               [16]  677 	push	hl
-    000002BA F8 02            [12]  678 	ldhl	sp,#2
-    000002BC 2A               [ 8]  679 	ld	a, (hl+)
-    000002BD 5F               [ 4]  680 	ld	e, a
-    000002BE 56               [ 8]  681 	ld	d, (hl)
-    000002BF 1A               [ 8]  682 	ld	a, (de)
-    000002C0 4F               [ 4]  683 	ld	c, a
-    000002C1 F8 0B            [12]  684 	ldhl	sp,#11
-    000002C3 2A               [ 8]  685 	ld	a, (hl+)
-    000002C4 5F               [ 4]  686 	ld	e, a
-    000002C5 56               [ 8]  687 	ld	d, (hl)
-    000002C6 21 09 00         [12]  688 	ld	hl, #0x0009
-    000002C9 19               [ 8]  689 	add	hl, de
-    000002CA E5               [16]  690 	push	hl
-    000002CB 7D               [ 4]  691 	ld	a, l
-    000002CC F8 08            [12]  692 	ldhl	sp,	#8
-    000002CE 77               [ 8]  693 	ld	(hl), a
-    000002CF E1               [12]  694 	pop	hl
-    000002D0 7C               [ 4]  695 	ld	a, h
-    000002D1 F8 07            [12]  696 	ldhl	sp,	#7
-    000002D3 32               [ 8]  697 	ld	(hl-), a
-    000002D4 2A               [ 8]  698 	ld	a, (hl+)
-    000002D5 5F               [ 4]  699 	ld	e, a
-    000002D6 3A               [ 8]  700 	ld	a, (hl-)
-    000002D7 2B               [ 8]  701 	dec	hl
-    000002D8 2B               [ 8]  702 	dec	hl
-    000002D9 57               [ 4]  703 	ld	d, a
-    000002DA 1A               [ 8]  704 	ld	a, (de)
-    000002DB 87               [ 4]  705 	add	a, a
-    000002DC 87               [ 4]  706 	add	a, a
-    000002DD 87               [ 4]  707 	add	a, a
-    000002DE 81               [ 4]  708 	add	a, c
-    000002DF 4F               [ 4]  709 	ld	c, a
-    000002E0 2A               [ 8]  710 	ld	a, (hl+)
-    000002E1 5F               [ 4]  711 	ld	e, a
-    000002E2 56               [ 8]  712 	ld	d, (hl)
-    000002E3 1A               [ 8]  713 	ld	a, (de)
-    000002E4 47               [ 4]  714 	ld	b, a
-    000002E5 F8 0B            [12]  715 	ldhl	sp,#11
-    000002E7 2A               [ 8]  716 	ld	a, (hl+)
-    000002E8 5F               [ 4]  717 	ld	e, a
-    000002E9 56               [ 8]  718 	ld	d, (hl)
-    000002EA 21 08 00         [12]  719 	ld	hl, #0x0008
-    000002ED 19               [ 8]  720 	add	hl, de
-    000002EE E5               [16]  721 	push	hl
-    000002EF 7D               [ 4]  722 	ld	a, l
-    000002F0 F8 0A            [12]  723 	ldhl	sp,	#10
-    000002F2 77               [ 8]  724 	ld	(hl), a
-    000002F3 E1               [12]  725 	pop	hl
-    000002F4 7C               [ 4]  726 	ld	a, h
-    000002F5 F8 09            [12]  727 	ldhl	sp,	#9
-    000002F7 32               [ 8]  728 	ld	(hl-), a
-    000002F8 2A               [ 8]  729 	ld	a, (hl+)
-    000002F9 5F               [ 4]  730 	ld	e, a
-    000002FA 56               [ 8]  731 	ld	d, (hl)
-    000002FB 1A               [ 8]  732 	ld	a, (de)
-    000002FC 87               [ 4]  733 	add	a, a
-    000002FD 87               [ 4]  734 	add	a, a
-    000002FE 87               [ 4]  735 	add	a, a
-    000002FF 80               [ 4]  736 	add	a, b
-    00000300 59               [ 4]  737 	ld	e, c
-    00000301 CDr00r00         [24]  738 	call	_tileindex_from_xy
-    00000304 E1               [12]  739 	pop	hl
-    00000305 E5               [16]  740 	push	hl
-    00000306 79               [ 4]  741 	ld	a, c
-    00000307 22               [ 8]  742 	ld	(hl+), a
-    00000308 70               [ 8]  743 	ld	(hl), b
-                                    744 ;src/Character.c:106: if(canplayermove(p)) {
-    00000309 F8 0B            [12]  745 	ldhl	sp,	#11
-    0000030B 2A               [ 8]  746 	ld	a, (hl+)
-    0000030C 5F               [ 4]  747 	ld	e, a
-    0000030D 56               [ 8]  748 	ld	d, (hl)
-    0000030E CDr5Br01         [24]  749 	call	_canplayermove
-    00000311 B7               [ 4]  750 	or	a, a
-    00000312 28 51            [12]  751 	jr	Z, 00104$
-                                    752 ;src/Character.c:107: p->x += p->speed * p->dir_x;
-    00000314 F8 04            [12]  753 	ldhl	sp,#4
-    00000316 2A               [ 8]  754 	ld	a, (hl+)
-    00000317 5F               [ 4]  755 	ld	e, a
-    00000318 56               [ 8]  756 	ld	d, (hl)
-    00000319 1A               [ 8]  757 	ld	a, (de)
-    0000031A F8 0A            [12]  758 	ldhl	sp,	#10
-    0000031C 22               [ 8]  759 	ld	(hl+), a
-    0000031D 2A               [ 8]  760 	ld	a, (hl+)
-    0000031E 5F               [ 4]  761 	ld	e, a
-    0000031F 56               [ 8]  762 	ld	d, (hl)
-    00000320 21 0A 00         [12]  763 	ld	hl, #0x000a
-    00000323 19               [ 8]  764 	add	hl, de
-    00000324 4D               [ 4]  765 	ld	c, l
-    00000325 44               [ 4]  766 	ld	b, h
-    00000326 0A               [ 8]  767 	ld	a, (bc)
-    00000327 F8 08            [12]  768 	ldhl	sp,#8
-    00000329 5E               [ 8]  769 	ld	e, (hl)
-    0000032A 23               [ 8]  770 	inc	hl
-    0000032B 56               [ 8]  771 	ld	d, (hl)
-    0000032C F5               [16]  772 	push	af
-    0000032D 1A               [ 8]  773 	ld	a, (de)
-    0000032E 6F               [ 4]  774 	ld	l, a
-    0000032F F1               [12]  775 	pop	af
-    00000330 C5               [16]  776 	push	bc
-    00000331 5D               [ 4]  777 	ld	e, l
-    00000332 CDr00r00         [24]  778 	call	__mulschar
-    00000335 79               [ 4]  779 	ld	a, c
-    00000336 C1               [12]  780 	pop	bc
-    00000337 F8 0A            [12]  781 	ldhl	sp,	#10
-    00000339 5E               [ 8]  782 	ld	e, (hl)
-    0000033A 83               [ 4]  783 	add	a, e
-    0000033B F8 04            [12]  784 	ldhl	sp,	#4
-    0000033D 5E               [ 8]  785 	ld	e, (hl)
-    0000033E 23               [ 8]  786 	inc	hl
-    0000033F 66               [ 8]  787 	ld	h, (hl)
-    00000340 6B               [ 4]  788 	ld	l, e
-    00000341 77               [ 8]  789 	ld	(hl), a
-                                    790 ;src/Character.c:108: p->y += p->speed * p->dir_y;
-    00000342 F8 02            [12]  791 	ldhl	sp,#2
-    00000344 2A               [ 8]  792 	ld	a, (hl+)
-    00000345 5F               [ 4]  793 	ld	e, a
-    00000346 56               [ 8]  794 	ld	d, (hl)
-    00000347 1A               [ 8]  795 	ld	a, (de)
-    00000348 F8 0A            [12]  796 	ldhl	sp,	#10
-    0000034A 77               [ 8]  797 	ld	(hl), a
-    0000034B 0A               [ 8]  798 	ld	a, (bc)
-    0000034C 4F               [ 4]  799 	ld	c, a
-    0000034D F8 06            [12]  800 	ldhl	sp,#6
-    0000034F 2A               [ 8]  801 	ld	a, (hl+)
-    00000350 5F               [ 4]  802 	ld	e, a
-    00000351 56               [ 8]  803 	ld	d, (hl)
-    00000352 1A               [ 8]  804 	ld	a, (de)
-    00000353 5F               [ 4]  805 	ld	e, a
-    00000354 79               [ 4]  806 	ld	a, c
-    00000355 CDr00r00         [24]  807 	call	__mulschar
-    00000358 F8 0A            [12]  808 	ldhl	sp,	#10
-    0000035A 7E               [ 8]  809 	ld	a, (hl)
-    0000035B 81               [ 4]  810 	add	a, c
-    0000035C F8 02            [12]  811 	ldhl	sp,	#2
-    0000035E 5E               [ 8]  812 	ld	e, (hl)
-    0000035F 23               [ 8]  813 	inc	hl
-    00000360 66               [ 8]  814 	ld	h, (hl)
-    00000361 6B               [ 4]  815 	ld	l, e
-    00000362 77               [ 8]  816 	ld	(hl), a
-    00000363 18 08            [12]  817 	jr	00105$
-    00000365                        818 00104$:
-                                    819 ;src/Character.c:110: flip_direction(p);
-    00000365 F8 0B            [12]  820 	ldhl	sp,	#11
-    00000367 2A               [ 8]  821 	ld	a, (hl+)
-    00000368 5F               [ 4]  822 	ld	e, a
-    00000369 56               [ 8]  823 	ld	d, (hl)
-    0000036A CDr39r02         [24]  824 	call	_flip_direction
-    0000036D                        825 00105$:
-                                    826 ;src/Character.c:112: move_character(p);
-    0000036D F8 0B            [12]  827 	ldhl	sp,	#11
-    0000036F 2A               [ 8]  828 	ld	a, (hl+)
-    00000370 5F               [ 4]  829 	ld	e, a
-    00000371 56               [ 8]  830 	ld	d, (hl)
-    00000372 CDr98r00         [24]  831 	call	_move_character
-    00000375                        832 00106$:
-                                    833 ;src/Character.c:113: }
-    00000375 E8 0D            [16]  834 	add	sp, #13
-    00000377 C9               [16]  835 	ret
-                                    836 	.area _CODE
-                                    837 	.area _INITIALIZER
-    00000000                        838 __xinit__debug:
-    00000000 00                     839 	.db #0x00	; 0
-                                    840 	.area _CABS (ABS)
+                                     52 	.area _HOME
+                                     53 ;--------------------------------------------------------
+                                     54 ; code
+                                     55 ;--------------------------------------------------------
+                                     56 	.area _CODE
+                                     57 ;src/Character.c:11: void set_direction(Character* p,  int8_t x, int8_t y){
+                                     58 ;	---------------------------------
+                                     59 ; Function set_direction
+                                     60 ; ---------------------------------
+    00000000                         61 _set_direction::
+    00000000 4F               [ 4]   62 	ld	c, a
+                                     63 ;src/Character.c:12: p->dir_x = x;
+    00000001 21 08 00         [12]   64 	ld	hl, #0x0008
+    00000004 19               [ 8]   65 	add	hl, de
+    00000005 71               [ 8]   66 	ld	(hl), c
+                                     67 ;src/Character.c:13: p->dir_y = y;
+    00000006 21 09 00         [12]   68 	ld	hl, #0x0009
+    00000009 19               [ 8]   69 	add	hl, de
+    0000000A 4D               [ 4]   70 	ld	c, l
+    0000000B 44               [ 4]   71 	ld	b, h
+    0000000C F8 02            [12]   72 	ldhl	sp,	#2
+    0000000E 7E               [ 8]   73 	ld	a, (hl)
+    0000000F 02               [ 8]   74 	ld	(bc), a
+                                     75 ;src/Character.c:14: }
+    00000010 E1               [12]   76 	pop	hl
+    00000011 33               [ 8]   77 	inc	sp
+    00000012 E9               [ 4]   78 	jp	(hl)
+                                     79 ;src/Character.c:17: void character_init(Character* p) {
+                                     80 ;	---------------------------------
+                                     81 ; Function character_init
+                                     82 ; ---------------------------------
+    00000013                         83 _character_init::
+    00000013 3B               [ 8]   84 	dec	sp
+                                     85 ;src/Character.c:19: get_init_point_from_map(global_colision_map);
+    00000014 D5               [16]   86 	push	de
+    00000015 11r00r00         [12]   87 	ld	de, #_global_colision_map
+    00000018 CDr00r00         [24]   88 	call	_get_init_point_from_map
+    0000001B D1               [12]   89 	pop	de
+                                     90 ;src/Character.c:20: uint8_t player_x = (global_init_point % 20) * 8 + 8; //columna
+    0000001C FAr00r00         [16]   91 	ld	a, (_global_init_point)
+    0000001F 6F               [ 4]   92 	ld	l, a
+    00000020 FAr01r00         [16]   93 	ld	a, (_global_init_point + 1)
+    00000023 67               [ 4]   94 	ld	h, a
+    00000024 E5               [16]   95 	push	hl
+    00000025 D5               [16]   96 	push	de
+    00000026 01 14 00         [12]   97 	ld	bc, #0x0014
+    00000029 5D               [ 4]   98 	ld	e, l
+    0000002A 54               [ 4]   99 	ld	d, h
+    0000002B CDr00r00         [24]  100 	call	__moduint
+    0000002E D1               [12]  101 	pop	de
+    0000002F E1               [12]  102 	pop	hl
+    00000030 79               [ 4]  103 	ld	a, c
+    00000031 87               [ 4]  104 	add	a, a
+    00000032 87               [ 4]  105 	add	a, a
+    00000033 87               [ 4]  106 	add	a, a
+    00000034 C6 08            [ 8]  107 	add	a, #0x08
+    00000036 E5               [16]  108 	push	hl
+    00000037 F8 02            [12]  109 	ldhl	sp,	#2
+    00000039 77               [ 8]  110 	ld	(hl), a
+    0000003A E1               [12]  111 	pop	hl
+                                    112 ;src/Character.c:21: uint8_t player_y = (global_init_point / 20) * 8 + 16; //fila
+    0000003B D5               [16]  113 	push	de
+    0000003C 01 14 00         [12]  114 	ld	bc, #0x0014
+    0000003F 5D               [ 4]  115 	ld	e, l
+    00000040 54               [ 4]  116 	ld	d, h
+    00000041 CDr00r00         [24]  117 	call	__divuint
+    00000044 D1               [12]  118 	pop	de
+    00000045 79               [ 4]  119 	ld	a, c
+    00000046 87               [ 4]  120 	add	a, a
+    00000047 87               [ 4]  121 	add	a, a
+    00000048 87               [ 4]  122 	add	a, a
+    00000049 C6 10            [ 8]  123 	add	a, #0x10
+    0000004B 4F               [ 4]  124 	ld	c, a
+                                    125 ;src/Character.c:23: p->x = player_x;
+    0000004C 21 04 00         [12]  126 	ld	hl, #0x0004
+    0000004F 19               [ 8]  127 	add	hl, de
+    00000050 E5               [16]  128 	push	hl
+    00000051 F8 02            [12]  129 	ldhl	sp,	#2
+    00000053 7E               [ 8]  130 	ld	a, (hl)
+    00000054 E1               [12]  131 	pop	hl
+    00000055 77               [ 8]  132 	ld	(hl), a
+                                    133 ;src/Character.c:24: p->y = player_y;
+    00000056 21 05 00         [12]  134 	ld	hl, #0x0005
+    00000059 19               [ 8]  135 	add	hl, de
+    0000005A 71               [ 8]  136 	ld	(hl), c
+                                    137 ;src/Character.c:25: p->w = 16;
+    0000005B 21 06 00         [12]  138 	ld	hl, #0x0006
+    0000005E 19               [ 8]  139 	add	hl, de
+    0000005F 36 10            [12]  140 	ld	(hl), #0x10
+                                    141 ;src/Character.c:26: p->h = 16;
+    00000061 21 07 00         [12]  142 	ld	hl, #0x0007
+    00000064 19               [ 8]  143 	add	hl, de
+    00000065 36 10            [12]  144 	ld	(hl), #0x10
+                                    145 ;src/Character.c:27: p->dir_x = 1;  
+    00000067 21 08 00         [12]  146 	ld	hl, #0x0008
+    0000006A 19               [ 8]  147 	add	hl, de
+    0000006B 36 01            [12]  148 	ld	(hl), #0x01
+                                    149 ;src/Character.c:28: p->dir_y = 0; 
+    0000006D 21 09 00         [12]  150 	ld	hl, #0x0009
+    00000070 19               [ 8]  151 	add	hl, de
+    00000071 36 00            [12]  152 	ld	(hl), #0x00
+                                    153 ;src/Character.c:29: p->speed = 8;
+    00000073 21 0A 00         [12]  154 	ld	hl, #0x000a
+    00000076 19               [ 8]  155 	add	hl, de
+    00000077 36 08            [12]  156 	ld	(hl), #0x08
+                                    157 ;src/Character.c:30: for(uint8_t i = 0;i<=3;i++){
+    00000079 0E 00            [ 8]  158 	ld	c, #0x00
+    0000007B                        159 00103$:
+    0000007B 3E 03            [ 8]  160 	ld	a, #0x03
+    0000007D 91               [ 4]  161 	sub	a, c
+    0000007E 38 08            [12]  162 	jr	C, 00101$
+                                    163 ;src/Character.c:31: p->sprite_ids[i] = i;
+    00000080 69               [ 4]  164 	ld	l, c
+    00000081 26 00            [ 8]  165 	ld	h, #0x00
+    00000083 19               [ 8]  166 	add	hl, de
+    00000084 71               [ 8]  167 	ld	(hl), c
+                                    168 ;src/Character.c:30: for(uint8_t i = 0;i<=3;i++){
+    00000085 0C               [ 4]  169 	inc	c
+    00000086 18 F3            [12]  170 	jr	00103$
+    00000088                        171 00101$:
+                                    172 ;src/Character.c:33: p->tileindexBR = 0;
+    00000088 21 0B 00         [12]  173 	ld	hl, #0x000b
+    0000008B 19               [ 8]  174 	add	hl, de
+    0000008C AF               [ 4]  175 	xor	a, a
+    0000008D 22               [ 8]  176 	ld	(hl+), a
+    0000008E 77               [ 8]  177 	ld	(hl), a
+                                    178 ;src/Character.c:34: p->next_tileindexBR = 0;
+    0000008F 21 0D 00         [12]  179 	ld	hl, #0x000d
+    00000092 19               [ 8]  180 	add	hl, de
+    00000093 AF               [ 4]  181 	xor	a, a
+    00000094 22               [ 8]  182 	ld	(hl+), a
+    00000095 77               [ 8]  183 	ld	(hl), a
+                                    184 ;src/Character.c:35: }
+    00000096 33               [ 8]  185 	inc	sp
+    00000097 C9               [16]  186 	ret
+                                    187 ;src/Character.c:37: void move_character(Character* p) {
+                                    188 ;	---------------------------------
+                                    189 ; Function move_character
+                                    190 ; ---------------------------------
+    00000098                        191 _move_character::
+    00000098 3B               [ 8]  192 	dec	sp
+    00000099 3B               [ 8]  193 	dec	sp
+                                    194 ;src/Character.c:39: move_sprite(0, p->x-SPRITESIZE, p->y-SPRITESIZE);
+    0000009A 21 05 00         [12]  195 	ld	hl, #0x0005
+    0000009D 19               [ 8]  196 	add	hl, de
+    0000009E 4D               [ 4]  197 	ld	c, l
+    0000009F 44               [ 4]  198 	ld	b, h
+    000000A0 0A               [ 8]  199 	ld	a, (bc)
+    000000A1 C6 F8            [ 8]  200 	add	a, #0xf8
+    000000A3 F8 00            [12]  201 	ldhl	sp,	#0
+    000000A5 22               [ 8]  202 	ld	(hl+), a
+    000000A6 13               [ 8]  203 	inc	de
+    000000A7 13               [ 8]  204 	inc	de
+    000000A8 13               [ 8]  205 	inc	de
+    000000A9 13               [ 8]  206 	inc	de
+    000000AA 1A               [ 8]  207 	ld	a, (de)
+    000000AB C6 F8            [ 8]  208 	add	a, #0xf8
+    000000AD 77               [ 8]  209 	ld	(hl), a
+                                    210 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000000AE 21r00r00         [12]  211 	ld	hl, #_shadow_OAM
+                                    212 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    000000B1 E5               [16]  213 	push	hl
+    000000B2 F8 02            [12]  214 	ldhl	sp,	#2
+    000000B4 7E               [ 8]  215 	ld	a, (hl)
+    000000B5 E1               [12]  216 	pop	hl
+    000000B6 22               [ 8]  217 	ld	(hl+), a
+    000000B7 E5               [16]  218 	push	hl
+    000000B8 F8 03            [12]  219 	ldhl	sp,	#3
+    000000BA 7E               [ 8]  220 	ld	a, (hl)
+    000000BB E1               [12]  221 	pop	hl
+    000000BC 77               [ 8]  222 	ld	(hl), a
+                                    223 ;src/Character.c:40: move_sprite(1, p->x-SPRITESIZE, p->y);
+    000000BD 0A               [ 8]  224 	ld	a, (bc)
+    000000BE F8 00            [12]  225 	ldhl	sp,	#0
+    000000C0 22               [ 8]  226 	ld	(hl+), a
+    000000C1 1A               [ 8]  227 	ld	a, (de)
+    000000C2 C6 F8            [ 8]  228 	add	a, #0xf8
+    000000C4 77               [ 8]  229 	ld	(hl), a
+                                    230 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000000C5 21r04r00         [12]  231 	ld	hl, #(_shadow_OAM + 4)
+                                    232 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    000000C8 E5               [16]  233 	push	hl
+    000000C9 F8 02            [12]  234 	ldhl	sp,	#2
+    000000CB 7E               [ 8]  235 	ld	a, (hl)
+    000000CC E1               [12]  236 	pop	hl
+    000000CD 22               [ 8]  237 	ld	(hl+), a
+    000000CE E5               [16]  238 	push	hl
+    000000CF F8 03            [12]  239 	ldhl	sp,	#3
+    000000D1 7E               [ 8]  240 	ld	a, (hl)
+    000000D2 E1               [12]  241 	pop	hl
+    000000D3 77               [ 8]  242 	ld	(hl), a
+                                    243 ;src/Character.c:41: move_sprite(2, p->x, p->y-SPRITESIZE);
+    000000D4 0A               [ 8]  244 	ld	a, (bc)
+    000000D5 C6 F8            [ 8]  245 	add	a, #0xf8
+    000000D7 F8 00            [12]  246 	ldhl	sp,	#0
+    000000D9 22               [ 8]  247 	ld	(hl+), a
+    000000DA 1A               [ 8]  248 	ld	a, (de)
+    000000DB 77               [ 8]  249 	ld	(hl), a
+                                    250 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000000DC 21r08r00         [12]  251 	ld	hl, #(_shadow_OAM + 8)
+                                    252 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    000000DF E5               [16]  253 	push	hl
+    000000E0 F8 02            [12]  254 	ldhl	sp,	#2
+    000000E2 7E               [ 8]  255 	ld	a, (hl)
+    000000E3 E1               [12]  256 	pop	hl
+    000000E4 22               [ 8]  257 	ld	(hl+), a
+    000000E5 E5               [16]  258 	push	hl
+    000000E6 F8 03            [12]  259 	ldhl	sp,	#3
+    000000E8 7E               [ 8]  260 	ld	a, (hl)
+    000000E9 E1               [12]  261 	pop	hl
+    000000EA 77               [ 8]  262 	ld	(hl), a
+                                    263 ;src/Character.c:42: move_sprite(3, p->x, p->y);
+    000000EB 0A               [ 8]  264 	ld	a, (bc)
+    000000EC 47               [ 4]  265 	ld	b, a
+    000000ED 1A               [ 8]  266 	ld	a, (de)
+    000000EE 4F               [ 4]  267 	ld	c, a
+                                    268 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000000EF 21r0Cr00         [12]  269 	ld	hl, #(_shadow_OAM + 12)
+                                    270 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    000000F2 78               [ 4]  271 	ld	a, b
+    000000F3 22               [ 8]  272 	ld	(hl+), a
+    000000F4 71               [ 8]  273 	ld	(hl), c
+                                    274 ;src/Character.c:42: move_sprite(3, p->x, p->y);
+                                    275 ;src/Character.c:44: }
+    000000F5 33               [ 8]  276 	inc	sp
+    000000F6 33               [ 8]  277 	inc	sp
+    000000F7 C9               [16]  278 	ret
+                                    279 ;src/Character.c:46: void movement_step_by_step(Character* p){
+                                    280 ;	---------------------------------
+                                    281 ; Function movement_step_by_step
+                                    282 ; ---------------------------------
+    000000F8                        283 _movement_step_by_step::
+    000000F8 E8 F9            [16]  284 	add	sp, #-7
+    000000FA F8 04            [12]  285 	ldhl	sp,	#4
+    000000FC 7B               [ 4]  286 	ld	a, e
+    000000FD 22               [ 8]  287 	ld	(hl+), a
+                                    288 ;src/Character.c:48: for(uint8_t i = 0; i < SPRITESIZE; i++) {
+    000000FE 7A               [ 4]  289 	ld	a, d
+    000000FF 32               [ 8]  290 	ld	(hl-), a
+    00000100 2A               [ 8]  291 	ld	a, (hl+)
+    00000101 5F               [ 4]  292 	ld	e, a
+    00000102 56               [ 8]  293 	ld	d, (hl)
+    00000103 21 09 00         [12]  294 	ld	hl, #0x0009
+    00000106 19               [ 8]  295 	add	hl, de
+    00000107 33               [ 8]  296 	inc	sp
+    00000108 33               [ 8]  297 	inc	sp
+    00000109 E5               [16]  298 	push	hl
+    0000010A F8 04            [12]  299 	ldhl	sp,#4
+    0000010C 2A               [ 8]  300 	ld	a, (hl+)
+    0000010D 5F               [ 4]  301 	ld	e, a
+    0000010E 56               [ 8]  302 	ld	d, (hl)
+    0000010F 21 08 00         [12]  303 	ld	hl, #0x0008
+    00000112 19               [ 8]  304 	add	hl, de
+    00000113 E5               [16]  305 	push	hl
+    00000114 7D               [ 4]  306 	ld	a, l
+    00000115 F8 04            [12]  307 	ldhl	sp,	#4
+    00000117 77               [ 8]  308 	ld	(hl), a
+    00000118 E1               [12]  309 	pop	hl
+    00000119 7C               [ 4]  310 	ld	a, h
+    0000011A F8 03            [12]  311 	ldhl	sp,	#3
+    0000011C 77               [ 8]  312 	ld	(hl), a
+    0000011D F8 06            [12]  313 	ldhl	sp,	#6
+    0000011F 36 00            [12]  314 	ld	(hl), #0x00
+    00000121                        315 00103$:
+    00000121 F8 06            [12]  316 	ldhl	sp,	#6
+    00000123 7E               [ 8]  317 	ld	a, (hl)
+    00000124 D6 08            [ 8]  318 	sub	a, #0x08
+    00000126 30 30            [12]  319 	jr	NC, 00105$
+                                    320 ;src/Character.c:49: p->y += 1 * p->dir_y;
+    00000128 2B               [ 8]  321 	dec	hl
+    00000129 2B               [ 8]  322 	dec	hl
+    0000012A 2A               [ 8]  323 	ld	a, (hl+)
+    0000012B 5F               [ 4]  324 	ld	e, a
+    0000012C 56               [ 8]  325 	ld	d, (hl)
+    0000012D 21 05 00         [12]  326 	ld	hl, #0x0005
+    00000130 19               [ 8]  327 	add	hl, de
+    00000131 4D               [ 4]  328 	ld	c, l
+    00000132 44               [ 4]  329 	ld	b, h
+    00000133 0A               [ 8]  330 	ld	a, (bc)
+    00000134 D1               [12]  331 	pop	de
+    00000135 D5               [16]  332 	push	de
+    00000136 F5               [16]  333 	push	af
+    00000137 1A               [ 8]  334 	ld	a, (de)
+    00000138 6F               [ 4]  335 	ld	l, a
+    00000139 F1               [12]  336 	pop	af
+    0000013A 85               [ 4]  337 	add	a, l
+    0000013B 02               [ 8]  338 	ld	(bc), a
+                                    339 ;src/Character.c:50: p->x += 1 * p->dir_x;
+    0000013C F8 04            [12]  340 	ldhl	sp,#4
+    0000013E 2A               [ 8]  341 	ld	a, (hl+)
+    0000013F 5F               [ 4]  342 	ld	e, a
+    00000140 56               [ 8]  343 	ld	d, (hl)
+    00000141 21 04 00         [12]  344 	ld	hl, #0x0004
+    00000144 19               [ 8]  345 	add	hl, de
+    00000145 4D               [ 4]  346 	ld	c, l
+    00000146 44               [ 4]  347 	ld	b, h
+    00000147 0A               [ 8]  348 	ld	a, (bc)
+    00000148 F8 02            [12]  349 	ldhl	sp,#2
+    0000014A 5E               [ 8]  350 	ld	e, (hl)
+    0000014B 23               [ 8]  351 	inc	hl
+    0000014C 56               [ 8]  352 	ld	d, (hl)
+    0000014D F5               [16]  353 	push	af
+    0000014E 1A               [ 8]  354 	ld	a, (de)
+    0000014F 6F               [ 4]  355 	ld	l, a
+    00000150 F1               [12]  356 	pop	af
+    00000151 85               [ 4]  357 	add	a, l
+    00000152 02               [ 8]  358 	ld	(bc), a
+                                    359 ;src/Character.c:48: for(uint8_t i = 0; i < SPRITESIZE; i++) {
+    00000153 F8 06            [12]  360 	ldhl	sp,	#6
+    00000155 34               [12]  361 	inc	(hl)
+    00000156 18 C9            [12]  362 	jr	00103$
+    00000158                        363 00105$:
+                                    364 ;src/Character.c:52: }
+    00000158 E8 07            [16]  365 	add	sp, #7
+    0000015A C9               [16]  366 	ret
+                                    367 ;src/Character.c:54: uint8_t canplayermove(Character* p){
+                                    368 ;	---------------------------------
+                                    369 ; Function canplayermove
+                                    370 ; ---------------------------------
+    0000015B                        371 _canplayermove::
+    0000015B E8 F6            [16]  372 	add	sp, #-10
+    0000015D F8 08            [12]  373 	ldhl	sp,	#8
+    0000015F 7B               [ 4]  374 	ld	a, e
+    00000160 22               [ 8]  375 	ld	(hl+), a
+                                    376 ;src/Character.c:56: uint16_t tileindexBR = p->next_tileindexBR;
+    00000161 7A               [ 4]  377 	ld	a, d
+    00000162 32               [ 8]  378 	ld	(hl-), a
+    00000163 2A               [ 8]  379 	ld	a, (hl+)
+    00000164 5F               [ 4]  380 	ld	e, a
+    00000165 56               [ 8]  381 	ld	d, (hl)
+    00000166 21 0D 00         [12]  382 	ld	hl, #0x000d
+    00000169 19               [ 8]  383 	add	hl, de
+    0000016A 4D               [ 4]  384 	ld	c, l
+    0000016B 44               [ 4]  385 	ld	b, h
+    0000016C 59               [ 4]  386 	ld	e, c
+    0000016D 50               [ 4]  387 	ld	d, b
+    0000016E 1A               [ 8]  388 	ld	a, (de)
+    0000016F F8 00            [12]  389 	ldhl	sp,	#0
+    00000171 22               [ 8]  390 	ld	(hl+), a
+    00000172 13               [ 8]  391 	inc	de
+    00000173 1A               [ 8]  392 	ld	a, (de)
+                                    393 ;src/Character.c:57: uint16_t tileindexTL = tileindexBR -21;
+    00000174 22               [ 8]  394 	ld	(hl+), a
+    00000175 C1               [12]  395 	pop	bc
+    00000176 C5               [16]  396 	push	bc
+    00000177 79               [ 4]  397 	ld	a, c
+    00000178 C6 EB            [ 8]  398 	add	a, #0xeb
+    0000017A 5F               [ 4]  399 	ld	e, a
+    0000017B 78               [ 4]  400 	ld	a, b
+    0000017C CE FF            [ 8]  401 	adc	a, #0xff
+    0000017E 73               [ 8]  402 	ld	(hl), e
+    0000017F 23               [ 8]  403 	inc	hl
+                                    404 ;src/Character.c:58: uint16_t tileindexTR = tileindexBR -20;
+    00000180 22               [ 8]  405 	ld	(hl+), a
+    00000181 79               [ 4]  406 	ld	a, c
+    00000182 C6 EC            [ 8]  407 	add	a, #0xec
+    00000184 5F               [ 4]  408 	ld	e, a
+    00000185 78               [ 4]  409 	ld	a, b
+    00000186 CE FF            [ 8]  410 	adc	a, #0xff
+    00000188 73               [ 8]  411 	ld	(hl), e
+    00000189 23               [ 8]  412 	inc	hl
+                                    413 ;src/Character.c:59: uint16_t tileindexBL = tileindexBR -1;
+    0000018A 22               [ 8]  414 	ld	(hl+), a
+    0000018B 0B               [ 8]  415 	dec	bc
+    0000018C 79               [ 4]  416 	ld	a, c
+    0000018D 22               [ 8]  417 	ld	(hl+), a
+    0000018E 70               [ 8]  418 	ld	(hl), b
+                                    419 ;src/Character.c:62: if ((global_colision_map[tileindexTL] == SOLID) || 
+    0000018F 11r00r00         [12]  420 	ld	de, #_global_colision_map
+    00000192 F8 02            [12]  421 	ldhl	sp,	#2
+    00000194 2A               [ 8]  422 	ld	a,	(hl+)
+    00000195 66               [ 8]  423 	ld	h, (hl)
+    00000196 6F               [ 4]  424 	ld	l, a
+    00000197 19               [ 8]  425 	add	hl, de
+    00000198 4D               [ 4]  426 	ld	c, l
+    00000199 44               [ 4]  427 	ld	b, h
+    0000019A 0A               [ 8]  428 	ld	a, (bc)
+    0000019B 3D               [ 4]  429 	dec	a
+    0000019C 28 2A            [12]  430 	jr	Z, 00101$
+                                    431 ;src/Character.c:63: (global_colision_map[tileindexTR] == SOLID) || 
+    0000019E 11r00r00         [12]  432 	ld	de, #_global_colision_map
+    000001A1 F8 04            [12]  433 	ldhl	sp,	#4
+    000001A3 2A               [ 8]  434 	ld	a,	(hl+)
+    000001A4 66               [ 8]  435 	ld	h, (hl)
+    000001A5 6F               [ 4]  436 	ld	l, a
+    000001A6 19               [ 8]  437 	add	hl, de
+    000001A7 4D               [ 4]  438 	ld	c, l
+    000001A8 44               [ 4]  439 	ld	b, h
+    000001A9 0A               [ 8]  440 	ld	a, (bc)
+    000001AA 3D               [ 4]  441 	dec	a
+    000001AB 28 1B            [12]  442 	jr	Z, 00101$
+                                    443 ;src/Character.c:64: (global_colision_map[tileindexBL] == SOLID) ||
+    000001AD 11r00r00         [12]  444 	ld	de, #_global_colision_map
+    000001B0 F8 06            [12]  445 	ldhl	sp,	#6
+    000001B2 2A               [ 8]  446 	ld	a,	(hl+)
+    000001B3 66               [ 8]  447 	ld	h, (hl)
+    000001B4 6F               [ 4]  448 	ld	l, a
+    000001B5 19               [ 8]  449 	add	hl, de
+    000001B6 4D               [ 4]  450 	ld	c, l
+    000001B7 44               [ 4]  451 	ld	b, h
+    000001B8 0A               [ 8]  452 	ld	a, (bc)
+    000001B9 3D               [ 4]  453 	dec	a
+    000001BA 28 0C            [12]  454 	jr	Z, 00101$
+                                    455 ;src/Character.c:65: (global_colision_map[tileindexBR] == SOLID))
+    000001BC 11r00r00         [12]  456 	ld	de, #_global_colision_map
+    000001BF E1               [12]  457 	pop	hl
+    000001C0 E5               [16]  458 	push	hl
+    000001C1 19               [ 8]  459 	add	hl, de
+    000001C2 4D               [ 4]  460 	ld	c, l
+    000001C3 44               [ 4]  461 	ld	b, h
+    000001C4 0A               [ 8]  462 	ld	a, (bc)
+    000001C5 3D               [ 4]  463 	dec	a
+    000001C6 20 03            [12]  464 	jr	NZ, 00102$
+    000001C8                        465 00101$:
+                                    466 ;src/Character.c:67: return 0;
+    000001C8 AF               [ 4]  467 	xor	a, a
+    000001C9 18 6B            [12]  468 	jr	00112$
+    000001CB                        469 00102$:
+                                    470 ;src/Character.c:70: uint8_t event = player_tileBR_over_a_block(p->tileindexBR);
+    000001CB F8 08            [12]  471 	ldhl	sp,#8
+    000001CD 2A               [ 8]  472 	ld	a, (hl+)
+    000001CE 5F               [ 4]  473 	ld	e, a
+    000001CF 56               [ 8]  474 	ld	d, (hl)
+    000001D0 21 0B 00         [12]  475 	ld	hl, #0x000b
+    000001D3 19               [ 8]  476 	add	hl, de
+    000001D4 2A               [ 8]  477 	ld	a, (hl+)
+    000001D5 4F               [ 4]  478 	ld	c, a
+    000001D6 7E               [ 8]  479 	ld	a, (hl)
+    000001D7 59               [ 4]  480 	ld	e, c
+    000001D8 57               [ 4]  481 	ld	d, a
+    000001D9 CDr00r00         [24]  482 	call	_player_tileBR_over_a_block
+                                    483 ;src/Character.c:71: switch(event){
+    000001DC F8 07            [12]  484 	ldhl	sp,#7
+    000001DE 77               [ 8]  485 	ld	(hl), a
+    000001DF D6 06            [ 8]  486 	sub	a, #0x06
+    000001E1 28 17            [12]  487 	jr	Z, 00106$
+    000001E3 F8 07            [12]  488 	ldhl	sp,	#7
+    000001E5 7E               [ 8]  489 	ld	a, (hl)
+    000001E6 D6 07            [ 8]  490 	sub	a, #0x07
+    000001E8 28 1F            [12]  491 	jr	Z, 00107$
+    000001EA F8 07            [12]  492 	ldhl	sp,	#7
+    000001EC 7E               [ 8]  493 	ld	a, (hl)
+    000001ED D6 08            [ 8]  494 	sub	a, #0x08
+    000001EF 28 27            [12]  495 	jr	Z, 00108$
+    000001F1 F8 07            [12]  496 	ldhl	sp,	#7
+    000001F3 7E               [ 8]  497 	ld	a, (hl)
+    000001F4 D6 09            [ 8]  498 	sub	a, #0x09
+    000001F6 28 2F            [12]  499 	jr	Z, 00109$
+    000001F8 18 3A            [12]  500 	jr	00111$
+                                    501 ;src/Character.c:72: case RIGHT:
+    000001FA                        502 00106$:
+                                    503 ;src/Character.c:73: set_direction(p, 1, 0);
+    000001FA AF               [ 4]  504 	xor	a, a
+    000001FB F5               [16]  505 	push	af
+    000001FC 33               [ 8]  506 	inc	sp
+    000001FD 3E 01            [ 8]  507 	ld	a, #0x01
+    000001FF F8 09            [12]  508 	ldhl	sp,	#9
+    00000201 5E               [ 8]  509 	ld	e, (hl)
+    00000202 23               [ 8]  510 	inc	hl
+    00000203 56               [ 8]  511 	ld	d, (hl)
+    00000204 CDr00r00         [24]  512 	call	_set_direction
+                                    513 ;src/Character.c:74: break;
+    00000207 18 2B            [12]  514 	jr	00111$
+                                    515 ;src/Character.c:75: case LEFT:
+    00000209                        516 00107$:
+                                    517 ;src/Character.c:76: set_direction(p, -1, 0);
+    00000209 AF               [ 4]  518 	xor	a, a
+    0000020A F5               [16]  519 	push	af
+    0000020B 33               [ 8]  520 	inc	sp
+    0000020C 3E FF            [ 8]  521 	ld	a, #0xff
+    0000020E F8 09            [12]  522 	ldhl	sp,	#9
+    00000210 5E               [ 8]  523 	ld	e, (hl)
+    00000211 23               [ 8]  524 	inc	hl
+    00000212 56               [ 8]  525 	ld	d, (hl)
+    00000213 CDr00r00         [24]  526 	call	_set_direction
+                                    527 ;src/Character.c:77: break;
+    00000216 18 1C            [12]  528 	jr	00111$
+                                    529 ;src/Character.c:78: case UP:
+    00000218                        530 00108$:
+                                    531 ;src/Character.c:79: set_direction(p, 0, -1);
+    00000218 3E FF            [ 8]  532 	ld	a, #0xff
+    0000021A F5               [16]  533 	push	af
+    0000021B 33               [ 8]  534 	inc	sp
+    0000021C AF               [ 4]  535 	xor	a, a
+    0000021D F8 09            [12]  536 	ldhl	sp,	#9
+    0000021F 5E               [ 8]  537 	ld	e, (hl)
+    00000220 23               [ 8]  538 	inc	hl
+    00000221 56               [ 8]  539 	ld	d, (hl)
+    00000222 CDr00r00         [24]  540 	call	_set_direction
+                                    541 ;src/Character.c:80: break;
+    00000225 18 0D            [12]  542 	jr	00111$
+                                    543 ;src/Character.c:81: case DOWN:
+    00000227                        544 00109$:
+                                    545 ;src/Character.c:82: set_direction(p, 0, 1);
+    00000227 3E 01            [ 8]  546 	ld	a, #0x01
+    00000229 F5               [16]  547 	push	af
+    0000022A 33               [ 8]  548 	inc	sp
+    0000022B AF               [ 4]  549 	xor	a, a
+    0000022C F8 09            [12]  550 	ldhl	sp,	#9
+    0000022E 5E               [ 8]  551 	ld	e, (hl)
+    0000022F 23               [ 8]  552 	inc	hl
+    00000230 56               [ 8]  553 	ld	d, (hl)
+    00000231 CDr00r00         [24]  554 	call	_set_direction
+                                    555 ;src/Character.c:86: }
+    00000234                        556 00111$:
+                                    557 ;src/Character.c:88: return 1;
+    00000234 3E 01            [ 8]  558 	ld	a, #0x01
+    00000236                        559 00112$:
+                                    560 ;src/Character.c:89: }
+    00000236 E8 0A            [16]  561 	add	sp, #10
+    00000238 C9               [16]  562 	ret
+                                    563 ;src/Character.c:91: void flip_direction(Character* p){
+                                    564 ;	---------------------------------
+                                    565 ; Function flip_direction
+                                    566 ; ---------------------------------
+    00000239                        567 _flip_direction::
+                                    568 ;src/Character.c:92: p->dir_x = - p->dir_x;
+    00000239 21 08 00         [12]  569 	ld	hl, #0x0008
+    0000023C 19               [ 8]  570 	add	hl, de
+    0000023D AF               [ 4]  571 	xor	a, a
+    0000023E 96               [ 8]  572 	sub	a, (hl)
+    0000023F 77               [ 8]  573 	ld	(hl), a
+                                    574 ;src/Character.c:93: p->dir_y = - p->dir_y;
+    00000240 21 09 00         [12]  575 	ld	hl, #0x0009
+    00000243 19               [ 8]  576 	add	hl, de
+    00000244 AF               [ 4]  577 	xor	a, a
+    00000245 96               [ 8]  578 	sub	a, (hl)
+    00000246 77               [ 8]  579 	ld	(hl), a
+                                    580 ;src/Character.c:94: }
+    00000247 C9               [16]  581 	ret
+                                    582 ;src/Character.c:96: void update_character(Character* p) { //devuelve las teclas actuales
+                                    583 ;	---------------------------------
+                                    584 ; Function update_character
+                                    585 ; ---------------------------------
+    00000248                        586 _update_character::
+    00000248 E8 F4            [16]  587 	add	sp, #-12
+    0000024A 4B               [ 4]  588 	ld	c, e
+    0000024B 42               [ 4]  589 	ld	b, d
+                                    590 ;src/Character.c:98: check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
+    0000024C 21 07 00         [12]  591 	ld	hl, #0x0007
+    0000024F 09               [ 8]  592 	add	hl, bc
+    00000250 7E               [ 8]  593 	ld	a, (hl)
+    00000251 F8 09            [12]  594 	ldhl	sp,	#9
+    00000253 77               [ 8]  595 	ld	(hl), a
+    00000254 21 06 00         [12]  596 	ld	hl, #0x0006
+    00000257 09               [ 8]  597 	add	hl, bc
+    00000258 7E               [ 8]  598 	ld	a, (hl)
+    00000259 F8 0A            [12]  599 	ldhl	sp,	#10
+    0000025B 77               [ 8]  600 	ld	(hl), a
+    0000025C 21 05 00         [12]  601 	ld	hl, #0x0005
+    0000025F 09               [ 8]  602 	add	hl, bc
+    00000260 33               [ 8]  603 	inc	sp
+    00000261 33               [ 8]  604 	inc	sp
+    00000262 5D               [ 4]  605 	ld	e, l
+    00000263 54               [ 4]  606 	ld	d, h
+    00000264 D5               [16]  607 	push	de
+    00000265 1A               [ 8]  608 	ld	a, (de)
+    00000266 F8 09            [12]  609 	ldhl	sp,	#9
+    00000268 5E               [ 8]  610 	ld	e, (hl)
+    00000269 23               [ 8]  611 	inc	hl
+    0000026A 23               [ 8]  612 	inc	hl
+    0000026B CB 3B            [ 8]  613 	srl	e
+    0000026D 93               [ 4]  614 	sub	a, e
+    0000026E 77               [ 8]  615 	ld	(hl), a
+    0000026F 21 04 00         [12]  616 	ld	hl, #0x0004
+    00000272 09               [ 8]  617 	add	hl, bc
+    00000273 E5               [16]  618 	push	hl
+    00000274 7D               [ 4]  619 	ld	a, l
+    00000275 F8 04            [12]  620 	ldhl	sp,	#4
+    00000277 77               [ 8]  621 	ld	(hl), a
+    00000278 E1               [12]  622 	pop	hl
+    00000279 7C               [ 4]  623 	ld	a, h
+    0000027A F8 03            [12]  624 	ldhl	sp,	#3
+    0000027C 32               [ 8]  625 	ld	(hl-), a
+    0000027D 2A               [ 8]  626 	ld	a, (hl+)
+    0000027E 5F               [ 4]  627 	ld	e, a
+    0000027F 56               [ 8]  628 	ld	d, (hl)
+    00000280 1A               [ 8]  629 	ld	a, (de)
+    00000281 F8 0A            [12]  630 	ldhl	sp,	#10
+    00000283 5E               [ 8]  631 	ld	e, (hl)
+    00000284 2B               [ 8]  632 	dec	hl
+    00000285 CB 3B            [ 8]  633 	srl	e
+    00000287 93               [ 4]  634 	sub	a, e
+    00000288 C5               [16]  635 	push	bc
+    00000289 66               [ 8]  636 	ld	h, (hl)
+    0000028A E5               [16]  637 	push	hl
+    0000028B 33               [ 8]  638 	inc	sp
+    0000028C F8 0D            [12]  639 	ldhl	sp,	#13
+    0000028E 66               [ 8]  640 	ld	h, (hl)
+    0000028F E5               [16]  641 	push	hl
+    00000290 33               [ 8]  642 	inc	sp
+    00000291 F8 0F            [12]  643 	ldhl	sp,	#15
+    00000293 5E               [ 8]  644 	ld	e, (hl)
+    00000294 CDr00r00         [24]  645 	call	_check_colision_with_object
+    00000297 C1               [12]  646 	pop	bc
+                                    647 ;src/Character.c:100: if(player_tileBR_over_destination(p->tileindexBR)){
+    00000298 21 0B 00         [12]  648 	ld	hl, #0x000b
+    0000029B 09               [ 8]  649 	add	hl, bc
+    0000029C E5               [16]  650 	push	hl
+    0000029D 7D               [ 4]  651 	ld	a, l
+    0000029E F8 0A            [12]  652 	ldhl	sp,	#10
+    000002A0 77               [ 8]  653 	ld	(hl), a
+    000002A1 E1               [12]  654 	pop	hl
+    000002A2 7C               [ 4]  655 	ld	a, h
+    000002A3 F8 09            [12]  656 	ldhl	sp,	#9
+    000002A5 32               [ 8]  657 	ld	(hl-), a
+    000002A6 2A               [ 8]  658 	ld	a, (hl+)
+    000002A7 5F               [ 4]  659 	ld	e, a
+    000002A8 56               [ 8]  660 	ld	d, (hl)
+    000002A9 1A               [ 8]  661 	ld	a, (de)
+    000002AA 6F               [ 4]  662 	ld	l, a
+    000002AB 13               [ 8]  663 	inc	de
+    000002AC 1A               [ 8]  664 	ld	a, (de)
+    000002AD C5               [16]  665 	push	bc
+    000002AE 5D               [ 4]  666 	ld	e, l
+    000002AF 57               [ 4]  667 	ld	d, a
+    000002B0 CDr00r00         [24]  668 	call	_player_tileBR_over_destination
+    000002B3 C1               [12]  669 	pop	bc
+    000002B4 B7               [ 4]  670 	or	a, a
+    000002B5 28 08            [12]  671 	jr	Z, 00102$
+                                    672 ;src/Character.c:101: update_game_state(STATE_GAME_OVER);
+    000002B7 3E 05            [ 8]  673 	ld	a, #0x05
+    000002B9 CDr00r00         [24]  674 	call	_update_game_state
+                                    675 ;src/Character.c:102: return;
+    000002BC C3rBDr03         [16]  676 	jp	00106$
+    000002BF                        677 00102$:
+                                    678 ;src/Character.c:105: p->tileindexBR = tileindex_from_xy(p->x, p->y);
+    000002BF D1               [12]  679 	pop	de
+    000002C0 D5               [16]  680 	push	de
+    000002C1 1A               [ 8]  681 	ld	a, (de)
+    000002C2 F8 02            [12]  682 	ldhl	sp,#2
+    000002C4 5E               [ 8]  683 	ld	e, (hl)
+    000002C5 23               [ 8]  684 	inc	hl
+    000002C6 56               [ 8]  685 	ld	d, (hl)
+    000002C7 F5               [16]  686 	push	af
+    000002C8 1A               [ 8]  687 	ld	a, (de)
+    000002C9 6F               [ 4]  688 	ld	l, a
+    000002CA F1               [12]  689 	pop	af
+    000002CB C5               [16]  690 	push	bc
+    000002CC 5F               [ 4]  691 	ld	e, a
+    000002CD 7D               [ 4]  692 	ld	a, l
+    000002CE CDr00r00         [24]  693 	call	_tileindex_from_xy
+    000002D1 F8 0C            [12]  694 	ldhl	sp,	#12
+    000002D3 79               [ 4]  695 	ld	a, c
+    000002D4 22               [ 8]  696 	ld	(hl+), a
+    000002D5 70               [ 8]  697 	ld	(hl), b
+    000002D6 C1               [12]  698 	pop	bc
+    000002D7 F8 08            [12]  699 	ldhl	sp,	#8
+    000002D9 2A               [ 8]  700 	ld	a, (hl+)
+    000002DA 5F               [ 4]  701 	ld	e, a
+    000002DB 2A               [ 8]  702 	ld	a, (hl+)
+    000002DC 57               [ 4]  703 	ld	d, a
+    000002DD 2A               [ 8]  704 	ld	a, (hl+)
+    000002DE 12               [ 8]  705 	ld	(de), a
+    000002DF 13               [ 8]  706 	inc	de
+    000002E0 7E               [ 8]  707 	ld	a, (hl)
+    000002E1 12               [ 8]  708 	ld	(de), a
+                                    709 ;src/Character.c:106: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
+    000002E2 21 0D 00         [12]  710 	ld	hl, #0x000d
+    000002E5 09               [ 8]  711 	add	hl, bc
+    000002E6 E5               [16]  712 	push	hl
+    000002E7 7D               [ 4]  713 	ld	a, l
+    000002E8 F8 06            [12]  714 	ldhl	sp,	#6
+    000002EA 77               [ 8]  715 	ld	(hl), a
+    000002EB E1               [12]  716 	pop	hl
+    000002EC 7C               [ 4]  717 	ld	a, h
+    000002ED F8 05            [12]  718 	ldhl	sp,	#5
+    000002EF 77               [ 8]  719 	ld	(hl), a
+    000002F0 D1               [12]  720 	pop	de
+    000002F1 D5               [16]  721 	push	de
+    000002F2 1A               [ 8]  722 	ld	a, (de)
+    000002F3 F8 0B            [12]  723 	ldhl	sp,	#11
+    000002F5 77               [ 8]  724 	ld	(hl), a
+    000002F6 21 09 00         [12]  725 	ld	hl, #0x0009
+    000002F9 09               [ 8]  726 	add	hl, bc
+    000002FA E5               [16]  727 	push	hl
+    000002FB 7D               [ 4]  728 	ld	a, l
+    000002FC F8 08            [12]  729 	ldhl	sp,	#8
+    000002FE 77               [ 8]  730 	ld	(hl), a
+    000002FF E1               [12]  731 	pop	hl
+    00000300 7C               [ 4]  732 	ld	a, h
+    00000301 F8 07            [12]  733 	ldhl	sp,	#7
+    00000303 32               [ 8]  734 	ld	(hl-), a
+    00000304 2A               [ 8]  735 	ld	a, (hl+)
+    00000305 5F               [ 4]  736 	ld	e, a
+    00000306 56               [ 8]  737 	ld	d, (hl)
+    00000307 1A               [ 8]  738 	ld	a, (de)
+    00000308 87               [ 4]  739 	add	a, a
+    00000309 87               [ 4]  740 	add	a, a
+    0000030A 87               [ 4]  741 	add	a, a
+    0000030B F8 0B            [12]  742 	ldhl	sp,	#11
+    0000030D 5E               [ 8]  743 	ld	e, (hl)
+    0000030E 83               [ 4]  744 	add	a, e
+    0000030F F8 08            [12]  745 	ldhl	sp,	#8
+    00000311 77               [ 8]  746 	ld	(hl), a
+    00000312 F8 02            [12]  747 	ldhl	sp,#2
+    00000314 2A               [ 8]  748 	ld	a, (hl+)
+    00000315 5F               [ 4]  749 	ld	e, a
+    00000316 56               [ 8]  750 	ld	d, (hl)
+    00000317 1A               [ 8]  751 	ld	a, (de)
+    00000318 F8 09            [12]  752 	ldhl	sp,	#9
+    0000031A 77               [ 8]  753 	ld	(hl), a
+    0000031B 21 08 00         [12]  754 	ld	hl, #0x0008
+    0000031E 09               [ 8]  755 	add	hl, bc
+    0000031F E5               [16]  756 	push	hl
+    00000320 7D               [ 4]  757 	ld	a, l
+    00000321 F8 0C            [12]  758 	ldhl	sp,	#12
+    00000323 77               [ 8]  759 	ld	(hl), a
+    00000324 E1               [12]  760 	pop	hl
+    00000325 7C               [ 4]  761 	ld	a, h
+    00000326 F8 0B            [12]  762 	ldhl	sp,	#11
+    00000328 32               [ 8]  763 	ld	(hl-), a
+    00000329 2A               [ 8]  764 	ld	a, (hl+)
+    0000032A 5F               [ 4]  765 	ld	e, a
+    0000032B 3A               [ 8]  766 	ld	a, (hl-)
+    0000032C 2B               [ 8]  767 	dec	hl
+    0000032D 57               [ 4]  768 	ld	d, a
+    0000032E 1A               [ 8]  769 	ld	a, (de)
+    0000032F 87               [ 4]  770 	add	a, a
+    00000330 87               [ 4]  771 	add	a, a
+    00000331 87               [ 4]  772 	add	a, a
+    00000332 5E               [ 8]  773 	ld	e, (hl)
+    00000333 2B               [ 8]  774 	dec	hl
+    00000334 83               [ 4]  775 	add	a, e
+    00000335 C5               [16]  776 	push	bc
+    00000336 5E               [ 8]  777 	ld	e, (hl)
+    00000337 CDr00r00         [24]  778 	call	_tileindex_from_xy
+    0000033A F8 0A            [12]  779 	ldhl	sp,	#10
+    0000033C 79               [ 4]  780 	ld	a, c
+    0000033D 22               [ 8]  781 	ld	(hl+), a
+    0000033E 70               [ 8]  782 	ld	(hl), b
+    0000033F C1               [12]  783 	pop	bc
+    00000340 F8 04            [12]  784 	ldhl	sp,	#4
+    00000342 2A               [ 8]  785 	ld	a, (hl+)
+    00000343 5F               [ 4]  786 	ld	e, a
+    00000344 56               [ 8]  787 	ld	d, (hl)
+    00000345 F8 08            [12]  788 	ldhl	sp,	#8
+    00000347 2A               [ 8]  789 	ld	a, (hl+)
+    00000348 12               [ 8]  790 	ld	(de), a
+    00000349 13               [ 8]  791 	inc	de
+    0000034A 7E               [ 8]  792 	ld	a, (hl)
+    0000034B 12               [ 8]  793 	ld	(de), a
+                                    794 ;src/Character.c:108: if(canplayermove(p)) {
+    0000034C C5               [16]  795 	push	bc
+    0000034D 59               [ 4]  796 	ld	e, c
+    0000034E 50               [ 4]  797 	ld	d, b
+    0000034F CDr5Br01         [24]  798 	call	_canplayermove
+    00000352 C1               [12]  799 	pop	bc
+    00000353 B7               [ 4]  800 	or	a, a
+    00000354 28 5B            [12]  801 	jr	Z, 00104$
+                                    802 ;src/Character.c:109: p->x += p->speed * p->dir_x;
+    00000356 F8 02            [12]  803 	ldhl	sp,#2
+    00000358 2A               [ 8]  804 	ld	a, (hl+)
+    00000359 5F               [ 4]  805 	ld	e, a
+    0000035A 2A               [ 8]  806 	ld	a, (hl+)
+    0000035B 23               [ 8]  807 	inc	hl
+    0000035C 57               [ 4]  808 	ld	d, a
+    0000035D 1A               [ 8]  809 	ld	a, (de)
+    0000035E 77               [ 8]  810 	ld	(hl), a
+    0000035F 21 0A 00         [12]  811 	ld	hl, #0x000a
+    00000362 09               [ 8]  812 	add	hl, bc
+    00000363 E5               [16]  813 	push	hl
+    00000364 7D               [ 4]  814 	ld	a, l
+    00000365 F8 0A            [12]  815 	ldhl	sp,	#10
+    00000367 77               [ 8]  816 	ld	(hl), a
+    00000368 E1               [12]  817 	pop	hl
+    00000369 7C               [ 4]  818 	ld	a, h
+    0000036A F8 09            [12]  819 	ldhl	sp,	#9
+    0000036C 32               [ 8]  820 	ld	(hl-), a
+    0000036D 2A               [ 8]  821 	ld	a, (hl+)
+    0000036E 5F               [ 4]  822 	ld	e, a
+    0000036F 2A               [ 8]  823 	ld	a, (hl+)
+    00000370 57               [ 4]  824 	ld	d, a
+    00000371 1A               [ 8]  825 	ld	a, (de)
+    00000372 5E               [ 8]  826 	ld	e, (hl)
+    00000373 23               [ 8]  827 	inc	hl
+    00000374 56               [ 8]  828 	ld	d, (hl)
+    00000375 F5               [16]  829 	push	af
+    00000376 1A               [ 8]  830 	ld	a, (de)
+    00000377 6F               [ 4]  831 	ld	l, a
+    00000378 F1               [12]  832 	pop	af
+    00000379 C5               [16]  833 	push	bc
+    0000037A 5D               [ 4]  834 	ld	e, l
+    0000037B CDr00r00         [24]  835 	call	__mulschar
+    0000037E 79               [ 4]  836 	ld	a, c
+    0000037F C1               [12]  837 	pop	bc
+    00000380 F8 05            [12]  838 	ldhl	sp,	#5
+    00000382 5E               [ 8]  839 	ld	e, (hl)
+    00000383 83               [ 4]  840 	add	a, e
+    00000384 F8 02            [12]  841 	ldhl	sp,	#2
+    00000386 5E               [ 8]  842 	ld	e, (hl)
+    00000387 23               [ 8]  843 	inc	hl
+    00000388 66               [ 8]  844 	ld	h, (hl)
+    00000389 6B               [ 4]  845 	ld	l, e
+    0000038A 77               [ 8]  846 	ld	(hl), a
+                                    847 ;src/Character.c:110: p->y += p->speed * p->dir_y;
+    0000038B D1               [12]  848 	pop	de
+    0000038C D5               [16]  849 	push	de
+    0000038D 1A               [ 8]  850 	ld	a, (de)
+    0000038E F8 0B            [12]  851 	ldhl	sp,	#11
+    00000390 32               [ 8]  852 	ld	(hl-), a
+    00000391 2B               [ 8]  853 	dec	hl
+    00000392 2B               [ 8]  854 	dec	hl
+    00000393 2A               [ 8]  855 	ld	a, (hl+)
+    00000394 5F               [ 4]  856 	ld	e, a
+    00000395 3A               [ 8]  857 	ld	a, (hl-)
+    00000396 2B               [ 8]  858 	dec	hl
+    00000397 2B               [ 8]  859 	dec	hl
+    00000398 57               [ 4]  860 	ld	d, a
+    00000399 1A               [ 8]  861 	ld	a, (de)
+    0000039A 5E               [ 8]  862 	ld	e, (hl)
+    0000039B 23               [ 8]  863 	inc	hl
+    0000039C 56               [ 8]  864 	ld	d, (hl)
+    0000039D F5               [16]  865 	push	af
+    0000039E 1A               [ 8]  866 	ld	a, (de)
+    0000039F 6F               [ 4]  867 	ld	l, a
+    000003A0 F1               [12]  868 	pop	af
+    000003A1 C5               [16]  869 	push	bc
+    000003A2 5D               [ 4]  870 	ld	e, l
+    000003A3 CDr00r00         [24]  871 	call	__mulschar
+    000003A6 79               [ 4]  872 	ld	a, c
+    000003A7 C1               [12]  873 	pop	bc
+    000003A8 F8 0B            [12]  874 	ldhl	sp,	#11
+    000003AA 5E               [ 8]  875 	ld	e, (hl)
+    000003AB 83               [ 4]  876 	add	a, e
+    000003AC E1               [12]  877 	pop	hl
+    000003AD E5               [16]  878 	push	hl
+    000003AE 77               [ 8]  879 	ld	(hl), a
+    000003AF 18 07            [12]  880 	jr	00105$
+    000003B1                        881 00104$:
+                                    882 ;src/Character.c:112: flip_direction(p);
+    000003B1 C5               [16]  883 	push	bc
+    000003B2 59               [ 4]  884 	ld	e, c
+    000003B3 50               [ 4]  885 	ld	d, b
+    000003B4 CDr39r02         [24]  886 	call	_flip_direction
+    000003B7 C1               [12]  887 	pop	bc
+    000003B8                        888 00105$:
+                                    889 ;src/Character.c:114: move_character(p);
+    000003B8 59               [ 4]  890 	ld	e, c
+    000003B9 50               [ 4]  891 	ld	d, b
+    000003BA CDr98r00         [24]  892 	call	_move_character
+    000003BD                        893 00106$:
+                                    894 ;src/Character.c:115: }
+    000003BD E8 0C            [16]  895 	add	sp, #12
+    000003BF C9               [16]  896 	ret
+                                    897 	.area _CODE
+                                    898 	.area _INITIALIZER
+    00000000                        899 __xinit__debug:
+    00000000 00                     900 	.db #0x00	; 0
+                                    901 	.area _CABS (ABS)
