@@ -8,6 +8,8 @@
 
 uint8_t debug = 0;
 
+uint8_t global_blocks_active = 1;
+
 void set_direction(Character* p,  int8_t x, int8_t y){
     p->dir_x = x;
     p->dir_y = y;
@@ -68,21 +70,23 @@ uint8_t canplayermove(Character* p){
     }
     //comprobar eventos 
     uint8_t event = player_tileBR_over_a_block(p->tileindexBR);
-    switch(event){
-        case RIGHT:
-            set_direction(p, 1, 0);
-            break;
-        case LEFT:
-            set_direction(p, -1, 0);
-            break;
-        case UP:
-            set_direction(p, 0, -1);
-            break;
-        case DOWN:
-            set_direction(p, 0, 1);
-            break;
-        default:
-            break;
+    if(global_blocks_active){
+        switch(event){
+            case RIGHT:
+                set_direction(p, 1, 0);
+                break;
+            case LEFT:
+                set_direction(p, -1, 0);
+                break;
+            case UP:
+                set_direction(p, 0, -1);
+                break;
+            case DOWN:
+                set_direction(p, 0, 1);
+                break;
+            default:
+                break;
+        }
     }
 
     return 1;
@@ -93,10 +97,60 @@ void flip_direction(Character* p){
     p->dir_y = - p->dir_y;
 }
 
+void take_effect(uint8_t index){
+    //me pregunto: quiero que esta funcion esté en object.c, por que me parece 
+    //mas aclaratorio. Pero como cambiará valores del personaje Character, no 
+    //me deja pasarselo por parametros. Alguna forma de hacerlo?
+
+    uint8_t type = global_object_information[index*3+2];
+        switch (type)
+    {
+    case NO_ACTION:
+        global_blocks_active = 0;
+        break;
+    
+    case SPEED_UP:
+        /* code */
+        break;
+
+    case GO_RIGHT:
+        /* code */
+        break;
+
+    case GO_LEFT:
+        /* code */
+        break;
+
+    case GO_UP:
+        /* code */
+        break;
+
+    case GO_DOWN:
+        /* code */
+        break;
+
+    case BOMB:
+        /* code */
+        break;
+    
+    case KEY:
+        /* code */
+        break;
+    
+    case DEAD:
+        update_game_state(STATE_GAME_OVER);
+        break;
+
+    default:
+        break;
+    }
+}
+
 void update_character(Character* p) { //devuelve las teclas actuales
 
     uint8_t object_index_in_array = check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
     if(object_index_in_array != 255){ 
+        take_effect(object_index_in_array);
         hide_object(object_index_in_array);
     }
 

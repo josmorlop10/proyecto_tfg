@@ -273,8 +273,8 @@ _check_colision_with_object::
 __xinit__global_object_information:
 	.db #0x54	; 84	'T'
 	.db #0x1c	; 28
-	.db #0x0d	; 13
+	.db #0x08	; 8
 	.db #0x5c	; 92
 	.db #0x1c	; 28
-	.db #0x10	; 16
+	.db #0x0a	; 10
 	.area _CABS (ABS)

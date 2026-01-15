@@ -3,7 +3,7 @@
 #include "Headers/Object.h"
 #include "Headers/LevelLogic.h"
 
-uint8_t global_object_information[3*NUMBER_OF_OBJECTS] = {84, 28, GO_DOWN, 92, 28, DEAD};
+uint8_t global_object_information[3*NUMBER_OF_OBJECTS] = {84, 28, NO_ACTION, 92, 28, GO_RIGHT};
 
 void print_objects_in_screen(void){
 

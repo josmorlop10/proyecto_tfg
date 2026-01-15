@@ -15,6 +15,8 @@ typedef struct {
 
 } Character;
 
+extern uint8_t global_blocks_active;
+
 void character_init(Character* p);
 void update_character(Character* p);
 void move_character(Character* p);
