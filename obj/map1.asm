@@ -8,6 +8,8 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _map1
+	.globl _blocks_map1
+	.globl _objects_map1
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -40,6 +42,18 @@
 ;--------------------------------------------------------
 	.area _CODE
 	.area _CODE
+_objects_map1:
+	.db #0x54	; 84	'T'
+	.db #0x1c	; 28
+	.db #0x08	; 8
+	.db #0x5c	; 92
+	.db #0x1c	; 28
+	.db #0x0a	; 10
+_blocks_map1:
+	.db #0x02	; 2
+	.db #0x02	; 2
+	.db #0x02	; 2
+	.db #0x02	; 2
 _map1:
 	.db #0x04	; 4
 	.db #0x0e	; 14

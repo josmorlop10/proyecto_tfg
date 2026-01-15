@@ -18,6 +18,8 @@
 #define UMBRAL_COLISION_UP 3
 #define UMBRAL_COLISION_DOWN 15
 
+#define NUMBER_OF_BLOCKS 4
+
 //Global variable for block selected.Indicará la cantidad de bloques disponibles.
 //Siendo index 1 = DER, 2= IZQ, 3=ARRIBA, 4=ABAJO (+6 por los "define" de arriba)
 extern uint8_t global_blocks_available[4];
@@ -56,6 +58,7 @@ void change_colision_map_BR(uint16_t tileindexBR, uint8_t new_value);
 void move_foward_block_id(void);
 void init_level(uint8_t level_number);
 uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah, uint8_t bx, uint8_t by, uint8_t bw, uint8_t bh);
-
+void read_global_object_info_from_map(unsigned char* objects_map);
+void read_global_block_info_from_map(unsigned char* blocks_map);
 
 #endif

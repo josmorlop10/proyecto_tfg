@@ -25,6 +25,8 @@
 #define map1Bank 0
 
 extern const unsigned char map1[];
+extern const unsigned char objects_map1[];
+extern const unsigned char blocks_map1[];
 
 #endif
 

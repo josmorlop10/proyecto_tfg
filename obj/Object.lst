@@ -192,89 +192,115 @@
     0000008A F8 03            [12]  192 	ldhl	sp,	#3
     0000008C 32               [ 8]  193 	ld	(hl-), a
                                     194 ;src/Object.c:33: uint8_t res = 255;
-                                    195 ;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
-    0000008D 7B               [ 4]  196 	ld	a, e
-    0000008E 32               [ 8]  197 	ld	(hl-), a
-    0000008F 2B               [ 8]  198 	dec	hl
-    00000090 0E FF            [ 8]  199 	ld	c, #0xff
-    00000092 36 00            [12]  200 	ld	(hl), #0x00
-    00000094 06 00            [ 8]  201 	ld	b, #0x00
-    00000096                        202 00105$:
-    00000096 78               [ 4]  203 	ld	a, b
-    00000097 D6 02            [ 8]  204 	sub	a, #0x02
-    00000099 30 44            [12]  205 	jr	NC, 00103$
-                                    206 ;src/Object.c:36: obj_x = global_object_information[3*e];
-    0000009B 68               [ 4]  207 	ld	l, b
-    0000009C 26 00            [ 8]  208 	ld	h, #0x00
-    0000009E 5D               [ 4]  209 	ld	e, l
-    0000009F 54               [ 4]  210 	ld	d, h
-    000000A0 29               [ 8]  211 	add	hl, hl
-    000000A1 19               [ 8]  212 	add	hl, de
-    000000A2 11r00r00         [12]  213 	ld	de, #_global_object_information
-    000000A5 19               [ 8]  214 	add	hl, de
-    000000A6 7E               [ 8]  215 	ld	a, (hl)
-    000000A7 F8 01            [12]  216 	ldhl	sp,	#1
-    000000A9 77               [ 8]  217 	ld	(hl), a
-                                    218 ;src/Object.c:37: obj_y = global_object_information[3*e + 1];
-    000000AA 68               [ 4]  219 	ld	l, b
-    000000AB 5D               [ 4]  220 	ld	e, l
-    000000AC 29               [ 8]  221 	add	hl, hl
-    000000AD 19               [ 8]  222 	add	hl, de
-    000000AE 2C               [ 4]  223 	inc	l
-    000000AF 26 00            [ 8]  224 	ld	h, #0x00
-    000000B1 11r00r00         [12]  225 	ld	de, #_global_object_information
-    000000B4 19               [ 8]  226 	add	hl, de
-    000000B5 5E               [ 8]  227 	ld	e, (hl)
-                                    228 ;src/Object.c:41: if(check_colision_of_sprites(obj_x,obj_y,OBJECT_SIZE, OBJECT_SIZE,
-    000000B6 C5               [16]  229 	push	bc
-    000000B7 F8 09            [12]  230 	ldhl	sp,	#9
-    000000B9 3A               [ 8]  231 	ld	a, (hl-)
-    000000BA 47               [ 4]  232 	ld	b, a
-    000000BB 4E               [ 8]  233 	ld	c, (hl)
-    000000BC C5               [16]  234 	push	bc
-    000000BD F8 06            [12]  235 	ldhl	sp,	#6
-    000000BF 2A               [ 8]  236 	ld	a, (hl+)
-    000000C0 F5               [16]  237 	push	af
-    000000C1 33               [ 8]  238 	inc	sp
-    000000C2 3A               [ 8]  239 	ld	a, (hl-)
-    000000C3 2B               [ 8]  240 	dec	hl
-    000000C4 47               [ 4]  241 	ld	b, a
-    000000C5 0E 08            [ 8]  242 	ld	c, #0x08
-    000000C7 C5               [16]  243 	push	bc
-    000000C8 3E 08            [ 8]  244 	ld	a, #0x08
-    000000CA F5               [16]  245 	push	af
-    000000CB 33               [ 8]  246 	inc	sp
-    000000CC 7E               [ 8]  247 	ld	a, (hl)
-    000000CD CDr00r00         [24]  248 	call	_check_colision_of_sprites
-    000000D0 C1               [12]  249 	pop	bc
-    000000D1 B7               [ 4]  250 	or	a, a
-    000000D2 28 05            [12]  251 	jr	Z, 00106$
-                                    252 ;src/Object.c:43: res = e;
-    000000D4 F8 00            [12]  253 	ldhl	sp,	#0
-    000000D6 4E               [ 8]  254 	ld	c, (hl)
-                                    255 ;src/Object.c:44: break;
-    000000D7 18 06            [12]  256 	jr	00103$
-    000000D9                        257 00106$:
-                                    258 ;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
-    000000D9 04               [ 4]  259 	inc	b
-    000000DA F8 00            [12]  260 	ldhl	sp,	#0
-    000000DC 70               [ 8]  261 	ld	(hl), b
-    000000DD 18 B7            [12]  262 	jr	00105$
-    000000DF                        263 00103$:
-                                    264 ;src/Object.c:47: return res;
-    000000DF 79               [ 4]  265 	ld	a, c
-                                    266 ;src/Object.c:48: }
-    000000E0 E8 04            [16]  267 	add	sp, #4
-    000000E2 E1               [12]  268 	pop	hl
-    000000E3 C1               [12]  269 	pop	bc
-    000000E4 E9               [ 4]  270 	jp	(hl)
-                                    271 	.area _CODE
-                                    272 	.area _INITIALIZER
-    00000000                        273 __xinit__global_object_information:
-    00000000 54                     274 	.db #0x54	; 84	'T'
-    00000001 1C                     275 	.db #0x1c	; 28
-    00000002 08                     276 	.db #0x08	; 8
-    00000003 5C                     277 	.db #0x5c	; 92
-    00000004 1C                     278 	.db #0x1c	; 28
-    00000005 0A                     279 	.db #0x0a	; 10
-                                    280 	.area _CABS (ABS)
+    0000008D 7B               [ 4]  195 	ld	a, e
+    0000008E 32               [ 8]  196 	ld	(hl-), a
+    0000008F 2B               [ 8]  197 	dec	hl
+                                    198 ;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+    00000090 3E FF            [ 8]  199 	ld	a, #0xff
+    00000092 22               [ 8]  200 	ld	(hl+), a
+    00000093 36 00            [12]  201 	ld	(hl), #0x00
+    00000095 0E 00            [ 8]  202 	ld	c, #0x00
+    00000097                        203 00109$:
+    00000097 79               [ 4]  204 	ld	a, c
+    00000098 D6 02            [ 8]  205 	sub	a, #0x02
+    0000009A 30 5D            [12]  206 	jr	NC, 00107$
+                                    207 ;src/Object.c:37: obj_x = global_object_information[3*e];
+    0000009C 69               [ 4]  208 	ld	l, c
+    0000009D 26 00            [ 8]  209 	ld	h, #0x00
+    0000009F 5D               [ 4]  210 	ld	e, l
+    000000A0 54               [ 4]  211 	ld	d, h
+    000000A1 29               [ 8]  212 	add	hl, hl
+    000000A2 19               [ 8]  213 	add	hl, de
+    000000A3 11r00r00         [12]  214 	ld	de, #_global_object_information
+    000000A6 19               [ 8]  215 	add	hl, de
+    000000A7 46               [ 8]  216 	ld	b, (hl)
+                                    217 ;src/Object.c:38: obj_y = global_object_information[3*e + 1];
+    000000A8 69               [ 4]  218 	ld	l, c
+    000000A9 5D               [ 4]  219 	ld	e, l
+    000000AA 29               [ 8]  220 	add	hl, hl
+    000000AB 19               [ 8]  221 	add	hl, de
+    000000AC 7D               [ 4]  222 	ld	a, l
+    000000AD 3C               [ 4]  223 	inc	a
+    000000AE C6r00            [ 8]  224 	add	a, #<(_global_object_information)
+    000000B0 5F               [ 4]  225 	ld	e, a
+    000000B1 3E 00            [ 8]  226 	ld	a, #0x00
+    000000B3 CEs00            [ 8]  227 	adc	a, #>(_global_object_information)
+    000000B5 57               [ 4]  228 	ld	d, a
+    000000B6 1A               [ 8]  229 	ld	a, (de)
+    000000B7 5F               [ 4]  230 	ld	e, a
+                                    231 ;src/Object.c:39: obj_type = global_object_information[3*e + 2];
+    000000B8 7D               [ 4]  232 	ld	a, l
+    000000B9 3C               [ 4]  233 	inc	a
+    000000BA 3C               [ 4]  234 	inc	a
+    000000BB C6r00            [ 8]  235 	add	a, #<(_global_object_information)
+    000000BD 6F               [ 4]  236 	ld	l, a
+    000000BE 3E 00            [ 8]  237 	ld	a, #0x00
+    000000C0 CEs00            [ 8]  238 	adc	a, #>(_global_object_information)
+    000000C2 67               [ 4]  239 	ld	h, a
+    000000C3 56               [ 8]  240 	ld	d, (hl)
+                                    241 ;src/Object.c:41: if(obj_x==255 && obj_y==255 && obj_type ==255){
+    000000C4 78               [ 4]  242 	ld	a, b
+    000000C5 3C               [ 4]  243 	inc	a
+    000000C6 20 07            [12]  244 	jr	NZ, 00102$
+    000000C8 7B               [ 4]  245 	ld	a, e
+    000000C9 3C               [ 4]  246 	inc	a
+    000000CA 20 03            [12]  247 	jr	NZ, 00102$
+    000000CC 14               [ 4]  248 	inc	d
+    000000CD 28 2A            [12]  249 	jr	Z, 00107$
+                                    250 ;src/Object.c:42: break;
+    000000CF                        251 00102$:
+                                    252 ;src/Object.c:45: if(check_colision_of_sprites(obj_x,obj_y,OBJECT_SIZE, OBJECT_SIZE,
+    000000CF C5               [16]  253 	push	bc
+    000000D0 F8 09            [12]  254 	ldhl	sp,	#9
+    000000D2 3A               [ 8]  255 	ld	a, (hl-)
+    000000D3 F5               [16]  256 	push	af
+    000000D4 33               [ 8]  257 	inc	sp
+    000000D5 7E               [ 8]  258 	ld	a, (hl)
+    000000D6 F5               [16]  259 	push	af
+    000000D7 33               [ 8]  260 	inc	sp
+    000000D8 F8 06            [12]  261 	ldhl	sp,	#6
+    000000DA 2A               [ 8]  262 	ld	a, (hl+)
+    000000DB F5               [16]  263 	push	af
+    000000DC 33               [ 8]  264 	inc	sp
+    000000DD 66               [ 8]  265 	ld	h, (hl)
+    000000DE 2E 08            [ 8]  266 	ld	l, #0x08
+    000000E0 E5               [16]  267 	push	hl
+    000000E1 3E 08            [ 8]  268 	ld	a, #0x08
+    000000E3 F5               [16]  269 	push	af
+    000000E4 33               [ 8]  270 	inc	sp
+    000000E5 78               [ 4]  271 	ld	a, b
+    000000E6 CDr00r00         [24]  272 	call	_check_colision_of_sprites
+    000000E9 C1               [12]  273 	pop	bc
+    000000EA B7               [ 4]  274 	or	a, a
+    000000EB 28 06            [12]  275 	jr	Z, 00110$
+                                    276 ;src/Object.c:47: res = e;
+    000000ED F8 01            [12]  277 	ldhl	sp,	#1
+    000000EF 3A               [ 8]  278 	ld	a, (hl-)
+    000000F0 77               [ 8]  279 	ld	(hl), a
+                                    280 ;src/Object.c:48: break;
+    000000F1 18 06            [12]  281 	jr	00107$
+    000000F3                        282 00110$:
+                                    283 ;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+    000000F3 0C               [ 4]  284 	inc	c
+    000000F4 F8 01            [12]  285 	ldhl	sp,	#1
+    000000F6 71               [ 8]  286 	ld	(hl), c
+    000000F7 18 9E            [12]  287 	jr	00109$
+    000000F9                        288 00107$:
+                                    289 ;src/Object.c:51: return res;
+    000000F9 F8 00            [12]  290 	ldhl	sp,	#0
+    000000FB 7E               [ 8]  291 	ld	a, (hl)
+                                    292 ;src/Object.c:52: }
+    000000FC E8 04            [16]  293 	add	sp, #4
+    000000FE E1               [12]  294 	pop	hl
+    000000FF C1               [12]  295 	pop	bc
+    00000100 E9               [ 4]  296 	jp	(hl)
+                                    297 	.area _CODE
+                                    298 	.area _INITIALIZER
+    00000000                        299 __xinit__global_object_information:
+    00000000 00                     300 	.db #0x00	; 0
+    00000001 00                     301 	.db 0x00
+    00000002 00                     302 	.db 0x00
+    00000003 00                     303 	.db 0x00
+    00000004 00                     304 	.db 0x00
+    00000005 00                     305 	.db 0x00
+                                    306 	.area _CABS (ABS)

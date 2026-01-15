@@ -192,19 +192,20 @@ _check_colision_with_object::
 	ldhl	sp,	#3
 	ld	(hl-), a
 ;src/Object.c:33: uint8_t res = 255;
-;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
 	ld	a, e
 	ld	(hl-), a
 	dec	hl
-	ld	c, #0xff
+;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+	ld	a, #0xff
+	ld	(hl+), a
 	ld	(hl), #0x00
-	ld	b, #0x00
-00105$:
-	ld	a, b
+	ld	c, #0x00
+00109$:
+	ld	a, c
 	sub	a, #0x02
-	jr	NC, 00103$
-;src/Object.c:36: obj_x = global_object_information[3*e];
-	ld	l, b
+	jr	NC, 00107$
+;src/Object.c:37: obj_x = global_object_information[3*e];
+	ld	l, c
 	ld	h, #0x00
 	ld	e, l
 	ld	d, h
@@ -212,58 +213,83 @@ _check_colision_with_object::
 	add	hl, de
 	ld	de, #_global_object_information
 	add	hl, de
-	ld	a, (hl)
-	ldhl	sp,	#1
-	ld	(hl), a
-;src/Object.c:37: obj_y = global_object_information[3*e + 1];
-	ld	l, b
+	ld	b, (hl)
+;src/Object.c:38: obj_y = global_object_information[3*e + 1];
+	ld	l, c
 	ld	e, l
 	add	hl, hl
 	add	hl, de
-	inc	l
-	ld	h, #0x00
-	ld	de, #_global_object_information
-	add	hl, de
-	ld	e, (hl)
-;src/Object.c:41: if(check_colision_of_sprites(obj_x,obj_y,OBJECT_SIZE, OBJECT_SIZE,
+	ld	a, l
+	inc	a
+	add	a, #<(_global_object_information)
+	ld	e, a
+	ld	a, #0x00
+	adc	a, #>(_global_object_information)
+	ld	d, a
+	ld	a, (de)
+	ld	e, a
+;src/Object.c:39: obj_type = global_object_information[3*e + 2];
+	ld	a, l
+	inc	a
+	inc	a
+	add	a, #<(_global_object_information)
+	ld	l, a
+	ld	a, #0x00
+	adc	a, #>(_global_object_information)
+	ld	h, a
+	ld	d, (hl)
+;src/Object.c:41: if(obj_x==255 && obj_y==255 && obj_type ==255){
+	ld	a, b
+	inc	a
+	jr	NZ, 00102$
+	ld	a, e
+	inc	a
+	jr	NZ, 00102$
+	inc	d
+	jr	Z, 00107$
+;src/Object.c:42: break;
+00102$:
+;src/Object.c:45: if(check_colision_of_sprites(obj_x,obj_y,OBJECT_SIZE, OBJECT_SIZE,
 	push	bc
 	ldhl	sp,	#9
 	ld	a, (hl-)
-	ld	b, a
-	ld	c, (hl)
-	push	bc
+	push	af
+	inc	sp
+	ld	a, (hl)
+	push	af
+	inc	sp
 	ldhl	sp,	#6
 	ld	a, (hl+)
 	push	af
 	inc	sp
-	ld	a, (hl-)
-	dec	hl
-	ld	b, a
-	ld	c, #0x08
-	push	bc
+	ld	h, (hl)
+	ld	l, #0x08
+	push	hl
 	ld	a, #0x08
 	push	af
 	inc	sp
-	ld	a, (hl)
+	ld	a, b
 	call	_check_colision_of_sprites
 	pop	bc
 	or	a, a
-	jr	Z, 00106$
-;src/Object.c:43: res = e;
-	ldhl	sp,	#0
-	ld	c, (hl)
-;src/Object.c:44: break;
-	jr	00103$
-00106$:
+	jr	Z, 00110$
+;src/Object.c:47: res = e;
+	ldhl	sp,	#1
+	ld	a, (hl-)
+	ld	(hl), a
+;src/Object.c:48: break;
+	jr	00107$
+00110$:
 ;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
-	inc	b
+	inc	c
+	ldhl	sp,	#1
+	ld	(hl), c
+	jr	00109$
+00107$:
+;src/Object.c:51: return res;
 	ldhl	sp,	#0
-	ld	(hl), b
-	jr	00105$
-00103$:
-;src/Object.c:47: return res;
-	ld	a, c
-;src/Object.c:48: }
+	ld	a, (hl)
+;src/Object.c:52: }
 	add	sp, #4
 	pop	hl
 	pop	bc
@@ -271,10 +297,10 @@ _check_colision_with_object::
 	.area _CODE
 	.area _INITIALIZER
 __xinit__global_object_information:
-	.db #0x54	; 84	'T'
-	.db #0x1c	; 28
-	.db #0x08	; 8
-	.db #0x5c	; 92
-	.db #0x1c	; 28
-	.db #0x0a	; 10
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
 	.area _CABS (ABS)

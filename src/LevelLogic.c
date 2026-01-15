@@ -1,4 +1,5 @@
 #include "Headers/LevelLogic.h"
+#include "Headers/Object.h"
 #include <stdio.h>
 #include <gb/gb.h>
 #include <gbdk/console.h>
@@ -11,7 +12,7 @@ uint8_t global_colision_map[360] = {EMPTY};
 struct TileEvent global_events[10];
 uint16_t global_init_point;
 
-uint8_t global_blocks_available[4] = {2,2,2,2}; //MOCKUP. Change later
+uint8_t global_blocks_available[4] = {0}; 
 uint8_t global_selected_block = 0;
 
 const unsigned char* global_levels_array[] = {map1};
@@ -27,6 +28,11 @@ void init_level(uint8_t level_number){
     }
 
     get_colision_from_map(global_levels_array[level_number], global_colision_map);
+    
+    //TODO: Those values in params (objects_map1, blocks_map should be decided by the level. Not alway map1)
+    read_global_object_info_from_map(objects_map1);
+    read_global_block_info_from_map(blocks_map1);
+
     get_init_point_from_map(global_colision_map);
 
 }
@@ -46,6 +52,20 @@ void get_colision_from_map(const unsigned char in[], uint8_t out[]){
         } else if(in[i] >= UMBRAL_COLISION_UP && in[i] <= UMBRAL_COLISION_DOWN){
             out[i] = SOLID;
         }
+    }
+}
+
+void read_global_object_info_from_map(unsigned char* objects_map){
+    for(uint8_t e=0; e<NUMBER_OF_OBJECTS; e++){
+        global_object_information[e*3] = objects_map[e*3];
+        global_object_information[e*3+1] = objects_map[e*3+1];
+        global_object_information[e*3+2] = objects_map[e*3+2];
+    }
+}
+
+void read_global_block_info_from_map(unsigned char* blocks_map){
+    for(uint8_t e=0; e<NUMBER_OF_BLOCKS; e++){
+        global_blocks_available[e] = blocks_map[e];
     }
 }
 
