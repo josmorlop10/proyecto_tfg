@@ -10,13 +10,14 @@
 	.globl _can_pointer_move
 	.globl _set_bkg_tiles
 	.globl _joypad
+	.globl _update_values_in_hud
+	.globl _change_bkg_tile_16x16
+	.globl _change_bkg_tile_xy
 	.globl _check_colision_with_object
 	.globl _move_foward_block_id
 	.globl _change_colision_map_BR
 	.globl _change_colision_map_at
 	.globl _tileindex_from_xy
-	.globl _change_bkg_tile_16x16
-	.globl _change_bkg_tile_xy
 	.globl _pointer_init
 	.globl _move_pointer
 	.globl _place_object_at_pointer
@@ -58,20 +59,20 @@
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;src/PointerSelector.c:8: void pointer_init(Pointer* s) {
+;src/PointerSelector.c:9: void pointer_init(Pointer* s) {
 ;	---------------------------------
 ; Function pointer_init
 ; ---------------------------------
 _pointer_init::
-;src/PointerSelector.c:9: s->x = 80;
+;src/PointerSelector.c:10: s->x = 80;
 	ld	l, e
 	ld	h, d
 	ld	(hl), #0x50
-;src/PointerSelector.c:10: s->y = 72;
+;src/PointerSelector.c:11: s->y = 72;
 	push	hl
 	inc	hl
 	ld	(hl), #0x48
-;src/PointerSelector.c:11: for(uint8_t i = 4;i<=7;i++){
+;src/PointerSelector.c:12: for(uint8_t i = 4;i<=7;i++){
 	pop	bc
 	push	bc
 	inc	bc
@@ -81,16 +82,16 @@ _pointer_init::
 	ld	a, #0x07
 	sub	a, e
 	jr	C, 00101$
-;src/PointerSelector.c:12: s->sprite_ids[i] = i;
+;src/PointerSelector.c:13: s->sprite_ids[i] = i;
 	ld	l, e
 	ld	h, #0x00
 	add	hl, bc
 	ld	(hl), e
-;src/PointerSelector.c:11: for(uint8_t i = 4;i<=7;i++){
+;src/PointerSelector.c:12: for(uint8_t i = 4;i<=7;i++){
 	inc	e
 	jr	00103$
 00101$:
-;src/PointerSelector.c:14: s->tileindexBR = 0;
+;src/PointerSelector.c:15: s->tileindexBR = 0;
 	pop	de
 	push	de
 	ld	hl, #0x0006
@@ -101,18 +102,18 @@ _pointer_init::
 	ld	(bc), a
 	inc	bc
 	ld	(bc), a
-;src/PointerSelector.c:15: }
+;src/PointerSelector.c:16: }
 	inc	sp
 	inc	sp
 	ret
-;src/PointerSelector.c:17: void move_pointer(Pointer* s) {
+;src/PointerSelector.c:18: void move_pointer(Pointer* s) {
 ;	---------------------------------
 ; Function move_pointer
 ; ---------------------------------
 _move_pointer::
 	dec	sp
 	dec	sp
-;src/PointerSelector.c:18: move_sprite(4, s->x- SPRITESIZE, s->y-SPRITESIZE);
+;src/PointerSelector.c:19: move_sprite(4, s->x- SPRITESIZE, s->y-SPRITESIZE);
 	ld	c, e
 	ld	b, d
 	inc	bc
@@ -136,7 +137,7 @@ _move_pointer::
 	ld	a, (hl)
 	pop	hl
 	ld	(hl), a
-;src/PointerSelector.c:19: move_sprite(5, s->x- SPRITESIZE, s->y);
+;src/PointerSelector.c:20: move_sprite(5, s->x- SPRITESIZE, s->y);
 	ld	a, (bc)
 	ldhl	sp,	#0
 	ld	(hl+), a
@@ -156,7 +157,7 @@ _move_pointer::
 	ld	a, (hl)
 	pop	hl
 	ld	(hl), a
-;src/PointerSelector.c:20: move_sprite(6, s->x, s->y-SPRITESIZE);
+;src/PointerSelector.c:21: move_sprite(6, s->x, s->y-SPRITESIZE);
 	ld	a, (bc)
 	add	a, #0xf8
 	ldhl	sp,	#0
@@ -176,7 +177,7 @@ _move_pointer::
 	ld	a, (hl)
 	pop	hl
 	ld	(hl), a
-;src/PointerSelector.c:21: move_sprite(7, s->x, s->y);
+;src/PointerSelector.c:22: move_sprite(7, s->x, s->y);
 	ld	a, (bc)
 	ld	b, a
 	ld	a, (de)
@@ -187,21 +188,21 @@ _move_pointer::
 	ld	a, b
 	ld	(hl+), a
 	ld	(hl), c
-;src/PointerSelector.c:21: move_sprite(7, s->x, s->y);
-;src/PointerSelector.c:23: }
+;src/PointerSelector.c:22: move_sprite(7, s->x, s->y);
+;src/PointerSelector.c:24: }
 	inc	sp
 	inc	sp
 	ret
-;src/PointerSelector.c:25: uint8_t can_pointer_move(Pointer* s, int8_t dir_x, int8_t dir_y){
+;src/PointerSelector.c:26: uint8_t can_pointer_move(Pointer* s, int8_t dir_x, int8_t dir_y){
 ;	---------------------------------
 ; Function can_pointer_move
 ; ---------------------------------
 _can_pointer_move::
 	ld	l, e
 	ld	h, d
-;src/PointerSelector.c:26: uint8_t new_x = s->x + dir_x*SPRITESIZE;
+;src/PointerSelector.c:27: uint8_t new_x = s->x + dir_x*SPRITESIZE;
 	ld	c, (hl)
-;src/PointerSelector.c:27: uint8_t new_y = s->y + dir_y*SPRITESIZE;
+;src/PointerSelector.c:28: uint8_t new_y = s->y + dir_y*SPRITESIZE;
 	inc	hl
 	add	a, a
 	add	a, a
@@ -216,7 +217,7 @@ _can_pointer_move::
 	add	a, a
 	add	a, e
 	ld	b, a
-;src/PointerSelector.c:29: if(new_x < 20 || new_x > 156 || new_y < 32 || new_y > 120){
+;src/PointerSelector.c:30: if(new_x < 20 || new_x > 156 || new_y < 32 || new_y > 120){
 	ld	a, c
 	sub	a, #0x14
 	jr	C, 00101$
@@ -230,18 +231,18 @@ _can_pointer_move::
 	sub	a, b
 	jr	NC, 00102$
 00101$:
-;src/PointerSelector.c:30: return 0;
+;src/PointerSelector.c:31: return 0;
 	xor	a, a
 	jr	00106$
 00102$:
-;src/PointerSelector.c:32: return 1;
+;src/PointerSelector.c:33: return 1;
 	ld	a, #0x01
 00106$:
-;src/PointerSelector.c:34: }
+;src/PointerSelector.c:35: }
 	pop	hl
 	inc	sp
 	jp	(hl)
-;src/PointerSelector.c:36: void place_object_at_pointer(Pointer* s, uint8_t block_type){
+;src/PointerSelector.c:37: void place_object_at_pointer(Pointer* s, uint8_t block_type){
 ;	---------------------------------
 ; Function place_object_at_pointer
 ; ---------------------------------
@@ -250,7 +251,7 @@ _place_object_at_pointer::
 	dec	sp
 	ldhl	sp,	#1
 	ld	(hl), a
-;src/PointerSelector.c:37: change_colision_map_at(s->tileindexBR, BLOCK);
+;src/PointerSelector.c:38: change_colision_map_at(s->tileindexBR, BLOCK);
 	ld	hl, #0x0006
 	add	hl, de
 	ld	c,l
@@ -264,7 +265,7 @@ _place_object_at_pointer::
 	ld	d, h
 	call	_change_colision_map_at
 	pop	bc
-;src/PointerSelector.c:38: change_colision_map_BR(s->tileindexBR, block_type);
+;src/PointerSelector.c:39: change_colision_map_BR(s->tileindexBR, block_type);
 	ld	l, c
 	ld	h, b
 	ld	a,	(hl+)
@@ -277,7 +278,7 @@ _place_object_at_pointer::
 	pop	de
 	call	_change_colision_map_BR
 	pop	bc
-;src/PointerSelector.c:39: change_bkg_tile_16x16(s->tileindexBR, global_selected_block * 4 + 31);
+;src/PointerSelector.c:40: change_bkg_tile_16x16(s->tileindexBR, global_selected_block * 4 + 31);
 	ld	a, (_global_selected_block)
 	add	a, a
 	add	a, a
@@ -294,30 +295,49 @@ _place_object_at_pointer::
 	ld	e, c
 	ld	d, b
 	call	_change_bkg_tile_16x16
-;src/PointerSelector.c:40: global_blocks_available[global_selected_block]--;
-	ld	a, #<(_global_blocks_available)
+;src/PointerSelector.c:41: global_blocks_available[global_selected_block]--;
+	ld	bc, #_global_blocks_available+0
+	ld	a, c
 	ld	hl, #_global_selected_block
 	add	a, (hl)
-	ld	c, a
-	ld	a, #>(_global_blocks_available)
+	ld	e, a
+	ld	a, b
 	adc	a, #0x00
-	ld	b, a
-	ld	a, (bc)
+	ld	d, a
+	ld	a, (de)
 	dec	a
-	ld	(bc), a
-;src/PointerSelector.c:41: }
+	ld	(de), a
+;src/PointerSelector.c:42: update_values_in_hud(block_type, global_blocks_available[global_selected_block]);
+	ld	a, c
+	add	a, (hl)
+	ld	c, a
+	jr	NC, 00103$
+	inc	b
+00103$:
+	ld	a, (bc)
+	ld	e, a
+	ldhl	sp,	#1
+	ld	a, (hl)
+	inc	sp
+	inc	sp
+	jp	_update_values_in_hud
+;src/PointerSelector.c:43: }
 	inc	sp
 	inc	sp
 	ret
-;src/PointerSelector.c:43: void remove_object_at_pointer(Pointer* s, uint8_t block_type){
+;src/PointerSelector.c:45: void remove_object_at_pointer(Pointer* s, uint8_t block_type){
 ;	---------------------------------
 ; Function remove_object_at_pointer
 ; ---------------------------------
 _remove_object_at_pointer::
 	dec	sp
-	ldhl	sp,	#0
+	dec	sp
+	ldhl	sp,	#1
+;src/PointerSelector.c:47: uint8_t block_index = block_type - RIGHT;
+	ld	(hl-), a
+	add	a, #0xfa
 	ld	(hl), a
-;src/PointerSelector.c:45: change_colision_map_at(s->tileindexBR, EMPTY);
+;src/PointerSelector.c:48: change_colision_map_at(s->tileindexBR, EMPTY);
 	ld	hl, #0x0006
 	add	hl, de
 	ld	c,l
@@ -330,7 +350,7 @@ _remove_object_at_pointer::
 	ld	e, l
 	ld	d, h
 	call	_change_colision_map_at
-;src/PointerSelector.c:46: change_bkg_tile_xy(s->tileindexBR, 0);
+;src/PointerSelector.c:49: change_bkg_tile_xy(s->tileindexBR, 0);
 	pop	hl
 	ld	a, (hl+)
 	ld	c, a
@@ -339,26 +359,34 @@ _remove_object_at_pointer::
 	ld	e, c
 	ld	d, b
 	call	_change_bkg_tile_xy
-;src/PointerSelector.c:47: global_blocks_available[block_type]++;
-	ld	bc, #_global_blocks_available+0
+;src/PointerSelector.c:50: global_blocks_available[block_index]++;
+	ld	de, #_global_blocks_available
 	ldhl	sp,	#0
 	ld	l, (hl)
 	ld	h, #0x00
-	add	hl, bc
+	add	hl, de
 	ld	c, l
 	ld	b, h
 	ld	a, (bc)
 	inc	a
 	ld	(bc), a
-;src/PointerSelector.c:48: }
+;src/PointerSelector.c:51: update_values_in_hud(block_type, global_blocks_available[block_index]);
+	ld	e, a
+	ldhl	sp,	#1
+	ld	a, (hl)
+	inc	sp
+	inc	sp
+	jp	_update_values_in_hud
+;src/PointerSelector.c:52: }
+	inc	sp
 	inc	sp
 	ret
-;src/PointerSelector.c:50: uint8_t block_is_not_placed_below(Pointer* s){
+;src/PointerSelector.c:54: uint8_t block_is_not_placed_below(Pointer* s){
 ;	---------------------------------
 ; Function block_is_not_placed_below
 ; ---------------------------------
 _block_is_not_placed_below::
-;src/PointerSelector.c:51: return (global_colision_map[s->tileindexBR] == EMPTY) 
+;src/PointerSelector.c:55: return (global_colision_map[s->tileindexBR] == EMPTY) 
 	ld	bc, #_global_colision_map+0
 	ld	hl, #0x0006
 	add	hl, de
@@ -373,7 +401,7 @@ _block_is_not_placed_below::
 	ld	a, (de)
 	or	a, a
 	jr	NZ, 00103$
-;src/PointerSelector.c:52: && (global_colision_map[s->tileindexBR-1] == EMPTY)
+;src/PointerSelector.c:56: && (global_colision_map[s->tileindexBR-1] == EMPTY)
 	ld	e,l
 	ld	d,h
 	dec	hl
@@ -381,7 +409,7 @@ _block_is_not_placed_below::
 	ld	a, (hl)
 	or	a, a
 	jr	NZ, 00103$
-;src/PointerSelector.c:53: && (global_colision_map[s->tileindexBR-20] == EMPTY)
+;src/PointerSelector.c:57: && (global_colision_map[s->tileindexBR-20] == EMPTY)
 	ld	a, e
 	add	a, #0xec
 	ld	l, a
@@ -392,7 +420,7 @@ _block_is_not_placed_below::
 	ld	a, (hl)
 	or	a, a
 	jr	NZ, 00103$
-;src/PointerSelector.c:54: && (global_colision_map[s->tileindexBR-21] == EMPTY);
+;src/PointerSelector.c:58: && (global_colision_map[s->tileindexBR-21] == EMPTY);
 	ld	a, e
 	add	a, #0xeb
 	ld	l, a
@@ -408,16 +436,16 @@ _block_is_not_placed_below::
 	ret
 00104$:
 	ld	a, #0x01
-;src/PointerSelector.c:55: }
+;src/PointerSelector.c:59: }
 	ret
-;src/PointerSelector.c:57: uint8_t block_is_placed_below(Pointer* s){
+;src/PointerSelector.c:61: uint8_t block_is_placed_below(Pointer* s){
 ;	---------------------------------
 ; Function block_is_placed_below
 ; ---------------------------------
 _block_is_placed_below::
-;src/PointerSelector.c:63: uint8_t res = 0;
+;src/PointerSelector.c:67: uint8_t res = 0;
 	ld	c, #0x00
-;src/PointerSelector.c:64: if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=DOWN) 
+;src/PointerSelector.c:68: if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=DOWN) 
 	ld	hl, #0x0006
 	add	hl, de
 	ld	a,	(hl+)
@@ -435,7 +463,7 @@ _block_is_placed_below::
 	ld	a, #0x09
 	sub	a, e
 	jr	C, 00102$
-;src/PointerSelector.c:65: && (global_colision_map[s->tileindexBR-1] != EMPTY)
+;src/PointerSelector.c:69: && (global_colision_map[s->tileindexBR-1] != EMPTY)
 	ld	b, l
 	ld	d,h
 	dec	hl
@@ -446,7 +474,7 @@ _block_is_placed_below::
 	ld	a, (hl)
 	or	a, a
 	jr	Z, 00102$
-;src/PointerSelector.c:66: && (global_colision_map[s->tileindexBR-20] != EMPTY)
+;src/PointerSelector.c:70: && (global_colision_map[s->tileindexBR-20] != EMPTY)
 	ld	a, b
 	add	a, #0xec
 	ld	l, a
@@ -460,7 +488,7 @@ _block_is_placed_below::
 	ld	a, (hl)
 	or	a, a
 	jr	Z, 00102$
-;src/PointerSelector.c:67: && (global_colision_map[s->tileindexBR-21] != EMPTY)){
+;src/PointerSelector.c:71: && (global_colision_map[s->tileindexBR-21] != EMPTY)){
 	ld	a, b
 	add	a, #0xeb
 	ld	l, a
@@ -474,14 +502,14 @@ _block_is_placed_below::
 	ld	a, (hl)
 	or	a, a
 	jr	Z, 00102$
-;src/PointerSelector.c:68: res = global_colision_map[s->tileindexBR];
+;src/PointerSelector.c:72: res = global_colision_map[s->tileindexBR];
 	ld	c, e
 00102$:
-;src/PointerSelector.c:70: return res;
+;src/PointerSelector.c:74: return res;
 	ld	a, c
-;src/PointerSelector.c:71: }
+;src/PointerSelector.c:75: }
 	ret
-;src/PointerSelector.c:73: void control_pointer(Pointer* s){
+;src/PointerSelector.c:77: void control_pointer(Pointer* s){
 ;	---------------------------------
 ; Function control_pointer
 ; ---------------------------------
@@ -491,18 +519,18 @@ _control_pointer::
 	ld	a, e
 	ld	(hl+), a
 	ld	(hl), d
-;src/PointerSelector.c:75: if(joypad() & J_UP) {
+;src/PointerSelector.c:79: if(joypad() & J_UP) {
 	call	_joypad
-;src/PointerSelector.c:77: s->y -= 8;
+;src/PointerSelector.c:81: s->y -= 8;
 	ldhl	sp,	#2
 	ld	c, (hl)
 	inc	hl
 	ld	b, (hl)
 	inc	bc
-;src/PointerSelector.c:75: if(joypad() & J_UP) {
+;src/PointerSelector.c:79: if(joypad() & J_UP) {
 	bit	2, a
 	jr	Z, 00133$
-;src/PointerSelector.c:76: if (can_pointer_move(s, 0, -1)){
+;src/PointerSelector.c:80: if (can_pointer_move(s, 0, -1)){
 	push	bc
 	ld	a, #0xff
 	push	af
@@ -516,17 +544,17 @@ _control_pointer::
 	pop	bc
 	or	a, a
 	jp	Z, 00135$
-;src/PointerSelector.c:77: s->y -= 8;
+;src/PointerSelector.c:81: s->y -= 8;
 	ld	a, (bc)
 	add	a, #0xf8
 	ld	(bc), a
 	jp	00135$
 00133$:
-;src/PointerSelector.c:79: } else if(joypad() & J_DOWN) {
+;src/PointerSelector.c:83: } else if(joypad() & J_DOWN) {
 	call	_joypad
 	bit	3, a
 	jr	Z, 00130$
-;src/PointerSelector.c:80: if (can_pointer_move(s, 0, 1)){
+;src/PointerSelector.c:84: if (can_pointer_move(s, 0, 1)){
 	push	bc
 	ld	a, #0x01
 	push	af
@@ -540,16 +568,16 @@ _control_pointer::
 	pop	bc
 	or	a, a
 	jp	Z, 00135$
-;src/PointerSelector.c:81: s->y += 8;
+;src/PointerSelector.c:85: s->y += 8;
 	ld	a, (bc)
 	add	a, #0x08
 	ld	(bc), a
 	jp	00135$
 00130$:
-;src/PointerSelector.c:83: } else if(joypad() & J_LEFT) {
+;src/PointerSelector.c:87: } else if(joypad() & J_LEFT) {
 	call	_joypad
 	ld	e, a
-;src/PointerSelector.c:85: s->x -= 8;
+;src/PointerSelector.c:89: s->x -= 8;
 	ldhl	sp,	#2
 	ld	a, (hl-)
 	dec	hl
@@ -558,10 +586,10 @@ _control_pointer::
 	ld	a, (hl-)
 	dec	hl
 	ld	(hl), a
-;src/PointerSelector.c:83: } else if(joypad() & J_LEFT) {
+;src/PointerSelector.c:87: } else if(joypad() & J_LEFT) {
 	bit	1, e
 	jr	Z, 00127$
-;src/PointerSelector.c:84: if (can_pointer_move(s, -1, 0)){
+;src/PointerSelector.c:88: if (can_pointer_move(s, -1, 0)){
 	xor	a, a
 	push	af
 	inc	sp
@@ -573,7 +601,7 @@ _control_pointer::
 	call	_can_pointer_move
 	or	a, a
 	jp	Z, 00135$
-;src/PointerSelector.c:85: s->x -= 8;
+;src/PointerSelector.c:89: s->x -= 8;
 	pop	de
 	push	de
 	ld	a, (de)
@@ -583,11 +611,11 @@ _control_pointer::
 	ld	(hl), a
 	jp	00135$
 00127$:
-;src/PointerSelector.c:87: } else if(joypad() & J_RIGHT) {
+;src/PointerSelector.c:91: } else if(joypad() & J_RIGHT) {
 	call	_joypad
 	rrca
 	jr	NC, 00124$
-;src/PointerSelector.c:88: if (can_pointer_move(s, 1, 0)){
+;src/PointerSelector.c:92: if (can_pointer_move(s, 1, 0)){
 	xor	a, a
 	push	af
 	inc	sp
@@ -599,7 +627,7 @@ _control_pointer::
 	call	_can_pointer_move
 	or	a, a
 	jp	Z, 00135$
-;src/PointerSelector.c:89: s->x += 8;
+;src/PointerSelector.c:93: s->x += 8;
 	pop	de
 	push	de
 	ld	a, (de)
@@ -609,11 +637,11 @@ _control_pointer::
 	ld	(hl), a
 	jr	00135$
 00124$:
-;src/PointerSelector.c:91: } else if(joypad() & J_A) {
+;src/PointerSelector.c:95: } else if(joypad() & J_A) {
 	call	_joypad
 	bit	4, a
 	jr	Z, 00121$
-;src/PointerSelector.c:92: if(block_is_not_placed_below(s) 
+;src/PointerSelector.c:96: if(block_is_not_placed_below(s) 
 	push	bc
 	ldhl	sp,	#4
 	ld	a, (hl+)
@@ -623,7 +651,7 @@ _control_pointer::
 	pop	bc
 	or	a, a
 	jr	Z, 00135$
-;src/PointerSelector.c:93: && (global_blocks_available[global_selected_block]>0)
+;src/PointerSelector.c:97: && (global_blocks_available[global_selected_block]>0)
 	ld	a, #<(_global_blocks_available)
 	ld	hl, #_global_selected_block
 	add	a, (hl)
@@ -634,7 +662,7 @@ _control_pointer::
 	ld	a, (de)
 	or	a, a
 	jr	Z, 00135$
-;src/PointerSelector.c:94: && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1) , 16, 16) == 255){
+;src/PointerSelector.c:98: && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1) , 16, 16) == 255){
 	ld	a, (bc)
 	add	a, #0xf8
 	ld	c, a
@@ -652,7 +680,7 @@ _control_pointer::
 	call	_check_colision_with_object
 	inc	a
 	jr	NZ, 00135$
-;src/PointerSelector.c:95: place_object_at_pointer(s, global_selected_block + 6);
+;src/PointerSelector.c:99: place_object_at_pointer(s, global_selected_block + 6);
 	ld	a, (_global_selected_block)
 	add	a, #0x06
 	ldhl	sp,	#2
@@ -662,21 +690,20 @@ _control_pointer::
 	call	_place_object_at_pointer
 	jr	00135$
 00121$:
-;src/PointerSelector.c:97: } else if(joypad() & J_B) {
+;src/PointerSelector.c:101: } else if(joypad() & J_B) {
 	call	_joypad
 	bit	5, a
 	jr	Z, 00118$
-;src/PointerSelector.c:98: uint8_t block = block_is_placed_below(s);
+;src/PointerSelector.c:102: uint8_t block = block_is_placed_below(s);
 	ldhl	sp,	#2
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
 	call	_block_is_placed_below
-;src/PointerSelector.c:99: if(block>=6){
+;src/PointerSelector.c:103: if(block>=6){
 	cp	a, #0x06
 	jr	C, 00135$
-;src/PointerSelector.c:100: remove_object_at_pointer(s, block - 6);
-	add	a, #0xfa
+;src/PointerSelector.c:104: remove_object_at_pointer(s, block);
 	ldhl	sp,	#2
 	ld	e, (hl)
 	inc	hl
@@ -684,28 +711,28 @@ _control_pointer::
 	call	_remove_object_at_pointer
 	jr	00135$
 00118$:
-;src/PointerSelector.c:102: } else if(joypad() & J_SELECT) {
+;src/PointerSelector.c:106: } else if(joypad() & J_SELECT) {
 	call	_joypad
 	bit	6, a
 	jr	Z, 00135$
-;src/PointerSelector.c:103: move_foward_block_id();
+;src/PointerSelector.c:107: move_foward_block_id();
 	call	_move_foward_block_id
-;src/PointerSelector.c:104: print_counter();
+;src/PointerSelector.c:108: print_counter();
 	call	_print_counter
 00135$:
-;src/PointerSelector.c:106: }
+;src/PointerSelector.c:110: }
 	add	sp, #4
 	ret
-;src/PointerSelector.c:109: void print_counter(void){
+;src/PointerSelector.c:113: void print_counter(void){
 ;	---------------------------------
 ; Function print_counter
 ; ---------------------------------
 _print_counter::
 	dec	sp
-;src/PointerSelector.c:110: uint8_t tile_id = global_selected_block + 16;
+;src/PointerSelector.c:114: uint8_t tile_id = global_selected_block + 16;
 	ld	a, (_global_selected_block)
 	add	a, #0x10
-;src/PointerSelector.c:111: set_bkg_tiles(1, 1, 1, 1, &tile_id);
+;src/PointerSelector.c:115: set_bkg_tiles(1, 1, 1, 1, &tile_id);
 	ldhl	sp,#0
 	ld	(hl), a
 	push	hl
@@ -713,17 +740,17 @@ _print_counter::
 	push	hl
 	push	hl
 	call	_set_bkg_tiles
-;src/PointerSelector.c:112: }
+;src/PointerSelector.c:116: }
 	add	sp, #7
 	ret
-;src/PointerSelector.c:114: void update_pointer(Pointer* s) { 
+;src/PointerSelector.c:118: void update_pointer(Pointer* s) { 
 ;	---------------------------------
 ; Function update_pointer
 ; ---------------------------------
 _update_pointer::
 	ld	c, e
 	ld	b, d
-;src/PointerSelector.c:115: s->tileindexBR = tileindex_from_xy(s->x, s->y);
+;src/PointerSelector.c:119: s->tileindexBR = tileindex_from_xy(s->x, s->y);
 	ld	hl, #0x0006
 	add	hl, bc
 	ld	e, c
@@ -742,21 +769,21 @@ _update_pointer::
 	ld	a, e
 	ld	(hl+), a
 	ld	(hl), d
-;src/PointerSelector.c:116: control_pointer(s);
+;src/PointerSelector.c:120: control_pointer(s);
 	push	bc
 	ld	e, c
 	ld	d, b
 	call	_control_pointer
-;src/PointerSelector.c:117: move_pointer(s);
+;src/PointerSelector.c:121: move_pointer(s);
 	pop	de
-;src/PointerSelector.c:118: }
+;src/PointerSelector.c:122: }
 	jp	_move_pointer
-;src/PointerSelector.c:120: void hide_pointer(void){
+;src/PointerSelector.c:124: void hide_pointer(void){
 ;	---------------------------------
 ; Function hide_pointer
 ; ---------------------------------
 _hide_pointer::
-;src/PointerSelector.c:121: for(uint8_t i= 4; i<=7; i++){
+;src/PointerSelector.c:125: for(uint8_t i= 4; i<=7; i++){
 	ld	c, #0x04
 00104$:
 	ld	a, #0x07
@@ -774,9 +801,9 @@ _hide_pointer::
 	xor	a, a
 	ld	(hl+), a
 	ld	(hl), a
-;src/PointerSelector.c:121: for(uint8_t i= 4; i<=7; i++){
+;src/PointerSelector.c:125: for(uint8_t i= 4; i<=7; i++){
 	inc	c
-;src/PointerSelector.c:124: }
+;src/PointerSelector.c:128: }
 	jr	00104$
 	.area _CODE
 	.area _INITIALIZER

@@ -7,9 +7,13 @@ Symbol Table
     .__.ABS.                                                    =   00000000 G
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
-  0 _performantdelay                                                00000000 GR
-  0 _tileindex_from_xy                                              0000000C GR
-    _wait_vbl_done                                                  ******** GX
+    __divuint                                                       ******** GX
+    __moduint                                                       ******** GX
+  0 _change_bkg_tile_16x16                                          00000062 GR
+  0 _change_bkg_tile_xy                                             00000000 GR
+    _set_bkg_tiles                                                  ******** GX
+    _set_win_tile_xy                                                ******** GX
+  0 _update_values_in_hud                                           000000DE GR
 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
@@ -17,7 +21,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       95   flags    0
+   0 _CODE                                      size      114   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

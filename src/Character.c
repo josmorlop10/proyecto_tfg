@@ -3,6 +3,7 @@
 #include "Headers/Common.h"
 #include "Headers/EventManagement.h"
 #include "Headers/Object.h"
+#include "Headers/Graphic.h"
 #include <stdio.h>
 #include <gb/gb.h>
 

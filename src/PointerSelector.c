@@ -2,6 +2,7 @@
 #include "Headers/Common.h"
 #include "Headers/LevelLogic.h"
 #include "Headers/Object.h"
+#include "Headers/Graphic.h"
 #include <gb/gb.h>
 #include <stdio.h>
 
@@ -38,13 +39,16 @@ void place_object_at_pointer(Pointer* s, uint8_t block_type){
     change_colision_map_BR(s->tileindexBR, block_type);
     change_bkg_tile_16x16(s->tileindexBR, global_selected_block * 4 + 31);
     global_blocks_available[global_selected_block]--;
+    update_values_in_hud(block_type, global_blocks_available[global_selected_block]);
 }
 
 void remove_object_at_pointer(Pointer* s, uint8_t block_type){
-  
+    
+    uint8_t block_index = block_type - RIGHT;
     change_colision_map_at(s->tileindexBR, EMPTY);
     change_bkg_tile_xy(s->tileindexBR, 0);
-    global_blocks_available[block_type]++;
+    global_blocks_available[block_index]++;
+    update_values_in_hud(block_type, global_blocks_available[block_index]);
 }
 
 uint8_t block_is_not_placed_below(Pointer* s){
@@ -97,7 +101,7 @@ void control_pointer(Pointer* s){
     } else if(joypad() & J_B) {
         uint8_t block = block_is_placed_below(s);
         if(block>=6){
-            remove_object_at_pointer(s, block - 6);
+            remove_object_at_pointer(s, block);
         }
     } else if(joypad() & J_SELECT) {
         move_foward_block_id();
