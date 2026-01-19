@@ -51,9 +51,9 @@ _objects_map1:
 	.db #0x0a	; 10
 _blocks_map1:
 	.db #0x06	; 6
-	.db #0x04	; 4
-	.db #0x03	; 3
-	.db #0x00	; 0
+	.db #0x06	; 6
+	.db #0x06	; 6
+	.db #0x06	; 6
 _map1:
 	.db #0x04	; 4
 	.db #0x0e	; 14

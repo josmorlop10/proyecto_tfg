@@ -24,7 +24,7 @@
 #define map1Bank 0
 
 const unsigned char objects_map1[] = {84, 36, NO_ACTION, 92, 36, GO_RIGHT};
-const unsigned char blocks_map1[] = {6,4,3,0};
+const unsigned char blocks_map1[] = {6,6,6,6};
 
 const unsigned char map1[] =
 {
