@@ -1,0 +1,26 @@
+XL4
+H 9 areas 2 global symbols
+M hud_selector
+S .__.ABS. Def00000000
+A _CODE size 3C flags 0 addr 0
+S _hud_selector Def00000000
+A _DATA size 0 flags 0 addr 0
+A _INITIALIZED size 0 flags 0 addr 0
+A _DABS size 0 flags 8 addr 0
+A _HOME size 0 flags 0 addr 0
+A _GSINIT size 0 flags 0 addr 0
+A _GSFINAL size 0 flags 0 addr 0
+A _INITIALIZER size 0 flags 0 addr 0
+A _CABS size 0 flags 8 addr 0
+T 00 00 00 00
+R 00 00 00 00
+T 00 00 00 00 2C 2C 2C 2C 2C 2C 2C 2C 2C 2C 2C 2C
+R 00 00 00 00
+T 0C 00 00 00 2C 2C 2C 2C 2C 2C 2C 2C 2C 37 3C 36
+R 00 00 00 00
+T 18 00 00 00 2C 39 3C 36 2C 2C 2C 2C 2C 2C 2C 2C
+R 00 00 00 00
+T 24 00 00 00 3B 3C 36 2C 2C 38 3C 36 2C 3A 3C 36
+R 00 00 00 00
+T 30 00 00 00 2C 2C 2C 2C 2C 2C 2C 2C 2C 2C 2C 2C
+R 00 00 00 00

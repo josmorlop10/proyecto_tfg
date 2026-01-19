@@ -6,6 +6,8 @@
 #include "../res/map1.h" 
 #include "../res/map_tiles.h" 
 #include "../res/object_sprites.h"
+#include "../res/hud_tiles.h"
+#include "../res/hud_selector.h"
 #include "Headers/Common.h"
 #include "Headers/Character.h"
 #include "Headers/LevelLogic.h"
@@ -49,6 +51,14 @@ void init_gfx(void){
     set_bkg_data(0, 44, map_tiles);
     set_bkg_tiles(0,0,20,18,map1);
     SHOW_BKG;
+
+    //HUD
+    // Activa la window
+    set_win_data(44,17, hud_tiles);
+    set_win_tiles(0,0,20,3, hud_selector);
+    SHOW_WIN;
+    WX_REG = 7;      // SIEMPRE 7
+    WY_REG = 120;    // 144 - 24
 }
 
 void main(void)
