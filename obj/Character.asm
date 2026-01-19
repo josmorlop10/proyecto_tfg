@@ -683,20 +683,9 @@ _update_character::
 ;src/Character.c:154: return;
 	jp	00110$
 00102$:
-;src/Character.c:157: if(player_over_fall(p->tileindexBR)){
-	ld	hl, #0x000b
-	add	hl, bc
-	push	hl
-	ld	a, l
-	ldhl	sp,	#11
-	ld	(hl), a
-	pop	hl
-	ld	a, h
-	ldhl	sp,	#10
-	ld	(hl-), a
-	ld	a, (hl+)
-	ld	e, a
-	ld	d, (hl)
+;src/Character.c:157: if(player_over_fall(p->next_tileindexBR)){
+	pop	de
+	push	de
 	ld	a, (de)
 	ld	l, a
 	inc	de
@@ -718,7 +707,7 @@ _update_character::
 	ld	a, h
 	ldhl	sp,	#3
 	ld	(hl), a
-;src/Character.c:157: if(player_over_fall(p->tileindexBR)){
+;src/Character.c:157: if(player_over_fall(p->next_tileindexBR)){
 	ld	a, e
 	or	a, a
 	jr	Z, 00104$
@@ -811,6 +800,16 @@ _update_character::
 	pop	bc
 00106$:
 ;src/Character.c:168: p->tileindexBR = tileindex_from_xy(p->x, p->y);
+	ld	hl, #0x000b
+	add	hl, bc
+	push	hl
+	ld	a, l
+	ldhl	sp,	#12
+	ld	(hl), a
+	pop	hl
+	ld	a, h
+	ldhl	sp,	#11
+	ld	(hl), a
 	ldhl	sp,#4
 	ld	a, (hl+)
 	ld	e, a
@@ -833,11 +832,10 @@ _update_character::
 	ld	(hl+), a
 	ld	(hl), b
 	pop	bc
-	ldhl	sp,	#9
+	ldhl	sp,	#10
 	ld	a, (hl+)
 	ld	e, a
 	ld	a, (hl+)
-	inc	hl
 	ld	d, a
 	ld	a, (hl+)
 	ld	(de), a

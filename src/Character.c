@@ -154,7 +154,7 @@ void update_character(Character* p) { //devuelve las teclas actuales
         return;
     }
 
-    if(player_over_fall(p->tileindexBR)){
+    if(player_over_fall(p->next_tileindexBR)){
         p->speed = 0;
         return;
     }
