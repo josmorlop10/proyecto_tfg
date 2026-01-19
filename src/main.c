@@ -95,14 +95,12 @@ void main(void)
             update_character(&p);
             
             //DEBUG
-        
-            /*
             if(joypad() & J_A){
                 for(uint16_t i = 0; i<360; i++){
                     printf("%d",global_colision_map[i]);
                 }
             }
-            */
+
            
             break;
         

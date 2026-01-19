@@ -1,9 +1,10 @@
 XL4
-H 9 areas 4 global symbols
+H 9 areas 5 global symbols
 M EventManagement
 S .__.ABS. Def00000000
 S _global_colision_map Ref00000000
-A _CODE size 41 flags 0 addr 0
+A _CODE size 74 flags 0 addr 0
+S _player_over_fall Def00000041
 S _player_tileBR_over_a_block Def00000000
 S _player_tileBR_over_destination Def0000000E
 A _DATA size 0 flags 0 addr 0
@@ -37,4 +38,20 @@ R 00 00 00 00
 T 3F 00 00 00
 R 00 00 00 00
 T 3F 00 00 00 AF C9
+R 00 00 00 00
+T 41 00 00 00
+R 00 00 00 00
+T 41 00 00 00 01 00 00 69 60 19 7E D6 0A 20 26 6B
+R 00 00 00 00 02 05 01 00
+T 4D 00 00 00 62 2B 09 7E D6 0A 20 1D 7B C6 EC 6F
+R 00 00 00 00
+T 59 00 00 00 7A CE FF 67 09 7E D6 0A 20 0F 7B C6
+R 00 00 00 00
+T 65 00 00 00 EB 6F 7A CE FF 67 09 7E D6 0A 3E 01
+R 00 00 00 00
+T 71 00 00 00 C8
+R 00 00 00 00
+T 72 00 00 00
+R 00 00 00 00
+T 72 00 00 00 AF C9
 R 00 00 00 00

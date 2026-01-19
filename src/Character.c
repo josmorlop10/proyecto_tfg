@@ -149,15 +149,20 @@ void take_effect(uint8_t index){
 
 void update_character(Character* p) { //devuelve las teclas actuales
 
+    if(player_tileBR_over_destination(p->next_tileindexBR)){
+        update_game_state(STATE_GAME_OVER);
+        return;
+    }
+
+    if(player_over_fall(p->tileindexBR)){
+        p->speed = 0;
+        return;
+    }
+
     uint8_t object_index_in_array = check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
     if(object_index_in_array != 255){ 
         take_effect(object_index_in_array);
         hide_object(object_index_in_array);
-    }
-
-    if(player_tileBR_over_destination(p->tileindexBR)){
-        update_game_state(STATE_GAME_OVER);
-        return;
     }
 
     p->tileindexBR = tileindex_from_xy(p->x, p->y);

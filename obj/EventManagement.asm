@@ -9,6 +9,7 @@
 ;--------------------------------------------------------
 	.globl _player_tileBR_over_a_block
 	.globl _player_tileBR_over_destination
+	.globl _player_over_fall
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -108,6 +109,56 @@ _player_tileBR_over_destination::
 00102$:
 	xor	a, a
 ;src/EventManagement.c:25: }
+	ret
+;src/EventManagement.c:27: uint8_t player_over_fall(uint16_t tileindexBR){
+;	---------------------------------
+; Function player_over_fall
+; ---------------------------------
+_player_over_fall::
+;src/EventManagement.c:28: if(global_colision_map[tileindexBR] == FALL &&
+	ld	bc, #_global_colision_map+0
+	ld	l, c
+	ld	h, b
+	add	hl, de
+	ld	a, (hl)
+	sub	a, #0x0a
+	jr	NZ, 00102$
+;src/EventManagement.c:29: global_colision_map[tileindexBR-1] == FALL &&
+	ld	l, e
+	ld	h, d
+	dec	hl
+	add	hl, bc
+	ld	a, (hl)
+	sub	a, #0x0a
+	jr	NZ, 00102$
+;src/EventManagement.c:30: global_colision_map[tileindexBR-20] == FALL &&
+	ld	a, e
+	add	a, #0xec
+	ld	l, a
+	ld	a, d
+	adc	a, #0xff
+	ld	h, a
+	add	hl, bc
+	ld	a, (hl)
+	sub	a, #0x0a
+	jr	NZ, 00102$
+;src/EventManagement.c:31: global_colision_map[tileindexBR-21] == FALL){
+	ld	a, e
+	add	a, #0xeb
+	ld	l, a
+	ld	a, d
+	adc	a, #0xff
+	ld	h, a
+	add	hl, bc
+	ld	a, (hl)
+	sub	a, #0x0a
+;src/EventManagement.c:32: return 1;
+;src/EventManagement.c:34: return 0;
+	ld	a, #0x01
+	ret	Z
+00102$:
+	xor	a, a
+;src/EventManagement.c:36: }
 	ret
 	.area _CODE
 	.area _INITIALIZER

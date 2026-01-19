@@ -24,3 +24,14 @@ uint8_t player_tileBR_over_destination(uint16_t tileindexBR){
     }
 }
 
+uint8_t player_over_fall(uint16_t tileindexBR){
+    if(global_colision_map[tileindexBR] == FALL &&
+        global_colision_map[tileindexBR-1] == FALL &&
+        global_colision_map[tileindexBR-20] == FALL &&
+        global_colision_map[tileindexBR-21] == FALL){
+            return 1;
+    } else {
+        return 0;
+    }
+}
+

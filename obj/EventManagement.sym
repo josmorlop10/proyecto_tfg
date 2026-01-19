@@ -8,6 +8,7 @@ Symbol Table
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
     _global_colision_map                                            ******** GX
+  0 _player_over_fall                                               00000041 GR
   0 _player_tileBR_over_a_block                                     00000000 GR
   0 _player_tileBR_over_destination                                 0000000E GR
 
@@ -17,7 +18,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       41   flags    0
+   0 _CODE                                      size       74   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

@@ -9,106 +9,157 @@
                                       9 ;--------------------------------------------------------
                                      10 	.globl _player_tileBR_over_a_block
                                      11 	.globl _player_tileBR_over_destination
-                                     12 ;--------------------------------------------------------
-                                     13 ; special function registers
-                                     14 ;--------------------------------------------------------
+                                     12 	.globl _player_over_fall
+                                     13 ;--------------------------------------------------------
+                                     14 ; special function registers
                                      15 ;--------------------------------------------------------
-                                     16 ; ram data
-                                     17 ;--------------------------------------------------------
-                                     18 	.area _DATA
-                                     19 ;--------------------------------------------------------
-                                     20 ; ram data
-                                     21 ;--------------------------------------------------------
-                                     22 	.area _INITIALIZED
-                                     23 ;--------------------------------------------------------
-                                     24 ; absolute external ram data
-                                     25 ;--------------------------------------------------------
-                                     26 	.area _DABS (ABS)
-                                     27 ;--------------------------------------------------------
-                                     28 ; global & static initialisations
-                                     29 ;--------------------------------------------------------
-                                     30 	.area _HOME
-                                     31 	.area _GSINIT
-                                     32 	.area _GSFINAL
-                                     33 	.area _GSINIT
-                                     34 ;--------------------------------------------------------
-                                     35 ; Home
-                                     36 ;--------------------------------------------------------
-                                     37 	.area _HOME
+                                     16 ;--------------------------------------------------------
+                                     17 ; ram data
+                                     18 ;--------------------------------------------------------
+                                     19 	.area _DATA
+                                     20 ;--------------------------------------------------------
+                                     21 ; ram data
+                                     22 ;--------------------------------------------------------
+                                     23 	.area _INITIALIZED
+                                     24 ;--------------------------------------------------------
+                                     25 ; absolute external ram data
+                                     26 ;--------------------------------------------------------
+                                     27 	.area _DABS (ABS)
+                                     28 ;--------------------------------------------------------
+                                     29 ; global & static initialisations
+                                     30 ;--------------------------------------------------------
+                                     31 	.area _HOME
+                                     32 	.area _GSINIT
+                                     33 	.area _GSFINAL
+                                     34 	.area _GSINIT
+                                     35 ;--------------------------------------------------------
+                                     36 ; Home
+                                     37 ;--------------------------------------------------------
                                      38 	.area _HOME
-                                     39 ;--------------------------------------------------------
-                                     40 ; code
-                                     41 ;--------------------------------------------------------
-                                     42 	.area _CODE
-                                     43 ;src/EventManagement.c:7: uint8_t player_tileBR_over_a_block(uint16_t tileindexBR){
-                                     44 ;	---------------------------------
-                                     45 ; Function player_tileBR_over_a_block
-                                     46 ; ---------------------------------
-    00000000                         47 _player_tileBR_over_a_block::
-                                     48 ;src/EventManagement.c:9: if(global_colision_map[tileindexBR]>= RIGHT && global_colision_map[tileindexBR]<=DOWN){
-    00000000 21r00r00         [12]   49 	ld	hl, #_global_colision_map
-    00000003 19               [ 8]   50 	add	hl, de
-    00000004 7E               [ 8]   51 	ld	a, (hl)
-    00000005 FE 06            [ 8]   52 	cp	a, #0x06
-    00000007 38 03            [12]   53 	jr	C, 00102$
-    00000009 FE 0A            [ 8]   54 	cp	a, #0x0a
-                                     55 ;src/EventManagement.c:10: return global_colision_map[tileindexBR];
-    0000000B D8               [20]   56 	ret	C
-    0000000C                         57 00102$:
-                                     58 ;src/EventManagement.c:12: return 0;
-    0000000C AF               [ 4]   59 	xor	a, a
-                                     60 ;src/EventManagement.c:14: }
-    0000000D C9               [16]   61 	ret
-                                     62 ;src/EventManagement.c:16: uint8_t player_tileBR_over_destination(uint16_t tileindexBR){
-                                     63 ;	---------------------------------
-                                     64 ; Function player_tileBR_over_destination
-                                     65 ; ---------------------------------
-    0000000E                         66 _player_tileBR_over_destination::
-                                     67 ;src/EventManagement.c:17: if(global_colision_map[tileindexBR] == DESTINATION &&
-    0000000E 01r00r00         [12]   68 	ld	bc, #_global_colision_map+0
-    00000011 69               [ 4]   69 	ld	l, c
-    00000012 60               [ 4]   70 	ld	h, b
-    00000013 19               [ 8]   71 	add	hl, de
-    00000014 7E               [ 8]   72 	ld	a, (hl)
-    00000015 D6 04            [ 8]   73 	sub	a, #0x04
-    00000017 20 26            [12]   74 	jr	NZ, 00102$
-                                     75 ;src/EventManagement.c:18: global_colision_map[tileindexBR-1] == DESTINATION &&
-    00000019 6B               [ 4]   76 	ld	l, e
-    0000001A 62               [ 4]   77 	ld	h, d
-    0000001B 2B               [ 8]   78 	dec	hl
-    0000001C 09               [ 8]   79 	add	hl, bc
-    0000001D 7E               [ 8]   80 	ld	a, (hl)
-    0000001E D6 04            [ 8]   81 	sub	a, #0x04
-    00000020 20 1D            [12]   82 	jr	NZ, 00102$
-                                     83 ;src/EventManagement.c:19: global_colision_map[tileindexBR-20] == DESTINATION &&
-    00000022 7B               [ 4]   84 	ld	a, e
-    00000023 C6 EC            [ 8]   85 	add	a, #0xec
-    00000025 6F               [ 4]   86 	ld	l, a
-    00000026 7A               [ 4]   87 	ld	a, d
-    00000027 CE FF            [ 8]   88 	adc	a, #0xff
-    00000029 67               [ 4]   89 	ld	h, a
-    0000002A 09               [ 8]   90 	add	hl, bc
-    0000002B 7E               [ 8]   91 	ld	a, (hl)
-    0000002C D6 04            [ 8]   92 	sub	a, #0x04
-    0000002E 20 0F            [12]   93 	jr	NZ, 00102$
-                                     94 ;src/EventManagement.c:20: global_colision_map[tileindexBR-21] == DESTINATION){
-    00000030 7B               [ 4]   95 	ld	a, e
-    00000031 C6 EB            [ 8]   96 	add	a, #0xeb
-    00000033 6F               [ 4]   97 	ld	l, a
-    00000034 7A               [ 4]   98 	ld	a, d
-    00000035 CE FF            [ 8]   99 	adc	a, #0xff
-    00000037 67               [ 4]  100 	ld	h, a
-    00000038 09               [ 8]  101 	add	hl, bc
-    00000039 7E               [ 8]  102 	ld	a, (hl)
-    0000003A D6 04            [ 8]  103 	sub	a, #0x04
-                                    104 ;src/EventManagement.c:21: return 1;
-                                    105 ;src/EventManagement.c:23: return 0;
-    0000003C 3E 01            [ 8]  106 	ld	a, #0x01
-    0000003E C8               [20]  107 	ret	Z
-    0000003F                        108 00102$:
-    0000003F AF               [ 4]  109 	xor	a, a
-                                    110 ;src/EventManagement.c:25: }
-    00000040 C9               [16]  111 	ret
-                                    112 	.area _CODE
-                                    113 	.area _INITIALIZER
-                                    114 	.area _CABS (ABS)
+                                     39 	.area _HOME
+                                     40 ;--------------------------------------------------------
+                                     41 ; code
+                                     42 ;--------------------------------------------------------
+                                     43 	.area _CODE
+                                     44 ;src/EventManagement.c:7: uint8_t player_tileBR_over_a_block(uint16_t tileindexBR){
+                                     45 ;	---------------------------------
+                                     46 ; Function player_tileBR_over_a_block
+                                     47 ; ---------------------------------
+    00000000                         48 _player_tileBR_over_a_block::
+                                     49 ;src/EventManagement.c:9: if(global_colision_map[tileindexBR]>= RIGHT && global_colision_map[tileindexBR]<=DOWN){
+    00000000 21r00r00         [12]   50 	ld	hl, #_global_colision_map
+    00000003 19               [ 8]   51 	add	hl, de
+    00000004 7E               [ 8]   52 	ld	a, (hl)
+    00000005 FE 06            [ 8]   53 	cp	a, #0x06
+    00000007 38 03            [12]   54 	jr	C, 00102$
+    00000009 FE 0A            [ 8]   55 	cp	a, #0x0a
+                                     56 ;src/EventManagement.c:10: return global_colision_map[tileindexBR];
+    0000000B D8               [20]   57 	ret	C
+    0000000C                         58 00102$:
+                                     59 ;src/EventManagement.c:12: return 0;
+    0000000C AF               [ 4]   60 	xor	a, a
+                                     61 ;src/EventManagement.c:14: }
+    0000000D C9               [16]   62 	ret
+                                     63 ;src/EventManagement.c:16: uint8_t player_tileBR_over_destination(uint16_t tileindexBR){
+                                     64 ;	---------------------------------
+                                     65 ; Function player_tileBR_over_destination
+                                     66 ; ---------------------------------
+    0000000E                         67 _player_tileBR_over_destination::
+                                     68 ;src/EventManagement.c:17: if(global_colision_map[tileindexBR] == DESTINATION &&
+    0000000E 01r00r00         [12]   69 	ld	bc, #_global_colision_map+0
+    00000011 69               [ 4]   70 	ld	l, c
+    00000012 60               [ 4]   71 	ld	h, b
+    00000013 19               [ 8]   72 	add	hl, de
+    00000014 7E               [ 8]   73 	ld	a, (hl)
+    00000015 D6 04            [ 8]   74 	sub	a, #0x04
+    00000017 20 26            [12]   75 	jr	NZ, 00102$
+                                     76 ;src/EventManagement.c:18: global_colision_map[tileindexBR-1] == DESTINATION &&
+    00000019 6B               [ 4]   77 	ld	l, e
+    0000001A 62               [ 4]   78 	ld	h, d
+    0000001B 2B               [ 8]   79 	dec	hl
+    0000001C 09               [ 8]   80 	add	hl, bc
+    0000001D 7E               [ 8]   81 	ld	a, (hl)
+    0000001E D6 04            [ 8]   82 	sub	a, #0x04
+    00000020 20 1D            [12]   83 	jr	NZ, 00102$
+                                     84 ;src/EventManagement.c:19: global_colision_map[tileindexBR-20] == DESTINATION &&
+    00000022 7B               [ 4]   85 	ld	a, e
+    00000023 C6 EC            [ 8]   86 	add	a, #0xec
+    00000025 6F               [ 4]   87 	ld	l, a
+    00000026 7A               [ 4]   88 	ld	a, d
+    00000027 CE FF            [ 8]   89 	adc	a, #0xff
+    00000029 67               [ 4]   90 	ld	h, a
+    0000002A 09               [ 8]   91 	add	hl, bc
+    0000002B 7E               [ 8]   92 	ld	a, (hl)
+    0000002C D6 04            [ 8]   93 	sub	a, #0x04
+    0000002E 20 0F            [12]   94 	jr	NZ, 00102$
+                                     95 ;src/EventManagement.c:20: global_colision_map[tileindexBR-21] == DESTINATION){
+    00000030 7B               [ 4]   96 	ld	a, e
+    00000031 C6 EB            [ 8]   97 	add	a, #0xeb
+    00000033 6F               [ 4]   98 	ld	l, a
+    00000034 7A               [ 4]   99 	ld	a, d
+    00000035 CE FF            [ 8]  100 	adc	a, #0xff
+    00000037 67               [ 4]  101 	ld	h, a
+    00000038 09               [ 8]  102 	add	hl, bc
+    00000039 7E               [ 8]  103 	ld	a, (hl)
+    0000003A D6 04            [ 8]  104 	sub	a, #0x04
+                                    105 ;src/EventManagement.c:21: return 1;
+                                    106 ;src/EventManagement.c:23: return 0;
+    0000003C 3E 01            [ 8]  107 	ld	a, #0x01
+    0000003E C8               [20]  108 	ret	Z
+    0000003F                        109 00102$:
+    0000003F AF               [ 4]  110 	xor	a, a
+                                    111 ;src/EventManagement.c:25: }
+    00000040 C9               [16]  112 	ret
+                                    113 ;src/EventManagement.c:27: uint8_t player_over_fall(uint16_t tileindexBR){
+                                    114 ;	---------------------------------
+                                    115 ; Function player_over_fall
+                                    116 ; ---------------------------------
+    00000041                        117 _player_over_fall::
+                                    118 ;src/EventManagement.c:28: if(global_colision_map[tileindexBR] == FALL &&
+    00000041 01r00r00         [12]  119 	ld	bc, #_global_colision_map+0
+    00000044 69               [ 4]  120 	ld	l, c
+    00000045 60               [ 4]  121 	ld	h, b
+    00000046 19               [ 8]  122 	add	hl, de
+    00000047 7E               [ 8]  123 	ld	a, (hl)
+    00000048 D6 0A            [ 8]  124 	sub	a, #0x0a
+    0000004A 20 26            [12]  125 	jr	NZ, 00102$
+                                    126 ;src/EventManagement.c:29: global_colision_map[tileindexBR-1] == FALL &&
+    0000004C 6B               [ 4]  127 	ld	l, e
+    0000004D 62               [ 4]  128 	ld	h, d
+    0000004E 2B               [ 8]  129 	dec	hl
+    0000004F 09               [ 8]  130 	add	hl, bc
+    00000050 7E               [ 8]  131 	ld	a, (hl)
+    00000051 D6 0A            [ 8]  132 	sub	a, #0x0a
+    00000053 20 1D            [12]  133 	jr	NZ, 00102$
+                                    134 ;src/EventManagement.c:30: global_colision_map[tileindexBR-20] == FALL &&
+    00000055 7B               [ 4]  135 	ld	a, e
+    00000056 C6 EC            [ 8]  136 	add	a, #0xec
+    00000058 6F               [ 4]  137 	ld	l, a
+    00000059 7A               [ 4]  138 	ld	a, d
+    0000005A CE FF            [ 8]  139 	adc	a, #0xff
+    0000005C 67               [ 4]  140 	ld	h, a
+    0000005D 09               [ 8]  141 	add	hl, bc
+    0000005E 7E               [ 8]  142 	ld	a, (hl)
+    0000005F D6 0A            [ 8]  143 	sub	a, #0x0a
+    00000061 20 0F            [12]  144 	jr	NZ, 00102$
+                                    145 ;src/EventManagement.c:31: global_colision_map[tileindexBR-21] == FALL){
+    00000063 7B               [ 4]  146 	ld	a, e
+    00000064 C6 EB            [ 8]  147 	add	a, #0xeb
+    00000066 6F               [ 4]  148 	ld	l, a
+    00000067 7A               [ 4]  149 	ld	a, d
+    00000068 CE FF            [ 8]  150 	adc	a, #0xff
+    0000006A 67               [ 4]  151 	ld	h, a
+    0000006B 09               [ 8]  152 	add	hl, bc
+    0000006C 7E               [ 8]  153 	ld	a, (hl)
+    0000006D D6 0A            [ 8]  154 	sub	a, #0x0a
+                                    155 ;src/EventManagement.c:32: return 1;
+                                    156 ;src/EventManagement.c:34: return 0;
+    0000006F 3E 01            [ 8]  157 	ld	a, #0x01
+    00000071 C8               [20]  158 	ret	Z
+    00000072                        159 00102$:
+    00000072 AF               [ 4]  160 	xor	a, a
+                                    161 ;src/EventManagement.c:36: }
+    00000073 C9               [16]  162 	ret
+                                    163 	.area _CODE
+                                    164 	.area _INITIALIZER
+                                    165 	.area _CABS (ABS)

@@ -14,6 +14,7 @@
 #define LEFT 7
 #define UP 8
 #define DOWN 9
+#define FALL 10
 
 #define UMBRAL_COLISION_UP 3
 #define UMBRAL_COLISION_DOWN 15
