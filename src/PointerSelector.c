@@ -109,12 +109,6 @@ void control_pointer(Pointer* s){
     }
 }
 
-//TODO:TEMPORAL
-void print_counter(void){
-    uint8_t tile_id = global_selected_block + 16;
-    set_bkg_tiles(1, 1, 1, 1, &tile_id);
-}
-
 void update_pointer(Pointer* s) { 
     s->tileindexBR = tileindex_from_xy(s->x, s->y);
     control_pointer(s);

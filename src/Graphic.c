@@ -50,6 +50,13 @@ void change_bkg_tile_16x16(uint16_t tile_index, uint8_t tile_id_BR){
 }
 
 //Changing graphics HUD (WIN)
+
+//TODO:TEMPORAL
+void print_counter(void){
+    uint8_t tile_id = global_selected_block + 16;
+    set_win_tile_xy(0, 0, tile_id);
+}
+
 void update_values_in_hud(uint8_t position, uint8_t new_value){
     /** Cambia un valor en la HUD (window) en una posicion concreta.
 
@@ -82,5 +89,5 @@ void update_values_in_hud(uint8_t position, uint8_t new_value){
         break;
     }
 
-    set_win_tile_xy(x,y,new_value + hud_selectorTileOffset);
+    set_win_tile_xy(x,y, new_value + hud_selectorTileOffset);
 }

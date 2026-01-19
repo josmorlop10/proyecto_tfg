@@ -135,10 +135,10 @@ _init_gfx::
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x02
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:51: set_bkg_data(0, 44, map_tiles);
+;src/main.c:51: set_bkg_data(0, 56, map_tiles);
 	ld	de, #_map_tiles
 	push	de
-	ld	hl, #0x2c00
+	ld	hl, #0x3800
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
@@ -156,10 +156,10 @@ _init_gfx::
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x01
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:57: set_win_data(44,17, hud_tiles);
+;src/main.c:57: set_win_data(56,17, hud_tiles);
 	ld	de, #_hud_tiles
 	push	de
-	ld	hl, #0x112c
+	ld	hl, #0x1138
 	push	hl
 	call	_set_win_data
 	add	sp, #4

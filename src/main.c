@@ -48,13 +48,13 @@ void init_gfx(void){
     SHOW_SPRITES;
 
     //map
-    set_bkg_data(0, 44, map_tiles);
+    set_bkg_data(0, 56, map_tiles);
     set_bkg_tiles(0,0,20,18,map1);
     SHOW_BKG;
 
     //HUD
     // Activa la window
-    set_win_data(44,17, hud_tiles);
+    set_win_data(56,17, hud_tiles);
     set_win_tiles(0,0,20,3, hud_selector);
     SHOW_WIN;
     WX_REG = 7;      // SIEMPRE 7

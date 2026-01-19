@@ -7,6 +7,7 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
+	.globl _print_counter
 	.globl _set_win_tile_xy
 	.globl _set_bkg_tiles
 	.globl _change_bkg_tile_xy
@@ -212,17 +213,33 @@ _change_bkg_tile_16x16::
 ;src/Graphic.c:50: }
 	add	sp, #11
 	ret
-;src/Graphic.c:53: void update_values_in_hud(uint8_t position, uint8_t new_value){
+;src/Graphic.c:55: void print_counter(void){
+;	---------------------------------
+; Function print_counter
+; ---------------------------------
+_print_counter::
+;src/Graphic.c:56: uint8_t tile_id = global_selected_block + 16;
+	ld	a, (_global_selected_block)
+	add	a, #0x10
+;src/Graphic.c:57: set_win_tile_xy(0, 0, tile_id);
+	push	af
+	inc	sp
+	xor	a, a
+	ld	e, a
+	call	_set_win_tile_xy
+;src/Graphic.c:58: }
+	ret
+;src/Graphic.c:60: void update_values_in_hud(uint8_t position, uint8_t new_value){
 ;	---------------------------------
 ; Function update_values_in_hud
 ; ---------------------------------
 _update_values_in_hud::
 	ld	c, e
-;src/Graphic.c:60: uint8_t x = 0;
-;src/Graphic.c:61: uint8_t y = 0;
+;src/Graphic.c:67: uint8_t x = 0;
+;src/Graphic.c:68: uint8_t y = 0;
 	ld	b, #0x00
 	ld	e, b
-;src/Graphic.c:63: switch (position)
+;src/Graphic.c:70: switch (position)
 	cp	a, #0x06
 	jr	Z, 00101$
 	cp	a, #0x07
@@ -232,46 +249,46 @@ _update_values_in_hud::
 	sub	a, #0x09
 	jr	Z, 00104$
 	jr	00106$
-;src/Graphic.c:65: case RIGHT:
+;src/Graphic.c:72: case RIGHT:
 00101$:
-;src/Graphic.c:66: x = 3;
+;src/Graphic.c:73: x = 3;
 	ld	b, #0x03
-;src/Graphic.c:67: y = 1;
+;src/Graphic.c:74: y = 1;
 	ld	e, #0x01
-;src/Graphic.c:68: break;
+;src/Graphic.c:75: break;
 	jr	00106$
-;src/Graphic.c:69: case LEFT:
+;src/Graphic.c:76: case LEFT:
 00102$:
-;src/Graphic.c:70: x = 3;
+;src/Graphic.c:77: x = 3;
 	ld	b, #0x03
-;src/Graphic.c:71: y = 2;
+;src/Graphic.c:78: y = 2;
 	ld	e, #0x02
-;src/Graphic.c:72: break;
+;src/Graphic.c:79: break;
 	jr	00106$
-;src/Graphic.c:73: case UP:
+;src/Graphic.c:80: case UP:
 00103$:
-;src/Graphic.c:74: x = 7;
+;src/Graphic.c:81: x = 7;
 	ld	b, #0x07
-;src/Graphic.c:75: y = 1;
+;src/Graphic.c:82: y = 1;
 	ld	e, #0x01
-;src/Graphic.c:76: break;
+;src/Graphic.c:83: break;
 	jr	00106$
-;src/Graphic.c:77: case DOWN:
+;src/Graphic.c:84: case DOWN:
 00104$:
-;src/Graphic.c:78: x = 7;
+;src/Graphic.c:85: x = 7;
 	ld	b, #0x07
-;src/Graphic.c:79: y = 2;
+;src/Graphic.c:86: y = 2;
 	ld	e, #0x02
-;src/Graphic.c:83: }
+;src/Graphic.c:90: }
 00106$:
-;src/Graphic.c:85: set_win_tile_xy(x,y,new_value + hud_selectorTileOffset);
+;src/Graphic.c:92: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset);
 	ld	a, c
-	add	a, #0x2c
+	add	a, #0x38
 	push	af
 	inc	sp
 	ld	a, b
 	call	_set_win_tile_xy
-;src/Graphic.c:86: }
+;src/Graphic.c:93: }
 	ret
 	.area _CODE
 	.area _INITIALIZER

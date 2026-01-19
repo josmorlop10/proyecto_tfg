@@ -8,7 +8,6 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _can_pointer_move
-	.globl _set_bkg_tiles
 	.globl _joypad
 	.globl _update_values_in_hud
 	.globl _change_bkg_tile_16x16
@@ -18,6 +17,7 @@
 	.globl _change_colision_map_BR
 	.globl _change_colision_map_at
 	.globl _tileindex_from_xy
+	.globl _print_counter
 	.globl _pointer_init
 	.globl _move_pointer
 	.globl _place_object_at_pointer
@@ -25,7 +25,6 @@
 	.globl _block_is_not_placed_below
 	.globl _block_is_placed_below
 	.globl _control_pointer
-	.globl _print_counter
 	.globl _update_pointer
 	.globl _hide_pointer
 ;--------------------------------------------------------
@@ -723,34 +722,14 @@ _control_pointer::
 ;src/PointerSelector.c:110: }
 	add	sp, #4
 	ret
-;src/PointerSelector.c:113: void print_counter(void){
-;	---------------------------------
-; Function print_counter
-; ---------------------------------
-_print_counter::
-	dec	sp
-;src/PointerSelector.c:114: uint8_t tile_id = global_selected_block + 16;
-	ld	a, (_global_selected_block)
-	add	a, #0x10
-;src/PointerSelector.c:115: set_bkg_tiles(1, 1, 1, 1, &tile_id);
-	ldhl	sp,#0
-	ld	(hl), a
-	push	hl
-	ld	hl, #0x101
-	push	hl
-	push	hl
-	call	_set_bkg_tiles
-;src/PointerSelector.c:116: }
-	add	sp, #7
-	ret
-;src/PointerSelector.c:118: void update_pointer(Pointer* s) { 
+;src/PointerSelector.c:112: void update_pointer(Pointer* s) { 
 ;	---------------------------------
 ; Function update_pointer
 ; ---------------------------------
 _update_pointer::
 	ld	c, e
 	ld	b, d
-;src/PointerSelector.c:119: s->tileindexBR = tileindex_from_xy(s->x, s->y);
+;src/PointerSelector.c:113: s->tileindexBR = tileindex_from_xy(s->x, s->y);
 	ld	hl, #0x0006
 	add	hl, bc
 	ld	e, c
@@ -769,21 +748,21 @@ _update_pointer::
 	ld	a, e
 	ld	(hl+), a
 	ld	(hl), d
-;src/PointerSelector.c:120: control_pointer(s);
+;src/PointerSelector.c:114: control_pointer(s);
 	push	bc
 	ld	e, c
 	ld	d, b
 	call	_control_pointer
-;src/PointerSelector.c:121: move_pointer(s);
+;src/PointerSelector.c:115: move_pointer(s);
 	pop	de
-;src/PointerSelector.c:122: }
+;src/PointerSelector.c:116: }
 	jp	_move_pointer
-;src/PointerSelector.c:124: void hide_pointer(void){
+;src/PointerSelector.c:118: void hide_pointer(void){
 ;	---------------------------------
 ; Function hide_pointer
 ; ---------------------------------
 _hide_pointer::
-;src/PointerSelector.c:125: for(uint8_t i= 4; i<=7; i++){
+;src/PointerSelector.c:119: for(uint8_t i= 4; i<=7; i++){
 	ld	c, #0x04
 00104$:
 	ld	a, #0x07
@@ -801,9 +780,9 @@ _hide_pointer::
 	xor	a, a
 	ld	(hl+), a
 	ld	(hl), a
-;src/PointerSelector.c:125: for(uint8_t i= 4; i<=7; i++){
+;src/PointerSelector.c:119: for(uint8_t i= 4; i<=7; i++){
 	inc	c
-;src/PointerSelector.c:128: }
+;src/PointerSelector.c:122: }
 	jr	00104$
 	.area _CODE
 	.area _INITIALIZER
