@@ -18,9 +18,17 @@
 
 */
 
+#include "../src/Headers/Object.h"
+
 #define map1_altWidth 20
 #define map1_altHeight 16
 #define map1_altBank 0
+
+const unsigned char objects_map1_alt[] = {84, 36, GO_RIGHT, 92, 36, GO_LEFT,
+100, 36, GO_UP, 108, 36, GO_DOWN,116, 36, TURN_AROUND, 124, 36, NO_ACTION,132, 36, KEY,
+140, 36, JUMP};
+
+const unsigned char blocks_map1_alt[] = {6,6,6,6};
 
 const unsigned char map1_alt[] =
 {

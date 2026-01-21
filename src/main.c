@@ -77,7 +77,7 @@ void main(void)
             if(last_state != STATE_GAME_SETTING) {
                 init_gfx();
                 init_level(0);
-                get_colision_from_map(map1, global_colision_map);
+                get_colision_from_map(map1_alt, global_colision_map);
 
                 print_objects_in_screen();
                 last_state = STATE_GAME_SETTING;
@@ -98,7 +98,8 @@ void main(void)
             
             //DEBUG
             if(joypad() & J_A){
-                for(uint16_t i = 0; i<360; i++){
+                HIDE_WIN;
+                for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
                     printf("%d",global_colision_map[i]);
                 }
             }

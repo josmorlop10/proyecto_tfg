@@ -23,6 +23,7 @@
 #define hud_selectorWidth 20
 #define hud_selectorHeight 3
 #define hud_selectorBank 0
+#define hud_selectorTileOffset 104
 
 extern const unsigned char hud_selector[];
 

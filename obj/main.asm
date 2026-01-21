@@ -197,13 +197,15 @@ _main::
 ;src/main.c:73: while(1) {
 00120$:
 ;src/main.c:74: switch (global_game_state)
-	ld	a,(#_global_game_state)
-	cp	a,#0x02
+	ld	a, (#_global_game_state)
+	sub	a, #0x02
 	jr	Z, 00101$
-	cp	a,#0x03
+	ld	a, (#_global_game_state)
+	sub	a, #0x03
 	jr	Z, 00106$
+	ld	a, (#_global_game_state)
 	sub	a, #0x05
-	jr	Z, 00112$
+	jp	Z, 00112$
 	jp	00118$
 ;src/main.c:76: case STATE_GAME_SETTING:
 00101$:
@@ -216,9 +218,9 @@ _main::
 ;src/main.c:79: init_level(0);
 	xor	a, a
 	call	_init_level
-;src/main.c:80: get_colision_from_map(map1, global_colision_map);
+;src/main.c:80: get_colision_from_map(map1_alt, global_colision_map);
 	ld	bc, #_global_colision_map
-	ld	de, #_map1
+	ld	de, #_map1_alt
 	call	_get_colision_from_map
 ;src/main.c:82: print_objects_in_screen();
 	call	_print_objects_in_screen
@@ -260,17 +262,21 @@ _main::
 	call	_joypad
 	bit	4, a
 	jr	Z, 00118$
-;src/main.c:101: for(uint16_t i = 0; i<360; i++){
+;src/main.c:101: HIDE_WIN;
+	ldh	a, (_LCDC_REG + 0)
+	and	a, #0xdf
+	ldh	(_LCDC_REG + 0), a
+;src/main.c:102: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	ld	bc, #0x0000
 00123$:
 	ld	e, c
 	ld	d, b
 	ld	a, e
-	sub	a, #0x68
+	sub	a, #0x2c
 	ld	a, d
 	sbc	a, #0x01
 	jr	NC, 00118$
-;src/main.c:102: printf("%d",global_colision_map[i]);
+;src/main.c:103: printf("%d",global_colision_map[i]);
 	ld	hl, #_global_colision_map
 	add	hl, bc
 	ld	e, (hl)
@@ -282,37 +288,37 @@ _main::
 	call	_printf
 	add	sp, #4
 	pop	bc
-;src/main.c:101: for(uint16_t i = 0; i<360; i++){
+;src/main.c:102: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	inc	bc
 	jr	00123$
-;src/main.c:109: case STATE_GAME_OVER:
+;src/main.c:110: case STATE_GAME_OVER:
 00112$:
-;src/main.c:110: if(last_state != STATE_GAME_OVER) {
+;src/main.c:111: if(last_state != STATE_GAME_OVER) {
 	ld	a, (#_last_state)
 	sub	a, #0x05
 	jr	Z, 00114$
-;src/main.c:111: last_state = STATE_GAME_OVER;
+;src/main.c:112: last_state = STATE_GAME_OVER;
 	ld	hl, #_last_state
 	ld	(hl), #0x05
-;src/main.c:112: printf("You WIN!\nPress start to try again");
+;src/main.c:113: printf("You WIN!\nPress start to try again");
 	ld	de, #___str_1
 	push	de
 	call	_printf
 	pop	hl
 00114$:
-;src/main.c:114: if(joypad() & J_START){
+;src/main.c:115: if(joypad() & J_START){
 	call	_joypad
 	rlca
 	jr	NC, 00118$
-;src/main.c:115: update_game_state(STATE_GAME_SETTING);
+;src/main.c:116: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	call	_update_game_state
-;src/main.c:121: }
+;src/main.c:122: }
 00118$:
-;src/main.c:122: performantdelay(10);
+;src/main.c:123: performantdelay(10);
 	ld	a, #0x0a
 	call	_performantdelay
-;src/main.c:124: }
+;src/main.c:125: }
 	jp	00120$
 ___str_0:
 	.ascii "%d"

@@ -121,7 +121,7 @@ _player_over_fall::
 	ld	h, b
 	add	hl, de
 	ld	a, (hl)
-	sub	a, #0x0a
+	sub	a, #0x05
 	jr	NZ, 00102$
 ;src/EventManagement.c:29: global_colision_map[tileindexBR-1] == FALL &&
 	ld	l, e
@@ -129,7 +129,7 @@ _player_over_fall::
 	dec	hl
 	add	hl, bc
 	ld	a, (hl)
-	sub	a, #0x0a
+	sub	a, #0x05
 	jr	NZ, 00102$
 ;src/EventManagement.c:30: global_colision_map[tileindexBR-20] == FALL &&
 	ld	a, e
@@ -140,7 +140,7 @@ _player_over_fall::
 	ld	h, a
 	add	hl, bc
 	ld	a, (hl)
-	sub	a, #0x0a
+	sub	a, #0x05
 	jr	NZ, 00102$
 ;src/EventManagement.c:31: global_colision_map[tileindexBR-21] == FALL){
 	ld	a, e
@@ -151,7 +151,7 @@ _player_over_fall::
 	ld	h, a
 	add	hl, bc
 	ld	a, (hl)
-	sub	a, #0x0a
+	sub	a, #0x05
 ;src/EventManagement.c:32: return 1;
 ;src/EventManagement.c:34: return 0;
 	ld	a, #0x01

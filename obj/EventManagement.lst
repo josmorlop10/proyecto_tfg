@@ -121,7 +121,7 @@
     00000045 60               [ 4]  121 	ld	h, b
     00000046 19               [ 8]  122 	add	hl, de
     00000047 7E               [ 8]  123 	ld	a, (hl)
-    00000048 D6 0A            [ 8]  124 	sub	a, #0x0a
+    00000048 D6 05            [ 8]  124 	sub	a, #0x05
     0000004A 20 26            [12]  125 	jr	NZ, 00102$
                                     126 ;src/EventManagement.c:29: global_colision_map[tileindexBR-1] == FALL &&
     0000004C 6B               [ 4]  127 	ld	l, e
@@ -129,7 +129,7 @@
     0000004E 2B               [ 8]  129 	dec	hl
     0000004F 09               [ 8]  130 	add	hl, bc
     00000050 7E               [ 8]  131 	ld	a, (hl)
-    00000051 D6 0A            [ 8]  132 	sub	a, #0x0a
+    00000051 D6 05            [ 8]  132 	sub	a, #0x05
     00000053 20 1D            [12]  133 	jr	NZ, 00102$
                                     134 ;src/EventManagement.c:30: global_colision_map[tileindexBR-20] == FALL &&
     00000055 7B               [ 4]  135 	ld	a, e
@@ -140,7 +140,7 @@
     0000005C 67               [ 4]  140 	ld	h, a
     0000005D 09               [ 8]  141 	add	hl, bc
     0000005E 7E               [ 8]  142 	ld	a, (hl)
-    0000005F D6 0A            [ 8]  143 	sub	a, #0x0a
+    0000005F D6 05            [ 8]  143 	sub	a, #0x05
     00000061 20 0F            [12]  144 	jr	NZ, 00102$
                                     145 ;src/EventManagement.c:31: global_colision_map[tileindexBR-21] == FALL){
     00000063 7B               [ 4]  146 	ld	a, e
@@ -151,7 +151,7 @@
     0000006A 67               [ 4]  151 	ld	h, a
     0000006B 09               [ 8]  152 	add	hl, bc
     0000006C 7E               [ 8]  153 	ld	a, (hl)
-    0000006D D6 0A            [ 8]  154 	sub	a, #0x0a
+    0000006D D6 05            [ 8]  154 	sub	a, #0x05
                                     155 ;src/EventManagement.c:32: return 1;
                                     156 ;src/EventManagement.c:34: return 0;
     0000006F 3E 01            [ 8]  157 	ld	a, #0x01

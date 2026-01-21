@@ -25,6 +25,8 @@
 #define map1_altBank 0
 
 extern const unsigned char map1_alt[];
+extern const unsigned char objects_map1_alt[];
+extern const unsigned char blocks_map1_alt[];
 
 #endif
 

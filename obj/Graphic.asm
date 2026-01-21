@@ -283,7 +283,7 @@ _update_values_in_hud::
 00106$:
 ;src/Graphic.c:92: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset);
 	ld	a, c
-	add	a, #0x38
+	add	a, #0x68
 	push	af
 	inc	sp
 	ld	a, b

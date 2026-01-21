@@ -43,7 +43,7 @@ _global_init_point::
 ;--------------------------------------------------------
 	.area _INITIALIZED
 _global_colision_map::
-	.ds 360
+	.ds 300
 _global_blocks_available::
 	.ds 4
 _global_selected_block::
@@ -83,13 +83,13 @@ _init_level::
 	ld	a, c
 	and	a, #0x01
 	ld	c, a
-;src/LevelLogic.c:27: for(uint16_t i = 0; i<360; i++){
+;src/LevelLogic.c:27: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 00115$:
 	ld	de, #0x0000
 00106$:
 	ld	a, e
 	ld	l, d
-	sub	a, #0x68
+	sub	a, #0x2c
 	ld	a, l
 	sbc	a, #0x01
 	jr	NC, 00103$
@@ -97,7 +97,7 @@ _init_level::
 	ld	hl, #_global_colision_map
 	add	hl, de
 	ld	(hl), #0x00
-;src/LevelLogic.c:27: for(uint16_t i = 0; i<360; i++){
+;src/LevelLogic.c:27: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	inc	de
 	jr	00106$
 00103$:
@@ -114,11 +114,11 @@ _init_level::
 	ld	e, a
 	ld	d, l
 	call	_get_colision_from_map
-;src/LevelLogic.c:34: read_global_object_info_from_map(objects_map1);
-	ld	de, #_objects_map1
+;src/LevelLogic.c:34: read_global_object_info_from_map(objects_map1_alt);
+	ld	de, #_objects_map1_alt
 	call	_read_global_object_info_from_map
-;src/LevelLogic.c:35: read_global_block_info_from_map(blocks_map1);
-	ld	de, #_blocks_map1
+;src/LevelLogic.c:35: read_global_block_info_from_map(blocks_map1_alt);
+	ld	de, #_blocks_map1_alt
 	call	_read_global_block_info_from_map
 ;src/LevelLogic.c:37: for(uint8_t e = 0; e < NUMBER_OF_BLOCKS; e++){
 	ld	c, #0x00
@@ -167,17 +167,17 @@ _get_colision_from_map::
 	ld	a, c
 	ld	(hl+), a
 	ld	(hl), b
-;src/LevelLogic.c:52: for(uint16_t i = 0; i<360; i++){
+;src/LevelLogic.c:52: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	ld	bc, #0x0000
 00117$:
 	ld	e, c
 	ld	d, b
 	ld	a, e
-	sub	a, #0x68
+	sub	a, #0x2c
 	ld	a, d
 	sbc	a, #0x01
 	jr	NC, 00119$
-;src/LevelLogic.c:53: if(in[i] == 27){
+;src/LevelLogic.c:53: if(in[i] == 51){
 	ldhl	sp,	#3
 	ld	a,	(hl+)
 	ld	h, (hl)
@@ -185,7 +185,7 @@ _get_colision_from_map::
 	add	hl, bc
 	ld	e, l
 	ld	d, h
-;src/LevelLogic.c:57: } else if(in[i] >= 48 && in[i] <= 55){
+;src/LevelLogic.c:57: } else if(in[i] >= 21 && in[i] <= 29){
 	ld	a, (de)
 	ldhl	sp,	#0
 ;src/LevelLogic.c:54: out[i] = SOURCE;
@@ -196,22 +196,22 @@ _get_colision_from_map::
 	add	hl, bc
 	ld	e, l
 	ld	d, h
-;src/LevelLogic.c:53: if(in[i] == 27){
+;src/LevelLogic.c:53: if(in[i] == 51){
 	ldhl	sp,	#0
 	ld	a, (hl)
-	sub	a, #0x1b
+	sub	a, #0x33
 	jr	NZ, 00113$
 ;src/LevelLogic.c:54: out[i] = SOURCE;
 	ld	a, #0x03
 	ld	(de), a
 	jr	00118$
 00113$:
-;src/LevelLogic.c:55: } else if(in[i] >= 20 && in[i] <= 23){
+;src/LevelLogic.c:55: } else if(in[i] >= 64 && in[i] <= 67){
 	ldhl	sp,	#0
 	ld	a, (hl)
-	sub	a, #0x14
+	sub	a, #0x40
 	jr	C, 00109$
-	ld	a, #0x17
+	ld	a, #0x43
 	sub	a, (hl)
 	jr	C, 00109$
 ;src/LevelLogic.c:56: out[i] = DESTINATION;
@@ -219,32 +219,32 @@ _get_colision_from_map::
 	ld	(de), a
 	jr	00118$
 00109$:
-;src/LevelLogic.c:57: } else if(in[i] >= 48 && in[i] <= 55){
+;src/LevelLogic.c:57: } else if(in[i] >= 21 && in[i] <= 29){
 	ldhl	sp,	#0
 	ld	a, (hl)
-	sub	a, #0x30
+	sub	a, #0x15
 	jr	C, 00105$
-	ld	a, #0x37
+	ld	a, #0x1d
 	sub	a, (hl)
 	jr	C, 00105$
 ;src/LevelLogic.c:58: out[i] = FALL;
-	ld	a, #0x0a
+	ld	a, #0x05
 	ld	(de), a
 	jr	00118$
 00105$:
 ;src/LevelLogic.c:59: } else if(in[i] >= UMBRAL_COLISION_UP && in[i] <= UMBRAL_COLISION_DOWN){
 	ldhl	sp,	#0
 	ld	a, (hl)
-	sub	a, #0x03
+	sub	a, #0x05
 	jr	C, 00118$
-	ld	a, #0x0f
+	ld	a, #0x14
 	sub	a, (hl)
 	jr	C, 00118$
 ;src/LevelLogic.c:60: out[i] = SOLID;
 	ld	a, #0x01
 	ld	(de), a
 00118$:
-;src/LevelLogic.c:52: for(uint16_t i = 0; i<360; i++){
+;src/LevelLogic.c:52: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	inc	bc
 	jr	00117$
 00119$:
@@ -415,11 +415,11 @@ _change_colision_map_at::
 	dec	sp
 	ldhl	sp,	#0
 	ld	(hl), a
-;src/LevelLogic.c:80: if(tileindexBR < 360){
+;src/LevelLogic.c:80: if(tileindexBR < NUMBER_OF_TILES_IN_GRID){
 	ld	c, e
 	ld	b, d
 	ld	a, c
-	sub	a, #0x68
+	sub	a, #0x2c
 	ld	a, b
 	sbc	a, #0x01
 	jr	NC, 00103$
@@ -480,10 +480,10 @@ _change_colision_map_at::
 ; ---------------------------------
 _change_colision_map_BR::
 	ld	c, a
-;src/LevelLogic.c:89: if(tileindexBR < 360){
+;src/LevelLogic.c:89: if(tileindexBR < NUMBER_OF_TILES_IN_GRID){
 	ld	a, e
 	ld	l, d
-	sub	a, #0x68
+	sub	a, #0x2c
 	ld	a, l
 	sbc	a, #0x01
 	ret	NC
@@ -606,14 +606,14 @@ _check_colision_of_sprites::
 	pop	hl
 	add	sp, #6
 	jp	(hl)
-;src/LevelLogic.c:107: void get_init_point_from_map(uint8_t colision_map[360]){
+;src/LevelLogic.c:107: void get_init_point_from_map(uint8_t colision_map[NUMBER_OF_TILES_IN_GRID]){
 ;	---------------------------------
 ; Function get_init_point_from_map
 ; ---------------------------------
 _get_init_point_from_map::
 	dec	sp
 	dec	sp
-;src/LevelLogic.c:108: for(uint16_t i = 0; i<360; i++){
+;src/LevelLogic.c:108: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	xor	a, a
 	ldhl	sp,	#0
 	ld	(hl+), a
@@ -623,7 +623,7 @@ _get_init_point_from_map::
 	ld	l, c
 	ld	h, b
 	ld	a, l
-	sub	a, #0x68
+	sub	a, #0x2c
 	ld	a, h
 	sbc	a, #0x01
 	jr	NC, 00107$
@@ -644,7 +644,7 @@ _get_init_point_from_map::
 ;src/LevelLogic.c:111: break;
 	jr	00107$
 00106$:
-;src/LevelLogic.c:108: for(uint16_t i = 0; i<360; i++){
+;src/LevelLogic.c:108: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	inc	bc
 	inc	sp
 	inc	sp
@@ -663,7 +663,7 @@ _move_foward_block_id::
 ;src/LevelLogic.c:117: global_selected_block++;
 	ld	hl, #_global_selected_block
 	inc	(hl)
-;src/LevelLogic.c:118: if(global_selected_block >= 4){
+;src/LevelLogic.c:118: if(global_selected_block >= NUMBER_OF_BLOCKS){
 	ld	a, (hl)
 	sub	a, #0x04
 	ret	C
@@ -974,66 +974,6 @@ __xinit__global_colision_map:
 	.db 0x00
 	.db 0x00
 	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
-	.db 0x00
 __xinit__global_blocks_available:
 	.db #0x00	; 0
 	.db 0x00
@@ -1042,5 +982,5 @@ __xinit__global_blocks_available:
 __xinit__global_selected_block:
 	.db #0x00	; 0
 __xinit__global_levels_array:
-	.dw _map1
+	.dw _map1_alt
 	.area _CABS (ABS)

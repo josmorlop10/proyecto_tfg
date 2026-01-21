@@ -8,6 +8,8 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _map1_alt
+	.globl _blocks_map1_alt
+	.globl _objects_map1_alt
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -40,6 +42,36 @@
 ;--------------------------------------------------------
 	.area _CODE
 	.area _CODE
+_objects_map1_alt:
+	.db #0x54	; 84	'T'
+	.db #0x24	; 36
+	.db #0x08	; 8
+	.db #0x5c	; 92
+	.db #0x24	; 36
+	.db #0x09	; 9
+	.db #0x64	; 100	'd'
+	.db #0x24	; 36
+	.db #0x0a	; 10
+	.db #0x6c	; 108	'l'
+	.db #0x24	; 36
+	.db #0x0b	; 11
+	.db #0x74	; 116	't'
+	.db #0x24	; 36
+	.db #0x0c	; 12
+	.db #0x7c	; 124
+	.db #0x24	; 36
+	.db #0x0d	; 13
+	.db #0x84	; 132
+	.db #0x24	; 36
+	.db #0x0e	; 14
+	.db #0x8c	; 140
+	.db #0x24	; 36
+	.db #0x0f	; 15
+_blocks_map1_alt:
+	.db #0x06	; 6
+	.db #0x06	; 6
+	.db #0x06	; 6
+	.db #0x06	; 6
 _map1_alt:
 	.db #0x09	; 9
 	.db #0x0a	; 10

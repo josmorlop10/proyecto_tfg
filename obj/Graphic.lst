@@ -283,7 +283,7 @@
     00000117                        283 00106$:
                                     284 ;src/Graphic.c:92: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset);
     00000117 79               [ 4]  285 	ld	a, c
-    00000118 C6 38            [ 8]  286 	add	a, #0x38
+    00000118 C6 68            [ 8]  286 	add	a, #0x68
     0000011A F5               [16]  287 	push	af
     0000011B 33               [ 8]  288 	inc	sp
     0000011C 78               [ 4]  289 	ld	a, b
