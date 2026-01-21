@@ -267,7 +267,7 @@ _read_global_object_info_from_map::
 00103$:
 	ldhl	sp,	#5
 	ld	a, (hl)
-	sub	a, #0x02
+	sub	a, #0x08
 	jr	NC, 00105$
 ;src/LevelLogic.c:67: global_object_information[e*3] = objects_map[e*3];
 	ld	c, (hl)

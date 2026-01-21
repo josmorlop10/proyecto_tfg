@@ -32,7 +32,7 @@ Symbol Table
     _shadow_OAM                                                     ******** GX
   0 _take_effect                                                    00000251 GR
     _tileindex_from_xy                                              ******** GX
-  0 _update_character                                               00000291 GR
+  0 _update_character                                               00000289 GR
     _update_game_state                                              ******** GX
 
 
@@ -41,7 +41,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      440   flags    0
+   0 _CODE                                      size      438   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        2   flags    0
    3 _DABS                                      size        0   flags    8

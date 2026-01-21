@@ -10,8 +10,8 @@ Symbol Table
     _LCDC_REG                                                       ******** GX
     _WX_REG                                                         ******** GX
     _WY_REG                                                         ******** GX
-  0 ___str_0                                                        00000194 R
-  0 ___str_1                                                        00000197 R
+  0 ___str_0                                                        0000018A R
+  0 ___str_1                                                        0000018D R
     _character_init                                                 ******** GX
     _duck                                                           ******** GX
     _get_colision_from_map                                          ******** GX
@@ -24,7 +24,7 @@ Symbol Table
     _init_level                                                     ******** GX
     _joypad                                                         ******** GX
   1 _last_state                                                     00000017 GR
-  0 _main                                                           000000D6 GR
+  0 _main                                                           000000CC GR
     _map1                                                           ******** GX
     _map_tiles                                                      ******** GX
     _object_sprites                                                 ******** GX
@@ -51,7 +51,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      1B9   flags    0
+   0 _CODE                                      size      1AF   flags    0
    1 _DATA                                      size       18   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

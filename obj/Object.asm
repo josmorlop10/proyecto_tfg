@@ -24,7 +24,7 @@
 ;--------------------------------------------------------
 	.area _INITIALIZED
 _global_object_information::
-	.ds 6
+	.ds 24
 ;--------------------------------------------------------
 ; absolute external ram data
 ;--------------------------------------------------------
@@ -56,7 +56,7 @@ _print_objects_in_screen::
 	ld	c, #0x00
 00105$:
 	ld	a, c
-	sub	a, #0x02
+	sub	a, #0x08
 	jr	NC, 00107$
 ;src/Object.c:14: obj_x = global_object_information[3*e];
 	ld	l, c
@@ -152,10 +152,14 @@ _hide_object::
 	xor	a, a
 	ld	h, a
 	add	hl, hl
+	add	hl, hl
+	add	hl, hl
 	add	hl, de
 	ld	(hl), #0x00
 ;src/Object.c:25: global_object_information[i*NUMBER_OF_OBJECTS+1] = 0;
 	ld	a, c
+	add	a, a
+	add	a, a
 	add	a, a
 	inc	a
 	ld	l, a
@@ -202,7 +206,7 @@ _check_colision_with_object::
 	ld	c, #0x00
 00109$:
 	ld	a, c
-	sub	a, #0x02
+	sub	a, #0x08
 	jr	NC, 00107$
 ;src/Object.c:37: obj_x = global_object_information[3*e];
 	ld	l, c
@@ -298,6 +302,24 @@ _check_colision_with_object::
 	.area _INITIALIZER
 __xinit__global_object_information:
 	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
 	.db 0x00
 	.db 0x00
 	.db 0x00

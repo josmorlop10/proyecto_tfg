@@ -267,7 +267,7 @@
     000000D7                        267 00103$:
     000000D7 F8 05            [12]  268 	ldhl	sp,	#5
     000000D9 7E               [ 8]  269 	ld	a, (hl)
-    000000DA D6 02            [ 8]  270 	sub	a, #0x02
+    000000DA D6 08            [ 8]  270 	sub	a, #0x08
     000000DC 30 6F            [12]  271 	jr	NC, 00105$
                                     272 ;src/LevelLogic.c:67: global_object_information[e*3] = objects_map[e*3];
     000000DE 4E               [ 8]  273 	ld	c, (hl)

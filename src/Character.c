@@ -110,10 +110,6 @@ void take_effect(uint8_t index){
         global_blocks_active = 0;
         break;
     
-    case SPEED_UP:
-        /* code */
-        break;
-
     case GO_RIGHT:
         /* code */
         break;
@@ -130,16 +126,15 @@ void take_effect(uint8_t index){
         /* code */
         break;
 
-    case BOMB:
+    case TURN_AROUND:
         /* code */
         break;
-    
+
     case KEY:
         /* code */
         break;
     
-    case DEAD:
-        update_game_state(STATE_GAME_OVER);
+    case JUMP:
         break;
 
     default:

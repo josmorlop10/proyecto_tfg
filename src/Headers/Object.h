@@ -4,18 +4,19 @@
 #include <stdint.h>
 
 #define OBJECT_SIZE 8
-#define NUMBER_OF_OBJECTS 2
+#define NUMBER_OF_OBJECTS 8
 
 //OBJECT TYPES;
-
-#define GO_RIGHT 0
-#define GO_LEFT 1
-#define GO_UP 2
-#define GO_DOWN 3
-#define TURN_AROUND 4
-#define NO_ACTION 5
-#define KEY 6
-#define JUMP 7
+//Esto debe estar en orden. Empieza en 8, y no en 0 debido a los tiles están cargados
+//de esa forma en la OAM.
+#define GO_RIGHT 8
+#define GO_LEFT 9
+#define GO_UP 10
+#define GO_DOWN 11
+#define TURN_AROUND 12
+#define NO_ACTION 13
+#define KEY 14
+#define JUMP 15
 
 extern uint8_t global_object_information[3*NUMBER_OF_OBJECTS];
 

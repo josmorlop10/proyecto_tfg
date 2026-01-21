@@ -23,7 +23,10 @@
 #define map1Height 15
 #define map1Bank 0
 
-const unsigned char objects_map1[] = {84, 36, NO_ACTION, 92, 36, GO_RIGHT};
+const unsigned char objects_map1[] = {84, 36, GO_RIGHT, 92, 36, GO_LEFT,
+100, 36, GO_UP, 108, 36, GO_DOWN,116, 36, TURN_AROUND, 124, 36, NO_ACTION,132, 36, KEY,
+140, 36, JUMP};
+
 const unsigned char blocks_map1[] = {6,6,6,6};
 
 const unsigned char map1[] =

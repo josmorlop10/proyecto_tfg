@@ -169,5 +169,21 @@ _object_sprites:
 	.db #0x48	; 72	'H'
 	.db #0x00	; 0
 	.db #0x30	; 48	'0'
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
 	.area _INITIALIZER
 	.area _CABS (ABS)

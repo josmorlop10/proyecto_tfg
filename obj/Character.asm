@@ -611,12 +611,12 @@ _take_effect::
 ;src/Character.c:107: switch (type)
 	cp	a, #0x08
 	ret	C
-	cp	a, #0x11
+	cp	a, #0x10
 	ret	NC
 	add	a, #0xf8
 	ld	c, a
 	ld	b, #0x00
-	ld	hl, #00128$
+	ld	hl, #00127$
 	add	hl, bc
 	add	hl, bc
 	ld	c, (hl)
@@ -624,33 +624,25 @@ _take_effect::
 	ld	h, (hl)
 	ld	l, c
 	jp	(hl)
-00128$:
+00127$:
+	.dw	00111$
+	.dw	00111$
+	.dw	00111$
+	.dw	00111$
+	.dw	00111$
 	.dw	00101$
-	.dw	00112$
-	.dw	00112$
-	.dw	00112$
-	.dw	00112$
-	.dw	00112$
-	.dw	00112$
-	.dw	00112$
-	.dw	00109$
+	.dw	00111$
+	.dw	00111$
 ;src/Character.c:109: case NO_ACTION:
 00101$:
 ;src/Character.c:110: global_blocks_active = 0;
 	xor	a, a
 	ld	(#_global_blocks_active),a
-;src/Character.c:111: break;
+;src/Character.c:142: }
+00111$:
+;src/Character.c:143: }
 	ret
-;src/Character.c:141: case DEAD:
-00109$:
-;src/Character.c:142: update_game_state(STATE_GAME_OVER);
-	ld	a, #0x05
-	jp	_update_game_state
-;src/Character.c:147: }
-00112$:
-;src/Character.c:148: }
-	ret
-;src/Character.c:150: void update_character(Character* p) { //devuelve las teclas actuales
+;src/Character.c:145: void update_character(Character* p) { //devuelve las teclas actuales
 ;	---------------------------------
 ; Function update_character
 ; ---------------------------------
@@ -658,7 +650,7 @@ _update_character::
 	add	sp, #-14
 	ld	c, e
 	ld	b, d
-;src/Character.c:152: if(player_tileBR_over_destination(p->next_tileindexBR)){
+;src/Character.c:147: if(player_tileBR_over_destination(p->next_tileindexBR)){
 	ld	hl, #0x000d
 	add	hl, bc
 	inc	sp
@@ -677,13 +669,13 @@ _update_character::
 	pop	bc
 	or	a, a
 	jr	Z, 00102$
-;src/Character.c:153: update_game_state(STATE_GAME_OVER);
+;src/Character.c:148: update_game_state(STATE_GAME_OVER);
 	ld	a, #0x05
 	call	_update_game_state
-;src/Character.c:154: return;
+;src/Character.c:149: return;
 	jp	00110$
 00102$:
-;src/Character.c:157: if(player_over_fall(p->next_tileindexBR)){
+;src/Character.c:152: if(player_over_fall(p->next_tileindexBR)){
 	pop	de
 	push	de
 	ld	a, (de)
@@ -696,7 +688,7 @@ _update_character::
 	call	_player_over_fall
 	ld	e, a
 	pop	bc
-;src/Character.c:158: p->speed = 0;
+;src/Character.c:153: p->speed = 0;
 	ld	hl, #0x000a
 	add	hl, bc
 	push	hl
@@ -707,20 +699,20 @@ _update_character::
 	ld	a, h
 	ldhl	sp,	#3
 	ld	(hl), a
-;src/Character.c:157: if(player_over_fall(p->next_tileindexBR)){
+;src/Character.c:152: if(player_over_fall(p->next_tileindexBR)){
 	ld	a, e
 	or	a, a
 	jr	Z, 00104$
-;src/Character.c:158: p->speed = 0;
+;src/Character.c:153: p->speed = 0;
 	dec	hl
 	ld	a, (hl+)
 	ld	h, (hl)
 	ld	l, a
 	ld	(hl), #0x00
-;src/Character.c:159: return;
+;src/Character.c:154: return;
 	jp	00110$
 00104$:
-;src/Character.c:162: uint8_t object_index_in_array = check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
+;src/Character.c:157: uint8_t object_index_in_array = check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
 	ld	hl, #0x0007
 	add	hl, bc
 	ld	a, (hl)
@@ -784,22 +776,22 @@ _update_character::
 	call	_check_colision_with_object
 	ld	e, a
 	pop	bc
-;src/Character.c:163: if(object_index_in_array != 255){ 
+;src/Character.c:158: if(object_index_in_array != 255){ 
 	ld	a, e
 	inc	a
 	jr	Z, 00106$
-;src/Character.c:164: take_effect(object_index_in_array);
+;src/Character.c:159: take_effect(object_index_in_array);
 	push	bc
 	push	de
 	ld	a, e
 	call	_take_effect
 	pop	de
-;src/Character.c:165: hide_object(object_index_in_array);
+;src/Character.c:160: hide_object(object_index_in_array);
 	ld	a, e
 	call	_hide_object
 	pop	bc
 00106$:
-;src/Character.c:168: p->tileindexBR = tileindex_from_xy(p->x, p->y);
+;src/Character.c:163: p->tileindexBR = tileindex_from_xy(p->x, p->y);
 	ld	hl, #0x000b
 	add	hl, bc
 	push	hl
@@ -842,7 +834,7 @@ _update_character::
 	inc	de
 	ld	a, (hl)
 	ld	(de), a
-;src/Character.c:169: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
+;src/Character.c:164: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
 	ldhl	sp,#4
 	ld	a, (hl+)
 	ld	e, a
@@ -917,7 +909,7 @@ _update_character::
 	inc	de
 	ld	a, (hl)
 	ld	(de), a
-;src/Character.c:171: if(canplayermove(p)) {
+;src/Character.c:166: if(canplayermove(p)) {
 	push	bc
 	ld	e, c
 	ld	d, b
@@ -925,7 +917,7 @@ _update_character::
 	pop	bc
 	or	a, a
 	jr	Z, 00108$
-;src/Character.c:172: p->x += p->speed * p->dir_x;
+;src/Character.c:167: p->x += p->speed * p->dir_x;
 	ldhl	sp,#6
 	ld	a, (hl+)
 	ld	e, a
@@ -960,7 +952,7 @@ _update_character::
 	ld	h, (hl)
 	ld	l, e
 	ld	(hl), a
-;src/Character.c:173: p->y += p->speed * p->dir_y;
+;src/Character.c:168: p->y += p->speed * p->dir_y;
 	ldhl	sp,#4
 	ld	a, (hl+)
 	ld	e, a
@@ -997,19 +989,19 @@ _update_character::
 	ld	(hl), a
 	jr	00109$
 00108$:
-;src/Character.c:175: flip_direction(p);
+;src/Character.c:170: flip_direction(p);
 	push	bc
 	ld	e, c
 	ld	d, b
 	call	_flip_direction
 	pop	bc
 00109$:
-;src/Character.c:177: move_character(p);
+;src/Character.c:172: move_character(p);
 	ld	e, c
 	ld	d, b
 	call	_move_character
 00110$:
-;src/Character.c:178: }
+;src/Character.c:173: }
 	add	sp, #14
 	ret
 	.area _CODE

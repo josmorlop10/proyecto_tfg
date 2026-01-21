@@ -2,7 +2,7 @@ XL4
 H 9 areas 2 global symbols
 M object_sprites
 S .__.ABS. Def00000000
-A _CODE size 80 flags 0 addr 0
+A _CODE size 90 flags 0 addr 0
 S _object_sprites Def00000000
 A _DATA size 0 flags 0 addr 0
 A _INITIALIZED size 0 flags 0 addr 0
@@ -34,5 +34,7 @@ T 60 00 00 00 00 00 65 00 95 60 9F 00 90 0F 60 90
 R 00 00 00 00
 T 6C 00 00 00 00 60 00 00 04 00 0E 00 1F 00 04 1B
 R 00 00 00 00
-T 78 00 00 00 44 00 48 04 30 48 00 30
+T 78 00 00 00 44 00 48 04 30 48 00 30 00 00 00 00
+R 00 00 00 00
+T 84 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 R 00 00 00 00
