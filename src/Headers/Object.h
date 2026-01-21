@@ -7,15 +7,15 @@
 #define NUMBER_OF_OBJECTS 2
 
 //OBJECT TYPES;
-#define NO_ACTION 8
-#define SPEED_UP 9
-#define GO_RIGHT 10
-#define GO_LEFT 11
-#define GO_UP 12
-#define GO_DOWN 13
-#define BOMB 14
-#define KEY 15
-#define DEAD 16
+
+#define GO_RIGHT 0
+#define GO_LEFT 1
+#define GO_UP 2
+#define GO_DOWN 3
+#define TURN_AROUND 4
+#define NO_ACTION 5
+#define KEY 6
+#define JUMP 7
 
 extern uint8_t global_object_information[3*NUMBER_OF_OBJECTS];
 
