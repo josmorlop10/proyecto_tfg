@@ -70,20 +70,20 @@
                                      70 ; code
                                      71 ;--------------------------------------------------------
                                      72 	.area _CODE
-                                     73 ;src/LevelLogic.c:21: void init_level(uint8_t level_number){
+                                     73 ;src/LevelLogic.c:20: void init_level(uint8_t level_number){
                                      74 ;	---------------------------------
                                      75 ; Function init_level
                                      76 ; ---------------------------------
     00000000                         77 _init_level::
-                                     78 ;src/LevelLogic.c:23: if(level_number >= sizeof(global_levels_array)){
+                                     78 ;src/LevelLogic.c:22: if(level_number >= sizeof(global_levels_array)){
     00000000 4F               [ 4]   79 	ld	c, a
     00000001 D6 02            [ 8]   80 	sub	a, #0x02
     00000003 38 04            [12]   81 	jr	C, 00115$
-                                     82 ;src/LevelLogic.c:24: level_number = level_number % sizeof(global_levels_array);
+                                     82 ;src/LevelLogic.c:23: level_number = level_number % sizeof(global_levels_array);
     00000005 79               [ 4]   83 	ld	a, c
     00000006 E6 01            [ 8]   84 	and	a, #0x01
     00000008 4F               [ 4]   85 	ld	c, a
-                                     86 ;src/LevelLogic.c:27: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+                                     86 ;src/LevelLogic.c:26: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
     00000009                         87 00115$:
     00000009 11 00 00         [12]   88 	ld	de, #0x0000
     0000000C                         89 00106$:
@@ -93,15 +93,15 @@
     00000010 7D               [ 4]   93 	ld	a, l
     00000011 DE 01            [ 8]   94 	sbc	a, #0x01
     00000013 30 09            [12]   95 	jr	NC, 00103$
-                                     96 ;src/LevelLogic.c:28: global_colision_map[i] = EMPTY;
+                                     96 ;src/LevelLogic.c:27: global_colision_map[i] = EMPTY;
     00000015 21r00r00         [12]   97 	ld	hl, #_global_colision_map
     00000018 19               [ 8]   98 	add	hl, de
     00000019 36 00            [12]   99 	ld	(hl), #0x00
-                                    100 ;src/LevelLogic.c:27: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+                                    100 ;src/LevelLogic.c:26: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
     0000001B 13               [ 8]  101 	inc	de
     0000001C 18 EE            [12]  102 	jr	00106$
     0000001E                        103 00103$:
-                                    104 ;src/LevelLogic.c:31: get_colision_from_map(global_levels_array[level_number], global_colision_map);
+                                    104 ;src/LevelLogic.c:30: get_colision_from_map(global_levels_array[level_number], global_colision_map);
     0000001E 11r35r01         [12]  105 	ld	de, #_global_levels_array+0
     00000021 AF               [ 4]  106 	xor	a, a
     00000022 69               [ 4]  107 	ld	l, c
@@ -114,19 +114,19 @@
     0000002B 5F               [ 4]  114 	ld	e, a
     0000002C 55               [ 4]  115 	ld	d, l
     0000002D CDr5Fr00         [24]  116 	call	_get_colision_from_map
-                                    117 ;src/LevelLogic.c:34: read_global_object_info_from_map(objects_map1_alt);
+                                    117 ;src/LevelLogic.c:33: read_global_object_info_from_map(objects_map1_alt);
     00000030 11r00r00         [12]  118 	ld	de, #_objects_map1_alt
     00000033 CDrCDr00         [24]  119 	call	_read_global_object_info_from_map
-                                    120 ;src/LevelLogic.c:35: read_global_block_info_from_map(blocks_map1_alt);
+                                    120 ;src/LevelLogic.c:34: read_global_block_info_from_map(blocks_map1_alt);
     00000036 11r00r00         [12]  121 	ld	de, #_blocks_map1_alt
     00000039 CDr50r01         [24]  122 	call	_read_global_block_info_from_map
-                                    123 ;src/LevelLogic.c:37: for(uint8_t e = 0; e < NUMBER_OF_BLOCKS; e++){
+                                    123 ;src/LevelLogic.c:36: for(uint8_t e = 0; e < NUMBER_OF_BLOCKS; e++){
     0000003C 0E 00            [ 8]  124 	ld	c, #0x00
     0000003E                        125 00109$:
     0000003E 79               [ 4]  126 	ld	a, c
     0000003F D6 08            [ 8]  127 	sub	a, #0x08
     00000041 30 12            [12]  128 	jr	NC, 00104$
-                                    129 ;src/LevelLogic.c:38: update_values_in_hud(RIGHT+e, global_blocks_available[e]);
+                                    129 ;src/LevelLogic.c:37: update_values_in_hud(RIGHT+e, global_blocks_available[e]);
     00000043 21r2Cr01         [12]  130 	ld	hl, #_global_blocks_available
     00000046 06 00            [ 8]  131 	ld	b, #0x00
     00000048 09               [ 8]  132 	add	hl, bc
@@ -136,24 +136,24 @@
     0000004D C5               [16]  136 	push	bc
     0000004E CDr00r00         [24]  137 	call	_update_values_in_hud
     00000051 C1               [12]  138 	pop	bc
-                                    139 ;src/LevelLogic.c:37: for(uint8_t e = 0; e < NUMBER_OF_BLOCKS; e++){
+                                    139 ;src/LevelLogic.c:36: for(uint8_t e = 0; e < NUMBER_OF_BLOCKS; e++){
     00000052 0C               [ 4]  140 	inc	c
     00000053 18 E9            [12]  141 	jr	00109$
     00000055                        142 00104$:
-                                    143 ;src/LevelLogic.c:41: get_init_point_from_map(global_colision_map);
+                                    143 ;src/LevelLogic.c:40: get_init_point_from_map(global_colision_map);
     00000055 11r00r00         [12]  144 	ld	de, #_global_colision_map
-                                    145 ;src/LevelLogic.c:43: }
+                                    145 ;src/LevelLogic.c:42: }
     00000058 C3r5Br02         [16]  146 	jp	_get_init_point_from_map
-                                    147 ;src/LevelLogic.c:45: void update_game_state(GameState new_value){
+                                    147 ;src/LevelLogic.c:44: void update_game_state(GameState new_value){
                                     148 ;	---------------------------------
                                     149 ; Function update_game_state
                                     150 ; ---------------------------------
     0000005B                        151 _update_game_state::
     0000005B EAr00r00         [16]  152 	ld	(#_global_game_state),a
-                                    153 ;src/LevelLogic.c:46: global_game_state = new_value;
-                                    154 ;src/LevelLogic.c:47: }
+                                    153 ;src/LevelLogic.c:45: global_game_state = new_value;
+                                    154 ;src/LevelLogic.c:46: }
     0000005E C9               [16]  155 	ret
-                                    156 ;src/LevelLogic.c:50: void get_colision_from_map(const unsigned char in[], uint8_t out[]){
+                                    156 ;src/LevelLogic.c:49: void get_colision_from_map(const unsigned char in[], uint8_t out[]){
                                     157 ;	---------------------------------
                                     158 ; Function get_colision_from_map
                                     159 ; ---------------------------------
@@ -167,7 +167,7 @@
     00000068 79               [ 4]  167 	ld	a, c
     00000069 22               [ 8]  168 	ld	(hl+), a
     0000006A 70               [ 8]  169 	ld	(hl), b
-                                    170 ;src/LevelLogic.c:52: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+                                    170 ;src/LevelLogic.c:51: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
     0000006B 01 00 00         [12]  171 	ld	bc, #0x0000
     0000006E                        172 00117$:
     0000006E 59               [ 4]  173 	ld	e, c
@@ -177,7 +177,7 @@
     00000073 7A               [ 4]  177 	ld	a, d
     00000074 DE 01            [ 8]  178 	sbc	a, #0x01
     00000076 30 52            [12]  179 	jr	NC, 00119$
-                                    180 ;src/LevelLogic.c:53: if(in[i] == 51){
+                                    180 ;src/LevelLogic.c:52: if(in[i] == 51){
     00000078 F8 03            [12]  181 	ldhl	sp,	#3
     0000007A 2A               [ 8]  182 	ld	a,	(hl+)
     0000007B 66               [ 8]  183 	ld	h, (hl)
@@ -185,10 +185,10 @@
     0000007D 09               [ 8]  185 	add	hl, bc
     0000007E 5D               [ 4]  186 	ld	e, l
     0000007F 54               [ 4]  187 	ld	d, h
-                                    188 ;src/LevelLogic.c:57: } else if(in[i] >= 21 && in[i] <= 29){
+                                    188 ;src/LevelLogic.c:56: } else if(in[i] >= 21 && in[i] <= 29){
     00000080 1A               [ 8]  189 	ld	a, (de)
     00000081 F8 00            [12]  190 	ldhl	sp,	#0
-                                    191 ;src/LevelLogic.c:54: out[i] = SOURCE;
+                                    191 ;src/LevelLogic.c:53: out[i] = SOURCE;
     00000083 22               [ 8]  192 	ld	(hl+), a
     00000084 2A               [ 8]  193 	ld	a,	(hl+)
     00000085 66               [ 8]  194 	ld	h, (hl)
@@ -196,17 +196,17 @@
     00000087 09               [ 8]  196 	add	hl, bc
     00000088 5D               [ 4]  197 	ld	e, l
     00000089 54               [ 4]  198 	ld	d, h
-                                    199 ;src/LevelLogic.c:53: if(in[i] == 51){
+                                    199 ;src/LevelLogic.c:52: if(in[i] == 51){
     0000008A F8 00            [12]  200 	ldhl	sp,	#0
     0000008C 7E               [ 8]  201 	ld	a, (hl)
     0000008D D6 33            [ 8]  202 	sub	a, #0x33
     0000008F 20 05            [12]  203 	jr	NZ, 00113$
-                                    204 ;src/LevelLogic.c:54: out[i] = SOURCE;
+                                    204 ;src/LevelLogic.c:53: out[i] = SOURCE;
     00000091 3E 03            [ 8]  205 	ld	a, #0x03
     00000093 12               [ 8]  206 	ld	(de), a
     00000094 18 31            [12]  207 	jr	00118$
     00000096                        208 00113$:
-                                    209 ;src/LevelLogic.c:55: } else if(in[i] >= 64 && in[i] <= 67){
+                                    209 ;src/LevelLogic.c:54: } else if(in[i] >= 64 && in[i] <= 67){
     00000096 F8 00            [12]  210 	ldhl	sp,	#0
     00000098 7E               [ 8]  211 	ld	a, (hl)
     00000099 D6 40            [ 8]  212 	sub	a, #0x40
@@ -214,12 +214,12 @@
     0000009D 3E 43            [ 8]  214 	ld	a, #0x43
     0000009F 96               [ 8]  215 	sub	a, (hl)
     000000A0 38 05            [12]  216 	jr	C, 00109$
-                                    217 ;src/LevelLogic.c:56: out[i] = DESTINATION;
+                                    217 ;src/LevelLogic.c:55: out[i] = DESTINATION;
     000000A2 3E 04            [ 8]  218 	ld	a, #0x04
     000000A4 12               [ 8]  219 	ld	(de), a
     000000A5 18 20            [12]  220 	jr	00118$
     000000A7                        221 00109$:
-                                    222 ;src/LevelLogic.c:57: } else if(in[i] >= 21 && in[i] <= 29){
+                                    222 ;src/LevelLogic.c:56: } else if(in[i] >= 21 && in[i] <= 29){
     000000A7 F8 00            [12]  223 	ldhl	sp,	#0
     000000A9 7E               [ 8]  224 	ld	a, (hl)
     000000AA D6 15            [ 8]  225 	sub	a, #0x15
@@ -227,12 +227,12 @@
     000000AE 3E 1D            [ 8]  227 	ld	a, #0x1d
     000000B0 96               [ 8]  228 	sub	a, (hl)
     000000B1 38 05            [12]  229 	jr	C, 00105$
-                                    230 ;src/LevelLogic.c:58: out[i] = FALL;
+                                    230 ;src/LevelLogic.c:57: out[i] = FALL;
     000000B3 3E 0E            [ 8]  231 	ld	a, #0x0e
     000000B5 12               [ 8]  232 	ld	(de), a
     000000B6 18 0F            [12]  233 	jr	00118$
     000000B8                        234 00105$:
-                                    235 ;src/LevelLogic.c:59: } else if(in[i] >= UMBRAL_COLISION_UP && in[i] <= UMBRAL_COLISION_DOWN){
+                                    235 ;src/LevelLogic.c:58: } else if(in[i] >= UMBRAL_COLISION_UP && in[i] <= UMBRAL_COLISION_DOWN){
     000000B8 F8 00            [12]  236 	ldhl	sp,	#0
     000000BA 7E               [ 8]  237 	ld	a, (hl)
     000000BB D6 05            [ 8]  238 	sub	a, #0x05
@@ -240,18 +240,18 @@
     000000BF 3E 14            [ 8]  240 	ld	a, #0x14
     000000C1 96               [ 8]  241 	sub	a, (hl)
     000000C2 38 03            [12]  242 	jr	C, 00118$
-                                    243 ;src/LevelLogic.c:60: out[i] = SOLID;
+                                    243 ;src/LevelLogic.c:59: out[i] = SOLID;
     000000C4 3E 01            [ 8]  244 	ld	a, #0x01
     000000C6 12               [ 8]  245 	ld	(de), a
     000000C7                        246 00118$:
-                                    247 ;src/LevelLogic.c:52: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+                                    247 ;src/LevelLogic.c:51: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
     000000C7 03               [ 8]  248 	inc	bc
     000000C8 18 A4            [12]  249 	jr	00117$
     000000CA                        250 00119$:
-                                    251 ;src/LevelLogic.c:63: }
+                                    251 ;src/LevelLogic.c:62: }
     000000CA E8 05            [16]  252 	add	sp, #5
     000000CC C9               [16]  253 	ret
-                                    254 ;src/LevelLogic.c:65: void read_global_object_info_from_map(unsigned char* objects_map){
+                                    254 ;src/LevelLogic.c:64: void read_global_object_info_from_map(unsigned char* objects_map){
                                     255 ;	---------------------------------
                                     256 ; Function read_global_object_info_from_map
                                     257 ; ---------------------------------
@@ -260,7 +260,7 @@
     000000CF F8 03            [12]  260 	ldhl	sp,	#3
     000000D1 7B               [ 4]  261 	ld	a, e
     000000D2 22               [ 8]  262 	ld	(hl+), a
-                                    263 ;src/LevelLogic.c:66: for(uint8_t e=0; e<NUMBER_OF_OBJECTS; e++){
+                                    263 ;src/LevelLogic.c:65: for(uint8_t e=0; e<NUMBER_OF_OBJECTS; e++){
     000000D3 7A               [ 4]  264 	ld	a, d
     000000D4 22               [ 8]  265 	ld	(hl+), a
     000000D5 36 00            [12]  266 	ld	(hl), #0x00
@@ -269,7 +269,7 @@
     000000D9 7E               [ 8]  269 	ld	a, (hl)
     000000DA D6 08            [ 8]  270 	sub	a, #0x08
     000000DC 30 6F            [12]  271 	jr	NC, 00105$
-                                    272 ;src/LevelLogic.c:67: global_object_information[e*3] = objects_map[e*3];
+                                    272 ;src/LevelLogic.c:66: global_object_information[e*3] = objects_map[e*3];
     000000DE 4E               [ 8]  273 	ld	c, (hl)
     000000DF 06 00            [ 8]  274 	ld	b, #0x00
     000000E1 69               [ 4]  275 	ld	l, c
@@ -301,7 +301,7 @@
     00000100 66               [ 8]  301 	ld	h, (hl)
     00000101 6B               [ 4]  302 	ld	l, e
     00000102 77               [ 8]  303 	ld	(hl), a
-                                    304 ;src/LevelLogic.c:68: global_object_information[e*3+1] = objects_map[e*3+1];
+                                    304 ;src/LevelLogic.c:67: global_object_information[e*3+1] = objects_map[e*3+1];
     00000103 F8 05            [12]  305 	ldhl	sp,	#5
     00000105 7E               [ 8]  306 	ld	a, (hl)
     00000106 5F               [ 4]  307 	ld	e, a
@@ -338,7 +338,7 @@
     0000012C 66               [ 8]  338 	ld	h, (hl)
     0000012D 6B               [ 4]  339 	ld	l, e
     0000012E 77               [ 8]  340 	ld	(hl), a
-                                    341 ;src/LevelLogic.c:69: global_object_information[e*3+2] = objects_map[e*3+2];
+                                    341 ;src/LevelLogic.c:68: global_object_information[e*3+2] = objects_map[e*3+2];
     0000012F F8 00            [12]  342 	ldhl	sp,	#0
     00000131 7E               [ 8]  343 	ld	a, (hl)
     00000132 3C               [ 4]  344 	inc	a
@@ -359,22 +359,22 @@
     00000145 44               [ 4]  359 	ld	b, h
     00000146 0A               [ 8]  360 	ld	a, (bc)
     00000147 12               [ 8]  361 	ld	(de), a
-                                    362 ;src/LevelLogic.c:66: for(uint8_t e=0; e<NUMBER_OF_OBJECTS; e++){
+                                    362 ;src/LevelLogic.c:65: for(uint8_t e=0; e<NUMBER_OF_OBJECTS; e++){
     00000148 F8 05            [12]  363 	ldhl	sp,	#5
     0000014A 34               [12]  364 	inc	(hl)
     0000014B 18 8A            [12]  365 	jr	00103$
     0000014D                        366 00105$:
-                                    367 ;src/LevelLogic.c:71: }
+                                    367 ;src/LevelLogic.c:70: }
     0000014D E8 06            [16]  368 	add	sp, #6
     0000014F C9               [16]  369 	ret
-                                    370 ;src/LevelLogic.c:73: void read_global_block_info_from_map(unsigned char* blocks_map){
+                                    370 ;src/LevelLogic.c:72: void read_global_block_info_from_map(unsigned char* blocks_map){
                                     371 ;	---------------------------------
                                     372 ; Function read_global_block_info_from_map
                                     373 ; ---------------------------------
     00000150                        374 _read_global_block_info_from_map::
     00000150 E8 FF            [16]  375 	add	sp, #-1
     00000152 D5               [16]  376 	push	de
-                                    377 ;src/LevelLogic.c:74: for(uint8_t e=0; e<NUMBER_OF_BLOCKS; e++){
+                                    377 ;src/LevelLogic.c:73: for(uint8_t e=0; e<NUMBER_OF_BLOCKS; e++){
     00000153 F8 02            [12]  378 	ldhl	sp,	#2
     00000155 36 00            [12]  379 	ld	(hl), #0x00
     00000157                        380 00103$:
@@ -382,7 +382,7 @@
     00000159 7E               [ 8]  382 	ld	a, (hl)
     0000015A D6 08            [ 8]  383 	sub	a, #0x08
     0000015C 30 1A            [12]  384 	jr	NC, 00105$
-                                    385 ;src/LevelLogic.c:75: global_blocks_available[e] = blocks_map[e];
+                                    385 ;src/LevelLogic.c:74: global_blocks_available[e] = blocks_map[e];
     0000015E 11r2Cr01         [12]  386 	ld	de, #_global_blocks_available
     00000161 6E               [ 8]  387 	ld	l, (hl)
     00000162 26 00            [ 8]  388 	ld	h, #0x00
@@ -399,15 +399,15 @@
     00000170 54               [ 4]  399 	ld	d, h
     00000171 1A               [ 8]  400 	ld	a, (de)
     00000172 02               [ 8]  401 	ld	(bc), a
-                                    402 ;src/LevelLogic.c:74: for(uint8_t e=0; e<NUMBER_OF_BLOCKS; e++){
+                                    402 ;src/LevelLogic.c:73: for(uint8_t e=0; e<NUMBER_OF_BLOCKS; e++){
     00000173 F8 02            [12]  403 	ldhl	sp,	#2
     00000175 34               [12]  404 	inc	(hl)
     00000176 18 DF            [12]  405 	jr	00103$
     00000178                        406 00105$:
-                                    407 ;src/LevelLogic.c:77: }
+                                    407 ;src/LevelLogic.c:76: }
     00000178 E8 03            [16]  408 	add	sp, #3
     0000017A C9               [16]  409 	ret
-                                    410 ;src/LevelLogic.c:79: void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value){
+                                    410 ;src/LevelLogic.c:78: void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value){
                                     411 ;	---------------------------------
                                     412 ; Function change_colision_map_at
                                     413 ; ---------------------------------
@@ -415,7 +415,7 @@
     0000017B 3B               [ 8]  415 	dec	sp
     0000017C F8 00            [12]  416 	ldhl	sp,	#0
     0000017E 77               [ 8]  417 	ld	(hl), a
-                                    418 ;src/LevelLogic.c:80: if(tileindexBR < NUMBER_OF_TILES_IN_GRID){
+                                    418 ;src/LevelLogic.c:79: if(tileindexBR < NUMBER_OF_TILES_IN_GRID){
     0000017F 4B               [ 4]  419 	ld	c, e
     00000180 42               [ 4]  420 	ld	b, d
     00000181 79               [ 4]  421 	ld	a, c
@@ -423,7 +423,7 @@
     00000184 78               [ 4]  423 	ld	a, b
     00000185 DE 01            [ 8]  424 	sbc	a, #0x01
     00000187 30 3B            [12]  425 	jr	NC, 00103$
-                                    426 ;src/LevelLogic.c:81: global_colision_map[tileindexBR] = new_value;
+                                    426 ;src/LevelLogic.c:80: global_colision_map[tileindexBR] = new_value;
     00000189 21r00r00         [12]  427 	ld	hl, #_global_colision_map
     0000018C 19               [ 8]  428 	add	hl, de
     0000018D 5D               [ 4]  429 	ld	e, l
@@ -431,7 +431,7 @@
     0000018F F8 00            [12]  431 	ldhl	sp,	#0
     00000191 7E               [ 8]  432 	ld	a, (hl)
     00000192 12               [ 8]  433 	ld	(de), a
-                                    434 ;src/LevelLogic.c:82: global_colision_map[tileindexBR-1] = new_value;
+                                    434 ;src/LevelLogic.c:81: global_colision_map[tileindexBR-1] = new_value;
     00000193 59               [ 4]  435 	ld	e, c
     00000194 50               [ 4]  436 	ld	d, b
     00000195 1B               [ 8]  437 	dec	de
@@ -442,7 +442,7 @@
     0000019C F8 00            [12]  442 	ldhl	sp,	#0
     0000019E 7E               [ 8]  443 	ld	a, (hl)
     0000019F 12               [ 8]  444 	ld	(de), a
-                                    445 ;src/LevelLogic.c:83: global_colision_map[tileindexBR-20] = new_value;
+                                    445 ;src/LevelLogic.c:82: global_colision_map[tileindexBR-20] = new_value;
     000001A0 79               [ 4]  446 	ld	a, c
     000001A1 C6 EC            [ 8]  447 	add	a, #0xec
     000001A3 5F               [ 4]  448 	ld	e, a
@@ -456,7 +456,7 @@
     000001AE F8 00            [12]  456 	ldhl	sp,	#0
     000001B0 7E               [ 8]  457 	ld	a, (hl)
     000001B1 12               [ 8]  458 	ld	(de), a
-                                    459 ;src/LevelLogic.c:84: global_colision_map[tileindexBR-21] = new_value;
+                                    459 ;src/LevelLogic.c:83: global_colision_map[tileindexBR-21] = new_value;
     000001B2 79               [ 4]  460 	ld	a, c
     000001B3 C6 EB            [ 8]  461 	add	a, #0xeb
     000001B5 4F               [ 4]  462 	ld	c, a
@@ -471,29 +471,29 @@
     000001C2 7E               [ 8]  471 	ld	a, (hl)
     000001C3 02               [ 8]  472 	ld	(bc), a
     000001C4                        473 00103$:
-                                    474 ;src/LevelLogic.c:86: }
+                                    474 ;src/LevelLogic.c:85: }
     000001C4 33               [ 8]  475 	inc	sp
     000001C5 C9               [16]  476 	ret
-                                    477 ;src/LevelLogic.c:88: void change_colision_map_BR(uint16_t tileindexBR, uint8_t new_value){
+                                    477 ;src/LevelLogic.c:87: void change_colision_map_BR(uint16_t tileindexBR, uint8_t new_value){
                                     478 ;	---------------------------------
                                     479 ; Function change_colision_map_BR
                                     480 ; ---------------------------------
     000001C6                        481 _change_colision_map_BR::
     000001C6 4F               [ 4]  482 	ld	c, a
-                                    483 ;src/LevelLogic.c:89: if(tileindexBR < NUMBER_OF_TILES_IN_GRID){
+                                    483 ;src/LevelLogic.c:88: if(tileindexBR < NUMBER_OF_TILES_IN_GRID){
     000001C7 7B               [ 4]  484 	ld	a, e
     000001C8 6A               [ 4]  485 	ld	l, d
     000001C9 D6 2C            [ 8]  486 	sub	a, #0x2c
     000001CB 7D               [ 4]  487 	ld	a, l
     000001CC DE 01            [ 8]  488 	sbc	a, #0x01
     000001CE D0               [20]  489 	ret	NC
-                                    490 ;src/LevelLogic.c:90: global_colision_map[tileindexBR] = new_value;
+                                    490 ;src/LevelLogic.c:89: global_colision_map[tileindexBR] = new_value;
     000001CF 21r00r00         [12]  491 	ld	hl, #_global_colision_map
     000001D2 19               [ 8]  492 	add	hl, de
     000001D3 71               [ 8]  493 	ld	(hl), c
-                                    494 ;src/LevelLogic.c:92: }
+                                    494 ;src/LevelLogic.c:91: }
     000001D4 C9               [16]  495 	ret
-                                    496 ;src/LevelLogic.c:94: uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah, uint8_t bx, uint8_t by, uint8_t bw, uint8_t bh){
+                                    496 ;src/LevelLogic.c:93: uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah, uint8_t bx, uint8_t by, uint8_t bw, uint8_t bh){
                                     497 ;	---------------------------------
                                     498 ; Function check_colision_of_sprites
                                     499 ; ---------------------------------
@@ -502,10 +502,10 @@
     000001D7 4F               [ 4]  502 	ld	c, a
     000001D8 F8 05            [12]  503 	ldhl	sp,	#5
     000001DA 73               [ 8]  504 	ld	(hl), e
-                                    505 ;src/LevelLogic.c:95: uint8_t res = 0; //no colision of sprites
+                                    505 ;src/LevelLogic.c:94: uint8_t res = 0; //no colision of sprites
     000001DB F8 00            [12]  506 	ldhl	sp,	#0
     000001DD 36 00            [12]  507 	ld	(hl), #0x00
-                                    508 ;src/LevelLogic.c:97: if(ax < bx + bw &&
+                                    508 ;src/LevelLogic.c:96: if(ax < bx + bw &&
     000001DF F8 0A            [12]  509 	ldhl	sp,	#10
     000001E1 7E               [ 8]  510 	ld	a, (hl)
     000001E2 F8 01            [12]  511 	ldhl	sp,	#1
@@ -534,7 +534,7 @@
     00000201 78               [ 4]  534 	ld	a, b
     00000202 9E               [ 8]  535 	sbc	a, (hl)
     00000203 30 4D            [12]  536 	jr	NC, 00102$
-                                    537 ;src/LevelLogic.c:98: ax + aw > bx &&
+                                    537 ;src/LevelLogic.c:97: ax + aw > bx &&
     00000205 F8 08            [12]  538 	ldhl	sp,	#8
     00000207 7E               [ 8]  539 	ld	a, (hl)
     00000208 1E 00            [ 8]  540 	ld	e, #0x00
@@ -549,7 +549,7 @@
     00000213 7E               [ 8]  549 	ld	a, (hl)
     00000214 98               [ 4]  550 	sbc	a, b
     00000215 30 3B            [12]  551 	jr	NC, 00102$
-                                    552 ;src/LevelLogic.c:99: ay < by + bh &&
+                                    552 ;src/LevelLogic.c:98: ay < by + bh &&
     00000217 F8 0B            [12]  553 	ldhl	sp,	#11
     00000219 7E               [ 8]  554 	ld	a, (hl)
     0000021A F8 01            [12]  555 	ldhl	sp,	#1
@@ -576,7 +576,7 @@
     00000235 7E               [ 8]  576 	ld	a, (hl)
     00000236 98               [ 4]  577 	sbc	a, b
     00000237 30 19            [12]  578 	jr	NC, 00102$
-                                    579 ;src/LevelLogic.c:100: ay + ah > by){
+                                    579 ;src/LevelLogic.c:99: ay + ah > by){
     00000239 F8 09            [12]  580 	ldhl	sp,	#9
     0000023B 4E               [ 8]  581 	ld	c, (hl)
     0000023C 06 00            [ 8]  582 	ld	b, #0x00
@@ -593,27 +593,27 @@
     0000024A 7E               [ 8]  593 	ld	a, (hl)
     0000024B 98               [ 4]  594 	sbc	a, b
     0000024C 30 04            [12]  595 	jr	NC, 00102$
-                                    596 ;src/LevelLogic.c:101: res = 1;
+                                    596 ;src/LevelLogic.c:100: res = 1;
     0000024E 2B               [ 8]  597 	dec	hl
     0000024F 2B               [ 8]  598 	dec	hl
     00000250 36 01            [12]  599 	ld	(hl), #0x01
     00000252                        600 00102$:
-                                    601 ;src/LevelLogic.c:103: return res;
+                                    601 ;src/LevelLogic.c:102: return res;
     00000252 F8 00            [12]  602 	ldhl	sp,	#0
     00000254 7E               [ 8]  603 	ld	a, (hl)
-                                    604 ;src/LevelLogic.c:104: }
+                                    604 ;src/LevelLogic.c:103: }
     00000255 E8 06            [16]  605 	add	sp, #6
     00000257 E1               [12]  606 	pop	hl
     00000258 E8 06            [16]  607 	add	sp, #6
     0000025A E9               [ 4]  608 	jp	(hl)
-                                    609 ;src/LevelLogic.c:107: void get_init_point_from_map(uint8_t colision_map[NUMBER_OF_TILES_IN_GRID]){
+                                    609 ;src/LevelLogic.c:106: void get_init_point_from_map(uint8_t colision_map[NUMBER_OF_TILES_IN_GRID]){
                                     610 ;	---------------------------------
                                     611 ; Function get_init_point_from_map
                                     612 ; ---------------------------------
     0000025B                        613 _get_init_point_from_map::
     0000025B 3B               [ 8]  614 	dec	sp
     0000025C 3B               [ 8]  615 	dec	sp
-                                    616 ;src/LevelLogic.c:108: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+                                    616 ;src/LevelLogic.c:107: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
     0000025D AF               [ 4]  617 	xor	a, a
     0000025E F8 00            [12]  618 	ldhl	sp,	#0
     00000260 22               [ 8]  619 	ld	(hl+), a
@@ -627,49 +627,49 @@
     0000026A 7C               [ 4]  627 	ld	a, h
     0000026B DE 01            [ 8]  628 	sbc	a, #0x01
     0000026D 30 1C            [12]  629 	jr	NC, 00107$
-                                    630 ;src/LevelLogic.c:109: if(colision_map[i] == SOURCE){
+                                    630 ;src/LevelLogic.c:108: if(colision_map[i] == SOURCE){
     0000026F 69               [ 4]  631 	ld	l, c
     00000270 60               [ 4]  632 	ld	h, b
     00000271 19               [ 8]  633 	add	hl, de
     00000272 7E               [ 8]  634 	ld	a, (hl)
     00000273 D6 03            [ 8]  635 	sub	a, #0x03
     00000275 20 0E            [12]  636 	jr	NZ, 00106$
-                                    637 ;src/LevelLogic.c:110: global_init_point = i;
+                                    637 ;src/LevelLogic.c:109: global_init_point = i;
     00000277 F8 00            [12]  638 	ldhl	sp,	#0
     00000279 7E               [ 8]  639 	ld	a, (hl)
     0000027A EAr29r00         [16]  640 	ld	(#_global_init_point),a
     0000027D F8 01            [12]  641 	ldhl	sp,	#1
     0000027F 7E               [ 8]  642 	ld	a, (hl)
     00000280 EAr2Ar00         [16]  643 	ld	(#_global_init_point + 1),a
-                                    644 ;src/LevelLogic.c:111: break;
+                                    644 ;src/LevelLogic.c:110: break;
     00000283 18 06            [12]  645 	jr	00107$
     00000285                        646 00106$:
-                                    647 ;src/LevelLogic.c:108: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+                                    647 ;src/LevelLogic.c:107: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
     00000285 03               [ 8]  648 	inc	bc
     00000286 33               [ 8]  649 	inc	sp
     00000287 33               [ 8]  650 	inc	sp
     00000288 C5               [16]  651 	push	bc
     00000289 18 DA            [12]  652 	jr	00105$
     0000028B                        653 00107$:
-                                    654 ;src/LevelLogic.c:114: }
+                                    654 ;src/LevelLogic.c:113: }
     0000028B 33               [ 8]  655 	inc	sp
     0000028C 33               [ 8]  656 	inc	sp
     0000028D C9               [16]  657 	ret
-                                    658 ;src/LevelLogic.c:116: void move_foward_block_id(void){
+                                    658 ;src/LevelLogic.c:115: void move_foward_block_id(void){
                                     659 ;	---------------------------------
                                     660 ; Function move_foward_block_id
                                     661 ; ---------------------------------
     0000028E                        662 _move_foward_block_id::
-                                    663 ;src/LevelLogic.c:117: global_selected_block++;
+                                    663 ;src/LevelLogic.c:116: global_selected_block++;
     0000028E 21r34r01         [12]  664 	ld	hl, #_global_selected_block
     00000291 34               [12]  665 	inc	(hl)
-                                    666 ;src/LevelLogic.c:118: if(global_selected_block >= NUMBER_OF_BLOCKS){
+                                    666 ;src/LevelLogic.c:117: if(global_selected_block >= NUMBER_OF_BLOCKS){
     00000292 7E               [ 8]  667 	ld	a, (hl)
     00000293 D6 08            [ 8]  668 	sub	a, #0x08
     00000295 D8               [20]  669 	ret	C
-                                    670 ;src/LevelLogic.c:119: global_selected_block = 0;
+                                    670 ;src/LevelLogic.c:118: global_selected_block = 0;
     00000296 36 00            [12]  671 	ld	(hl), #0x00
-                                    672 ;src/LevelLogic.c:121: }
+                                    672 ;src/LevelLogic.c:120: }
     00000298 C9               [16]  673 	ret
                                     674 	.area _CODE
                                     675 	.area _INITIALIZER

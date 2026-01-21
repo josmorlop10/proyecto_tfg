@@ -4,8 +4,6 @@
 #include "../res/selector.h" 
 #include "../res/duck.h"
 #include "../res/block_pointer.h"
-#include "../res/map1.h" 
-#include "../res/map_tiles.h" 
 
 #include "../res/map_tiles_alt.h"
 #include "../res/map1_alt.h"

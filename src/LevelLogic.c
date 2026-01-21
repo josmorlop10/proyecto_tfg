@@ -5,8 +5,7 @@
 #include <gb/gb.h>
 #include <gbdk/console.h>
 #include "../res/map1_alt.h"
-#include "../res/map_tiles.h"
-
+#include "../res/map1_alt.h"
 //variables globales
 GameState global_game_state;
 uint8_t global_colision_map[NUMBER_OF_TILES_IN_GRID] = {EMPTY};
