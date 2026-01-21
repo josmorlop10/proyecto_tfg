@@ -53,7 +53,7 @@ void change_bkg_tile_16x16(uint16_t tile_index, uint8_t tile_id_BR){
 
 //TODO:TEMPORAL
 void print_counter(void){
-    uint8_t tile_id = global_selected_block + 16;
+    uint8_t tile_id = global_selected_block + 115;
     set_win_tile_xy(0, 0, tile_id);
 }
 

@@ -218,9 +218,9 @@ _change_bkg_tile_16x16::
 ; Function print_counter
 ; ---------------------------------
 _print_counter::
-;src/Graphic.c:56: uint8_t tile_id = global_selected_block + 16;
+;src/Graphic.c:56: uint8_t tile_id = global_selected_block + 115;
 	ld	a, (_global_selected_block)
-	add	a, #0x10
+	add	a, #0x73
 ;src/Graphic.c:57: set_win_tile_xy(0, 0, tile_id);
 	push	af
 	inc	sp

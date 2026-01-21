@@ -218,9 +218,9 @@
                                     218 ; Function print_counter
                                     219 ; ---------------------------------
     000000DE                        220 _print_counter::
-                                    221 ;src/Graphic.c:56: uint8_t tile_id = global_selected_block + 16;
+                                    221 ;src/Graphic.c:56: uint8_t tile_id = global_selected_block + 115;
     000000DE FAr00r00         [16]  222 	ld	a, (_global_selected_block)
-    000000E1 C6 10            [ 8]  223 	add	a, #0x10
+    000000E1 C6 73            [ 8]  223 	add	a, #0x73
                                     224 ;src/Graphic.c:57: set_win_tile_xy(0, 0, tile_id);
     000000E3 F5               [16]  225 	push	af
     000000E4 33               [ 8]  226 	inc	sp
