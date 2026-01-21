@@ -45,7 +45,7 @@ _global_init_point::
 _global_colision_map::
 	.ds 300
 _global_blocks_available::
-	.ds 4
+	.ds 8
 _global_selected_block::
 	.ds 1
 _global_levels_array::
@@ -124,13 +124,14 @@ _init_level::
 	ld	c, #0x00
 00109$:
 	ld	a, c
-	sub	a, #0x04
+	sub	a, #0x08
 	jr	NC, 00104$
-;src/LevelLogic.c:38: update_values_in_hud(RIGHT+e, global_blocks_available[e]);
+;src/LevelLogic.c:38: update_values_in_hud(RIGHT+e, global_blocks_available[e]+1);
 	ld	hl, #_global_blocks_available
 	ld	b, #0x00
 	add	hl, bc
 	ld	e, (hl)
+	inc	e
 	ld	a, c
 	add	a, #0x06
 	push	bc
@@ -380,7 +381,7 @@ _read_global_block_info_from_map::
 00103$:
 	ldhl	sp,	#2
 	ld	a, (hl)
-	sub	a, #0x04
+	sub	a, #0x08
 	jr	NC, 00105$
 ;src/LevelLogic.c:75: global_blocks_available[e] = blocks_map[e];
 	ld	de, #_global_blocks_available
@@ -665,7 +666,7 @@ _move_foward_block_id::
 	inc	(hl)
 ;src/LevelLogic.c:118: if(global_selected_block >= NUMBER_OF_BLOCKS){
 	ld	a, (hl)
-	sub	a, #0x04
+	sub	a, #0x08
 	ret	C
 ;src/LevelLogic.c:119: global_selected_block = 0;
 	ld	(hl), #0x00
@@ -976,6 +977,10 @@ __xinit__global_colision_map:
 	.db 0x00
 __xinit__global_blocks_available:
 	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
 	.db 0x00
 	.db 0x00
 	.db 0x00

@@ -234,61 +234,99 @@ _print_counter::
 ; Function update_values_in_hud
 ; ---------------------------------
 _update_values_in_hud::
-	ld	c, e
 ;src/Graphic.c:67: uint8_t x = 0;
 ;src/Graphic.c:68: uint8_t y = 0;
-	ld	b, #0x00
-	ld	e, b
+	ld	bc, #0x0
 ;src/Graphic.c:70: switch (position)
 	cp	a, #0x06
-	jr	Z, 00101$
-	cp	a, #0x07
-	jr	Z, 00102$
-	cp	a, #0x08
-	jr	Z, 00103$
-	sub	a, #0x09
-	jr	Z, 00104$
-	jr	00106$
+	jr	C, 00110$
+	cp	a, #0x0e
+	jr	NC, 00110$
+	add	a, #0xfa
+	ld	c, a
+	ld	b, #0x00
+	ld	hl, #00127$
+	add	hl, bc
+	add	hl, bc
+	ld	c, (hl)
+	inc	hl
+	ld	h, (hl)
+	ld	l, c
+	jp	(hl)
+00127$:
+	.dw	00101$
+	.dw	00102$
+	.dw	00103$
+	.dw	00104$
+	.dw	00105$
+	.dw	00106$
+	.dw	00107$
+	.dw	00108$
 ;src/Graphic.c:72: case RIGHT:
 00101$:
 ;src/Graphic.c:73: x = 3;
-	ld	b, #0x03
 ;src/Graphic.c:74: y = 1;
-	ld	e, #0x01
+	ld	bc, #0x103
 ;src/Graphic.c:75: break;
-	jr	00106$
+	jr	00110$
 ;src/Graphic.c:76: case LEFT:
 00102$:
 ;src/Graphic.c:77: x = 3;
-	ld	b, #0x03
 ;src/Graphic.c:78: y = 2;
-	ld	e, #0x02
+	ld	bc, #0x203
 ;src/Graphic.c:79: break;
-	jr	00106$
+	jr	00110$
 ;src/Graphic.c:80: case UP:
 00103$:
 ;src/Graphic.c:81: x = 7;
-	ld	b, #0x07
 ;src/Graphic.c:82: y = 1;
-	ld	e, #0x01
+	ld	bc, #0x107
 ;src/Graphic.c:83: break;
-	jr	00106$
+	jr	00110$
 ;src/Graphic.c:84: case DOWN:
 00104$:
 ;src/Graphic.c:85: x = 7;
-	ld	b, #0x07
 ;src/Graphic.c:86: y = 2;
-	ld	e, #0x02
-;src/Graphic.c:90: }
+	ld	bc, #0x207
+;src/Graphic.c:87: break;
+	jr	00110$
+;src/Graphic.c:88: case RIGHT_UP:
+00105$:
+;src/Graphic.c:89: x = 11;
+;src/Graphic.c:90: y = 1;
+	ld	bc, #0x10b
+;src/Graphic.c:91: break;
+	jr	00110$
+;src/Graphic.c:92: case RIGHT_DOWN:
 00106$:
-;src/Graphic.c:92: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset);
-	ld	a, c
+;src/Graphic.c:93: x = 11;
+;src/Graphic.c:94: y = 2;
+	ld	bc, #0x20b
+;src/Graphic.c:95: break;
+	jr	00110$
+;src/Graphic.c:96: case LEFT_UP:
+00107$:
+;src/Graphic.c:97: x = 15; 
+;src/Graphic.c:98: y = 1;
+	ld	bc, #0x10f
+;src/Graphic.c:99: break;
+	jr	00110$
+;src/Graphic.c:100: case LEFT_DOWN:
+00108$:
+;src/Graphic.c:101: x = 15; 
+;src/Graphic.c:102: y = 2;
+	ld	bc, #0x20f
+;src/Graphic.c:106: }
+00110$:
+;src/Graphic.c:108: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset);
+	ld	a, e
 	add	a, #0x68
 	push	af
 	inc	sp
-	ld	a, b
+	ld	e, b
+	ld	a, c
 	call	_set_win_tile_xy
-;src/Graphic.c:93: }
+;src/Graphic.c:109: }
 	ret
 	.area _CODE
 	.area _INITIALIZER

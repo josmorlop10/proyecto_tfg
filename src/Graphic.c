@@ -85,6 +85,22 @@ void update_values_in_hud(uint8_t position, uint8_t new_value){
         x = 7;
         y = 2;
         break;
+    case RIGHT_UP:
+        x = 11;
+        y = 1;
+        break;
+    case RIGHT_DOWN:
+        x = 11;
+        y = 2;
+        break;
+    case LEFT_UP:
+        x = 15; 
+        y = 1;
+        break;
+    case LEFT_DOWN:
+        x = 15; 
+        y = 2;
+        break;  
     default:
         break;
     }

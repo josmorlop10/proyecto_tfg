@@ -24,12 +24,12 @@
 #define UMBRAL_COLISION_DOWN 20
 #define UMBRAL_BLOCKS 71 //Botton Right!
 
-#define NUMBER_OF_BLOCKS 4
+#define NUMBER_OF_BLOCKS 8
 #define NUMBER_OF_TILES_IN_GRID 300 //20x15
 
 //Global variable for block selected.Indicará la cantidad de bloques disponibles.
 //Siendo index 1 = DER, 2= IZQ, 3=ARRIBA, 4=ABAJO (+6 por los "define" de arriba)
-extern uint8_t global_blocks_available[4];
+extern uint8_t global_blocks_available[NUMBER_OF_BLOCKS];
 //indica el indice del array
 extern uint8_t global_selected_block;
 //variable global array de niveles disponibles (o mapas)

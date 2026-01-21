@@ -234,62 +234,100 @@
                                     234 ; Function update_values_in_hud
                                     235 ; ---------------------------------
     000000EB                        236 _update_values_in_hud::
-    000000EB 4B               [ 4]  237 	ld	c, e
-                                    238 ;src/Graphic.c:67: uint8_t x = 0;
-                                    239 ;src/Graphic.c:68: uint8_t y = 0;
-    000000EC 06 00            [ 8]  240 	ld	b, #0x00
-    000000EE 58               [ 4]  241 	ld	e, b
-                                    242 ;src/Graphic.c:70: switch (position)
-    000000EF FE 06            [ 8]  243 	cp	a, #0x06
-    000000F1 28 0E            [12]  244 	jr	Z, 00101$
-    000000F3 FE 07            [ 8]  245 	cp	a, #0x07
-    000000F5 28 10            [12]  246 	jr	Z, 00102$
-    000000F7 FE 08            [ 8]  247 	cp	a, #0x08
-    000000F9 28 12            [12]  248 	jr	Z, 00103$
-    000000FB D6 09            [ 8]  249 	sub	a, #0x09
-    000000FD 28 14            [12]  250 	jr	Z, 00104$
-    000000FF 18 16            [12]  251 	jr	00106$
-                                    252 ;src/Graphic.c:72: case RIGHT:
-    00000101                        253 00101$:
-                                    254 ;src/Graphic.c:73: x = 3;
-    00000101 06 03            [ 8]  255 	ld	b, #0x03
-                                    256 ;src/Graphic.c:74: y = 1;
-    00000103 1E 01            [ 8]  257 	ld	e, #0x01
-                                    258 ;src/Graphic.c:75: break;
-    00000105 18 10            [12]  259 	jr	00106$
-                                    260 ;src/Graphic.c:76: case LEFT:
-    00000107                        261 00102$:
-                                    262 ;src/Graphic.c:77: x = 3;
-    00000107 06 03            [ 8]  263 	ld	b, #0x03
-                                    264 ;src/Graphic.c:78: y = 2;
-    00000109 1E 02            [ 8]  265 	ld	e, #0x02
-                                    266 ;src/Graphic.c:79: break;
-    0000010B 18 0A            [12]  267 	jr	00106$
-                                    268 ;src/Graphic.c:80: case UP:
-    0000010D                        269 00103$:
-                                    270 ;src/Graphic.c:81: x = 7;
-    0000010D 06 07            [ 8]  271 	ld	b, #0x07
-                                    272 ;src/Graphic.c:82: y = 1;
-    0000010F 1E 01            [ 8]  273 	ld	e, #0x01
-                                    274 ;src/Graphic.c:83: break;
-    00000111 18 04            [12]  275 	jr	00106$
-                                    276 ;src/Graphic.c:84: case DOWN:
-    00000113                        277 00104$:
-                                    278 ;src/Graphic.c:85: x = 7;
-    00000113 06 07            [ 8]  279 	ld	b, #0x07
-                                    280 ;src/Graphic.c:86: y = 2;
-    00000115 1E 02            [ 8]  281 	ld	e, #0x02
-                                    282 ;src/Graphic.c:90: }
-    00000117                        283 00106$:
-                                    284 ;src/Graphic.c:92: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset);
-    00000117 79               [ 4]  285 	ld	a, c
-    00000118 C6 68            [ 8]  286 	add	a, #0x68
-    0000011A F5               [16]  287 	push	af
-    0000011B 33               [ 8]  288 	inc	sp
-    0000011C 78               [ 4]  289 	ld	a, b
-    0000011D CDr00r00         [24]  290 	call	_set_win_tile_xy
-                                    291 ;src/Graphic.c:93: }
-    00000120 C9               [16]  292 	ret
-                                    293 	.area _CODE
-                                    294 	.area _INITIALIZER
-                                    295 	.area _CABS (ABS)
+                                    237 ;src/Graphic.c:67: uint8_t x = 0;
+                                    238 ;src/Graphic.c:68: uint8_t y = 0;
+    000000EB 01 00 00         [12]  239 	ld	bc, #0x0
+                                    240 ;src/Graphic.c:70: switch (position)
+    000000EE FE 06            [ 8]  241 	cp	a, #0x06
+    000000F0 38 49            [12]  242 	jr	C, 00110$
+    000000F2 FE 0E            [ 8]  243 	cp	a, #0x0e
+    000000F4 30 45            [12]  244 	jr	NC, 00110$
+    000000F6 C6 FA            [ 8]  245 	add	a, #0xfa
+    000000F8 4F               [ 4]  246 	ld	c, a
+    000000F9 06 00            [ 8]  247 	ld	b, #0x00
+    000000FB 21r05r01         [12]  248 	ld	hl, #00127$
+    000000FE 09               [ 8]  249 	add	hl, bc
+    000000FF 09               [ 8]  250 	add	hl, bc
+    00000100 4E               [ 8]  251 	ld	c, (hl)
+    00000101 23               [ 8]  252 	inc	hl
+    00000102 66               [ 8]  253 	ld	h, (hl)
+    00000103 69               [ 4]  254 	ld	l, c
+    00000104 E9               [ 4]  255 	jp	(hl)
+    00000105                        256 00127$:
+    00000105r15r01                  257 	.dw	00101$
+    00000107r1Ar01                  258 	.dw	00102$
+    00000109r1Fr01                  259 	.dw	00103$
+    0000010Br24r01                  260 	.dw	00104$
+    0000010Dr29r01                  261 	.dw	00105$
+    0000010Fr2Er01                  262 	.dw	00106$
+    00000111r33r01                  263 	.dw	00107$
+    00000113r38r01                  264 	.dw	00108$
+                                    265 ;src/Graphic.c:72: case RIGHT:
+    00000115                        266 00101$:
+                                    267 ;src/Graphic.c:73: x = 3;
+                                    268 ;src/Graphic.c:74: y = 1;
+    00000115 01 03 01         [12]  269 	ld	bc, #0x103
+                                    270 ;src/Graphic.c:75: break;
+    00000118 18 21            [12]  271 	jr	00110$
+                                    272 ;src/Graphic.c:76: case LEFT:
+    0000011A                        273 00102$:
+                                    274 ;src/Graphic.c:77: x = 3;
+                                    275 ;src/Graphic.c:78: y = 2;
+    0000011A 01 03 02         [12]  276 	ld	bc, #0x203
+                                    277 ;src/Graphic.c:79: break;
+    0000011D 18 1C            [12]  278 	jr	00110$
+                                    279 ;src/Graphic.c:80: case UP:
+    0000011F                        280 00103$:
+                                    281 ;src/Graphic.c:81: x = 7;
+                                    282 ;src/Graphic.c:82: y = 1;
+    0000011F 01 07 01         [12]  283 	ld	bc, #0x107
+                                    284 ;src/Graphic.c:83: break;
+    00000122 18 17            [12]  285 	jr	00110$
+                                    286 ;src/Graphic.c:84: case DOWN:
+    00000124                        287 00104$:
+                                    288 ;src/Graphic.c:85: x = 7;
+                                    289 ;src/Graphic.c:86: y = 2;
+    00000124 01 07 02         [12]  290 	ld	bc, #0x207
+                                    291 ;src/Graphic.c:87: break;
+    00000127 18 12            [12]  292 	jr	00110$
+                                    293 ;src/Graphic.c:88: case RIGHT_UP:
+    00000129                        294 00105$:
+                                    295 ;src/Graphic.c:89: x = 11;
+                                    296 ;src/Graphic.c:90: y = 1;
+    00000129 01 0B 01         [12]  297 	ld	bc, #0x10b
+                                    298 ;src/Graphic.c:91: break;
+    0000012C 18 0D            [12]  299 	jr	00110$
+                                    300 ;src/Graphic.c:92: case RIGHT_DOWN:
+    0000012E                        301 00106$:
+                                    302 ;src/Graphic.c:93: x = 11;
+                                    303 ;src/Graphic.c:94: y = 2;
+    0000012E 01 0B 02         [12]  304 	ld	bc, #0x20b
+                                    305 ;src/Graphic.c:95: break;
+    00000131 18 08            [12]  306 	jr	00110$
+                                    307 ;src/Graphic.c:96: case LEFT_UP:
+    00000133                        308 00107$:
+                                    309 ;src/Graphic.c:97: x = 15; 
+                                    310 ;src/Graphic.c:98: y = 1;
+    00000133 01 0F 01         [12]  311 	ld	bc, #0x10f
+                                    312 ;src/Graphic.c:99: break;
+    00000136 18 03            [12]  313 	jr	00110$
+                                    314 ;src/Graphic.c:100: case LEFT_DOWN:
+    00000138                        315 00108$:
+                                    316 ;src/Graphic.c:101: x = 15; 
+                                    317 ;src/Graphic.c:102: y = 2;
+    00000138 01 0F 02         [12]  318 	ld	bc, #0x20f
+                                    319 ;src/Graphic.c:106: }
+    0000013B                        320 00110$:
+                                    321 ;src/Graphic.c:108: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset);
+    0000013B 7B               [ 4]  322 	ld	a, e
+    0000013C C6 68            [ 8]  323 	add	a, #0x68
+    0000013E F5               [16]  324 	push	af
+    0000013F 33               [ 8]  325 	inc	sp
+    00000140 58               [ 4]  326 	ld	e, b
+    00000141 79               [ 4]  327 	ld	a, c
+    00000142 CDr00r00         [24]  328 	call	_set_win_tile_xy
+                                    329 ;src/Graphic.c:109: }
+    00000145 C9               [16]  330 	ret
+                                    331 	.area _CODE
+                                    332 	.area _INITIALIZER
+                                    333 	.area _CABS (ABS)
