@@ -152,10 +152,10 @@
     0000009A F0r00            [12]  152 	ldh	a, (_LCDC_REG + 0)
     0000009C F6 01            [ 8]  153 	or	a, #0x01
     0000009E E0r00            [12]  154 	ldh	(_LCDC_REG + 0), a
-                                    155 ;src/main.c:59: set_win_data(104,22, hud_tiles);
+                                    155 ;src/main.c:59: set_win_data(104,26, hud_tiles);
     000000A0 11r00r00         [12]  156 	ld	de, #_hud_tiles
     000000A3 D5               [16]  157 	push	de
-    000000A4 21 68 16         [12]  158 	ld	hl, #0x1668
+    000000A4 21 68 1A         [12]  158 	ld	hl, #0x1a68
     000000A7 E5               [16]  159 	push	hl
     000000A8 CDr00r00         [24]  160 	call	_set_win_data
     000000AB E8 04            [16]  161 	add	sp, #4

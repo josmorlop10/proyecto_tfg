@@ -152,10 +152,10 @@ _init_gfx::
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x01
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:59: set_win_data(104,22, hud_tiles);
+;src/main.c:59: set_win_data(104,26, hud_tiles);
 	ld	de, #_hud_tiles
 	push	de
-	ld	hl, #0x1668
+	ld	hl, #0x1a68
 	push	hl
 	call	_set_win_data
 	add	sp, #4

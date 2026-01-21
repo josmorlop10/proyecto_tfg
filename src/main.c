@@ -56,7 +56,7 @@ void init_gfx(void){
 
     //HUD
     // Activa la window
-    set_win_data(104,22, hud_tiles);
+    set_win_data(104,26, hud_tiles);
     set_win_tiles(0,0,20,3, hud_selector);
     SHOW_WIN;
     WX_REG = 7;      // SIEMPRE 7
