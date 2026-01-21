@@ -105,5 +105,5 @@ void update_values_in_hud(uint8_t position, uint8_t new_value){
         break;
     }
 
-    set_win_tile_xy(x,y, new_value + hud_selectorTileOffset);
+    set_win_tile_xy(x,y, new_value + hud_selectorTileOffset + 1);
 }

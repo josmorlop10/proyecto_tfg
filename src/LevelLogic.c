@@ -35,7 +35,7 @@ void init_level(uint8_t level_number){
     read_global_block_info_from_map(blocks_map1_alt);
 
     for(uint8_t e = 0; e < NUMBER_OF_BLOCKS; e++){
-        update_values_in_hud(RIGHT+e, global_blocks_available[e]+1);
+        update_values_in_hud(RIGHT+e, global_blocks_available[e]);
     }
 
     get_init_point_from_map(global_colision_map);

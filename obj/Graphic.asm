@@ -318,9 +318,9 @@ _update_values_in_hud::
 	ld	bc, #0x20f
 ;src/Graphic.c:106: }
 00110$:
-;src/Graphic.c:108: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset);
+;src/Graphic.c:108: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset + 1);
 	ld	a, e
-	add	a, #0x68
+	add	a, #0x69
 	push	af
 	inc	sp
 	ld	e, b

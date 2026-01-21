@@ -126,12 +126,11 @@ _init_level::
 	ld	a, c
 	sub	a, #0x08
 	jr	NC, 00104$
-;src/LevelLogic.c:38: update_values_in_hud(RIGHT+e, global_blocks_available[e]+1);
+;src/LevelLogic.c:38: update_values_in_hud(RIGHT+e, global_blocks_available[e]);
 	ld	hl, #_global_blocks_available
 	ld	b, #0x00
 	add	hl, bc
 	ld	e, (hl)
-	inc	e
 	ld	a, c
 	add	a, #0x06
 	push	bc

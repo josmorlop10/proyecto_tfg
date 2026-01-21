@@ -442,39 +442,49 @@ _block_is_not_placed_below::
 ; Function block_is_placed_below
 ; ---------------------------------
 _block_is_placed_below::
+	add	sp, #-3
 ;src/PointerSelector.c:67: uint8_t res = 0;
 	ld	c, #0x00
-;src/PointerSelector.c:68: if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=DOWN) 
+;src/PointerSelector.c:68: if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=LEFT_DOWN) 
 	ld	hl, #0x0006
 	add	hl, de
-	ld	a,	(hl+)
-	ld	h, (hl)
-	ld	l, a
-	add	a,#<(_global_colision_map)
-	ld	e, a
-	ld	a, #>(_global_colision_map)
-	adc	a, h
-	ld	d, a
+	ld	e, l
+	ld	d, h
 	ld	a, (de)
-	ld	e, a
+	ldhl	sp,	#0
+	ld	(hl+), a
+	inc	de
+	ld	a, (de)
+	ld	(hl), a
+	ld	de, #_global_colision_map
+	pop	hl
+	push	hl
+	add	hl, de
+	ld	e, l
+	ld	d, h
+	ld	a, (de)
+	ldhl	sp,	#2
+	ld	(hl), a
 	sub	a, #0x06
 	jr	C, 00102$
-	ld	a, #0x09
-	sub	a, e
+	ld	a, #0x0d
+	sub	a, (hl)
 	jr	C, 00102$
-;src/PointerSelector.c:69: && (global_colision_map[s->tileindexBR-1] != EMPTY)
-	ld	b, l
-	ld	d,h
+;src/PointerSelector.c:69: && (global_colision_map[s->tileindexBR-1] == BLOCK)
+	pop	de
+	push	de
+	ld	l, e
+	ld	h, d
 	dec	hl
 	push	de
 	ld	de, #_global_colision_map
 	add	hl, de
 	pop	de
 	ld	a, (hl)
-	or	a, a
-	jr	Z, 00102$
-;src/PointerSelector.c:70: && (global_colision_map[s->tileindexBR-20] != EMPTY)
-	ld	a, b
+	sub	a, #0x05
+	jr	NZ, 00102$
+;src/PointerSelector.c:70: && (global_colision_map[s->tileindexBR-20] == BLOCK)
+	ld	a, e
 	add	a, #0xec
 	ld	l, a
 	ld	a, d
@@ -485,28 +495,28 @@ _block_is_placed_below::
 	add	hl, de
 	pop	de
 	ld	a, (hl)
-	or	a, a
-	jr	Z, 00102$
-;src/PointerSelector.c:71: && (global_colision_map[s->tileindexBR-21] != EMPTY)){
-	ld	a, b
+	sub	a, #0x05
+	jr	NZ, 00102$
+;src/PointerSelector.c:71: && (global_colision_map[s->tileindexBR-21] == BLOCK)){
+	ld	a, e
 	add	a, #0xeb
 	ld	l, a
 	ld	a, d
 	adc	a, #0xff
 	ld	h, a
-	push	de
 	ld	de, #_global_colision_map
 	add	hl, de
-	pop	de
 	ld	a, (hl)
-	or	a, a
-	jr	Z, 00102$
+	sub	a, #0x05
+	jr	NZ, 00102$
 ;src/PointerSelector.c:72: res = global_colision_map[s->tileindexBR];
-	ld	c, e
+	ldhl	sp,	#2
+	ld	c, (hl)
 00102$:
 ;src/PointerSelector.c:74: return res;
 	ld	a, c
 ;src/PointerSelector.c:75: }
+	add	sp, #3
 	ret
 ;src/PointerSelector.c:77: void control_pointer(Pointer* s){
 ;	---------------------------------

@@ -65,10 +65,10 @@ uint8_t block_is_placed_below(Pointer* s){
     //devuelbe el bloque si es que hay un bloque. 
     //Si no devuelve 0
     uint8_t res = 0;
-    if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=DOWN) 
-           && (global_colision_map[s->tileindexBR-1] != EMPTY)
-           && (global_colision_map[s->tileindexBR-20] != EMPTY)
-           && (global_colision_map[s->tileindexBR-21] != EMPTY)){
+    if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=LEFT_DOWN) 
+           && (global_colision_map[s->tileindexBR-1] == BLOCK)
+           && (global_colision_map[s->tileindexBR-20] == BLOCK)
+           && (global_colision_map[s->tileindexBR-21] == BLOCK)){
                 res = global_colision_map[s->tileindexBR];
            }
     return res;

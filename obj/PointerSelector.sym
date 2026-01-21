@@ -15,11 +15,11 @@ Symbol Table
     _change_colision_map_BR                                         ******** GX
     _change_colision_map_at                                         ******** GX
     _check_colision_with_object                                     ******** GX
-  0 _control_pointer                                                000001D6 GR
+  0 _control_pointer                                                000001E8 GR
     _global_blocks_available                                        ******** GX
     _global_colision_map                                            ******** GX
     _global_selected_block                                          ******** GX
-  0 _hide_pointer                                                   0000030E GR
+  0 _hide_pointer                                                   00000320 GR
     _joypad                                                         ******** GX
     _move_foward_block_id                                           ******** GX
   0 _move_pointer                                                   0000002A GR
@@ -29,7 +29,7 @@ Symbol Table
   0 _remove_object_at_pointer                                       00000111 GR
     _shadow_OAM                                                     ******** GX
     _tileindex_from_xy                                              ******** GX
-  0 _update_pointer                                                 000002EC GR
+  0 _update_pointer                                                 000002FE GR
     _update_values_in_hud                                           ******** GX
 
 
@@ -38,7 +38,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      323   flags    0
+   0 _CODE                                      size      335   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

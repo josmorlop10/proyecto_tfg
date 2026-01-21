@@ -442,348 +442,358 @@
                                     442 ; Function block_is_placed_below
                                     443 ; ---------------------------------
     00000187                        444 _block_is_placed_below::
-                                    445 ;src/PointerSelector.c:67: uint8_t res = 0;
-    00000187 0E 00            [ 8]  446 	ld	c, #0x00
-                                    447 ;src/PointerSelector.c:68: if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=DOWN) 
-    00000189 21 06 00         [12]  448 	ld	hl, #0x0006
-    0000018C 19               [ 8]  449 	add	hl, de
-    0000018D 2A               [ 8]  450 	ld	a,	(hl+)
-    0000018E 66               [ 8]  451 	ld	h, (hl)
-    0000018F 6F               [ 4]  452 	ld	l, a
-    00000190 C6r00            [ 8]  453 	add	a,#<(_global_colision_map)
-    00000192 5F               [ 4]  454 	ld	e, a
-    00000193 3Es00            [ 8]  455 	ld	a, #>(_global_colision_map)
-    00000195 8C               [ 4]  456 	adc	a, h
-    00000196 57               [ 4]  457 	ld	d, a
-    00000197 1A               [ 8]  458 	ld	a, (de)
-    00000198 5F               [ 4]  459 	ld	e, a
-    00000199 D6 06            [ 8]  460 	sub	a, #0x06
-    0000019B 38 37            [12]  461 	jr	C, 00102$
-    0000019D 3E 09            [ 8]  462 	ld	a, #0x09
-    0000019F 93               [ 4]  463 	sub	a, e
-    000001A0 38 32            [12]  464 	jr	C, 00102$
-                                    465 ;src/PointerSelector.c:69: && (global_colision_map[s->tileindexBR-1] != EMPTY)
-    000001A2 45               [ 4]  466 	ld	b, l
-    000001A3 54               [ 4]  467 	ld	d,h
-    000001A4 2B               [ 8]  468 	dec	hl
-    000001A5 D5               [16]  469 	push	de
-    000001A6 11r00r00         [12]  470 	ld	de, #_global_colision_map
-    000001A9 19               [ 8]  471 	add	hl, de
-    000001AA D1               [12]  472 	pop	de
-    000001AB 7E               [ 8]  473 	ld	a, (hl)
-    000001AC B7               [ 4]  474 	or	a, a
-    000001AD 28 25            [12]  475 	jr	Z, 00102$
-                                    476 ;src/PointerSelector.c:70: && (global_colision_map[s->tileindexBR-20] != EMPTY)
-    000001AF 78               [ 4]  477 	ld	a, b
-    000001B0 C6 EC            [ 8]  478 	add	a, #0xec
-    000001B2 6F               [ 4]  479 	ld	l, a
-    000001B3 7A               [ 4]  480 	ld	a, d
-    000001B4 CE FF            [ 8]  481 	adc	a, #0xff
-    000001B6 67               [ 4]  482 	ld	h, a
-    000001B7 D5               [16]  483 	push	de
-    000001B8 11r00r00         [12]  484 	ld	de, #_global_colision_map
-    000001BB 19               [ 8]  485 	add	hl, de
-    000001BC D1               [12]  486 	pop	de
-    000001BD 7E               [ 8]  487 	ld	a, (hl)
-    000001BE B7               [ 4]  488 	or	a, a
-    000001BF 28 13            [12]  489 	jr	Z, 00102$
-                                    490 ;src/PointerSelector.c:71: && (global_colision_map[s->tileindexBR-21] != EMPTY)){
-    000001C1 78               [ 4]  491 	ld	a, b
-    000001C2 C6 EB            [ 8]  492 	add	a, #0xeb
-    000001C4 6F               [ 4]  493 	ld	l, a
-    000001C5 7A               [ 4]  494 	ld	a, d
-    000001C6 CE FF            [ 8]  495 	adc	a, #0xff
-    000001C8 67               [ 4]  496 	ld	h, a
-    000001C9 D5               [16]  497 	push	de
-    000001CA 11r00r00         [12]  498 	ld	de, #_global_colision_map
-    000001CD 19               [ 8]  499 	add	hl, de
-    000001CE D1               [12]  500 	pop	de
-    000001CF 7E               [ 8]  501 	ld	a, (hl)
-    000001D0 B7               [ 4]  502 	or	a, a
-    000001D1 28 01            [12]  503 	jr	Z, 00102$
-                                    504 ;src/PointerSelector.c:72: res = global_colision_map[s->tileindexBR];
-    000001D3 4B               [ 4]  505 	ld	c, e
-    000001D4                        506 00102$:
-                                    507 ;src/PointerSelector.c:74: return res;
-    000001D4 79               [ 4]  508 	ld	a, c
-                                    509 ;src/PointerSelector.c:75: }
-    000001D5 C9               [16]  510 	ret
-                                    511 ;src/PointerSelector.c:77: void control_pointer(Pointer* s){
-                                    512 ;	---------------------------------
-                                    513 ; Function control_pointer
-                                    514 ; ---------------------------------
-    000001D6                        515 _control_pointer::
-    000001D6 E8 FC            [16]  516 	add	sp, #-4
-    000001D8 F8 02            [12]  517 	ldhl	sp,	#2
-    000001DA 7B               [ 4]  518 	ld	a, e
-    000001DB 22               [ 8]  519 	ld	(hl+), a
-    000001DC 72               [ 8]  520 	ld	(hl), d
-                                    521 ;src/PointerSelector.c:79: if(joypad() & J_UP) {
-    000001DD CDr00r00         [24]  522 	call	_joypad
-                                    523 ;src/PointerSelector.c:81: s->y -= 8;
-    000001E0 F8 02            [12]  524 	ldhl	sp,	#2
-    000001E2 4E               [ 8]  525 	ld	c, (hl)
-    000001E3 23               [ 8]  526 	inc	hl
-    000001E4 46               [ 8]  527 	ld	b, (hl)
-    000001E5 03               [ 8]  528 	inc	bc
-                                    529 ;src/PointerSelector.c:79: if(joypad() & J_UP) {
-    000001E6 CB 57            [ 8]  530 	bit	2, a
-    000001E8 28 1A            [12]  531 	jr	Z, 00133$
-                                    532 ;src/PointerSelector.c:80: if (can_pointer_move(s, 0, -1)){
-    000001EA C5               [16]  533 	push	bc
-    000001EB 3E FF            [ 8]  534 	ld	a, #0xff
-    000001ED F5               [16]  535 	push	af
-    000001EE 33               [ 8]  536 	inc	sp
-    000001EF AF               [ 4]  537 	xor	a, a
-    000001F0 F8 05            [12]  538 	ldhl	sp,	#5
-    000001F2 5E               [ 8]  539 	ld	e, (hl)
-    000001F3 23               [ 8]  540 	inc	hl
-    000001F4 56               [ 8]  541 	ld	d, (hl)
-    000001F5 CDr83r00         [24]  542 	call	_can_pointer_move
-    000001F8 C1               [12]  543 	pop	bc
-    000001F9 B7               [ 4]  544 	or	a, a
-    000001FA CArE9r02         [16]  545 	jp	Z, 00135$
-                                    546 ;src/PointerSelector.c:81: s->y -= 8;
-    000001FD 0A               [ 8]  547 	ld	a, (bc)
-    000001FE C6 F8            [ 8]  548 	add	a, #0xf8
-    00000200 02               [ 8]  549 	ld	(bc), a
-    00000201 C3rE9r02         [16]  550 	jp	00135$
-    00000204                        551 00133$:
-                                    552 ;src/PointerSelector.c:83: } else if(joypad() & J_DOWN) {
-    00000204 CDr00r00         [24]  553 	call	_joypad
-    00000207 CB 5F            [ 8]  554 	bit	3, a
-    00000209 28 1A            [12]  555 	jr	Z, 00130$
-                                    556 ;src/PointerSelector.c:84: if (can_pointer_move(s, 0, 1)){
-    0000020B C5               [16]  557 	push	bc
-    0000020C 3E 01            [ 8]  558 	ld	a, #0x01
-    0000020E F5               [16]  559 	push	af
-    0000020F 33               [ 8]  560 	inc	sp
-    00000210 AF               [ 4]  561 	xor	a, a
-    00000211 F8 05            [12]  562 	ldhl	sp,	#5
-    00000213 5E               [ 8]  563 	ld	e, (hl)
-    00000214 23               [ 8]  564 	inc	hl
-    00000215 56               [ 8]  565 	ld	d, (hl)
-    00000216 CDr83r00         [24]  566 	call	_can_pointer_move
-    00000219 C1               [12]  567 	pop	bc
-    0000021A B7               [ 4]  568 	or	a, a
-    0000021B CArE9r02         [16]  569 	jp	Z, 00135$
-                                    570 ;src/PointerSelector.c:85: s->y += 8;
-    0000021E 0A               [ 8]  571 	ld	a, (bc)
-    0000021F C6 08            [ 8]  572 	add	a, #0x08
-    00000221 02               [ 8]  573 	ld	(bc), a
-    00000222 C3rE9r02         [16]  574 	jp	00135$
-    00000225                        575 00130$:
-                                    576 ;src/PointerSelector.c:87: } else if(joypad() & J_LEFT) {
-    00000225 CDr00r00         [24]  577 	call	_joypad
-    00000228 5F               [ 4]  578 	ld	e, a
-                                    579 ;src/PointerSelector.c:89: s->x -= 8;
-    00000229 F8 02            [12]  580 	ldhl	sp,	#2
-    0000022B 3A               [ 8]  581 	ld	a, (hl-)
-    0000022C 2B               [ 8]  582 	dec	hl
-    0000022D 77               [ 8]  583 	ld	(hl), a
-    0000022E F8 03            [12]  584 	ldhl	sp,	#3
-    00000230 3A               [ 8]  585 	ld	a, (hl-)
-    00000231 2B               [ 8]  586 	dec	hl
-    00000232 77               [ 8]  587 	ld	(hl), a
-                                    588 ;src/PointerSelector.c:87: } else if(joypad() & J_LEFT) {
-    00000233 CB 4B            [ 8]  589 	bit	1, e
-    00000235 28 1C            [12]  590 	jr	Z, 00127$
-                                    591 ;src/PointerSelector.c:88: if (can_pointer_move(s, -1, 0)){
-    00000237 AF               [ 4]  592 	xor	a, a
-    00000238 F5               [16]  593 	push	af
-    00000239 33               [ 8]  594 	inc	sp
-    0000023A 3E FF            [ 8]  595 	ld	a, #0xff
-    0000023C F8 03            [12]  596 	ldhl	sp,	#3
-    0000023E 5E               [ 8]  597 	ld	e, (hl)
-    0000023F 23               [ 8]  598 	inc	hl
-    00000240 56               [ 8]  599 	ld	d, (hl)
-    00000241 CDr83r00         [24]  600 	call	_can_pointer_move
-    00000244 B7               [ 4]  601 	or	a, a
-    00000245 CArE9r02         [16]  602 	jp	Z, 00135$
-                                    603 ;src/PointerSelector.c:89: s->x -= 8;
-    00000248 D1               [12]  604 	pop	de
-    00000249 D5               [16]  605 	push	de
-    0000024A 1A               [ 8]  606 	ld	a, (de)
-    0000024B C6 F8            [ 8]  607 	add	a, #0xf8
-    0000024D E1               [12]  608 	pop	hl
-    0000024E E5               [16]  609 	push	hl
-    0000024F 77               [ 8]  610 	ld	(hl), a
-    00000250 C3rE9r02         [16]  611 	jp	00135$
-    00000253                        612 00127$:
-                                    613 ;src/PointerSelector.c:91: } else if(joypad() & J_RIGHT) {
-    00000253 CDr00r00         [24]  614 	call	_joypad
-    00000256 0F               [ 4]  615 	rrca
-    00000257 30 1B            [12]  616 	jr	NC, 00124$
-                                    617 ;src/PointerSelector.c:92: if (can_pointer_move(s, 1, 0)){
-    00000259 AF               [ 4]  618 	xor	a, a
-    0000025A F5               [16]  619 	push	af
-    0000025B 33               [ 8]  620 	inc	sp
-    0000025C 3E 01            [ 8]  621 	ld	a, #0x01
-    0000025E F8 03            [12]  622 	ldhl	sp,	#3
-    00000260 5E               [ 8]  623 	ld	e, (hl)
-    00000261 23               [ 8]  624 	inc	hl
-    00000262 56               [ 8]  625 	ld	d, (hl)
-    00000263 CDr83r00         [24]  626 	call	_can_pointer_move
-    00000266 B7               [ 4]  627 	or	a, a
-    00000267 CArE9r02         [16]  628 	jp	Z, 00135$
-                                    629 ;src/PointerSelector.c:93: s->x += 8;
-    0000026A D1               [12]  630 	pop	de
-    0000026B D5               [16]  631 	push	de
-    0000026C 1A               [ 8]  632 	ld	a, (de)
-    0000026D C6 08            [ 8]  633 	add	a, #0x08
-    0000026F E1               [12]  634 	pop	hl
-    00000270 E5               [16]  635 	push	hl
-    00000271 77               [ 8]  636 	ld	(hl), a
-    00000272 18 75            [12]  637 	jr	00135$
-    00000274                        638 00124$:
-                                    639 ;src/PointerSelector.c:95: } else if(joypad() & J_A) {
-    00000274 CDr00r00         [24]  640 	call	_joypad
-    00000277 CB 67            [ 8]  641 	bit	4, a
-    00000279 28 44            [12]  642 	jr	Z, 00121$
-                                    643 ;src/PointerSelector.c:96: if(block_is_not_placed_below(s) 
-    0000027B C5               [16]  644 	push	bc
-    0000027C F8 04            [12]  645 	ldhl	sp,	#4
-    0000027E 2A               [ 8]  646 	ld	a, (hl+)
-    0000027F 5F               [ 4]  647 	ld	e, a
-    00000280 56               [ 8]  648 	ld	d, (hl)
-    00000281 CDr4Dr01         [24]  649 	call	_block_is_not_placed_below
-    00000284 C1               [12]  650 	pop	bc
-    00000285 B7               [ 4]  651 	or	a, a
-    00000286 28 61            [12]  652 	jr	Z, 00135$
-                                    653 ;src/PointerSelector.c:97: && (global_blocks_available[global_selected_block]>0)
-    00000288 3Er00            [ 8]  654 	ld	a, #<(_global_blocks_available)
-    0000028A 21r00r00         [12]  655 	ld	hl, #_global_selected_block
-    0000028D 86               [ 8]  656 	add	a, (hl)
-    0000028E 5F               [ 4]  657 	ld	e, a
-    0000028F 3Es00            [ 8]  658 	ld	a, #>(_global_blocks_available)
-    00000291 CE 00            [ 8]  659 	adc	a, #0x00
-    00000293 57               [ 4]  660 	ld	d, a
-    00000294 1A               [ 8]  661 	ld	a, (de)
-    00000295 B7               [ 4]  662 	or	a, a
-    00000296 28 51            [12]  663 	jr	Z, 00135$
-                                    664 ;src/PointerSelector.c:98: && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1) , 16, 16) == 255){
-    00000298 0A               [ 8]  665 	ld	a, (bc)
-    00000299 C6 F8            [ 8]  666 	add	a, #0xf8
-    0000029B 4F               [ 4]  667 	ld	c, a
-    0000029C D1               [12]  668 	pop	de
-    0000029D D5               [16]  669 	push	de
-    0000029E 1A               [ 8]  670 	ld	a, (de)
-    0000029F C6 F8            [ 8]  671 	add	a, #0xf8
-    000002A1 26 10            [ 8]  672 	ld	h, #0x10
-    000002A3 E5               [16]  673 	push	hl
-    000002A4 33               [ 8]  674 	inc	sp
-    000002A5 26 10            [ 8]  675 	ld	h, #0x10
-    000002A7 E5               [16]  676 	push	hl
-    000002A8 33               [ 8]  677 	inc	sp
-    000002A9 59               [ 4]  678 	ld	e, c
-    000002AA CDr00r00         [24]  679 	call	_check_colision_with_object
-    000002AD 3C               [ 4]  680 	inc	a
-    000002AE 20 39            [12]  681 	jr	NZ, 00135$
-                                    682 ;src/PointerSelector.c:99: place_object_at_pointer(s, global_selected_block + 6);
-    000002B0 FAr00r00         [16]  683 	ld	a, (_global_selected_block)
-    000002B3 C6 06            [ 8]  684 	add	a, #0x06
-    000002B5 F8 02            [12]  685 	ldhl	sp,	#2
-    000002B7 5E               [ 8]  686 	ld	e, (hl)
-    000002B8 23               [ 8]  687 	inc	hl
-    000002B9 56               [ 8]  688 	ld	d, (hl)
-    000002BA CDrB1r00         [24]  689 	call	_place_object_at_pointer
-    000002BD 18 2A            [12]  690 	jr	00135$
-    000002BF                        691 00121$:
-                                    692 ;src/PointerSelector.c:101: } else if(joypad() & J_B) {
-    000002BF CDr00r00         [24]  693 	call	_joypad
-    000002C2 CB 6F            [ 8]  694 	bit	5, a
-    000002C4 28 16            [12]  695 	jr	Z, 00118$
-                                    696 ;src/PointerSelector.c:102: uint8_t block = block_is_placed_below(s);
-    000002C6 F8 02            [12]  697 	ldhl	sp,	#2
-    000002C8 2A               [ 8]  698 	ld	a, (hl+)
-    000002C9 5F               [ 4]  699 	ld	e, a
-    000002CA 56               [ 8]  700 	ld	d, (hl)
-    000002CB CDr87r01         [24]  701 	call	_block_is_placed_below
-                                    702 ;src/PointerSelector.c:103: if(block>=6){
-    000002CE FE 06            [ 8]  703 	cp	a, #0x06
-    000002D0 38 17            [12]  704 	jr	C, 00135$
-                                    705 ;src/PointerSelector.c:104: remove_object_at_pointer(s, block);
-    000002D2 F8 02            [12]  706 	ldhl	sp,	#2
-    000002D4 5E               [ 8]  707 	ld	e, (hl)
-    000002D5 23               [ 8]  708 	inc	hl
-    000002D6 56               [ 8]  709 	ld	d, (hl)
-    000002D7 CDr11r01         [24]  710 	call	_remove_object_at_pointer
-    000002DA 18 0D            [12]  711 	jr	00135$
-    000002DC                        712 00118$:
-                                    713 ;src/PointerSelector.c:106: } else if(joypad() & J_SELECT) {
-    000002DC CDr00r00         [24]  714 	call	_joypad
-    000002DF CB 77            [ 8]  715 	bit	6, a
-    000002E1 28 06            [12]  716 	jr	Z, 00135$
-                                    717 ;src/PointerSelector.c:107: move_foward_block_id();
-    000002E3 CDr00r00         [24]  718 	call	_move_foward_block_id
-                                    719 ;src/PointerSelector.c:108: print_counter();
-    000002E6 CDr00r00         [24]  720 	call	_print_counter
-    000002E9                        721 00135$:
-                                    722 ;src/PointerSelector.c:110: }
-    000002E9 E8 04            [16]  723 	add	sp, #4
-    000002EB C9               [16]  724 	ret
-                                    725 ;src/PointerSelector.c:112: void update_pointer(Pointer* s) { 
-                                    726 ;	---------------------------------
-                                    727 ; Function update_pointer
-                                    728 ; ---------------------------------
-    000002EC                        729 _update_pointer::
-    000002EC 4B               [ 4]  730 	ld	c, e
-    000002ED 42               [ 4]  731 	ld	b, d
-                                    732 ;src/PointerSelector.c:113: s->tileindexBR = tileindex_from_xy(s->x, s->y);
-    000002EE 21 06 00         [12]  733 	ld	hl, #0x0006
-    000002F1 09               [ 8]  734 	add	hl, bc
-    000002F2 59               [ 4]  735 	ld	e, c
-    000002F3 50               [ 4]  736 	ld	d, b
-    000002F4 13               [ 8]  737 	inc	de
-    000002F5 1A               [ 8]  738 	ld	a, (de)
-    000002F6 5F               [ 4]  739 	ld	e, a
-    000002F7 0A               [ 8]  740 	ld	a, (bc)
-    000002F8 E5               [16]  741 	push	hl
-    000002F9 C5               [16]  742 	push	bc
-    000002FA CDr00r00         [24]  743 	call	_tileindex_from_xy
-    000002FD 59               [ 4]  744 	ld	e, c
-    000002FE 50               [ 4]  745 	ld	d, b
-    000002FF C1               [12]  746 	pop	bc
-    00000300 E1               [12]  747 	pop	hl
-    00000301 7B               [ 4]  748 	ld	a, e
-    00000302 22               [ 8]  749 	ld	(hl+), a
-    00000303 72               [ 8]  750 	ld	(hl), d
-                                    751 ;src/PointerSelector.c:114: control_pointer(s);
-    00000304 C5               [16]  752 	push	bc
-    00000305 59               [ 4]  753 	ld	e, c
-    00000306 50               [ 4]  754 	ld	d, b
-    00000307 CDrD6r01         [24]  755 	call	_control_pointer
-                                    756 ;src/PointerSelector.c:115: move_pointer(s);
-    0000030A D1               [12]  757 	pop	de
-                                    758 ;src/PointerSelector.c:116: }
-    0000030B C3r2Ar00         [16]  759 	jp	_move_pointer
-                                    760 ;src/PointerSelector.c:118: void hide_pointer(void){
-                                    761 ;	---------------------------------
-                                    762 ; Function hide_pointer
-                                    763 ; ---------------------------------
-    0000030E                        764 _hide_pointer::
-                                    765 ;src/PointerSelector.c:119: for(uint8_t i= 4; i<=7; i++){
-    0000030E 0E 04            [ 8]  766 	ld	c, #0x04
-    00000310                        767 00104$:
-    00000310 3E 07            [ 8]  768 	ld	a, #0x07
-    00000312 91               [ 4]  769 	sub	a, c
-    00000313 D8               [20]  770 	ret	C
-                                    771 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    00000314 11r00r00         [12]  772 	ld	de, #_shadow_OAM+0
-    00000317 69               [ 4]  773 	ld	l, c
-    00000318 AF               [ 4]  774 	xor	a, a
-    00000319 67               [ 4]  775 	ld	h, a
-    0000031A 29               [ 8]  776 	add	hl, hl
-    0000031B 29               [ 8]  777 	add	hl, hl
-    0000031C 19               [ 8]  778 	add	hl, de
-                                    779 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    0000031D AF               [ 4]  780 	xor	a, a
-    0000031E 22               [ 8]  781 	ld	(hl+), a
-    0000031F 77               [ 8]  782 	ld	(hl), a
-                                    783 ;src/PointerSelector.c:119: for(uint8_t i= 4; i<=7; i++){
-    00000320 0C               [ 4]  784 	inc	c
-                                    785 ;src/PointerSelector.c:122: }
-    00000321 18 ED            [12]  786 	jr	00104$
-                                    787 	.area _CODE
-                                    788 	.area _INITIALIZER
-                                    789 	.area _CABS (ABS)
+    00000187 E8 FD            [16]  445 	add	sp, #-3
+                                    446 ;src/PointerSelector.c:67: uint8_t res = 0;
+    00000189 0E 00            [ 8]  447 	ld	c, #0x00
+                                    448 ;src/PointerSelector.c:68: if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=LEFT_DOWN) 
+    0000018B 21 06 00         [12]  449 	ld	hl, #0x0006
+    0000018E 19               [ 8]  450 	add	hl, de
+    0000018F 5D               [ 4]  451 	ld	e, l
+    00000190 54               [ 4]  452 	ld	d, h
+    00000191 1A               [ 8]  453 	ld	a, (de)
+    00000192 F8 00            [12]  454 	ldhl	sp,	#0
+    00000194 22               [ 8]  455 	ld	(hl+), a
+    00000195 13               [ 8]  456 	inc	de
+    00000196 1A               [ 8]  457 	ld	a, (de)
+    00000197 77               [ 8]  458 	ld	(hl), a
+    00000198 11r00r00         [12]  459 	ld	de, #_global_colision_map
+    0000019B E1               [12]  460 	pop	hl
+    0000019C E5               [16]  461 	push	hl
+    0000019D 19               [ 8]  462 	add	hl, de
+    0000019E 5D               [ 4]  463 	ld	e, l
+    0000019F 54               [ 4]  464 	ld	d, h
+    000001A0 1A               [ 8]  465 	ld	a, (de)
+    000001A1 F8 02            [12]  466 	ldhl	sp,	#2
+    000001A3 77               [ 8]  467 	ld	(hl), a
+    000001A4 D6 06            [ 8]  468 	sub	a, #0x06
+    000001A6 38 3C            [12]  469 	jr	C, 00102$
+    000001A8 3E 0D            [ 8]  470 	ld	a, #0x0d
+    000001AA 96               [ 8]  471 	sub	a, (hl)
+    000001AB 38 37            [12]  472 	jr	C, 00102$
+                                    473 ;src/PointerSelector.c:69: && (global_colision_map[s->tileindexBR-1] == BLOCK)
+    000001AD D1               [12]  474 	pop	de
+    000001AE D5               [16]  475 	push	de
+    000001AF 6B               [ 4]  476 	ld	l, e
+    000001B0 62               [ 4]  477 	ld	h, d
+    000001B1 2B               [ 8]  478 	dec	hl
+    000001B2 D5               [16]  479 	push	de
+    000001B3 11r00r00         [12]  480 	ld	de, #_global_colision_map
+    000001B6 19               [ 8]  481 	add	hl, de
+    000001B7 D1               [12]  482 	pop	de
+    000001B8 7E               [ 8]  483 	ld	a, (hl)
+    000001B9 D6 05            [ 8]  484 	sub	a, #0x05
+    000001BB 20 27            [12]  485 	jr	NZ, 00102$
+                                    486 ;src/PointerSelector.c:70: && (global_colision_map[s->tileindexBR-20] == BLOCK)
+    000001BD 7B               [ 4]  487 	ld	a, e
+    000001BE C6 EC            [ 8]  488 	add	a, #0xec
+    000001C0 6F               [ 4]  489 	ld	l, a
+    000001C1 7A               [ 4]  490 	ld	a, d
+    000001C2 CE FF            [ 8]  491 	adc	a, #0xff
+    000001C4 67               [ 4]  492 	ld	h, a
+    000001C5 D5               [16]  493 	push	de
+    000001C6 11r00r00         [12]  494 	ld	de, #_global_colision_map
+    000001C9 19               [ 8]  495 	add	hl, de
+    000001CA D1               [12]  496 	pop	de
+    000001CB 7E               [ 8]  497 	ld	a, (hl)
+    000001CC D6 05            [ 8]  498 	sub	a, #0x05
+    000001CE 20 14            [12]  499 	jr	NZ, 00102$
+                                    500 ;src/PointerSelector.c:71: && (global_colision_map[s->tileindexBR-21] == BLOCK)){
+    000001D0 7B               [ 4]  501 	ld	a, e
+    000001D1 C6 EB            [ 8]  502 	add	a, #0xeb
+    000001D3 6F               [ 4]  503 	ld	l, a
+    000001D4 7A               [ 4]  504 	ld	a, d
+    000001D5 CE FF            [ 8]  505 	adc	a, #0xff
+    000001D7 67               [ 4]  506 	ld	h, a
+    000001D8 11r00r00         [12]  507 	ld	de, #_global_colision_map
+    000001DB 19               [ 8]  508 	add	hl, de
+    000001DC 7E               [ 8]  509 	ld	a, (hl)
+    000001DD D6 05            [ 8]  510 	sub	a, #0x05
+    000001DF 20 03            [12]  511 	jr	NZ, 00102$
+                                    512 ;src/PointerSelector.c:72: res = global_colision_map[s->tileindexBR];
+    000001E1 F8 02            [12]  513 	ldhl	sp,	#2
+    000001E3 4E               [ 8]  514 	ld	c, (hl)
+    000001E4                        515 00102$:
+                                    516 ;src/PointerSelector.c:74: return res;
+    000001E4 79               [ 4]  517 	ld	a, c
+                                    518 ;src/PointerSelector.c:75: }
+    000001E5 E8 03            [16]  519 	add	sp, #3
+    000001E7 C9               [16]  520 	ret
+                                    521 ;src/PointerSelector.c:77: void control_pointer(Pointer* s){
+                                    522 ;	---------------------------------
+                                    523 ; Function control_pointer
+                                    524 ; ---------------------------------
+    000001E8                        525 _control_pointer::
+    000001E8 E8 FC            [16]  526 	add	sp, #-4
+    000001EA F8 02            [12]  527 	ldhl	sp,	#2
+    000001EC 7B               [ 4]  528 	ld	a, e
+    000001ED 22               [ 8]  529 	ld	(hl+), a
+    000001EE 72               [ 8]  530 	ld	(hl), d
+                                    531 ;src/PointerSelector.c:79: if(joypad() & J_UP) {
+    000001EF CDr00r00         [24]  532 	call	_joypad
+                                    533 ;src/PointerSelector.c:81: s->y -= 8;
+    000001F2 F8 02            [12]  534 	ldhl	sp,	#2
+    000001F4 4E               [ 8]  535 	ld	c, (hl)
+    000001F5 23               [ 8]  536 	inc	hl
+    000001F6 46               [ 8]  537 	ld	b, (hl)
+    000001F7 03               [ 8]  538 	inc	bc
+                                    539 ;src/PointerSelector.c:79: if(joypad() & J_UP) {
+    000001F8 CB 57            [ 8]  540 	bit	2, a
+    000001FA 28 1A            [12]  541 	jr	Z, 00133$
+                                    542 ;src/PointerSelector.c:80: if (can_pointer_move(s, 0, -1)){
+    000001FC C5               [16]  543 	push	bc
+    000001FD 3E FF            [ 8]  544 	ld	a, #0xff
+    000001FF F5               [16]  545 	push	af
+    00000200 33               [ 8]  546 	inc	sp
+    00000201 AF               [ 4]  547 	xor	a, a
+    00000202 F8 05            [12]  548 	ldhl	sp,	#5
+    00000204 5E               [ 8]  549 	ld	e, (hl)
+    00000205 23               [ 8]  550 	inc	hl
+    00000206 56               [ 8]  551 	ld	d, (hl)
+    00000207 CDr83r00         [24]  552 	call	_can_pointer_move
+    0000020A C1               [12]  553 	pop	bc
+    0000020B B7               [ 4]  554 	or	a, a
+    0000020C CArFBr02         [16]  555 	jp	Z, 00135$
+                                    556 ;src/PointerSelector.c:81: s->y -= 8;
+    0000020F 0A               [ 8]  557 	ld	a, (bc)
+    00000210 C6 F8            [ 8]  558 	add	a, #0xf8
+    00000212 02               [ 8]  559 	ld	(bc), a
+    00000213 C3rFBr02         [16]  560 	jp	00135$
+    00000216                        561 00133$:
+                                    562 ;src/PointerSelector.c:83: } else if(joypad() & J_DOWN) {
+    00000216 CDr00r00         [24]  563 	call	_joypad
+    00000219 CB 5F            [ 8]  564 	bit	3, a
+    0000021B 28 1A            [12]  565 	jr	Z, 00130$
+                                    566 ;src/PointerSelector.c:84: if (can_pointer_move(s, 0, 1)){
+    0000021D C5               [16]  567 	push	bc
+    0000021E 3E 01            [ 8]  568 	ld	a, #0x01
+    00000220 F5               [16]  569 	push	af
+    00000221 33               [ 8]  570 	inc	sp
+    00000222 AF               [ 4]  571 	xor	a, a
+    00000223 F8 05            [12]  572 	ldhl	sp,	#5
+    00000225 5E               [ 8]  573 	ld	e, (hl)
+    00000226 23               [ 8]  574 	inc	hl
+    00000227 56               [ 8]  575 	ld	d, (hl)
+    00000228 CDr83r00         [24]  576 	call	_can_pointer_move
+    0000022B C1               [12]  577 	pop	bc
+    0000022C B7               [ 4]  578 	or	a, a
+    0000022D CArFBr02         [16]  579 	jp	Z, 00135$
+                                    580 ;src/PointerSelector.c:85: s->y += 8;
+    00000230 0A               [ 8]  581 	ld	a, (bc)
+    00000231 C6 08            [ 8]  582 	add	a, #0x08
+    00000233 02               [ 8]  583 	ld	(bc), a
+    00000234 C3rFBr02         [16]  584 	jp	00135$
+    00000237                        585 00130$:
+                                    586 ;src/PointerSelector.c:87: } else if(joypad() & J_LEFT) {
+    00000237 CDr00r00         [24]  587 	call	_joypad
+    0000023A 5F               [ 4]  588 	ld	e, a
+                                    589 ;src/PointerSelector.c:89: s->x -= 8;
+    0000023B F8 02            [12]  590 	ldhl	sp,	#2
+    0000023D 3A               [ 8]  591 	ld	a, (hl-)
+    0000023E 2B               [ 8]  592 	dec	hl
+    0000023F 77               [ 8]  593 	ld	(hl), a
+    00000240 F8 03            [12]  594 	ldhl	sp,	#3
+    00000242 3A               [ 8]  595 	ld	a, (hl-)
+    00000243 2B               [ 8]  596 	dec	hl
+    00000244 77               [ 8]  597 	ld	(hl), a
+                                    598 ;src/PointerSelector.c:87: } else if(joypad() & J_LEFT) {
+    00000245 CB 4B            [ 8]  599 	bit	1, e
+    00000247 28 1C            [12]  600 	jr	Z, 00127$
+                                    601 ;src/PointerSelector.c:88: if (can_pointer_move(s, -1, 0)){
+    00000249 AF               [ 4]  602 	xor	a, a
+    0000024A F5               [16]  603 	push	af
+    0000024B 33               [ 8]  604 	inc	sp
+    0000024C 3E FF            [ 8]  605 	ld	a, #0xff
+    0000024E F8 03            [12]  606 	ldhl	sp,	#3
+    00000250 5E               [ 8]  607 	ld	e, (hl)
+    00000251 23               [ 8]  608 	inc	hl
+    00000252 56               [ 8]  609 	ld	d, (hl)
+    00000253 CDr83r00         [24]  610 	call	_can_pointer_move
+    00000256 B7               [ 4]  611 	or	a, a
+    00000257 CArFBr02         [16]  612 	jp	Z, 00135$
+                                    613 ;src/PointerSelector.c:89: s->x -= 8;
+    0000025A D1               [12]  614 	pop	de
+    0000025B D5               [16]  615 	push	de
+    0000025C 1A               [ 8]  616 	ld	a, (de)
+    0000025D C6 F8            [ 8]  617 	add	a, #0xf8
+    0000025F E1               [12]  618 	pop	hl
+    00000260 E5               [16]  619 	push	hl
+    00000261 77               [ 8]  620 	ld	(hl), a
+    00000262 C3rFBr02         [16]  621 	jp	00135$
+    00000265                        622 00127$:
+                                    623 ;src/PointerSelector.c:91: } else if(joypad() & J_RIGHT) {
+    00000265 CDr00r00         [24]  624 	call	_joypad
+    00000268 0F               [ 4]  625 	rrca
+    00000269 30 1B            [12]  626 	jr	NC, 00124$
+                                    627 ;src/PointerSelector.c:92: if (can_pointer_move(s, 1, 0)){
+    0000026B AF               [ 4]  628 	xor	a, a
+    0000026C F5               [16]  629 	push	af
+    0000026D 33               [ 8]  630 	inc	sp
+    0000026E 3E 01            [ 8]  631 	ld	a, #0x01
+    00000270 F8 03            [12]  632 	ldhl	sp,	#3
+    00000272 5E               [ 8]  633 	ld	e, (hl)
+    00000273 23               [ 8]  634 	inc	hl
+    00000274 56               [ 8]  635 	ld	d, (hl)
+    00000275 CDr83r00         [24]  636 	call	_can_pointer_move
+    00000278 B7               [ 4]  637 	or	a, a
+    00000279 CArFBr02         [16]  638 	jp	Z, 00135$
+                                    639 ;src/PointerSelector.c:93: s->x += 8;
+    0000027C D1               [12]  640 	pop	de
+    0000027D D5               [16]  641 	push	de
+    0000027E 1A               [ 8]  642 	ld	a, (de)
+    0000027F C6 08            [ 8]  643 	add	a, #0x08
+    00000281 E1               [12]  644 	pop	hl
+    00000282 E5               [16]  645 	push	hl
+    00000283 77               [ 8]  646 	ld	(hl), a
+    00000284 18 75            [12]  647 	jr	00135$
+    00000286                        648 00124$:
+                                    649 ;src/PointerSelector.c:95: } else if(joypad() & J_A) {
+    00000286 CDr00r00         [24]  650 	call	_joypad
+    00000289 CB 67            [ 8]  651 	bit	4, a
+    0000028B 28 44            [12]  652 	jr	Z, 00121$
+                                    653 ;src/PointerSelector.c:96: if(block_is_not_placed_below(s) 
+    0000028D C5               [16]  654 	push	bc
+    0000028E F8 04            [12]  655 	ldhl	sp,	#4
+    00000290 2A               [ 8]  656 	ld	a, (hl+)
+    00000291 5F               [ 4]  657 	ld	e, a
+    00000292 56               [ 8]  658 	ld	d, (hl)
+    00000293 CDr4Dr01         [24]  659 	call	_block_is_not_placed_below
+    00000296 C1               [12]  660 	pop	bc
+    00000297 B7               [ 4]  661 	or	a, a
+    00000298 28 61            [12]  662 	jr	Z, 00135$
+                                    663 ;src/PointerSelector.c:97: && (global_blocks_available[global_selected_block]>0)
+    0000029A 3Er00            [ 8]  664 	ld	a, #<(_global_blocks_available)
+    0000029C 21r00r00         [12]  665 	ld	hl, #_global_selected_block
+    0000029F 86               [ 8]  666 	add	a, (hl)
+    000002A0 5F               [ 4]  667 	ld	e, a
+    000002A1 3Es00            [ 8]  668 	ld	a, #>(_global_blocks_available)
+    000002A3 CE 00            [ 8]  669 	adc	a, #0x00
+    000002A5 57               [ 4]  670 	ld	d, a
+    000002A6 1A               [ 8]  671 	ld	a, (de)
+    000002A7 B7               [ 4]  672 	or	a, a
+    000002A8 28 51            [12]  673 	jr	Z, 00135$
+                                    674 ;src/PointerSelector.c:98: && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1) , 16, 16) == 255){
+    000002AA 0A               [ 8]  675 	ld	a, (bc)
+    000002AB C6 F8            [ 8]  676 	add	a, #0xf8
+    000002AD 4F               [ 4]  677 	ld	c, a
+    000002AE D1               [12]  678 	pop	de
+    000002AF D5               [16]  679 	push	de
+    000002B0 1A               [ 8]  680 	ld	a, (de)
+    000002B1 C6 F8            [ 8]  681 	add	a, #0xf8
+    000002B3 26 10            [ 8]  682 	ld	h, #0x10
+    000002B5 E5               [16]  683 	push	hl
+    000002B6 33               [ 8]  684 	inc	sp
+    000002B7 26 10            [ 8]  685 	ld	h, #0x10
+    000002B9 E5               [16]  686 	push	hl
+    000002BA 33               [ 8]  687 	inc	sp
+    000002BB 59               [ 4]  688 	ld	e, c
+    000002BC CDr00r00         [24]  689 	call	_check_colision_with_object
+    000002BF 3C               [ 4]  690 	inc	a
+    000002C0 20 39            [12]  691 	jr	NZ, 00135$
+                                    692 ;src/PointerSelector.c:99: place_object_at_pointer(s, global_selected_block + 6);
+    000002C2 FAr00r00         [16]  693 	ld	a, (_global_selected_block)
+    000002C5 C6 06            [ 8]  694 	add	a, #0x06
+    000002C7 F8 02            [12]  695 	ldhl	sp,	#2
+    000002C9 5E               [ 8]  696 	ld	e, (hl)
+    000002CA 23               [ 8]  697 	inc	hl
+    000002CB 56               [ 8]  698 	ld	d, (hl)
+    000002CC CDrB1r00         [24]  699 	call	_place_object_at_pointer
+    000002CF 18 2A            [12]  700 	jr	00135$
+    000002D1                        701 00121$:
+                                    702 ;src/PointerSelector.c:101: } else if(joypad() & J_B) {
+    000002D1 CDr00r00         [24]  703 	call	_joypad
+    000002D4 CB 6F            [ 8]  704 	bit	5, a
+    000002D6 28 16            [12]  705 	jr	Z, 00118$
+                                    706 ;src/PointerSelector.c:102: uint8_t block = block_is_placed_below(s);
+    000002D8 F8 02            [12]  707 	ldhl	sp,	#2
+    000002DA 2A               [ 8]  708 	ld	a, (hl+)
+    000002DB 5F               [ 4]  709 	ld	e, a
+    000002DC 56               [ 8]  710 	ld	d, (hl)
+    000002DD CDr87r01         [24]  711 	call	_block_is_placed_below
+                                    712 ;src/PointerSelector.c:103: if(block>=6){
+    000002E0 FE 06            [ 8]  713 	cp	a, #0x06
+    000002E2 38 17            [12]  714 	jr	C, 00135$
+                                    715 ;src/PointerSelector.c:104: remove_object_at_pointer(s, block);
+    000002E4 F8 02            [12]  716 	ldhl	sp,	#2
+    000002E6 5E               [ 8]  717 	ld	e, (hl)
+    000002E7 23               [ 8]  718 	inc	hl
+    000002E8 56               [ 8]  719 	ld	d, (hl)
+    000002E9 CDr11r01         [24]  720 	call	_remove_object_at_pointer
+    000002EC 18 0D            [12]  721 	jr	00135$
+    000002EE                        722 00118$:
+                                    723 ;src/PointerSelector.c:106: } else if(joypad() & J_SELECT) {
+    000002EE CDr00r00         [24]  724 	call	_joypad
+    000002F1 CB 77            [ 8]  725 	bit	6, a
+    000002F3 28 06            [12]  726 	jr	Z, 00135$
+                                    727 ;src/PointerSelector.c:107: move_foward_block_id();
+    000002F5 CDr00r00         [24]  728 	call	_move_foward_block_id
+                                    729 ;src/PointerSelector.c:108: print_counter();
+    000002F8 CDr00r00         [24]  730 	call	_print_counter
+    000002FB                        731 00135$:
+                                    732 ;src/PointerSelector.c:110: }
+    000002FB E8 04            [16]  733 	add	sp, #4
+    000002FD C9               [16]  734 	ret
+                                    735 ;src/PointerSelector.c:112: void update_pointer(Pointer* s) { 
+                                    736 ;	---------------------------------
+                                    737 ; Function update_pointer
+                                    738 ; ---------------------------------
+    000002FE                        739 _update_pointer::
+    000002FE 4B               [ 4]  740 	ld	c, e
+    000002FF 42               [ 4]  741 	ld	b, d
+                                    742 ;src/PointerSelector.c:113: s->tileindexBR = tileindex_from_xy(s->x, s->y);
+    00000300 21 06 00         [12]  743 	ld	hl, #0x0006
+    00000303 09               [ 8]  744 	add	hl, bc
+    00000304 59               [ 4]  745 	ld	e, c
+    00000305 50               [ 4]  746 	ld	d, b
+    00000306 13               [ 8]  747 	inc	de
+    00000307 1A               [ 8]  748 	ld	a, (de)
+    00000308 5F               [ 4]  749 	ld	e, a
+    00000309 0A               [ 8]  750 	ld	a, (bc)
+    0000030A E5               [16]  751 	push	hl
+    0000030B C5               [16]  752 	push	bc
+    0000030C CDr00r00         [24]  753 	call	_tileindex_from_xy
+    0000030F 59               [ 4]  754 	ld	e, c
+    00000310 50               [ 4]  755 	ld	d, b
+    00000311 C1               [12]  756 	pop	bc
+    00000312 E1               [12]  757 	pop	hl
+    00000313 7B               [ 4]  758 	ld	a, e
+    00000314 22               [ 8]  759 	ld	(hl+), a
+    00000315 72               [ 8]  760 	ld	(hl), d
+                                    761 ;src/PointerSelector.c:114: control_pointer(s);
+    00000316 C5               [16]  762 	push	bc
+    00000317 59               [ 4]  763 	ld	e, c
+    00000318 50               [ 4]  764 	ld	d, b
+    00000319 CDrE8r01         [24]  765 	call	_control_pointer
+                                    766 ;src/PointerSelector.c:115: move_pointer(s);
+    0000031C D1               [12]  767 	pop	de
+                                    768 ;src/PointerSelector.c:116: }
+    0000031D C3r2Ar00         [16]  769 	jp	_move_pointer
+                                    770 ;src/PointerSelector.c:118: void hide_pointer(void){
+                                    771 ;	---------------------------------
+                                    772 ; Function hide_pointer
+                                    773 ; ---------------------------------
+    00000320                        774 _hide_pointer::
+                                    775 ;src/PointerSelector.c:119: for(uint8_t i= 4; i<=7; i++){
+    00000320 0E 04            [ 8]  776 	ld	c, #0x04
+    00000322                        777 00104$:
+    00000322 3E 07            [ 8]  778 	ld	a, #0x07
+    00000324 91               [ 4]  779 	sub	a, c
+    00000325 D8               [20]  780 	ret	C
+                                    781 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000326 11r00r00         [12]  782 	ld	de, #_shadow_OAM+0
+    00000329 69               [ 4]  783 	ld	l, c
+    0000032A AF               [ 4]  784 	xor	a, a
+    0000032B 67               [ 4]  785 	ld	h, a
+    0000032C 29               [ 8]  786 	add	hl, hl
+    0000032D 29               [ 8]  787 	add	hl, hl
+    0000032E 19               [ 8]  788 	add	hl, de
+                                    789 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    0000032F AF               [ 4]  790 	xor	a, a
+    00000330 22               [ 8]  791 	ld	(hl+), a
+    00000331 77               [ 8]  792 	ld	(hl), a
+                                    793 ;src/PointerSelector.c:119: for(uint8_t i= 4; i<=7; i++){
+    00000332 0C               [ 4]  794 	inc	c
+                                    795 ;src/PointerSelector.c:122: }
+    00000333 18 ED            [12]  796 	jr	00104$
+                                    797 	.area _CODE
+                                    798 	.area _INITIALIZER
+                                    799 	.area _CABS (ABS)

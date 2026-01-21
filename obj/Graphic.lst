@@ -318,9 +318,9 @@
     00000138 01 0F 02         [12]  318 	ld	bc, #0x20f
                                     319 ;src/Graphic.c:106: }
     0000013B                        320 00110$:
-                                    321 ;src/Graphic.c:108: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset);
+                                    321 ;src/Graphic.c:108: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset + 1);
     0000013B 7B               [ 4]  322 	ld	a, e
-    0000013C C6 68            [ 8]  323 	add	a, #0x68
+    0000013C C6 69            [ 8]  323 	add	a, #0x69
     0000013E F5               [16]  324 	push	af
     0000013F 33               [ 8]  325 	inc	sp
     00000140 58               [ 4]  326 	ld	e, b
