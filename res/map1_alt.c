@@ -1,6 +1,6 @@
 /*
 
- MAP_NEW_TILES.C
+ MAP1_ALT.C
 
  Map Source File.
 
@@ -8,7 +8,7 @@
    Section       : 
    Bank          : 0
    Map size      : 20 x 16
-   Tile set      : C:\Users\josem\Documents\Cuarto_Curso\TFG\github\proyecto_tfg\res\map_tiles - copia.gbr
+   Tile set      : map_tiles_alt.gbr
    Plane count   : 1 plane (8 bits)
    Plane order   : Tiles are continues
    Tile offset   : 0
@@ -18,11 +18,11 @@
 
 */
 
-#define map_new_tilesWidth 20
-#define map_new_tilesHeight 16
-#define map_new_tilesBank 0
+#define map1_altWidth 20
+#define map1_altHeight 16
+#define map1_altBank 0
 
-const unsigned char map_new_tiles[] =
+const unsigned char map1_alt[] =
 {
   0x09,0x0A,0x0A,0x0A,0x0A,0x0A,0x0A,0x0A,0x0A,0x0A,
   0x0A,0x0A,0x0A,0x09,0x09,0x0A,0x0A,0x0A,0x0A,0x09,
@@ -58,4 +58,4 @@ const unsigned char map_new_tiles[] =
   0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01
 };
 
-/* End of MAP_NEW_TILES.C */
+/* End of MAP1_ALT.C */

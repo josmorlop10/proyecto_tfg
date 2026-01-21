@@ -26,7 +26,8 @@ Symbol Table
   1 _last_state                                                     00000017 GR
   0 _main                                                           000000CC GR
     _map1                                                           ******** GX
-    _map_tiles                                                      ******** GX
+    _map1_alt                                                       ******** GX
+    _map_tiles_alt                                                  ******** GX
     _object_sprites                                                 ******** GX
   1 _p                                                              00000000 GR
     _performantdelay                                                ******** GX
@@ -44,7 +45,6 @@ Symbol Table
     _update_character                                               ******** GX
     _update_game_state                                              ******** GX
     _update_pointer                                                 ******** GX
-
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]

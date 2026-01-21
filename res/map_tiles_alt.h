@@ -1,6 +1,6 @@
 /*
 
- HUD_TILES.H
+ MAP_TILES_ALT.H
 
  Include File.
 
@@ -10,7 +10,7 @@
   Compression          : None.
   Counter              : None.
   Tile size            : 8 x 8
-  Tiles                : 0 to 22
+  Tiles                : 0 to 104
 
   Palette colors       : None.
   SGB Palette          : None.
@@ -22,14 +22,14 @@
 
 */
 
-#ifndef __hud_tiles_h_INCLUDE
-#define __hud_tiles_h_INCLUDE
+#ifndef __map_tiles_alt_h_INCLUDE
+#define __map_tiles_alt_h_INCLUDE
 
 /* Bank of tiles. */
-#define hud_tilesBank 0
+#define map_tiles_altBank 0
 /* Start of tile array. */
-extern const unsigned char hud_tiles[];
+extern const unsigned char map_tiles_alt[];
 
 #endif
 
-/* End of HUD_TILES.H */
+/* End of MAP_TILES_ALT.H */

@@ -5,6 +5,10 @@
 #include "../res/duck.h"
 #include "../res/map1.h" 
 #include "../res/map_tiles.h" 
+
+#include "../res/map_tiles_alt.h"
+#include "../res/map1_alt.h"
+
 #include "../res/object_sprites.h"
 #include "../res/hud_tiles.h"
 #include "../res/hud_selector.h"
@@ -46,13 +50,13 @@ void init_gfx(void){
     SHOW_SPRITES;
 
     //map
-    set_bkg_data(0, 56, map_tiles);
-    set_bkg_tiles(0,0,20,18,map1);
+    set_bkg_data(0, 104, map_tiles_alt);
+    set_bkg_tiles(0,0,20,16,map1_alt);
     SHOW_BKG;
 
     //HUD
     // Activa la window
-    set_win_data(56,17, hud_tiles);
+    set_win_data(104,22, hud_tiles);
     set_win_tiles(0,0,20,3, hud_selector);
     SHOW_WIN;
     WX_REG = 7;      // SIEMPRE 7
