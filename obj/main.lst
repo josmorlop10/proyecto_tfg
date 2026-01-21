@@ -66,12 +66,12 @@
                                      66 ; code
                                      67 ;--------------------------------------------------------
                                      68 	.area _CODE
-                                     69 ;src/main.c:25: void init_gfx(void){
+                                     69 ;src/main.c:26: void init_gfx(void){
                                      70 ;	---------------------------------
                                      71 ; Function init_gfx
                                      72 ; ---------------------------------
     00000000                         73 _init_gfx::
-                                     74 ;src/main.c:27: set_sprite_data(0, 4, duck);
+                                     74 ;src/main.c:28: set_sprite_data(0, 4, duck);
     00000000 11r00r00         [12]   75 	ld	de, #_duck
     00000003 D5               [16]   76 	push	de
     00000004 21 00 04         [12]   77 	ld	hl, #0x400
@@ -87,7 +87,7 @@
     0000001A 36 02            [12]   87 	ld	(hl), #0x02
     0000001C 21r0Er00         [12]   88 	ld	hl, #(_shadow_OAM + 14)
     0000001F 36 03            [12]   89 	ld	(hl), #0x03
-                                     90 ;src/main.c:34: set_sprite_data(4, 4, selector);
+                                     90 ;src/main.c:35: set_sprite_data(4, 4, selector);
     00000021 11r00r00         [12]   91 	ld	de, #_selector
     00000024 D5               [16]   92 	push	de
     00000025 21 04 04         [12]   93 	ld	hl, #0x404
@@ -103,7 +103,7 @@
     0000003B 36 06            [12]  103 	ld	(hl), #0x06
     0000003D 21r1Er00         [12]  104 	ld	hl, #(_shadow_OAM + 30)
     00000040 36 07            [12]  105 	ld	(hl), #0x07
-                                    106 ;src/main.c:41: set_sprite_data(8,8,object_sprites);
+                                    106 ;src/main.c:42: set_sprite_data(8,8,object_sprites);
     00000042 11r00r00         [12]  107 	ld	de, #_object_sprites
     00000045 D5               [16]  108 	push	de
     00000046 21 08 08         [12]  109 	ld	hl, #0x808
@@ -127,211 +127,218 @@
     00000070 36 0E            [12]  127 	ld	(hl), #0x0e
     00000072 21r3Er00         [12]  128 	ld	hl, #(_shadow_OAM + 62)
     00000075 36 0F            [12]  129 	ld	(hl), #0x0f
-                                    130 ;src/main.c:50: SHOW_SPRITES;
-    00000077 F0r00            [12]  131 	ldh	a, (_LCDC_REG + 0)
-    00000079 F6 02            [ 8]  132 	or	a, #0x02
-    0000007B E0r00            [12]  133 	ldh	(_LCDC_REG + 0), a
-                                    134 ;src/main.c:53: set_bkg_data(0, 104, map_tiles_alt);
-    0000007D 11r00r00         [12]  135 	ld	de, #_map_tiles_alt
-    00000080 D5               [16]  136 	push	de
-    00000081 21 00 68         [12]  137 	ld	hl, #0x6800
-    00000084 E5               [16]  138 	push	hl
-    00000085 CDr00r00         [24]  139 	call	_set_bkg_data
-    00000088 E8 04            [16]  140 	add	sp, #4
-                                    141 ;src/main.c:54: set_bkg_tiles(0,0,20,16,map1_alt);
-    0000008A 11r00r00         [12]  142 	ld	de, #_map1_alt
+                                    130 ;src/main.c:53: set_sprite_data(16,1,block_pointer);
+    00000077 11r00r00         [12]  131 	ld	de, #_block_pointer
+    0000007A D5               [16]  132 	push	de
+    0000007B 21 10 01         [12]  133 	ld	hl, #0x110
+    0000007E E5               [16]  134 	push	hl
+    0000007F CDr00r00         [24]  135 	call	_set_sprite_data
+    00000082 E8 04            [16]  136 	add	sp, #4
+                                    137 ;src/main.c:54: SHOW_SPRITES;
+    00000084 F0r00            [12]  138 	ldh	a, (_LCDC_REG + 0)
+    00000086 F6 02            [ 8]  139 	or	a, #0x02
+    00000088 E0r00            [12]  140 	ldh	(_LCDC_REG + 0), a
+                                    141 ;src/main.c:57: set_bkg_data(0, 104, map_tiles_alt);
+    0000008A 11r00r00         [12]  142 	ld	de, #_map_tiles_alt
     0000008D D5               [16]  143 	push	de
-    0000008E 21 14 10         [12]  144 	ld	hl, #0x1014
+    0000008E 21 00 68         [12]  144 	ld	hl, #0x6800
     00000091 E5               [16]  145 	push	hl
-    00000092 AF               [ 4]  146 	xor	a, a
-    00000093 0F               [ 4]  147 	rrca
-    00000094 F5               [16]  148 	push	af
-    00000095 CDr00r00         [24]  149 	call	_set_bkg_tiles
-    00000098 E8 06            [16]  150 	add	sp, #6
-                                    151 ;src/main.c:55: SHOW_BKG;
-    0000009A F0r00            [12]  152 	ldh	a, (_LCDC_REG + 0)
-    0000009C F6 01            [ 8]  153 	or	a, #0x01
-    0000009E E0r00            [12]  154 	ldh	(_LCDC_REG + 0), a
-                                    155 ;src/main.c:59: set_win_data(104,26, hud_tiles);
-    000000A0 11r00r00         [12]  156 	ld	de, #_hud_tiles
-    000000A3 D5               [16]  157 	push	de
-    000000A4 21 68 1A         [12]  158 	ld	hl, #0x1a68
-    000000A7 E5               [16]  159 	push	hl
-    000000A8 CDr00r00         [24]  160 	call	_set_win_data
-    000000AB E8 04            [16]  161 	add	sp, #4
-                                    162 ;src/main.c:60: set_win_tiles(0,0,20,3, hud_selector);
-    000000AD 11r00r00         [12]  163 	ld	de, #_hud_selector
+    00000092 CDr00r00         [24]  146 	call	_set_bkg_data
+    00000095 E8 04            [16]  147 	add	sp, #4
+                                    148 ;src/main.c:58: set_bkg_tiles(0,0,20,16,map1_alt);
+    00000097 11r00r00         [12]  149 	ld	de, #_map1_alt
+    0000009A D5               [16]  150 	push	de
+    0000009B 21 14 10         [12]  151 	ld	hl, #0x1014
+    0000009E E5               [16]  152 	push	hl
+    0000009F AF               [ 4]  153 	xor	a, a
+    000000A0 0F               [ 4]  154 	rrca
+    000000A1 F5               [16]  155 	push	af
+    000000A2 CDr00r00         [24]  156 	call	_set_bkg_tiles
+    000000A5 E8 06            [16]  157 	add	sp, #6
+                                    158 ;src/main.c:59: SHOW_BKG;
+    000000A7 F0r00            [12]  159 	ldh	a, (_LCDC_REG + 0)
+    000000A9 F6 01            [ 8]  160 	or	a, #0x01
+    000000AB E0r00            [12]  161 	ldh	(_LCDC_REG + 0), a
+                                    162 ;src/main.c:63: set_win_data(104,26, hud_tiles);
+    000000AD 11r00r00         [12]  163 	ld	de, #_hud_tiles
     000000B0 D5               [16]  164 	push	de
-    000000B1 21 14 03         [12]  165 	ld	hl, #0x314
+    000000B1 21 68 1A         [12]  165 	ld	hl, #0x1a68
     000000B4 E5               [16]  166 	push	hl
-    000000B5 AF               [ 4]  167 	xor	a, a
-    000000B6 0F               [ 4]  168 	rrca
-    000000B7 F5               [16]  169 	push	af
-    000000B8 CDr00r00         [24]  170 	call	_set_win_tiles
-    000000BB E8 06            [16]  171 	add	sp, #6
-                                    172 ;src/main.c:61: SHOW_WIN;
-    000000BD F0r00            [12]  173 	ldh	a, (_LCDC_REG + 0)
-    000000BF F6 20            [ 8]  174 	or	a, #0x20
-    000000C1 E0r00            [12]  175 	ldh	(_LCDC_REG + 0), a
-                                    176 ;src/main.c:62: WX_REG = 7;      // SIEMPRE 7
-    000000C3 3E 07            [ 8]  177 	ld	a, #0x07
-    000000C5 E0r00            [12]  178 	ldh	(_WX_REG + 0), a
-                                    179 ;src/main.c:63: WY_REG = 120;    // 144 - 24
-    000000C7 3E 78            [ 8]  180 	ld	a, #0x78
-    000000C9 E0r00            [12]  181 	ldh	(_WY_REG + 0), a
-                                    182 ;src/main.c:64: }
-    000000CB C9               [16]  183 	ret
-                                    184 ;src/main.c:66: void main(void)
-                                    185 ;	---------------------------------
-                                    186 ; Function main
-                                    187 ; ---------------------------------
-    000000CC                        188 _main::
-                                    189 ;src/main.c:68: init_gfx();
-    000000CC CDr00r00         [24]  190 	call	_init_gfx
-                                    191 ;src/main.c:69: pointer_init(&s);
-    000000CF 11r0Fr00         [12]  192 	ld	de, #_s
-    000000D2 CDr00r00         [24]  193 	call	_pointer_init
-                                    194 ;src/main.c:71: global_game_state = STATE_GAME_SETTING;
-    000000D5 21r00r00         [12]  195 	ld	hl, #_global_game_state
-    000000D8 36 02            [12]  196 	ld	(hl), #0x02
-                                    197 ;src/main.c:73: while(1) {
-    000000DA                        198 00120$:
-                                    199 ;src/main.c:74: switch (global_game_state)
-    000000DA FAr00r00         [16]  200 	ld	a, (#_global_game_state)
-    000000DD D6 02            [ 8]  201 	sub	a, #0x02
-    000000DF 28 12            [12]  202 	jr	Z, 00101$
-    000000E1 FAr00r00         [16]  203 	ld	a, (#_global_game_state)
-    000000E4 D6 03            [ 8]  204 	sub	a, #0x03
-    000000E6 28 40            [12]  205 	jr	Z, 00106$
-    000000E8 FAr00r00         [16]  206 	ld	a, (#_global_game_state)
-    000000EB D6 05            [ 8]  207 	sub	a, #0x05
-    000000ED CAr70r01         [16]  208 	jp	Z, 00112$
-    000000F0 C3r8Fr01         [16]  209 	jp	00118$
-                                    210 ;src/main.c:76: case STATE_GAME_SETTING:
-    000000F3                        211 00101$:
-                                    212 ;src/main.c:77: if(last_state != STATE_GAME_SETTING) {
-    000000F3 FAr17r00         [16]  213 	ld	a, (#_last_state)
-    000000F6 D6 02            [ 8]  214 	sub	a, #0x02
-    000000F8 28 18            [12]  215 	jr	Z, 00103$
-                                    216 ;src/main.c:78: init_gfx();
-    000000FA CDr00r00         [24]  217 	call	_init_gfx
-                                    218 ;src/main.c:79: init_level(0);
-    000000FD AF               [ 4]  219 	xor	a, a
-    000000FE CDr00r00         [24]  220 	call	_init_level
-                                    221 ;src/main.c:80: get_colision_from_map(map1_alt, global_colision_map);
-    00000101 01r00r00         [12]  222 	ld	bc, #_global_colision_map
-    00000104 11r00r00         [12]  223 	ld	de, #_map1_alt
-    00000107 CDr00r00         [24]  224 	call	_get_colision_from_map
-                                    225 ;src/main.c:82: print_objects_in_screen();
-    0000010A CDr00r00         [24]  226 	call	_print_objects_in_screen
-                                    227 ;src/main.c:83: last_state = STATE_GAME_SETTING;
-    0000010D 21r17r00         [12]  228 	ld	hl, #_last_state
-    00000110 36 02            [12]  229 	ld	(hl), #0x02
-    00000112                        230 00103$:
-                                    231 ;src/main.c:85: update_pointer(&s);
-    00000112 11r0Fr00         [12]  232 	ld	de, #_s
-    00000115 CDr00r00         [24]  233 	call	_update_pointer
-                                    234 ;src/main.c:86: if(joypad() & J_START){
-    00000118 CDr00r00         [24]  235 	call	_joypad
-    0000011B 07               [ 4]  236 	rlca
-    0000011C 30 71            [12]  237 	jr	NC, 00118$
-                                    238 ;src/main.c:87: hide_pointer();
-    0000011E CDr00r00         [24]  239 	call	_hide_pointer
-                                    240 ;src/main.c:88: update_game_state(STATE_GAME_RUNNING);
-    00000121 3E 03            [ 8]  241 	ld	a, #0x03
-    00000123 CDr00r00         [24]  242 	call	_update_game_state
-                                    243 ;src/main.c:90: break;
-    00000126 18 67            [12]  244 	jr	00118$
-                                    245 ;src/main.c:92: case STATE_GAME_RUNNING:
-    00000128                        246 00106$:
-                                    247 ;src/main.c:93: if(last_state != STATE_GAME_RUNNING) {
-    00000128 FAr17r00         [16]  248 	ld	a, (#_last_state)
-    0000012B D6 03            [ 8]  249 	sub	a, #0x03
-    0000012D 28 0B            [12]  250 	jr	Z, 00108$
-                                    251 ;src/main.c:94: character_init(&p);
-    0000012F 11r00r00         [12]  252 	ld	de, #_p
-    00000132 CDr00r00         [24]  253 	call	_character_init
-                                    254 ;src/main.c:95: last_state = STATE_GAME_RUNNING;
-    00000135 21r17r00         [12]  255 	ld	hl, #_last_state
-    00000138 36 03            [12]  256 	ld	(hl), #0x03
-    0000013A                        257 00108$:
-                                    258 ;src/main.c:97: update_character(&p);
-    0000013A 11r00r00         [12]  259 	ld	de, #_p
-    0000013D CDr00r00         [24]  260 	call	_update_character
-                                    261 ;src/main.c:100: if(joypad() & J_A){
-    00000140 CDr00r00         [24]  262 	call	_joypad
-    00000143 CB 67            [ 8]  263 	bit	4, a
-    00000145 28 48            [12]  264 	jr	Z, 00118$
-                                    265 ;src/main.c:101: HIDE_WIN;
-    00000147 F0r00            [12]  266 	ldh	a, (_LCDC_REG + 0)
-    00000149 E6 DF            [ 8]  267 	and	a, #0xdf
-    0000014B E0r00            [12]  268 	ldh	(_LCDC_REG + 0), a
-                                    269 ;src/main.c:102: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
-    0000014D 01 00 00         [12]  270 	ld	bc, #0x0000
-    00000150                        271 00123$:
-    00000150 59               [ 4]  272 	ld	e, c
-    00000151 50               [ 4]  273 	ld	d, b
-    00000152 7B               [ 4]  274 	ld	a, e
-    00000153 D6 2C            [ 8]  275 	sub	a, #0x2c
-    00000155 7A               [ 4]  276 	ld	a, d
-    00000156 DE 01            [ 8]  277 	sbc	a, #0x01
-    00000158 30 35            [12]  278 	jr	NC, 00118$
-                                    279 ;src/main.c:103: printf("%d",global_colision_map[i]);
-    0000015A 21r00r00         [12]  280 	ld	hl, #_global_colision_map
-    0000015D 09               [ 8]  281 	add	hl, bc
-    0000015E 5E               [ 8]  282 	ld	e, (hl)
-    0000015F 16 00            [ 8]  283 	ld	d, #0x00
-    00000161 21r97r01         [12]  284 	ld	hl, #___str_0
-    00000164 C5               [16]  285 	push	bc
-    00000165 D5               [16]  286 	push	de
-    00000166 E5               [16]  287 	push	hl
-    00000167 CDr00r00         [24]  288 	call	_printf
-    0000016A E8 04            [16]  289 	add	sp, #4
-    0000016C C1               [12]  290 	pop	bc
-                                    291 ;src/main.c:102: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
-    0000016D 03               [ 8]  292 	inc	bc
-    0000016E 18 E0            [12]  293 	jr	00123$
-                                    294 ;src/main.c:110: case STATE_GAME_OVER:
-    00000170                        295 00112$:
-                                    296 ;src/main.c:111: if(last_state != STATE_GAME_OVER) {
-    00000170 FAr17r00         [16]  297 	ld	a, (#_last_state)
-    00000173 D6 05            [ 8]  298 	sub	a, #0x05
-    00000175 28 0D            [12]  299 	jr	Z, 00114$
-                                    300 ;src/main.c:112: last_state = STATE_GAME_OVER;
-    00000177 21r17r00         [12]  301 	ld	hl, #_last_state
-    0000017A 36 05            [12]  302 	ld	(hl), #0x05
-                                    303 ;src/main.c:113: printf("You WIN!\nPress start to try again");
-    0000017C 11r9Ar01         [12]  304 	ld	de, #___str_1
-    0000017F D5               [16]  305 	push	de
-    00000180 CDr00r00         [24]  306 	call	_printf
-    00000183 E1               [12]  307 	pop	hl
-    00000184                        308 00114$:
-                                    309 ;src/main.c:115: if(joypad() & J_START){
-    00000184 CDr00r00         [24]  310 	call	_joypad
-    00000187 07               [ 4]  311 	rlca
-    00000188 30 05            [12]  312 	jr	NC, 00118$
-                                    313 ;src/main.c:116: update_game_state(STATE_GAME_SETTING);
-    0000018A 3E 02            [ 8]  314 	ld	a, #0x02
-    0000018C CDr00r00         [24]  315 	call	_update_game_state
-                                    316 ;src/main.c:122: }
-    0000018F                        317 00118$:
-                                    318 ;src/main.c:123: performantdelay(10);
-    0000018F 3E 0A            [ 8]  319 	ld	a, #0x0a
-    00000191 CDr00r00         [24]  320 	call	_performantdelay
-                                    321 ;src/main.c:125: }
-    00000194 C3rDAr00         [16]  322 	jp	00120$
-    00000197                        323 ___str_0:
-    00000197 25 64                  324 	.ascii "%d"
-    00000199 00                     325 	.db 0x00
-    0000019A                        326 ___str_1:
-    0000019A 59 6F 75 20 57 49 4E   327 	.ascii "You WIN!"
+    000000B5 CDr00r00         [24]  167 	call	_set_win_data
+    000000B8 E8 04            [16]  168 	add	sp, #4
+                                    169 ;src/main.c:64: set_win_tiles(0,0,20,3, hud_selector);
+    000000BA 11r00r00         [12]  170 	ld	de, #_hud_selector
+    000000BD D5               [16]  171 	push	de
+    000000BE 21 14 03         [12]  172 	ld	hl, #0x314
+    000000C1 E5               [16]  173 	push	hl
+    000000C2 AF               [ 4]  174 	xor	a, a
+    000000C3 0F               [ 4]  175 	rrca
+    000000C4 F5               [16]  176 	push	af
+    000000C5 CDr00r00         [24]  177 	call	_set_win_tiles
+    000000C8 E8 06            [16]  178 	add	sp, #6
+                                    179 ;src/main.c:65: SHOW_WIN;
+    000000CA F0r00            [12]  180 	ldh	a, (_LCDC_REG + 0)
+    000000CC F6 20            [ 8]  181 	or	a, #0x20
+    000000CE E0r00            [12]  182 	ldh	(_LCDC_REG + 0), a
+                                    183 ;src/main.c:66: WX_REG = 7;      // SIEMPRE 7
+    000000D0 3E 07            [ 8]  184 	ld	a, #0x07
+    000000D2 E0r00            [12]  185 	ldh	(_WX_REG + 0), a
+                                    186 ;src/main.c:67: WY_REG = 120;    // 144 - 24
+    000000D4 3E 78            [ 8]  187 	ld	a, #0x78
+    000000D6 E0r00            [12]  188 	ldh	(_WY_REG + 0), a
+                                    189 ;src/main.c:68: }
+    000000D8 C9               [16]  190 	ret
+                                    191 ;src/main.c:70: void main(void)
+                                    192 ;	---------------------------------
+                                    193 ; Function main
+                                    194 ; ---------------------------------
+    000000D9                        195 _main::
+                                    196 ;src/main.c:72: init_gfx();
+    000000D9 CDr00r00         [24]  197 	call	_init_gfx
+                                    198 ;src/main.c:73: pointer_init(&s);
+    000000DC 11r0Fr00         [12]  199 	ld	de, #_s
+    000000DF CDr00r00         [24]  200 	call	_pointer_init
+                                    201 ;src/main.c:75: global_game_state = STATE_GAME_SETTING;
+    000000E2 21r00r00         [12]  202 	ld	hl, #_global_game_state
+    000000E5 36 02            [12]  203 	ld	(hl), #0x02
+                                    204 ;src/main.c:77: while(1) {
+    000000E7                        205 00120$:
+                                    206 ;src/main.c:78: switch (global_game_state)
+    000000E7 FAr00r00         [16]  207 	ld	a, (#_global_game_state)
+    000000EA D6 02            [ 8]  208 	sub	a, #0x02
+    000000EC 28 12            [12]  209 	jr	Z, 00101$
+    000000EE FAr00r00         [16]  210 	ld	a, (#_global_game_state)
+    000000F1 D6 03            [ 8]  211 	sub	a, #0x03
+    000000F3 28 40            [12]  212 	jr	Z, 00106$
+    000000F5 FAr00r00         [16]  213 	ld	a, (#_global_game_state)
+    000000F8 D6 05            [ 8]  214 	sub	a, #0x05
+    000000FA CAr7Dr01         [16]  215 	jp	Z, 00112$
+    000000FD C3r9Cr01         [16]  216 	jp	00118$
+                                    217 ;src/main.c:80: case STATE_GAME_SETTING:
+    00000100                        218 00101$:
+                                    219 ;src/main.c:81: if(last_state != STATE_GAME_SETTING) {
+    00000100 FAr17r00         [16]  220 	ld	a, (#_last_state)
+    00000103 D6 02            [ 8]  221 	sub	a, #0x02
+    00000105 28 18            [12]  222 	jr	Z, 00103$
+                                    223 ;src/main.c:82: init_gfx();
+    00000107 CDr00r00         [24]  224 	call	_init_gfx
+                                    225 ;src/main.c:83: init_level(0);
+    0000010A AF               [ 4]  226 	xor	a, a
+    0000010B CDr00r00         [24]  227 	call	_init_level
+                                    228 ;src/main.c:84: get_colision_from_map(map1_alt, global_colision_map);
+    0000010E 01r00r00         [12]  229 	ld	bc, #_global_colision_map
+    00000111 11r00r00         [12]  230 	ld	de, #_map1_alt
+    00000114 CDr00r00         [24]  231 	call	_get_colision_from_map
+                                    232 ;src/main.c:86: print_objects_in_screen();
+    00000117 CDr00r00         [24]  233 	call	_print_objects_in_screen
+                                    234 ;src/main.c:87: last_state = STATE_GAME_SETTING;
+    0000011A 21r17r00         [12]  235 	ld	hl, #_last_state
+    0000011D 36 02            [12]  236 	ld	(hl), #0x02
+    0000011F                        237 00103$:
+                                    238 ;src/main.c:89: update_pointer(&s);
+    0000011F 11r0Fr00         [12]  239 	ld	de, #_s
+    00000122 CDr00r00         [24]  240 	call	_update_pointer
+                                    241 ;src/main.c:90: if(joypad() & J_START){
+    00000125 CDr00r00         [24]  242 	call	_joypad
+    00000128 07               [ 4]  243 	rlca
+    00000129 30 71            [12]  244 	jr	NC, 00118$
+                                    245 ;src/main.c:91: hide_pointer();
+    0000012B CDr00r00         [24]  246 	call	_hide_pointer
+                                    247 ;src/main.c:92: update_game_state(STATE_GAME_RUNNING);
+    0000012E 3E 03            [ 8]  248 	ld	a, #0x03
+    00000130 CDr00r00         [24]  249 	call	_update_game_state
+                                    250 ;src/main.c:94: break;
+    00000133 18 67            [12]  251 	jr	00118$
+                                    252 ;src/main.c:96: case STATE_GAME_RUNNING:
+    00000135                        253 00106$:
+                                    254 ;src/main.c:97: if(last_state != STATE_GAME_RUNNING) {
+    00000135 FAr17r00         [16]  255 	ld	a, (#_last_state)
+    00000138 D6 03            [ 8]  256 	sub	a, #0x03
+    0000013A 28 0B            [12]  257 	jr	Z, 00108$
+                                    258 ;src/main.c:98: character_init(&p);
+    0000013C 11r00r00         [12]  259 	ld	de, #_p
+    0000013F CDr00r00         [24]  260 	call	_character_init
+                                    261 ;src/main.c:99: last_state = STATE_GAME_RUNNING;
+    00000142 21r17r00         [12]  262 	ld	hl, #_last_state
+    00000145 36 03            [12]  263 	ld	(hl), #0x03
+    00000147                        264 00108$:
+                                    265 ;src/main.c:101: update_character(&p);
+    00000147 11r00r00         [12]  266 	ld	de, #_p
+    0000014A CDr00r00         [24]  267 	call	_update_character
+                                    268 ;src/main.c:104: if(joypad() & J_A){
+    0000014D CDr00r00         [24]  269 	call	_joypad
+    00000150 CB 67            [ 8]  270 	bit	4, a
+    00000152 28 48            [12]  271 	jr	Z, 00118$
+                                    272 ;src/main.c:105: HIDE_WIN;
+    00000154 F0r00            [12]  273 	ldh	a, (_LCDC_REG + 0)
+    00000156 E6 DF            [ 8]  274 	and	a, #0xdf
+    00000158 E0r00            [12]  275 	ldh	(_LCDC_REG + 0), a
+                                    276 ;src/main.c:106: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+    0000015A 01 00 00         [12]  277 	ld	bc, #0x0000
+    0000015D                        278 00123$:
+    0000015D 59               [ 4]  279 	ld	e, c
+    0000015E 50               [ 4]  280 	ld	d, b
+    0000015F 7B               [ 4]  281 	ld	a, e
+    00000160 D6 2C            [ 8]  282 	sub	a, #0x2c
+    00000162 7A               [ 4]  283 	ld	a, d
+    00000163 DE 01            [ 8]  284 	sbc	a, #0x01
+    00000165 30 35            [12]  285 	jr	NC, 00118$
+                                    286 ;src/main.c:107: printf("%d",global_colision_map[i]);
+    00000167 21r00r00         [12]  287 	ld	hl, #_global_colision_map
+    0000016A 09               [ 8]  288 	add	hl, bc
+    0000016B 5E               [ 8]  289 	ld	e, (hl)
+    0000016C 16 00            [ 8]  290 	ld	d, #0x00
+    0000016E 21rA4r01         [12]  291 	ld	hl, #___str_0
+    00000171 C5               [16]  292 	push	bc
+    00000172 D5               [16]  293 	push	de
+    00000173 E5               [16]  294 	push	hl
+    00000174 CDr00r00         [24]  295 	call	_printf
+    00000177 E8 04            [16]  296 	add	sp, #4
+    00000179 C1               [12]  297 	pop	bc
+                                    298 ;src/main.c:106: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+    0000017A 03               [ 8]  299 	inc	bc
+    0000017B 18 E0            [12]  300 	jr	00123$
+                                    301 ;src/main.c:114: case STATE_GAME_OVER:
+    0000017D                        302 00112$:
+                                    303 ;src/main.c:115: if(last_state != STATE_GAME_OVER) {
+    0000017D FAr17r00         [16]  304 	ld	a, (#_last_state)
+    00000180 D6 05            [ 8]  305 	sub	a, #0x05
+    00000182 28 0D            [12]  306 	jr	Z, 00114$
+                                    307 ;src/main.c:116: last_state = STATE_GAME_OVER;
+    00000184 21r17r00         [12]  308 	ld	hl, #_last_state
+    00000187 36 05            [12]  309 	ld	(hl), #0x05
+                                    310 ;src/main.c:117: printf("You WIN!\nPress start to try again");
+    00000189 11rA7r01         [12]  311 	ld	de, #___str_1
+    0000018C D5               [16]  312 	push	de
+    0000018D CDr00r00         [24]  313 	call	_printf
+    00000190 E1               [12]  314 	pop	hl
+    00000191                        315 00114$:
+                                    316 ;src/main.c:119: if(joypad() & J_START){
+    00000191 CDr00r00         [24]  317 	call	_joypad
+    00000194 07               [ 4]  318 	rlca
+    00000195 30 05            [12]  319 	jr	NC, 00118$
+                                    320 ;src/main.c:120: update_game_state(STATE_GAME_SETTING);
+    00000197 3E 02            [ 8]  321 	ld	a, #0x02
+    00000199 CDr00r00         [24]  322 	call	_update_game_state
+                                    323 ;src/main.c:126: }
+    0000019C                        324 00118$:
+                                    325 ;src/main.c:127: performantdelay(10);
+    0000019C 3E 0A            [ 8]  326 	ld	a, #0x0a
+    0000019E CDr00r00         [24]  327 	call	_performantdelay
+                                    328 ;src/main.c:129: }
+    000001A1 C3rE7r00         [16]  329 	jp	00120$
+    000001A4                        330 ___str_0:
+    000001A4 25 64                  331 	.ascii "%d"
+    000001A6 00                     332 	.db 0x00
+    000001A7                        333 ___str_1:
+    000001A7 59 6F 75 20 57 49 4E   334 	.ascii "You WIN!"
              21
-    000001A2 0A                     328 	.db 0x0a
-    000001A3 50 72 65 73 73 20 73   329 	.ascii "Press start to try again"
+    000001AF 0A                     335 	.db 0x0a
+    000001B0 50 72 65 73 73 20 73   336 	.ascii "Press start to try again"
              74 61 72 74 20 74 6F
              20 74 72 79 20 61 67
              61 69 6E
-    000001BB 00                     330 	.db 0x00
-                                    331 	.area _CODE
-                                    332 	.area _INITIALIZER
-                                    333 	.area _CABS (ABS)
+    000001C8 00                     337 	.db 0x00
+                                    338 	.area _CODE
+                                    339 	.area _INITIALIZER
+                                    340 	.area _CABS (ABS)

@@ -228,7 +228,7 @@ _get_colision_from_map::
 	sub	a, (hl)
 	jr	C, 00105$
 ;src/LevelLogic.c:58: out[i] = FALL;
-	ld	a, #0x05
+	ld	a, #0x0e
 	ld	(de), a
 	jr	00118$
 00105$:

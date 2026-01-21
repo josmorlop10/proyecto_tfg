@@ -10,8 +10,9 @@ Symbol Table
     _LCDC_REG                                                       ******** GX
     _WX_REG                                                         ******** GX
     _WY_REG                                                         ******** GX
-  0 ___str_0                                                        00000197 R
-  0 ___str_1                                                        0000019A R
+  0 ___str_0                                                        000001A4 R
+  0 ___str_1                                                        000001A7 R
+    _block_pointer                                                  ******** GX
     _character_init                                                 ******** GX
     _duck                                                           ******** GX
     _get_colision_from_map                                          ******** GX
@@ -24,7 +25,7 @@ Symbol Table
     _init_level                                                     ******** GX
     _joypad                                                         ******** GX
   1 _last_state                                                     00000017 GR
-  0 _main                                                           000000CC GR
+  0 _main                                                           000000D9 GR
     _map1_alt                                                       ******** GX
     _map_tiles_alt                                                  ******** GX
     _object_sprites                                                 ******** GX
@@ -45,13 +46,12 @@ Symbol Table
     _update_game_state                                              ******** GX
     _update_pointer                                                 ******** GX
 
-
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      1BC   flags    0
+   0 _CODE                                      size      1C9   flags    0
    1 _DATA                                      size       18   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

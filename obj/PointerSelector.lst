@@ -277,11 +277,11 @@
     000000D2 D1               [12]  277 	pop	de
     000000D3 CDr00r00         [24]  278 	call	_change_colision_map_BR
     000000D6 C1               [12]  279 	pop	bc
-                                    280 ;src/PointerSelector.c:40: change_bkg_tile_16x16(s->tileindexBR, global_selected_block * 4 + 31);
+                                    280 ;src/PointerSelector.c:40: change_bkg_tile_16x16(s->tileindexBR, global_selected_block * 4 + UMBRAL_BLOCKS);
     000000D7 FAr00r00         [16]  281 	ld	a, (_global_selected_block)
     000000DA 87               [ 4]  282 	add	a, a
     000000DB 87               [ 4]  283 	add	a, a
-    000000DC C6 1F            [ 8]  284 	add	a, #0x1f
+    000000DC C6 47            [ 8]  284 	add	a, #0x47
     000000DE F8 00            [12]  285 	ldhl	sp,	#0
     000000E0 77               [ 8]  286 	ld	(hl), a
     000000E1 69               [ 4]  287 	ld	l, c

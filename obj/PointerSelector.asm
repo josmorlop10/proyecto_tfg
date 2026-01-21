@@ -277,11 +277,11 @@ _place_object_at_pointer::
 	pop	de
 	call	_change_colision_map_BR
 	pop	bc
-;src/PointerSelector.c:40: change_bkg_tile_16x16(s->tileindexBR, global_selected_block * 4 + 31);
+;src/PointerSelector.c:40: change_bkg_tile_16x16(s->tileindexBR, global_selected_block * 4 + UMBRAL_BLOCKS);
 	ld	a, (_global_selected_block)
 	add	a, a
 	add	a, a
-	add	a, #0x1f
+	add	a, #0x47
 	ldhl	sp,	#0
 	ld	(hl), a
 	ld	l, c

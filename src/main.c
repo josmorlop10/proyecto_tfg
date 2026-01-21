@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "../res/selector.h" 
 #include "../res/duck.h"
+#include "../res/block_pointer.h"
 #include "../res/map1.h" 
 #include "../res/map_tiles.h" 
 
@@ -47,6 +48,9 @@ void init_gfx(void){
     set_sprite_tile(13,13);
     set_sprite_tile(14,14);
     set_sprite_tile(15,15);
+
+    //block hud pointer
+    set_sprite_data(16,1,block_pointer);
     SHOW_SPRITES;
 
     //map

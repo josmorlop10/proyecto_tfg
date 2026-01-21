@@ -14,13 +14,18 @@
 #define LEFT 7
 #define UP 8
 #define DOWN 9
-#define FALL 5
+#define RIGHT_UP 10
+#define RIGHT_DOWN 11
+#define LEFT_UP 12
+#define LEFT_DOWN 13
+#define FALL 14
 
 #define UMBRAL_COLISION_UP 5
 #define UMBRAL_COLISION_DOWN 20
+#define UMBRAL_BLOCKS 71 //Botton Right!
 
 #define NUMBER_OF_BLOCKS 4
-#define NUMBER_OF_TILES_IN_GRID 300
+#define NUMBER_OF_TILES_IN_GRID 300 //20x15
 
 //Global variable for block selected.Indicará la cantidad de bloques disponibles.
 //Siendo index 1 = DER, 2= IZQ, 3=ARRIBA, 4=ABAJO (+6 por los "define" de arriba)
