@@ -61,7 +61,7 @@ _hud_selector:
 	.db #0x7f	; 127
 	.db #0x7f	; 127
 	.db #0x7e	; 126
-	.db #0x81	; 129
+	.db #0x83	; 131
 	.db #0x68	; 104	'h'
 	.db #0x73	; 115	's'
 	.db #0x7c	; 124

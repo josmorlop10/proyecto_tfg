@@ -270,7 +270,7 @@ _move_sprite_block_pointer::
 ; ---------------------------------
 _print_counter::
 ;src/Graphic.c:73: uint8_t tile_id = global_selected_block + 115;
-	ld	a, (_global_selected_block)
+	ld	a, (#_global_selected_block)
 	add	a, #0x73
 ;src/Graphic.c:74: set_win_tile_xy(0, 0, tile_id);
 	push	af

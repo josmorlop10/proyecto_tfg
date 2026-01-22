@@ -655,21 +655,84 @@ _get_init_point_from_map::
 	inc	sp
 	inc	sp
 	ret
-;src/LevelLogic.c:115: void move_foward_block_id(void){
+;src/LevelLogic.c:115: void move_foward_block_id(uint8_t button_pressed){
 ;	---------------------------------
 ; Function move_foward_block_id
 ; ---------------------------------
 _move_foward_block_id::
-;src/LevelLogic.c:116: global_selected_block++;
+	ld	c, a
+;src/LevelLogic.c:120: switch (button_pressed)
+	ld	a, #0x03
+	sub	a, c
+	jr	C, 00106$
+	ld	b, #0x00
+	ld	hl, #00135$
+	add	hl, bc
+	add	hl, bc
+	ld	c, (hl)
+	inc	hl
+	ld	h, (hl)
+	ld	l, c
+	jp	(hl)
+00135$:
+	.dw	00101$
+	.dw	00102$
+	.dw	00103$
+	.dw	00104$
+;src/LevelLogic.c:122: case 0:
+00101$:
+;src/LevelLogic.c:123: global_selected_block ++;
 	ld	hl, #_global_selected_block
 	inc	(hl)
-;src/LevelLogic.c:117: if(global_selected_block >= NUMBER_OF_BLOCKS){
+;src/LevelLogic.c:124: break;
+	jr	00106$
+;src/LevelLogic.c:126: case 1:
+00102$:
+;src/LevelLogic.c:127: global_selected_block --;
+	ld	hl, #_global_selected_block
+	dec	(hl)
+;src/LevelLogic.c:128: break;
+	jr	00106$
+;src/LevelLogic.c:129: case 2:
+00103$:
+;src/LevelLogic.c:130: global_selected_block +=4;
+	ld	hl, #_global_selected_block
+	inc	(hl)
+	inc	(hl)
+	inc	(hl)
+	inc	(hl)
+;src/LevelLogic.c:131: break;
+	jr	00106$
+;src/LevelLogic.c:132: case 3:
+00104$:
+;src/LevelLogic.c:133: global_selected_block -=4;
+	ld	hl, #_global_selected_block
 	ld	a, (hl)
-	sub	a, #0x08
-	ret	C
-;src/LevelLogic.c:118: global_selected_block = 0;
-	ld	(hl), #0x00
-;src/LevelLogic.c:120: }
+	add	a, #0xfc
+	ld	(hl), a
+;src/LevelLogic.c:138: }
+00106$:
+;src/LevelLogic.c:140: if(global_selected_block >= NUMBER_OF_BLOCKS){
+	ld	hl, #_global_selected_block
+	ld	a, (hl)
+	xor	a, #0x80
+	sub	a, #0x88
+	jr	C, 00110$
+;src/LevelLogic.c:141: global_selected_block -= NUMBER_OF_BLOCKS;
+	ld	a, (hl)
+	add	a, #0xf8
+	ld	(hl), a
+	ret
+00110$:
+;src/LevelLogic.c:142: } else if(global_selected_block < 0){
+	ld	hl, #_global_selected_block
+	bit	7, (hl)
+	ret	Z
+;src/LevelLogic.c:143: global_selected_block += NUMBER_OF_BLOCKS;
+	ld	a, (hl)
+	add	a, #0x08
+	ld	(hl), a
+;src/LevelLogic.c:145: }
 	ret
 	.area _CODE
 	.area _INITIALIZER
@@ -984,7 +1047,7 @@ __xinit__global_blocks_available:
 	.db 0x00
 	.db 0x00
 __xinit__global_selected_block:
-	.db #0x00	; 0
+	.db #0x00	;  0
 __xinit__global_levels_array:
 	.dw _map1_alt
 	.area _CABS (ABS)

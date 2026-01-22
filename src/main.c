@@ -50,7 +50,7 @@ void init_gfx(void){
     //block hud pointer
     set_sprite_data(16,1,block_pointer);
     set_sprite_tile(16,16);
-    
+
     SHOW_SPRITES;
 
     //map
@@ -60,7 +60,7 @@ void init_gfx(void){
 
     //HUD
     // Activa la window
-    set_win_data(104,26, hud_tiles);
+    set_win_data(104,28, hud_tiles);
     set_win_tiles(0,0,20,3, hud_selector);
     SHOW_WIN;
     WX_REG = 7;      // SIEMPRE 7

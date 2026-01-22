@@ -31,7 +31,7 @@
 //Siendo index 1 = DER, 2= IZQ, 3=ARRIBA, 4=ABAJO (+6 por los "define" de arriba)
 extern uint8_t global_blocks_available[NUMBER_OF_BLOCKS];
 //indica el indice del array
-extern uint8_t global_selected_block;
+extern int8_t global_selected_block;
 //variable global array de niveles disponibles (o mapas)
 extern const unsigned char* global_levels_array[];
 
@@ -62,7 +62,7 @@ void get_colision_from_map(const unsigned char in[], uint8_t out[]);
 void get_init_point_from_map(uint8_t colision_map[NUMBER_OF_TILES_IN_GRID]);
 void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value);
 void change_colision_map_BR(uint16_t tileindexBR, uint8_t new_value);
-void move_foward_block_id(void);
+void move_foward_block_id(uint8_t button_pressed);
 void init_level(uint8_t level_number);
 uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah, uint8_t bx, uint8_t by, uint8_t bw, uint8_t bh);
 void read_global_object_info_from_map(unsigned char* objects_map);

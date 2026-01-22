@@ -6,6 +6,8 @@
 #include <gb/gb.h>
 #include <stdio.h>
 
+uint8_t selection_of_block_active = 0;
+
 void pointer_init(Pointer* s) {
     s->x = 80;
     s->y = 72;
@@ -13,6 +15,7 @@ void pointer_init(Pointer* s) {
         s->sprite_ids[i] = i;
     }
     s->tileindexBR = 0;
+    move_sprite_block_pointer(global_selected_block);
 }
 
 void move_pointer(Pointer* s) {
@@ -76,36 +79,58 @@ uint8_t block_is_placed_below(Pointer* s){
 
 void control_pointer(Pointer* s){
 
-    if(joypad() & J_UP) {
-        if (can_pointer_move(s, 0, -1)){
-            s->y -= 8;
+    if(selection_of_block_active==0){
+        if(joypad() & J_UP) {
+            if (can_pointer_move(s, 0, -1)){
+                s->y -= 8;
+            }
+        } else if(joypad() & J_DOWN) {
+            if (can_pointer_move(s, 0, 1)){
+                s->y += 8;
+            }
+        } else if(joypad() & J_LEFT) {
+            if (can_pointer_move(s, -1, 0)){
+                s->x -= 8;
+            }
+        } else if(joypad() & J_RIGHT) {
+            if (can_pointer_move(s, 1, 0)){
+                s->x += 8;
+            }
+        } else if(joypad() & J_A) {
+            if(block_is_not_placed_below(s) 
+            && (global_blocks_available[global_selected_block]>0)
+            && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1) , 16, 16) == 255){
+                place_object_at_pointer(s, global_selected_block + 6);
+            }
+        } else if(joypad() & J_B) {
+            uint8_t block = block_is_placed_below(s);
+            if(block>=6){
+                remove_object_at_pointer(s, block);
+            }
+        } else if(joypad() & J_SELECT) {
+            selection_of_block_active = !selection_of_block_active;
+            set_win_tile_xy(0,1,130);
         }
-    } else if(joypad() & J_DOWN) {
-        if (can_pointer_move(s, 0, 1)){
-            s->y += 8;
+
+    } else {
+        if(joypad() & J_UP) {
+            move_foward_block_id(2);
+            move_sprite_block_pointer(global_selected_block);
+
+        } else if(joypad() & J_DOWN) {
+            move_foward_block_id(3);
+            move_sprite_block_pointer(global_selected_block);
+        } else if(joypad() & J_LEFT) {
+            move_foward_block_id(1);
+            move_sprite_block_pointer(global_selected_block);
+        } else if(joypad() & J_RIGHT) {
+            move_foward_block_id(0);
+            move_sprite_block_pointer(global_selected_block);
+
+        } else if(joypad() & J_SELECT) {
+            selection_of_block_active = !selection_of_block_active;
+            set_win_tile_xy(0,1,131);
         }
-    } else if(joypad() & J_LEFT) {
-        if (can_pointer_move(s, -1, 0)){
-            s->x -= 8;
-        }
-    } else if(joypad() & J_RIGHT) {
-        if (can_pointer_move(s, 1, 0)){
-            s->x += 8;
-        }
-    } else if(joypad() & J_A) {
-        if(block_is_not_placed_below(s) 
-        && (global_blocks_available[global_selected_block]>0)
-        && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1) , 16, 16) == 255){
-            place_object_at_pointer(s, global_selected_block + 6);
-        }
-    } else if(joypad() & J_B) {
-        uint8_t block = block_is_placed_below(s);
-        if(block>=6){
-            remove_object_at_pointer(s, block);
-        }
-    } else if(joypad() & J_SELECT) {
-        move_foward_block_id();
-        move_sprite_block_pointer(global_selected_block);
     }
 }
 
