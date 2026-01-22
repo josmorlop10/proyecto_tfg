@@ -9,6 +9,7 @@
 ;--------------------------------------------------------
 	.globl _can_pointer_move
 	.globl _joypad
+	.globl _move_sprite_block_pointer
 	.globl _update_values_in_hud
 	.globl _change_bkg_tile_16x16
 	.globl _change_bkg_tile_xy
@@ -17,7 +18,6 @@
 	.globl _change_colision_map_BR
 	.globl _change_colision_map_at
 	.globl _tileindex_from_xy
-	.globl _print_counter
 	.globl _pointer_init
 	.globl _move_pointer
 	.globl _place_object_at_pointer
@@ -726,8 +726,9 @@ _control_pointer::
 	jr	Z, 00135$
 ;src/PointerSelector.c:107: move_foward_block_id();
 	call	_move_foward_block_id
-;src/PointerSelector.c:108: print_counter();
-	call	_print_counter
+;src/PointerSelector.c:108: move_sprite_block_pointer(global_selected_block);
+	ld	a, (_global_selected_block)
+	call	_move_sprite_block_pointer
 00135$:
 ;src/PointerSelector.c:110: }
 	add	sp, #4

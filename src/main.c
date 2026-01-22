@@ -49,6 +49,8 @@ void init_gfx(void){
 
     //block hud pointer
     set_sprite_data(16,1,block_pointer);
+    set_sprite_tile(16,16);
+    
     SHOW_SPRITES;
 
     //map

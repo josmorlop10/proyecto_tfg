@@ -134,18 +134,21 @@ _init_gfx::
 	push	hl
 	call	_set_sprite_data
 	add	sp, #4
-;src/main.c:52: SHOW_SPRITES;
+;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+	ld	hl, #(_shadow_OAM + 66)
+	ld	(hl), #0x10
+;src/main.c:54: SHOW_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x02
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:55: set_bkg_data(0, 104, map_tiles_alt);
+;src/main.c:57: set_bkg_data(0, 104, map_tiles_alt);
 	ld	de, #_map_tiles_alt
 	push	de
 	ld	hl, #0x6800
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;src/main.c:56: set_bkg_tiles(0,0,20,16,map1_alt);
+;src/main.c:58: set_bkg_tiles(0,0,20,16,map1_alt);
 	ld	de, #_map1_alt
 	push	de
 	ld	hl, #0x1014
@@ -155,18 +158,18 @@ _init_gfx::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;src/main.c:57: SHOW_BKG;
+;src/main.c:59: SHOW_BKG;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x01
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:61: set_win_data(104,26, hud_tiles);
+;src/main.c:63: set_win_data(104,26, hud_tiles);
 	ld	de, #_hud_tiles
 	push	de
 	ld	hl, #0x1a68
 	push	hl
 	call	_set_win_data
 	add	sp, #4
-;src/main.c:62: set_win_tiles(0,0,20,3, hud_selector);
+;src/main.c:64: set_win_tiles(0,0,20,3, hud_selector);
 	ld	de, #_hud_selector
 	push	de
 	ld	hl, #0x314
@@ -176,34 +179,34 @@ _init_gfx::
 	push	af
 	call	_set_win_tiles
 	add	sp, #6
-;src/main.c:63: SHOW_WIN;
+;src/main.c:65: SHOW_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x20
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:64: WX_REG = 7;      // SIEMPRE 7
+;src/main.c:66: WX_REG = 7;      // SIEMPRE 7
 	ld	a, #0x07
 	ldh	(_WX_REG + 0), a
-;src/main.c:65: WY_REG = 120;    // 144 - 24
+;src/main.c:67: WY_REG = 120;    // 144 - 24
 	ld	a, #0x78
 	ldh	(_WY_REG + 0), a
-;src/main.c:66: }
+;src/main.c:68: }
 	ret
-;src/main.c:68: void main(void)
+;src/main.c:70: void main(void)
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
 _main::
-;src/main.c:70: init_gfx();
+;src/main.c:72: init_gfx();
 	call	_init_gfx
-;src/main.c:71: pointer_init(&s);
+;src/main.c:73: pointer_init(&s);
 	ld	de, #_s
 	call	_pointer_init
-;src/main.c:73: global_game_state = STATE_GAME_SETTING;
+;src/main.c:75: global_game_state = STATE_GAME_SETTING;
 	ld	hl, #_global_game_state
 	ld	(hl), #0x02
-;src/main.c:75: while(1) {
+;src/main.c:77: while(1) {
 00120$:
-;src/main.c:76: switch (global_game_state)
+;src/main.c:78: switch (global_game_state)
 	ld	a, (#_global_game_state)
 	sub	a, #0x02
 	jr	Z, 00101$
@@ -214,66 +217,66 @@ _main::
 	sub	a, #0x05
 	jp	Z, 00112$
 	jp	00118$
-;src/main.c:78: case STATE_GAME_SETTING:
+;src/main.c:80: case STATE_GAME_SETTING:
 00101$:
-;src/main.c:79: if(last_state != STATE_GAME_SETTING) {
+;src/main.c:81: if(last_state != STATE_GAME_SETTING) {
 	ld	a, (#_last_state)
 	sub	a, #0x02
 	jr	Z, 00103$
-;src/main.c:80: init_gfx();
+;src/main.c:82: init_gfx();
 	call	_init_gfx
-;src/main.c:81: init_level(0);
+;src/main.c:83: init_level(0);
 	xor	a, a
 	call	_init_level
-;src/main.c:82: get_colision_from_map(map1_alt, global_colision_map);
+;src/main.c:84: get_colision_from_map(map1_alt, global_colision_map);
 	ld	bc, #_global_colision_map
 	ld	de, #_map1_alt
 	call	_get_colision_from_map
-;src/main.c:84: print_objects_in_screen();
+;src/main.c:86: print_objects_in_screen();
 	call	_print_objects_in_screen
-;src/main.c:85: last_state = STATE_GAME_SETTING;
+;src/main.c:87: last_state = STATE_GAME_SETTING;
 	ld	hl, #_last_state
 	ld	(hl), #0x02
 00103$:
-;src/main.c:87: update_pointer(&s);
+;src/main.c:89: update_pointer(&s);
 	ld	de, #_s
 	call	_update_pointer
-;src/main.c:88: if(joypad() & J_START){
+;src/main.c:90: if(joypad() & J_START){
 	call	_joypad
 	rlca
 	jr	NC, 00118$
-;src/main.c:89: hide_pointer();
+;src/main.c:91: hide_pointer();
 	call	_hide_pointer
-;src/main.c:90: update_game_state(STATE_GAME_RUNNING);
+;src/main.c:92: update_game_state(STATE_GAME_RUNNING);
 	ld	a, #0x03
 	call	_update_game_state
-;src/main.c:92: break;
+;src/main.c:94: break;
 	jr	00118$
-;src/main.c:94: case STATE_GAME_RUNNING:
+;src/main.c:96: case STATE_GAME_RUNNING:
 00106$:
-;src/main.c:95: if(last_state != STATE_GAME_RUNNING) {
+;src/main.c:97: if(last_state != STATE_GAME_RUNNING) {
 	ld	a, (#_last_state)
 	sub	a, #0x03
 	jr	Z, 00108$
-;src/main.c:96: character_init(&p);
+;src/main.c:98: character_init(&p);
 	ld	de, #_p
 	call	_character_init
-;src/main.c:97: last_state = STATE_GAME_RUNNING;
+;src/main.c:99: last_state = STATE_GAME_RUNNING;
 	ld	hl, #_last_state
 	ld	(hl), #0x03
 00108$:
-;src/main.c:99: update_character(&p);
+;src/main.c:101: update_character(&p);
 	ld	de, #_p
 	call	_update_character
-;src/main.c:102: if(joypad() & J_A){
+;src/main.c:104: if(joypad() & J_A){
 	call	_joypad
 	bit	4, a
 	jr	Z, 00118$
-;src/main.c:103: HIDE_WIN;
+;src/main.c:105: HIDE_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xdf
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:104: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/main.c:106: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	ld	bc, #0x0000
 00123$:
 	ld	e, c
@@ -283,7 +286,7 @@ _main::
 	ld	a, d
 	sbc	a, #0x01
 	jr	NC, 00118$
-;src/main.c:105: printf("%d",global_colision_map[i]);
+;src/main.c:107: printf("%d",global_colision_map[i]);
 	ld	hl, #_global_colision_map
 	add	hl, bc
 	ld	e, (hl)
@@ -295,37 +298,37 @@ _main::
 	call	_printf
 	add	sp, #4
 	pop	bc
-;src/main.c:104: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/main.c:106: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	inc	bc
 	jr	00123$
-;src/main.c:112: case STATE_GAME_OVER:
+;src/main.c:114: case STATE_GAME_OVER:
 00112$:
-;src/main.c:113: if(last_state != STATE_GAME_OVER) {
+;src/main.c:115: if(last_state != STATE_GAME_OVER) {
 	ld	a, (#_last_state)
 	sub	a, #0x05
 	jr	Z, 00114$
-;src/main.c:114: last_state = STATE_GAME_OVER;
+;src/main.c:116: last_state = STATE_GAME_OVER;
 	ld	hl, #_last_state
 	ld	(hl), #0x05
-;src/main.c:115: printf("You WIN!\nPress start to try again");
+;src/main.c:117: printf("You WIN!\nPress start to try again");
 	ld	de, #___str_1
 	push	de
 	call	_printf
 	pop	hl
 00114$:
-;src/main.c:117: if(joypad() & J_START){
+;src/main.c:119: if(joypad() & J_START){
 	call	_joypad
 	rlca
 	jr	NC, 00118$
-;src/main.c:118: update_game_state(STATE_GAME_SETTING);
+;src/main.c:120: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	call	_update_game_state
-;src/main.c:124: }
+;src/main.c:126: }
 00118$:
-;src/main.c:125: performantdelay(10);
+;src/main.c:127: performantdelay(10);
 	ld	a, #0x0a
 	call	_performantdelay
-;src/main.c:127: }
+;src/main.c:129: }
 	jp	00120$
 ___str_0:
 	.ascii "%d"

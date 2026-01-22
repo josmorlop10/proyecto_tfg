@@ -105,7 +105,7 @@ void control_pointer(Pointer* s){
         }
     } else if(joypad() & J_SELECT) {
         move_foward_block_id();
-        print_counter();
+        move_sprite_block_pointer(global_selected_block);
     }
 }
 

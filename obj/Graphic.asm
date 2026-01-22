@@ -12,6 +12,7 @@
 	.globl _set_bkg_tiles
 	.globl _change_bkg_tile_xy
 	.globl _change_bkg_tile_16x16
+	.globl _move_sprite_block_pointer
 	.globl _update_values_in_hud
 ;--------------------------------------------------------
 ; special function registers
@@ -213,31 +214,81 @@ _change_bkg_tile_16x16::
 ;src/Graphic.c:50: }
 	add	sp, #11
 	ret
-;src/Graphic.c:55: void print_counter(void){
+;src/Graphic.c:54: void move_sprite_block_pointer(uint8_t direction){
+;	---------------------------------
+; Function move_sprite_block_pointer
+; ---------------------------------
+_move_sprite_block_pointer::
+;src/Graphic.c:63: uint8_t offset_x = direction%4 * 8*4;
+	ld	l, a
+	ld	h, #0x00
+	ld	a, l
+	and	a, #0x03
+	ld	e, a
+	swap	a
+	rlca
+	and	a, #0xe0
+	ld	c, a
+;src/Graphic.c:64: uint8_t offset_y = direction/4 * 8;
+	sra	h
+	rr	l
+	sra	h
+	rr	l
+	ld	a, l
+	add	a, a
+	add	a, a
+	add	a, a
+	ld	b, a
+;src/Graphic.c:65: if(direction%4 >= 2){
+	ld	a, e
+	sub	a, #0x02
+	jr	C, 00102$
+;src/Graphic.c:66: offset_x = offset_x + 8;
+	ld	a, c
+	add	a, #0x08
+	ld	c, a
+00102$:
+;src/Graphic.c:68: move_sprite(16, 24 + offset_x , 144 + offset_y);
+	ld	a, b
+	add	a, #0x90
+	ld	b, a
+	ld	a, c
+	add	a, #0x18
+	ld	c, a
+;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+	ld	hl, #(_shadow_OAM + 64)
+;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+	ld	a, b
+	ld	(hl+), a
+	ld	(hl), c
+;src/Graphic.c:68: move_sprite(16, 24 + offset_x , 144 + offset_y);
+;src/Graphic.c:69: }
+	ret
+;src/Graphic.c:72: void print_counter(void){
 ;	---------------------------------
 ; Function print_counter
 ; ---------------------------------
 _print_counter::
-;src/Graphic.c:56: uint8_t tile_id = global_selected_block + 115;
+;src/Graphic.c:73: uint8_t tile_id = global_selected_block + 115;
 	ld	a, (_global_selected_block)
 	add	a, #0x73
-;src/Graphic.c:57: set_win_tile_xy(0, 0, tile_id);
+;src/Graphic.c:74: set_win_tile_xy(0, 0, tile_id);
 	push	af
 	inc	sp
 	xor	a, a
 	ld	e, a
 	call	_set_win_tile_xy
-;src/Graphic.c:58: }
+;src/Graphic.c:75: }
 	ret
-;src/Graphic.c:60: void update_values_in_hud(uint8_t position, uint8_t new_value){
+;src/Graphic.c:77: void update_values_in_hud(uint8_t position, uint8_t new_value){
 ;	---------------------------------
 ; Function update_values_in_hud
 ; ---------------------------------
 _update_values_in_hud::
-;src/Graphic.c:67: uint8_t x = 0;
-;src/Graphic.c:68: uint8_t y = 0;
+;src/Graphic.c:84: uint8_t x = 0;
+;src/Graphic.c:85: uint8_t y = 0;
 	ld	bc, #0x0
-;src/Graphic.c:70: switch (position)
+;src/Graphic.c:87: switch (position)
 	cp	a, #0x06
 	jr	C, 00110$
 	cp	a, #0x0e
@@ -262,63 +313,63 @@ _update_values_in_hud::
 	.dw	00106$
 	.dw	00107$
 	.dw	00108$
-;src/Graphic.c:72: case RIGHT:
+;src/Graphic.c:89: case RIGHT:
 00101$:
-;src/Graphic.c:73: x = 3;
-;src/Graphic.c:74: y = 1;
-	ld	bc, #0x103
-;src/Graphic.c:75: break;
+;src/Graphic.c:90: x = 4;
+;src/Graphic.c:91: y = 1;
+	ld	bc, #0x104
+;src/Graphic.c:92: break;
 	jr	00110$
-;src/Graphic.c:76: case LEFT:
+;src/Graphic.c:93: case LEFT:
 00102$:
-;src/Graphic.c:77: x = 3;
-;src/Graphic.c:78: y = 2;
-	ld	bc, #0x203
-;src/Graphic.c:79: break;
+;src/Graphic.c:94: x = 8;
+;src/Graphic.c:95: y = 1;
+	ld	bc, #0x108
+;src/Graphic.c:96: break;
 	jr	00110$
-;src/Graphic.c:80: case UP:
+;src/Graphic.c:97: case UP:
 00103$:
-;src/Graphic.c:81: x = 7;
-;src/Graphic.c:82: y = 1;
-	ld	bc, #0x107
-;src/Graphic.c:83: break;
+;src/Graphic.c:98: x = 13;
+;src/Graphic.c:99: y = 1;
+	ld	bc, #0x10d
+;src/Graphic.c:100: break;
 	jr	00110$
-;src/Graphic.c:84: case DOWN:
+;src/Graphic.c:101: case DOWN:
 00104$:
-;src/Graphic.c:85: x = 7;
-;src/Graphic.c:86: y = 2;
-	ld	bc, #0x207
-;src/Graphic.c:87: break;
+;src/Graphic.c:102: x = 17;
+;src/Graphic.c:103: y = 1;
+	ld	bc, #0x111
+;src/Graphic.c:104: break;
 	jr	00110$
-;src/Graphic.c:88: case RIGHT_UP:
+;src/Graphic.c:105: case RIGHT_UP:
 00105$:
-;src/Graphic.c:89: x = 11;
-;src/Graphic.c:90: y = 1;
-	ld	bc, #0x10b
-;src/Graphic.c:91: break;
+;src/Graphic.c:106: x = 4;
+;src/Graphic.c:107: y = 2;
+	ld	bc, #0x204
+;src/Graphic.c:108: break;
 	jr	00110$
-;src/Graphic.c:92: case RIGHT_DOWN:
+;src/Graphic.c:109: case RIGHT_DOWN:
 00106$:
-;src/Graphic.c:93: x = 11;
-;src/Graphic.c:94: y = 2;
-	ld	bc, #0x20b
-;src/Graphic.c:95: break;
+;src/Graphic.c:110: x = 8;
+;src/Graphic.c:111: y = 2;
+	ld	bc, #0x208
+;src/Graphic.c:112: break;
 	jr	00110$
-;src/Graphic.c:96: case LEFT_UP:
+;src/Graphic.c:113: case LEFT_UP:
 00107$:
-;src/Graphic.c:97: x = 15; 
-;src/Graphic.c:98: y = 1;
-	ld	bc, #0x10f
-;src/Graphic.c:99: break;
+;src/Graphic.c:114: x = 13; 
+;src/Graphic.c:115: y = 2;
+	ld	bc, #0x20d
+;src/Graphic.c:116: break;
 	jr	00110$
-;src/Graphic.c:100: case LEFT_DOWN:
+;src/Graphic.c:117: case LEFT_DOWN:
 00108$:
-;src/Graphic.c:101: x = 15; 
-;src/Graphic.c:102: y = 2;
-	ld	bc, #0x20f
-;src/Graphic.c:106: }
+;src/Graphic.c:118: x = 17; 
+;src/Graphic.c:119: y = 2;
+	ld	bc, #0x211
+;src/Graphic.c:123: }
 00110$:
-;src/Graphic.c:108: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset + 1);
+;src/Graphic.c:125: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset + 1);
 	ld	a, e
 	add	a, #0x69
 	push	af
@@ -326,7 +377,7 @@ _update_values_in_hud::
 	ld	e, b
 	ld	a, c
 	call	_set_win_tile_xy
-;src/Graphic.c:109: }
+;src/Graphic.c:126: }
 	ret
 	.area _CODE
 	.area _INITIALIZER
