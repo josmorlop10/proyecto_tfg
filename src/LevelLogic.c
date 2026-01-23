@@ -115,8 +115,7 @@ void get_init_point_from_map(uint8_t colision_map[NUMBER_OF_TILES_IN_GRID]){
 void move_foward_block_id(uint8_t button_pressed){
     //0 der
     //1 izq
-    //2 arriba
-    //3 abajo
+
     switch (button_pressed)
     {
     case 0:
@@ -125,12 +124,6 @@ void move_foward_block_id(uint8_t button_pressed){
 
     case 1:
         global_selected_block --;
-        break;
-    case 2:
-        global_selected_block +=4;
-        break;
-    case 3:
-        global_selected_block -=4;
         break;
     
     default:

@@ -16,6 +16,7 @@ void set_direction(Character* p,  int8_t x, int8_t y){
     p->dir_y = y;
 }
 
+
 //Character
 void character_init(Character* p) {
 
@@ -85,6 +86,13 @@ uint8_t canplayermove(Character* p){
             case DOWN:
                 set_direction(p, 0, 1);
                 break;
+            case CLOCKWISE:
+                set_direction(p, 1, 0);
+                break;
+            case COUNTER_CLOCKWISE:
+                set_direction(p, -1, 0);
+                break;
+
             default:
                 break;
         }
@@ -93,9 +101,28 @@ uint8_t canplayermove(Character* p){
     return 1;
 }
 
+//Directions!
+
 void flip_direction(Character* p){
     p->dir_x = - p->dir_x;
     p->dir_y = - p->dir_y;
+}
+
+void rotate_direction(Character*p, uint8_t sentido){
+    //sentido = 1 horario
+    //sentido = 0 antihorario
+    uint8_t aux_x = p->dir_x;
+
+    if(sentido){
+        //(dx, dy) -> (-dy, dx)
+        p->dir_x = -p->dir_y;
+        p->dir_y = aux_x;
+    } else {
+        //(dx, dy) -> (dy, -dx)
+        p->dir_x = p->dir_y;
+        p->dir_y = aux_x;
+    }
+
 }
 
 void take_effect(uint8_t index){

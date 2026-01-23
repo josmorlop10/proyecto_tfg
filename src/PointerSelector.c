@@ -3,6 +3,7 @@
 #include "Headers/LevelLogic.h"
 #include "Headers/Object.h"
 #include "Headers/Graphic.h"
+#include "../res/hud_selector.h"
 #include <gb/gb.h>
 #include <stdio.h>
 
@@ -68,7 +69,7 @@ uint8_t block_is_placed_below(Pointer* s){
     //devuelbe el bloque si es que hay un bloque. 
     //Si no devuelve 0
     uint8_t res = 0;
-    if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=LEFT_DOWN) 
+    if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=RIGHT+NUMBER_OF_BLOCKS) 
            && (global_colision_map[s->tileindexBR-1] == BLOCK)
            && (global_colision_map[s->tileindexBR-20] == BLOCK)
            && (global_colision_map[s->tileindexBR-21] == BLOCK)){
@@ -78,6 +79,8 @@ uint8_t block_is_placed_below(Pointer* s){
 }
 
 void control_pointer(Pointer* s){
+
+    //TODO: refactor this function entirely
 
     if(global_hud_selected==0){
         if(joypad() & J_UP) {
@@ -114,18 +117,12 @@ void control_pointer(Pointer* s){
                 WY_REG = 120 - i;
                 delay(10);
             }
-            set_win_tile_xy(0,1,130);
+            set_win_tile_xy(0,1,hud_selectorTileOffset+26);
         }
 
     } else {
-        if(joypad() & J_UP) {
-            move_foward_block_id(2);
-            move_sprite_block_pointer(global_selected_block);
 
-        } else if(joypad() & J_DOWN) {
-            move_foward_block_id(3);
-            move_sprite_block_pointer(global_selected_block);
-        } else if(joypad() & J_LEFT) {
+        if(joypad() & J_LEFT) {
             move_foward_block_id(1);
             move_sprite_block_pointer(global_selected_block);
         } else if(joypad() & J_RIGHT) {
@@ -139,7 +136,7 @@ void control_pointer(Pointer* s){
                 WY_REG = 116 + i;
                 delay(10);
             }
-            set_win_tile_xy(0,1,131);
+            set_win_tile_xy(0,1,hud_selectorTileOffset+27);
         }
     }
 }

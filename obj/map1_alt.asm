@@ -74,8 +74,6 @@ _blocks_map1_alt:
 	.db #0x06	; 6
 	.db #0x06	; 6
 	.db #0x06	; 6
-	.db #0x06	; 6
-	.db #0x06	; 6
 _map1_alt:
 	.db #0x09	; 9
 	.db #0x0a	; 10

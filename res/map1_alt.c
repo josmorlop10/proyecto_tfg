@@ -28,7 +28,7 @@ const unsigned char objects_map1_alt[] = {44, 36, GO_RIGHT, 60, 36, GO_LEFT,
 76, 36, GO_UP, 92, 36, GO_DOWN,108, 36, TURN_AROUND, 124, 36, NO_ACTION,140, 36, KEY,
 156, 36, JUMP};
 
-const unsigned char blocks_map1_alt[] = {6,6,6,6,6,6,6,6};
+const unsigned char blocks_map1_alt[] = {6,6,6,6,6,6};
 
 const unsigned char map1_alt[] =
 {

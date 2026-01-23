@@ -45,7 +45,7 @@ _global_init_point::
 _global_colision_map::
 	.ds 300
 _global_blocks_available::
-	.ds 8
+	.ds 6
 _global_selected_block::
 	.ds 1
 _global_levels_array::
@@ -124,7 +124,7 @@ _init_level::
 	ld	c, #0x00
 00109$:
 	ld	a, c
-	sub	a, #0x08
+	sub	a, #0x06
 	jr	NC, 00104$
 ;src/LevelLogic.c:37: update_values_in_hud(RIGHT+e, global_blocks_available[e]);
 	ld	hl, #_global_blocks_available
@@ -380,7 +380,7 @@ _read_global_block_info_from_map::
 00103$:
 	ldhl	sp,	#2
 	ld	a, (hl)
-	sub	a, #0x08
+	sub	a, #0x06
 	jr	NC, 00105$
 ;src/LevelLogic.c:74: global_blocks_available[e] = blocks_map[e];
 	ld	de, #_global_blocks_available
@@ -660,79 +660,47 @@ _get_init_point_from_map::
 ; Function move_foward_block_id
 ; ---------------------------------
 _move_foward_block_id::
-	ld	c, a
-;src/LevelLogic.c:120: switch (button_pressed)
-	ld	a, #0x03
-	sub	a, c
-	jr	C, 00106$
-	ld	b, #0x00
-	ld	hl, #00135$
-	add	hl, bc
-	add	hl, bc
-	ld	c, (hl)
-	inc	hl
-	ld	h, (hl)
-	ld	l, c
-	jp	(hl)
-00135$:
-	.dw	00101$
-	.dw	00102$
-	.dw	00103$
-	.dw	00104$
-;src/LevelLogic.c:122: case 0:
+;src/LevelLogic.c:119: switch (button_pressed)
+	or	a, a
+	jr	Z, 00101$
+	dec	a
+	jr	Z, 00102$
+	jr	00104$
+;src/LevelLogic.c:121: case 0:
 00101$:
-;src/LevelLogic.c:123: global_selected_block ++;
+;src/LevelLogic.c:122: global_selected_block ++;
 	ld	hl, #_global_selected_block
 	inc	(hl)
-;src/LevelLogic.c:124: break;
-	jr	00106$
-;src/LevelLogic.c:126: case 1:
+;src/LevelLogic.c:123: break;
+	jr	00104$
+;src/LevelLogic.c:125: case 1:
 00102$:
-;src/LevelLogic.c:127: global_selected_block --;
+;src/LevelLogic.c:126: global_selected_block --;
 	ld	hl, #_global_selected_block
 	dec	(hl)
-;src/LevelLogic.c:128: break;
-	jr	00106$
-;src/LevelLogic.c:129: case 2:
-00103$:
-;src/LevelLogic.c:130: global_selected_block +=4;
-	ld	hl, #_global_selected_block
-	inc	(hl)
-	inc	(hl)
-	inc	(hl)
-	inc	(hl)
-;src/LevelLogic.c:131: break;
-	jr	00106$
-;src/LevelLogic.c:132: case 3:
+;src/LevelLogic.c:131: }
 00104$:
-;src/LevelLogic.c:133: global_selected_block -=4;
-	ld	hl, #_global_selected_block
-	ld	a, (hl)
-	add	a, #0xfc
-	ld	(hl), a
-;src/LevelLogic.c:138: }
-00106$:
-;src/LevelLogic.c:140: if(global_selected_block >= NUMBER_OF_BLOCKS){
+;src/LevelLogic.c:133: if(global_selected_block >= NUMBER_OF_BLOCKS){
 	ld	hl, #_global_selected_block
 	ld	a, (hl)
 	xor	a, #0x80
-	sub	a, #0x88
-	jr	C, 00110$
-;src/LevelLogic.c:141: global_selected_block -= NUMBER_OF_BLOCKS;
+	sub	a, #0x86
+	jr	C, 00108$
+;src/LevelLogic.c:134: global_selected_block -= NUMBER_OF_BLOCKS;
 	ld	a, (hl)
-	add	a, #0xf8
+	add	a, #0xfa
 	ld	(hl), a
 	ret
-00110$:
-;src/LevelLogic.c:142: } else if(global_selected_block < 0){
+00108$:
+;src/LevelLogic.c:135: } else if(global_selected_block < 0){
 	ld	hl, #_global_selected_block
 	bit	7, (hl)
 	ret	Z
-;src/LevelLogic.c:143: global_selected_block += NUMBER_OF_BLOCKS;
+;src/LevelLogic.c:136: global_selected_block += NUMBER_OF_BLOCKS;
 	ld	a, (hl)
-	add	a, #0x08
+	add	a, #0x06
 	ld	(hl), a
-;src/LevelLogic.c:145: }
+;src/LevelLogic.c:138: }
 	ret
 	.area _CODE
 	.area _INITIALIZER
@@ -1039,8 +1007,6 @@ __xinit__global_colision_map:
 	.db 0x00
 __xinit__global_blocks_available:
 	.db #0x00	; 0
-	.db 0x00
-	.db 0x00
 	.db 0x00
 	.db 0x00
 	.db 0x00

@@ -23,7 +23,7 @@ Symbol Table
     _global_colision_map                                            ******** GX
   2 _global_hud_selected                                            00000000 GR
     _global_selected_block                                          ******** GX
-  0 _hide_pointer                                                   000003D8 GR
+  0 _hide_pointer                                                   000003AB GR
     _joypad                                                         ******** GX
     _move_foward_block_id                                           ******** GX
   0 _move_pointer                                                   00000032 GR
@@ -34,7 +34,7 @@ Symbol Table
     _set_win_tile_xy                                                ******** GX
     _shadow_OAM                                                     ******** GX
     _tileindex_from_xy                                              ******** GX
-  0 _update_pointer                                                 000003B6 GR
+  0 _update_pointer                                                 00000389 GR
     _update_values_in_hud                                           ******** GX
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
@@ -42,7 +42,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      3ED   flags    0
+   0 _CODE                                      size      3C0   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        1   flags    0
    3 _DABS                                      size        0   flags    8

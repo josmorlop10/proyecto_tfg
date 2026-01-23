@@ -9,8 +9,8 @@ Symbol Table
     .__.H$L.                                                    =   00000000 L
   7 __xinit__global_blocks_available                                0000012C R
   7 __xinit__global_colision_map                                    00000000 R
-  7 __xinit__global_levels_array                                    00000135 R
-  7 __xinit__global_selected_block                                  00000134 R
+  7 __xinit__global_levels_array                                    00000133 R
+  7 __xinit__global_selected_block                                  00000132 R
     _blocks_map1_alt                                                ******** GX
   0 _change_colision_map_BR                                         000001C6 GR
   0 _change_colision_map_at                                         0000017B GR
@@ -22,9 +22,9 @@ Symbol Table
   1 _global_events                                                  00000001 GR
   1 _global_game_state                                              00000000 GR
   1 _global_init_point                                              00000029 GR
-  2 _global_levels_array                                            00000135 GR
+  2 _global_levels_array                                            00000133 GR
     _global_object_information                                      ******** GX
-  2 _global_selected_block                                          00000134 GR
+  2 _global_selected_block                                          00000132 GR
   0 _init_level                                                     00000000 GR
     _map1_alt                                                       ******** GX
   0 _move_foward_block_id                                           0000028E GR
@@ -39,13 +39,13 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      2DE   flags    0
+   0 _CODE                                      size      2BA   flags    0
    1 _DATA                                      size       2B   flags    0
-   2 _INITIALIZED                               size      137   flags    0
+   2 _INITIALIZED                               size      135   flags    0
    3 _DABS                                      size        0   flags    8
    4 _HOME                                      size        0   flags    0
    5 _GSINIT                                    size        0   flags    0
    6 _GSFINAL                                   size        0   flags    0
-   7 _INITIALIZER                               size      137   flags    0
+   7 _INITIALIZER                               size      135   flags    0
    8 _CABS                                      size        0   flags    8
 

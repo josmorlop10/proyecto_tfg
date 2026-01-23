@@ -141,10 +141,10 @@
     00000089 F0r00            [12]  141 	ldh	a, (_LCDC_REG + 0)
     0000008B F6 02            [ 8]  142 	or	a, #0x02
     0000008D E0r00            [12]  143 	ldh	(_LCDC_REG + 0), a
-                                    144 ;src/main.c:59: set_bkg_data(0, 104, map_tiles_alt);
+                                    144 ;src/main.c:59: set_bkg_data(0, 96, map_tiles_alt);
     0000008F 11r00r00         [12]  145 	ld	de, #_map_tiles_alt
     00000092 D5               [16]  146 	push	de
-    00000093 21 00 68         [12]  147 	ld	hl, #0x6800
+    00000093 21 00 60         [12]  147 	ld	hl, #0x6000
     00000096 E5               [16]  148 	push	hl
     00000097 CDr00r00         [24]  149 	call	_set_bkg_data
     0000009A E8 04            [16]  150 	add	sp, #4
@@ -162,10 +162,10 @@
     000000AC F0r00            [12]  162 	ldh	a, (_LCDC_REG + 0)
     000000AE F6 01            [ 8]  163 	or	a, #0x01
     000000B0 E0r00            [12]  164 	ldh	(_LCDC_REG + 0), a
-                                    165 ;src/main.c:65: set_win_data(104,28, hud_tiles);
+                                    165 ;src/main.c:65: set_win_data(96,28, hud_tiles);
     000000B2 11r00r00         [12]  166 	ld	de, #_hud_tiles
     000000B5 D5               [16]  167 	push	de
-    000000B6 21 68 1C         [12]  168 	ld	hl, #0x1c68
+    000000B6 21 60 1C         [12]  168 	ld	hl, #0x1c60
     000000B9 E5               [16]  169 	push	hl
     000000BA CDr00r00         [24]  170 	call	_set_win_data
     000000BD E8 04            [16]  171 	add	sp, #4
