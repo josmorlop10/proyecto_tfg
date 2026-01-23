@@ -11,12 +11,6 @@ uint8_t debug = 0;
 
 uint8_t global_blocks_active = 1;
 
-void set_direction(Character* p,  int8_t x, int8_t y){
-    p->dir_x = x;
-    p->dir_y = y;
-}
-
-
 //Character
 void character_init(Character* p) {
 
@@ -87,10 +81,10 @@ uint8_t canplayermove(Character* p){
                 set_direction(p, 0, 1);
                 break;
             case CLOCKWISE:
-                set_direction(p, 1, 0);
+                rotate_direction(p, 1);
                 break;
             case COUNTER_CLOCKWISE:
-                set_direction(p, -1, 0);
+                rotate_direction(p, 0);
                 break;
 
             default:
@@ -102,6 +96,11 @@ uint8_t canplayermove(Character* p){
 }
 
 //Directions!
+
+void set_direction(Character* p,  int8_t x, int8_t y){
+    p->dir_x = x;
+    p->dir_y = y;
+}
 
 void flip_direction(Character* p){
     p->dir_x = - p->dir_x;

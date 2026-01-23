@@ -21,6 +21,8 @@ void character_init(Character* p);
 void update_character(Character* p);
 void move_character(Character* p);
 void set_direction(Character* p,  int8_t x, int8_t y);
+void flip_direction(Character* p);
+void rotate_direction(Character*p, uint8_t sentido);
 uint8_t canplayermove(Character* p);
 
 

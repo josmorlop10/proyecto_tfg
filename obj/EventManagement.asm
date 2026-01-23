@@ -46,13 +46,13 @@
 ; Function player_tileBR_over_a_block
 ; ---------------------------------
 _player_tileBR_over_a_block::
-;src/EventManagement.c:9: if(global_colision_map[tileindexBR]>= RIGHT && global_colision_map[tileindexBR]<=DOWN){
+;src/EventManagement.c:9: if(global_colision_map[tileindexBR]>= RIGHT && global_colision_map[tileindexBR]<=RIGHT+NUMBER_OF_BLOCKS){
 	ld	hl, #_global_colision_map
 	add	hl, de
 	ld	a, (hl)
 	cp	a, #0x06
 	jr	C, 00102$
-	cp	a, #0x0a
+	cp	a, #0x0d
 ;src/EventManagement.c:10: return global_colision_map[tileindexBR];
 	ret	C
 00102$:
@@ -121,7 +121,7 @@ _player_over_fall::
 	ld	h, b
 	add	hl, de
 	ld	a, (hl)
-	sub	a, #0x0e
+	sub	a, #0x0c
 	jr	NZ, 00102$
 ;src/EventManagement.c:29: global_colision_map[tileindexBR-1] == FALL &&
 	ld	l, e
@@ -129,7 +129,7 @@ _player_over_fall::
 	dec	hl
 	add	hl, bc
 	ld	a, (hl)
-	sub	a, #0x0e
+	sub	a, #0x0c
 	jr	NZ, 00102$
 ;src/EventManagement.c:30: global_colision_map[tileindexBR-20] == FALL &&
 	ld	a, e
@@ -140,7 +140,7 @@ _player_over_fall::
 	ld	h, a
 	add	hl, bc
 	ld	a, (hl)
-	sub	a, #0x0e
+	sub	a, #0x0c
 	jr	NZ, 00102$
 ;src/EventManagement.c:31: global_colision_map[tileindexBR-21] == FALL){
 	ld	a, e
@@ -151,7 +151,7 @@ _player_over_fall::
 	ld	h, a
 	add	hl, bc
 	ld	a, (hl)
-	sub	a, #0x0e
+	sub	a, #0x0c
 ;src/EventManagement.c:32: return 1;
 ;src/EventManagement.c:34: return 0;
 	ld	a, #0x01

@@ -16,7 +16,7 @@
 #define DOWN 9
 #define CLOCKWISE 10
 #define COUNTER_CLOCKWISE 11
-#define FALL 14
+#define FALL 12
 
 #define UMBRAL_COLISION_UP 5
 #define UMBRAL_COLISION_DOWN 20
