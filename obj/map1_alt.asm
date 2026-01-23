@@ -57,10 +57,10 @@ _objects_map1_alt:
 	.db #0x0b	; 11
 	.db #0x6c	; 108	'l'
 	.db #0x24	; 36
-	.db #0x0c	; 12
+	.db #0x09	; 9
 	.db #0x7c	; 124
 	.db #0x24	; 36
-	.db #0x0d	; 13
+	.db #0x08	; 8
 	.db #0x8c	; 140
 	.db #0x24	; 36
 	.db #0x0e	; 14

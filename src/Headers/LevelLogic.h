@@ -33,6 +33,8 @@ extern int8_t global_selected_block;
 //variable global array de niveles disponibles (o mapas)
 extern const unsigned char* global_levels_array[];
 
+extern uint8_t global_keyset;
+
 
 typedef enum {
     STATE_MENU,

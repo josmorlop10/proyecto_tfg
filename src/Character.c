@@ -41,14 +41,6 @@ void move_character(Character* p) {
 
 }
 
-void movement_step_by_step(Character* p){
-    //TODO no funciona
-    for(uint8_t i = 0; i < SPRITESIZE; i++) {
-        p->y += 1 * p->dir_y;
-        p->x += 1 * p->dir_x;
-    }
-}
-
 uint8_t canplayermove(Character* p){
     //devuelve 1 si el personaje puede andar, y 0 si no puede
     uint16_t tileindexBR = p->next_tileindexBR;
@@ -96,7 +88,6 @@ uint8_t canplayermove(Character* p){
 }
 
 //Directions!
-
 void set_direction(Character* p,  int8_t x, int8_t y){
     p->dir_x = x;
     p->dir_y = y;
@@ -119,12 +110,12 @@ void rotate_direction(Character*p, uint8_t sentido){
     } else {
         //(dx, dy) -> (dy, -dx)
         p->dir_x = p->dir_y;
-        p->dir_y = aux_x;
+        p->dir_y = -aux_x;
     }
 
 }
 
-void take_effect(uint8_t index){
+void take_effect(Character* p, uint8_t index){
     //me pregunto: quiero que esta funcion esté en object.c, por que me parece 
     //mas aclaratorio. Pero como cambiará valores del personaje Character, no 
     //me deja pasarselo por parametros. Alguna forma de hacerlo?
@@ -137,27 +128,27 @@ void take_effect(uint8_t index){
         break;
     
     case GO_RIGHT:
-        /* code */
+        set_direction(p,1,0);
         break;
 
     case GO_LEFT:
-        /* code */
+        set_direction(p,-1,0);
         break;
 
     case GO_UP:
-        /* code */
+        set_direction(p,0,-1);
         break;
 
     case GO_DOWN:
-        /* code */
+        set_direction(p,0,1);
         break;
 
     case TURN_AROUND:
-        /* code */
+        flip_direction(p);
         break;
 
     case KEY:
-        /* code */
+    global_keyset ++;
         break;
     
     case JUMP:
@@ -182,7 +173,7 @@ void update_character(Character* p) { //devuelve las teclas actuales
 
     uint8_t object_index_in_array = check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
     if(object_index_in_array != 255){ 
-        take_effect(object_index_in_array);
+        take_effect(p, object_index_in_array);
         hide_object(object_index_in_array);
     }
 

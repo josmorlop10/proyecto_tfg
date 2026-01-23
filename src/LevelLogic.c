@@ -6,11 +6,13 @@
 #include <gbdk/console.h>
 #include "../res/map1_alt.h"
 #include "../res/map1_alt.h"
+
 //variables globales
 GameState global_game_state;
 uint8_t global_colision_map[NUMBER_OF_TILES_IN_GRID] = {EMPTY};
 struct TileEvent global_events[10];
 uint16_t global_init_point;
+uint8_t global_keyset;
 
 uint8_t global_blocks_available[NUMBER_OF_BLOCKS] = {0}; 
 int8_t global_selected_block = 0;
@@ -18,6 +20,8 @@ int8_t global_selected_block = 0;
 const unsigned char* global_levels_array[] = {map1_alt};
 
 void init_level(uint8_t level_number){
+
+    global_keyset = 0;
 
     if(level_number >= sizeof(global_levels_array)){
         level_number = level_number % sizeof(global_levels_array);
