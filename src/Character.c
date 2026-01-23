@@ -56,6 +56,23 @@ uint8_t canplayermove(Character* p){
     {
         return 0;
     }
+    //comprobar puerta
+    if ((global_colision_map[tileindexTL] == DOOR) && 
+    (global_colision_map[tileindexTR] == DOOR) && 
+    (global_colision_map[tileindexBL] == DOOR) &&
+    (global_colision_map[tileindexBR] == DOOR))
+    {
+        if(global_keyset>0){
+            global_keyset--;
+            change_colision_map_at(tileindexBR, EMPTY);
+            change_bkg_tile_16x16(tileindexBR, 0);
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
     //comprobar eventos 
     uint8_t event = player_tileBR_over_a_block(p->tileindexBR);
     if(global_blocks_active){

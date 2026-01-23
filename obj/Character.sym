@@ -13,10 +13,12 @@ Symbol Table
   7 __xinit__debug                                                  00000000 R
   7 __xinit__global_blocks_active                                   00000001 R
   0 _canplayermove                                                  000000E5 GR
+    _change_bkg_tile_16x16                                          ******** GX
+    _change_colision_map_at                                         ******** GX
   0 _character_init                                                 00000000 GR
     _check_colision_with_object                                     ******** GX
   2 _debug                                                          00000000 GR
-  0 _flip_direction                                                 00000201 GR
+  0 _flip_direction                                                 00000245 GR
     _get_init_point_from_map                                        ******** GX
   2 _global_blocks_active                                           00000001 GR
     _global_colision_map                                            ******** GX
@@ -28,12 +30,12 @@ Symbol Table
     _player_over_fall                                               ******** GX
     _player_tileBR_over_a_block                                     ******** GX
     _player_tileBR_over_destination                                 ******** GX
-  0 _rotate_direction                                               00000210 GR
-  0 _set_direction                                                  000001EE GR
+  0 _rotate_direction                                               00000254 GR
+  0 _set_direction                                                  00000232 GR
     _shadow_OAM                                                     ******** GX
-  0 _take_effect                                                    0000023F GR
+  0 _take_effect                                                    00000283 GR
     _tileindex_from_xy                                              ******** GX
-  0 _update_character                                               000002AF GR
+  0 _update_character                                               000002F3 GR
     _update_game_state                                              ******** GX
 
 
@@ -42,7 +44,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      460   flags    0
+   0 _CODE                                      size      4A4   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        2   flags    0
    3 _DABS                                      size        0   flags    8

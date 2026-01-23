@@ -61,6 +61,8 @@ void get_colision_from_map(const unsigned char in[], uint8_t out[]){
             out[i] = FALL;
         } else if(in[i] >= UMBRAL_COLISION_UP && in[i] <= UMBRAL_COLISION_DOWN){
             out[i] = SOLID;
+        } else if(in[i] >= 32 && in[i] <= 39){
+            out[i] = DOOR;
         }
     }
 }
