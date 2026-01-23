@@ -169,10 +169,10 @@ _init_gfx::
 	push	hl
 	call	_set_win_data
 	add	sp, #4
-;src/main.c:66: set_win_tiles(0,0,20,3, hud_selector);
+;src/main.c:66: set_win_tiles(0,0,20,4, hud_selector);
 	ld	de, #_hud_selector
 	push	de
-	ld	hl, #0x314
+	ld	hl, #0x414
 	push	hl
 	xor	a, a
 	rrca

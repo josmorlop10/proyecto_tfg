@@ -169,10 +169,10 @@
     000000B9 E5               [16]  169 	push	hl
     000000BA CDr00r00         [24]  170 	call	_set_win_data
     000000BD E8 04            [16]  171 	add	sp, #4
-                                    172 ;src/main.c:66: set_win_tiles(0,0,20,3, hud_selector);
+                                    172 ;src/main.c:66: set_win_tiles(0,0,20,4, hud_selector);
     000000BF 11r00r00         [12]  173 	ld	de, #_hud_selector
     000000C2 D5               [16]  174 	push	de
-    000000C3 21 14 03         [12]  175 	ld	hl, #0x314
+    000000C3 21 14 04         [12]  175 	ld	hl, #0x414
     000000C6 E5               [16]  176 	push	hl
     000000C7 AF               [ 4]  177 	xor	a, a
     000000C8 0F               [ 4]  178 	rrca

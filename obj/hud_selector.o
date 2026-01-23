@@ -2,7 +2,7 @@ XL4
 H 9 areas 2 global symbols
 M hud_selector
 S .__.ABS. Def00000000
-A _CODE size 3C flags 0 addr 0
+A _CODE size 50 flags 0 addr 0
 S _hud_selector Def00000000
 A _DATA size 0 flags 0 addr 0
 A _INITIALIZED size 0 flags 0 addr 0
@@ -23,4 +23,8 @@ R 00 00 00 00
 T 24 00 00 00 7C 69 68 80 81 68 77 7C 69 68 78 7C
 R 00 00 00 00
 T 30 00 00 00 69 68 68 79 7C 69 68 7A 7C 69 68 80
+R 00 00 00 00
+T 3C 00 00 00 81 68 68 68 68 68 68 68 68 68 68 68
+R 00 00 00 00
+T 48 00 00 00 68 68 68 68 68 68 68 80
 R 00 00 00 00

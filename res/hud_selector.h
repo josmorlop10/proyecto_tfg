@@ -7,7 +7,7 @@
  Info:
    Section       : 
    Bank          : 0
-   Map size      : 20 x 3
+   Map size      : 20 x 4
    Tile set      : hud_tiles.gbr
    Plane count   : 1 plane (8 bits)
    Plane order   : Tiles are continues
@@ -21,9 +21,8 @@
 #define __hud_selector_h_INCLUDE
 
 #define hud_selectorWidth 20
-#define hud_selectorHeight 3
+#define hud_selectorHeight 4
 #define hud_selectorBank 0
-#define hud_selectorTileOffset 104
 
 extern const unsigned char hud_selector[];
 
