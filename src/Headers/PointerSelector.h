@@ -9,6 +9,8 @@ typedef struct {
     uint16_t tileindexBR;
 } Pointer;
 
+extern uint8_t global_hud_selected;
+
 void pointer_init(Pointer* s);
 void move_pointer(Pointer* s);
 void control_pointer(Pointer* s);

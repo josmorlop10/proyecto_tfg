@@ -11,11 +11,13 @@
 #include "../res/object_sprites.h"
 #include "../res/hud_tiles.h"
 #include "../res/hud_selector.h"
+
 #include "Headers/Common.h"
 #include "Headers/Character.h"
 #include "Headers/LevelLogic.h"
 #include "Headers/PointerSelector.h"
 #include "Headers/Object.h"
+#include "Headers/Graphic.h"
 
 Character p;
 Pointer s;
@@ -65,6 +67,7 @@ void init_gfx(void){
     SHOW_WIN;
     WX_REG = 7;      // SIEMPRE 7
     WY_REG = 120;    // 144 - 24
+
 }
 
 void main(void)

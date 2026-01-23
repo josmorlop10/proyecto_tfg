@@ -1,5 +1,6 @@
 #include "Headers/Graphic.h"
 #include "Headers/LevelLogic.h"
+#include "Headers/PointerSelector.h"
 #include  "../res/hud_selector.h"
 #include <stdio.h>
 #include <gb/gb.h>
@@ -49,6 +50,8 @@ void change_bkg_tile_16x16(uint16_t tile_index, uint8_t tile_id_BR){
     set_bkg_tiles(x-1,y-1,1,1,&tile_id_TL);
 }
 
+
+
 //Changing graphics HUD (WIN)
 
 void move_sprite_block_pointer(uint8_t direction){
@@ -61,7 +64,7 @@ void move_sprite_block_pointer(uint8_t direction){
     //6 der - abajo
     //7 izq - abajo
     uint8_t offset_x = direction%4 * 8*4;
-    uint8_t offset_y = direction/4 * 8;
+    uint8_t offset_y = direction/4 * 8 - 4*global_hud_selected;
     if(direction%4 >= 2){
         offset_x = offset_x + 8;
     }

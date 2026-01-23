@@ -6,7 +6,7 @@
 #include <gb/gb.h>
 #include <stdio.h>
 
-uint8_t selection_of_block_active = 0;
+uint8_t global_hud_selected = 0;
 
 void pointer_init(Pointer* s) {
     s->x = 80;
@@ -79,7 +79,7 @@ uint8_t block_is_placed_below(Pointer* s){
 
 void control_pointer(Pointer* s){
 
-    if(selection_of_block_active==0){
+    if(global_hud_selected==0){
         if(joypad() & J_UP) {
             if (can_pointer_move(s, 0, -1)){
                 s->y -= 8;
@@ -108,7 +108,12 @@ void control_pointer(Pointer* s){
                 remove_object_at_pointer(s, block);
             }
         } else if(joypad() & J_SELECT) {
-            selection_of_block_active = !selection_of_block_active;
+            global_hud_selected = !global_hud_selected;
+            move_sprite_block_pointer(global_selected_block);
+            for(uint8_t i = 1;i<=4;i++){
+                WY_REG = 120 - i;
+                delay(10);
+            }
             set_win_tile_xy(0,1,130);
         }
 
@@ -128,7 +133,12 @@ void control_pointer(Pointer* s){
             move_sprite_block_pointer(global_selected_block);
 
         } else if(joypad() & J_SELECT) {
-            selection_of_block_active = !selection_of_block_active;
+            global_hud_selected = !global_hud_selected;
+            move_sprite_block_pointer(global_selected_block);
+            for(uint8_t i = 1;i<=4;i++){
+                WY_REG = 116 + i;
+                delay(10);
+            }
             set_win_tile_xy(0,1,131);
         }
     }
