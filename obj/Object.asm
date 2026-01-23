@@ -146,28 +146,29 @@ _print_objects_in_screen::
 ; ---------------------------------
 _hide_object::
 	ld	c, a
-;src/Object.c:24: global_object_information[i*NUMBER_OF_OBJECTS] = 0;
-	ld	de, #_global_object_information+0
+;src/Object.c:24: global_object_information[i*3] = 255;
 	ld	l, c
-	xor	a, a
-	ld	h, a
-	add	hl, hl
-	add	hl, hl
+	ld	h, #0x00
+	ld	e, l
+	ld	d, h
 	add	hl, hl
 	add	hl, de
-	ld	(hl), #0x00
-;src/Object.c:25: global_object_information[i*NUMBER_OF_OBJECTS+1] = 0;
+	ld	de, #_global_object_information
+	add	hl, de
+	ld	(hl), #0xff
+;src/Object.c:25: global_object_information[(i*3)+1] = 255;
 	ld	a, c
+	ld	e, a
 	add	a, a
-	add	a, a
-	add	a, a
+	add	a, e
 	inc	a
-	ld	l, a
+	ld	e, a
 	rlca
 	sbc	a, a
-	ld	h, a
+	ld	d, a
+	ld	hl, #_global_object_information
 	add	hl, de
-	ld	(hl), #0x00
+	ld	(hl), #0xff
 ;src/Object.c:26: move_sprite(8+i, 0, 0);
 	ld	a, c
 	add	a, #0x08
@@ -204,10 +205,10 @@ _check_colision_with_object::
 	ld	(hl+), a
 	ld	(hl), #0x00
 	ld	c, #0x00
-00109$:
+00111$:
 	ld	a, c
 	sub	a, #0x08
-	jr	NC, 00107$
+	jr	NC, 00109$
 ;src/Object.c:37: obj_x = global_object_information[3*e];
 	ld	l, c
 	ld	h, #0x00
@@ -242,18 +243,20 @@ _check_colision_with_object::
 	adc	a, #>(_global_object_information)
 	ld	h, a
 	ld	d, (hl)
-;src/Object.c:41: if(obj_x==255 && obj_y==255 && obj_type ==255){
+;src/Object.c:41: if(obj_x==255 && obj_y==255){
 	ld	a, b
 	inc	a
-	jr	NZ, 00102$
+	jr	NZ, 00106$
 	ld	a, e
 	inc	a
-	jr	NZ, 00102$
+	jr	NZ, 00106$
+;src/Object.c:42: if(obj_type ==255){
 	inc	d
-	jr	Z, 00107$
-;src/Object.c:42: break;
-00102$:
-;src/Object.c:45: if(check_colision_of_sprites(obj_x,obj_y,OBJECT_SIZE, OBJECT_SIZE,
+	jr	Z, 00109$
+;src/Object.c:43: break;
+	jr	00112$
+00106$:
+;src/Object.c:47: else if(check_colision_of_sprites(obj_x,obj_y,OBJECT_SIZE, OBJECT_SIZE,
 	push	bc
 	ldhl	sp,	#9
 	ld	a, (hl-)
@@ -276,24 +279,24 @@ _check_colision_with_object::
 	call	_check_colision_of_sprites
 	pop	bc
 	or	a, a
-	jr	Z, 00110$
-;src/Object.c:47: res = e;
+	jr	Z, 00112$
+;src/Object.c:49: res = e;
 	ldhl	sp,	#1
 	ld	a, (hl-)
 	ld	(hl), a
-;src/Object.c:48: break;
-	jr	00107$
-00110$:
+;src/Object.c:50: break;
+	jr	00109$
+00112$:
 ;src/Object.c:35: for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
 	inc	c
 	ldhl	sp,	#1
 	ld	(hl), c
-	jr	00109$
-00107$:
-;src/Object.c:51: return res;
+	jr	00111$
+00109$:
+;src/Object.c:54: return res;
 	ldhl	sp,	#0
 	ld	a, (hl)
-;src/Object.c:52: }
+;src/Object.c:55: }
 	add	sp, #4
 	pop	hl
 	pop	bc

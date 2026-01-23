@@ -26,7 +26,8 @@
 #define NUMBER_OF_TILES_IN_GRID 300 //20x15
 
 //Global variable for block selected.Indicará la cantidad de bloques disponibles.
-//Siendo index 1 = DER, 2= IZQ, 3=ARRIBA, 4=ABAJO (+6 por los "define" de arriba)
+//Siendo index 1 = DER, 2= IZQ, 3=ARRIBA, 4=ABAJO, 5=CLOCKWISE 6 = COUNTERCLOCKWISE
+// (+6 por los "define" de arriba)
 extern uint8_t global_blocks_available[NUMBER_OF_BLOCKS];
 //indica el indice del array
 extern int8_t global_selected_block;
@@ -50,7 +51,7 @@ struct TileEvent {
     uint8_t (*on_trigger)(void);
 };
 
-//global colision map : 20x18 = 360 tiles, cada posicion es un tile del mapa de fondo.
+//global colision map : 20x15 = 300 tiles, cada posicion es un tile del mapa de fondo.
 //cada incice indicara que tipo de bloque hay en ese tile y como gestionar la colision
 extern struct TileEvent global_events[10];
 extern uint8_t global_colision_map[NUMBER_OF_TILES_IN_GRID];

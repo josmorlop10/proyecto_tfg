@@ -9,7 +9,7 @@ Symbol Table
     .__.H$L.                                                    =   00000000 L
   7 __xinit__global_object_information                              00000000 R
     _check_colision_of_sprites                                      ******** GX
-  0 _check_colision_with_object                                     0000008C GR
+  0 _check_colision_with_object                                     00000090 GR
   2 _global_object_information                                      00000000 GR
   0 _hide_object                                                    00000062 GR
   0 _print_objects_in_screen                                        00000000 GR
@@ -21,7 +21,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      105   flags    0
+   0 _CODE                                      size      10B   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size       18   flags    0
    3 _DABS                                      size        0   flags    8

@@ -21,8 +21,8 @@ void print_objects_in_screen(void){
 }
 
 void hide_object(uint8_t i){
-    global_object_information[i*NUMBER_OF_OBJECTS] = 0;
-    global_object_information[i*NUMBER_OF_OBJECTS+1] = 0;
+    global_object_information[i*3] = 255;
+    global_object_information[(i*3)+1] = 255;
     move_sprite(8+i, 0, 0);
 }
 
@@ -38,15 +38,18 @@ uint8_t check_colision_with_object(uint8_t x, uint8_t y, uint8_t w, uint8_t h){
         obj_y = global_object_information[3*e + 1];
         obj_type = global_object_information[3*e + 2];
 
-        if(obj_x==255 && obj_y==255 && obj_type ==255){
-            break;
+        if(obj_x==255 && obj_y==255){
+            if(obj_type ==255){
+                break;
+            }
         }
         //Axis Aligned Bounding box (AABB)
-        if(check_colision_of_sprites(obj_x,obj_y,OBJECT_SIZE, OBJECT_SIZE,
+        else if(check_colision_of_sprites(obj_x,obj_y,OBJECT_SIZE, OBJECT_SIZE,
         x, y, w, h)){
             res = e;
             break;
         }
     }
+
     return res;
 }
