@@ -118,14 +118,14 @@ _character_init::
 	ld	hl, #0x0005
 	add	hl, de
 	ld	(hl), c
-;src/Character.c:23: p->w = 16;
+;src/Character.c:23: p->w = 8;
 	ld	hl, #0x0006
 	add	hl, de
-	ld	(hl), #0x10
-;src/Character.c:24: p->h = 16;
+	ld	(hl), #0x08
+;src/Character.c:24: p->h = 8;
 	ld	hl, #0x0007
 	add	hl, de
-	ld	(hl), #0x10
+	ld	(hl), #0x08
 ;src/Character.c:25: p->dir_x = 1;  
 	ld	hl, #0x0008
 	add	hl, de

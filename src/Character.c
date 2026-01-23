@@ -20,8 +20,8 @@ void character_init(Character* p) {
 
     p->x = player_x;
     p->y = player_y;
-    p->w = 16;
-    p->h = 16;
+    p->w = 8;
+    p->h = 8;
     p->dir_x = 1;  
     p->dir_y = 0; 
     p->speed = 8;
