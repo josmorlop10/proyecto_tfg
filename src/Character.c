@@ -75,32 +75,35 @@ uint8_t canplayermove(Character* p){
 
     //comprobar eventos 
     uint8_t event = player_tileBR_over_a_block(p->tileindexBR);
-    if(global_blocks_active){
-        switch(event){
-            case RIGHT:
-                set_direction(p, 1, 0);
-                break;
-            case LEFT:
-                set_direction(p, -1, 0);
-                break;
-            case UP:
-                set_direction(p, 0, -1);
-                break;
-            case DOWN:
-                set_direction(p, 0, 1);
-                break;
-            case CLOCKWISE:
-                rotate_direction(p, 1);
-                break;
-            case COUNTER_CLOCKWISE:
-                rotate_direction(p, 0);
-                break;
+    if(event!=EMPTY){
+        if(global_blocks_active){
+            switch(event){
+                case RIGHT:
+                    set_direction(p, 1, 0);
+                    break;
+                case LEFT:
+                    set_direction(p, -1, 0);
+                    break;
+                case UP:
+                    set_direction(p, 0, -1);
+                    break;
+                case DOWN:
+                    set_direction(p, 0, 1);
+                    break;
+                case CLOCKWISE:
+                    rotate_direction(p, 1);
+                    break;
+                case COUNTER_CLOCKWISE:
+                    rotate_direction(p, 0);
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
+        } else {
+            global_blocks_active = 1;
         }
     }
-
     return 1;
 }
 
@@ -165,7 +168,7 @@ void take_effect(Character* p, uint8_t index){
         break;
 
     case KEY:
-    global_keyset ++;
+        global_keyset ++;
         break;
     
     case JUMP:
