@@ -7,16 +7,17 @@ Symbol Table
     .__.ABS.                                                    =   00000000 G
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
+    _LCDC_REG                                                       ******** GX
   7 __xinit__global_blocks_available                                0000012C R
   7 __xinit__global_colision_map                                    00000000 R
   7 __xinit__global_levels_array                                    00000133 R
   7 __xinit__global_selected_block                                  00000132 R
     _blocks_map1_alt                                                ******** GX
-  0 _change_colision_map_BR                                         000001DB GR
-  0 _change_colision_map_at                                         00000190 GR
-  0 _check_colision_of_sprites                                      000001EA GR
-  0 _get_colision_from_map                                          00000063 GR
-  0 _get_init_point_from_map                                        00000270 GR
+  0 _change_colision_map_BR                                         00000205 GR
+  0 _change_colision_map_at                                         000001BA GR
+  0 _check_colision_of_sprites                                      00000214 GR
+  0 _get_colision_from_map                                          0000008D GR
+  0 _get_init_point_from_map                                        0000029A GR
   2 _global_blocks_available                                        0000012C GR
   2 _global_colision_map                                            00000000 GR
   1 _global_events                                                  00000001 GR
@@ -26,13 +27,18 @@ Symbol Table
   2 _global_levels_array                                            00000133 GR
     _global_object_information                                      ******** GX
   2 _global_selected_block                                          00000132 GR
-  0 _init_level                                                     00000000 GR
+  0 _init_game_title                                                00000000 GR
+  0 _init_level                                                     0000002A GR
     _map1_alt                                                       ******** GX
-  0 _move_foward_block_id                                           000002A3 GR
+  0 _move_foward_block_id                                           000002CD GR
     _objects_map1_alt                                               ******** GX
-  0 _read_global_block_info_from_map                                00000165 GR
-  0 _read_global_object_info_from_map                               000000E2 GR
-  0 _update_game_state                                              0000005F GR
+    _png_prueba_map                                                 ******** GX
+    _png_prueba_tiles                                               ******** GX
+  0 _read_global_block_info_from_map                                0000018F GR
+  0 _read_global_object_info_from_map                               0000010C GR
+    _set_bkg_data                                                   ******** GX
+    _set_bkg_tiles                                                  ******** GX
+  0 _update_game_state                                              00000089 GR
     _update_values_in_hud                                           ******** GX
 
 
@@ -41,7 +47,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      2CF   flags    0
+   0 _CODE                                      size      2F9   flags    0
    1 _DATA                                      size       2C   flags    0
    2 _INITIALIZED                               size      135   flags    0
    3 _DABS                                      size        0   flags    8

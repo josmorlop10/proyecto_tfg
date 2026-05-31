@@ -196,140 +196,167 @@ _init_gfx::
 ; Function main
 ; ---------------------------------
 _main::
-;src/main.c:75: init_gfx();
-	call	_init_gfx
-;src/main.c:76: pointer_init(&s);
-	ld	de, #_s
-	call	_pointer_init
-;src/main.c:78: global_game_state = STATE_GAME_SETTING;
-	ld	hl, #_global_game_state
-	ld	(hl), #0x02
-;src/main.c:80: while(1) {
-00120$:
-;src/main.c:81: switch (global_game_state)
+;src/main.c:75: init_game_title();
+	call	_init_game_title
+;src/main.c:79: global_game_state = STATE_MENU;
+	xor	a, a
+	ld	(#_global_game_state),a
+;src/main.c:81: while(1) {
+00125$:
+;src/main.c:82: switch (global_game_state)
 	ld	a, (#_global_game_state)
-	sub	a, #0x02
+	or	a, a
 	jr	Z, 00101$
 	ld	a, (#_global_game_state)
-	sub	a, #0x03
+	sub	a, #0x02
 	jr	Z, 00106$
 	ld	a, (#_global_game_state)
+	sub	a, #0x03
+	jr	Z, 00111$
+	ld	a, (#_global_game_state)
 	sub	a, #0x05
-	jp	Z, 00112$
-	jp	00118$
-;src/main.c:83: case STATE_GAME_SETTING:
+	jp	Z, 00117$
+	jp	00123$
+;src/main.c:85: case STATE_MENU:
 00101$:
-;src/main.c:84: if(last_state != STATE_GAME_SETTING) {
+;src/main.c:86: if(last_state != STATE_MENU) {
+	ld	hl, #_last_state
+	ld	a, (hl)
+	or	a, a
+	jr	Z, 00103$
+;src/main.c:87: last_state = STATE_MENU;
+	ld	(hl), #0x00
+00103$:
+;src/main.c:90: if(joypad() & J_START){
+	call	_joypad
+	rlca
+	jr	NC, 00105$
+;src/main.c:91: update_game_state(STATE_GAME_SETTING);
+	ld	a, #0x02
+	call	_update_game_state
+00105$:
+;src/main.c:94: performantdelay(3);
+	ld	a, #0x03
+	call	_performantdelay
+;src/main.c:95: break;
+	jp	00123$
+;src/main.c:98: case STATE_GAME_SETTING:
+00106$:
+;src/main.c:99: if(last_state != STATE_GAME_SETTING) {
 	ld	a, (#_last_state)
 	sub	a, #0x02
-	jr	Z, 00103$
-;src/main.c:85: init_gfx();
+	jr	Z, 00108$
+;src/main.c:100: init_gfx();
 	call	_init_gfx
-;src/main.c:86: init_level(0);
+;src/main.c:101: pointer_init(&s);
+	ld	de, #_s
+	call	_pointer_init
+;src/main.c:102: init_level(0);
 	xor	a, a
 	call	_init_level
-;src/main.c:87: get_colision_from_map(map1_alt, global_colision_map);
+;src/main.c:103: get_colision_from_map(map1_alt, global_colision_map);
 	ld	bc, #_global_colision_map
 	ld	de, #_map1_alt
 	call	_get_colision_from_map
-;src/main.c:89: print_objects_in_screen();
+;src/main.c:105: print_objects_in_screen();
 	call	_print_objects_in_screen
-;src/main.c:90: last_state = STATE_GAME_SETTING;
+;src/main.c:106: last_state = STATE_GAME_SETTING;
 	ld	hl, #_last_state
 	ld	(hl), #0x02
-00103$:
-;src/main.c:92: update_pointer(&s);
+00108$:
+;src/main.c:108: update_pointer(&s);
 	ld	de, #_s
 	call	_update_pointer
-;src/main.c:93: if(joypad() & J_START){
+;src/main.c:109: if(joypad() & J_START){
 	call	_joypad
 	rlca
-	jr	NC, 00118$
-;src/main.c:94: hide_pointer();
+	jr	NC, 00123$
+;src/main.c:110: hide_pointer();
 	call	_hide_pointer
-;src/main.c:95: update_game_state(STATE_GAME_RUNNING);
+;src/main.c:111: update_game_state(STATE_GAME_RUNNING);
 	ld	a, #0x03
 	call	_update_game_state
-;src/main.c:97: break;
-	jr	00118$
-;src/main.c:99: case STATE_GAME_RUNNING:
-00106$:
-;src/main.c:100: if(last_state != STATE_GAME_RUNNING) {
+;src/main.c:113: break;
+	jr	00123$
+;src/main.c:115: case STATE_GAME_RUNNING:
+00111$:
+;src/main.c:116: if(last_state != STATE_GAME_RUNNING) {
 	ld	a, (#_last_state)
 	sub	a, #0x03
-	jr	Z, 00108$
-;src/main.c:101: character_init(&p);
+	jr	Z, 00113$
+;src/main.c:117: character_init(&p);
 	ld	de, #_p
 	call	_character_init
-;src/main.c:102: last_state = STATE_GAME_RUNNING;
+;src/main.c:118: last_state = STATE_GAME_RUNNING;
 	ld	hl, #_last_state
 	ld	(hl), #0x03
-00108$:
-;src/main.c:104: update_character(&p);
+00113$:
+;src/main.c:120: update_character(&p);
 	ld	de, #_p
 	call	_update_character
-;src/main.c:107: if(joypad() & J_A){
+;src/main.c:123: if(joypad() & J_A){
 	call	_joypad
 	bit	4, a
-	jr	Z, 00118$
-;src/main.c:108: HIDE_WIN;
+	jr	Z, 00123$
+;src/main.c:124: HIDE_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xdf
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:109: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/main.c:125: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	ld	bc, #0x0000
-00123$:
+00128$:
 	ld	e, c
 	ld	d, b
 	ld	a, e
 	sub	a, #0x2c
 	ld	a, d
 	sbc	a, #0x01
-	jr	NC, 00118$
-;src/main.c:110: printf("%d",global_colision_map[i]);
+	jr	NC, 00123$
+;src/main.c:126: printf("%d",global_colision_map[i]);
 	ld	hl, #_global_colision_map
 	add	hl, bc
 	ld	e, (hl)
-	ld	d, #0x00
-	ld	hl, #___str_0
+	xor	a, a
 	push	bc
+	ld	d, a
 	push	de
-	push	hl
+	ld	de, #___str_0
+	push	de
 	call	_printf
 	add	sp, #4
 	pop	bc
-;src/main.c:109: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/main.c:125: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	inc	bc
-	jr	00123$
-;src/main.c:117: case STATE_GAME_OVER:
-00112$:
-;src/main.c:118: if(last_state != STATE_GAME_OVER) {
+	jr	00128$
+;src/main.c:133: case STATE_GAME_OVER:
+00117$:
+;src/main.c:134: if(last_state != STATE_GAME_OVER) {
 	ld	a, (#_last_state)
 	sub	a, #0x05
-	jr	Z, 00114$
-;src/main.c:119: last_state = STATE_GAME_OVER;
+	jr	Z, 00119$
+;src/main.c:135: last_state = STATE_GAME_OVER;
 	ld	hl, #_last_state
 	ld	(hl), #0x05
-;src/main.c:120: printf("You WIN!\nPress start to try again");
+;src/main.c:136: printf("You WIN!\nPress start to try again");
 	ld	de, #___str_1
 	push	de
 	call	_printf
 	pop	hl
-00114$:
-;src/main.c:122: if(joypad() & J_START){
+00119$:
+;src/main.c:138: if(joypad() & J_START){
 	call	_joypad
 	rlca
-	jr	NC, 00118$
-;src/main.c:123: update_game_state(STATE_GAME_SETTING);
+	jr	NC, 00123$
+;src/main.c:139: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	call	_update_game_state
-;src/main.c:129: }
-00118$:
-;src/main.c:130: performantdelay(10);
+;src/main.c:145: }
+00123$:
+;src/main.c:146: performantdelay(10);
 	ld	a, #0x0a
 	call	_performantdelay
-;src/main.c:132: }
-	jp	00120$
+;src/main.c:148: }
+	jp	00125$
 ___str_0:
 	.ascii "%d"
 	.db 0x00

@@ -10,8 +10,8 @@ Symbol Table
     _LCDC_REG                                                       ******** GX
     _WX_REG                                                         ******** GX
     _WY_REG                                                         ******** GX
-  0 ___str_0                                                        000001A9 R
-  0 ___str_1                                                        000001AC R
+  0 ___str_0                                                        000001CA R
+  0 ___str_1                                                        000001CD R
     _block_pointer                                                  ******** GX
     _character_init                                                 ******** GX
     _duck                                                           ******** GX
@@ -21,6 +21,7 @@ Symbol Table
     _hide_pointer                                                   ******** GX
     _hud_selector                                                   ******** GX
     _hud_tiles                                                      ******** GX
+    _init_game_title                                                ******** GX
   0 _init_gfx                                                       00000000 GR
     _init_level                                                     ******** GX
     _joypad                                                         ******** GX
@@ -46,12 +47,13 @@ Symbol Table
     _update_game_state                                              ******** GX
     _update_pointer                                                 ******** GX
 
+
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      1CE   flags    0
+   0 _CODE                                      size      1EF   flags    0
    1 _DATA                                      size       18   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

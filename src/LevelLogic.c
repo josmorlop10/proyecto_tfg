@@ -1,11 +1,12 @@
 #include "Headers/LevelLogic.h"
 #include "Headers/Object.h"
 #include "Headers/Graphic.h"
+
 #include <stdio.h>
 #include <gb/gb.h>
 #include <gbdk/console.h>
 #include "../res/map1_alt.h"
-#include "../res/map1_alt.h"
+#include "../res/png_prueba.h"
 
 //variables globales
 GameState global_game_state;
@@ -18,6 +19,14 @@ uint8_t global_blocks_available[NUMBER_OF_BLOCKS] = {0};
 int8_t global_selected_block = 0;
 
 const unsigned char* global_levels_array[] = {map1_alt};
+
+void init_game_title(){
+    
+    set_bkg_data(0,232,png_prueba_tiles);
+    set_bkg_tiles(0,0,20,18,png_prueba_map);
+    SHOW_SPRITES;
+    SHOW_BKG;
+}
 
 void init_level(uint8_t level_number){
 

@@ -72,17 +72,30 @@ void init_gfx(void){
 
 void main(void)
 {   
-    init_gfx();
-    pointer_init(&s);
-
-    global_game_state = STATE_GAME_SETTING;
+    init_game_title();
+    global_game_state = STATE_MENU;
     
     while(1) {
         switch (global_game_state)
         {
+
+        case STATE_MENU:
+            if(last_state != STATE_MENU) {
+                last_state = STATE_MENU;
+            }
+
+            if(joypad() & J_START){
+                update_game_state(STATE_GAME_SETTING);
+            }
+
+            performantdelay(5);
+            break;
+
+        
         case STATE_GAME_SETTING:
             if(last_state != STATE_GAME_SETTING) {
                 init_gfx();
+                pointer_init(&s);
                 init_level(0);
                 get_colision_from_map(map1_alt, global_colision_map);
 

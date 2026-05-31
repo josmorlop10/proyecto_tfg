@@ -196,152 +196,179 @@
                                     196 ; Function main
                                     197 ; ---------------------------------
     000000DE                        198 _main::
-                                    199 ;src/main.c:75: init_gfx();
-    000000DE CDr00r00         [24]  200 	call	_init_gfx
-                                    201 ;src/main.c:76: pointer_init(&s);
-    000000E1 11r0Fr00         [12]  202 	ld	de, #_s
-    000000E4 CDr00r00         [24]  203 	call	_pointer_init
-                                    204 ;src/main.c:78: global_game_state = STATE_GAME_SETTING;
-    000000E7 21r00r00         [12]  205 	ld	hl, #_global_game_state
-    000000EA 36 02            [12]  206 	ld	(hl), #0x02
-                                    207 ;src/main.c:80: while(1) {
-    000000EC                        208 00120$:
-                                    209 ;src/main.c:81: switch (global_game_state)
-    000000EC FAr00r00         [16]  210 	ld	a, (#_global_game_state)
-    000000EF D6 02            [ 8]  211 	sub	a, #0x02
-    000000F1 28 12            [12]  212 	jr	Z, 00101$
-    000000F3 FAr00r00         [16]  213 	ld	a, (#_global_game_state)
-    000000F6 D6 03            [ 8]  214 	sub	a, #0x03
-    000000F8 28 40            [12]  215 	jr	Z, 00106$
-    000000FA FAr00r00         [16]  216 	ld	a, (#_global_game_state)
-    000000FD D6 05            [ 8]  217 	sub	a, #0x05
-    000000FF CAr82r01         [16]  218 	jp	Z, 00112$
-    00000102 C3rA1r01         [16]  219 	jp	00118$
-                                    220 ;src/main.c:83: case STATE_GAME_SETTING:
-    00000105                        221 00101$:
-                                    222 ;src/main.c:84: if(last_state != STATE_GAME_SETTING) {
-    00000105 FAr17r00         [16]  223 	ld	a, (#_last_state)
-    00000108 D6 02            [ 8]  224 	sub	a, #0x02
-    0000010A 28 18            [12]  225 	jr	Z, 00103$
-                                    226 ;src/main.c:85: init_gfx();
-    0000010C CDr00r00         [24]  227 	call	_init_gfx
-                                    228 ;src/main.c:86: init_level(0);
-    0000010F AF               [ 4]  229 	xor	a, a
-    00000110 CDr00r00         [24]  230 	call	_init_level
-                                    231 ;src/main.c:87: get_colision_from_map(map1_alt, global_colision_map);
-    00000113 01r00r00         [12]  232 	ld	bc, #_global_colision_map
-    00000116 11r00r00         [12]  233 	ld	de, #_map1_alt
-    00000119 CDr00r00         [24]  234 	call	_get_colision_from_map
-                                    235 ;src/main.c:89: print_objects_in_screen();
-    0000011C CDr00r00         [24]  236 	call	_print_objects_in_screen
-                                    237 ;src/main.c:90: last_state = STATE_GAME_SETTING;
-    0000011F 21r17r00         [12]  238 	ld	hl, #_last_state
-    00000122 36 02            [12]  239 	ld	(hl), #0x02
-    00000124                        240 00103$:
-                                    241 ;src/main.c:92: update_pointer(&s);
-    00000124 11r0Fr00         [12]  242 	ld	de, #_s
-    00000127 CDr00r00         [24]  243 	call	_update_pointer
-                                    244 ;src/main.c:93: if(joypad() & J_START){
-    0000012A CDr00r00         [24]  245 	call	_joypad
-    0000012D 07               [ 4]  246 	rlca
-    0000012E 30 71            [12]  247 	jr	NC, 00118$
-                                    248 ;src/main.c:94: hide_pointer();
-    00000130 CDr00r00         [24]  249 	call	_hide_pointer
-                                    250 ;src/main.c:95: update_game_state(STATE_GAME_RUNNING);
-    00000133 3E 03            [ 8]  251 	ld	a, #0x03
-    00000135 CDr00r00         [24]  252 	call	_update_game_state
-                                    253 ;src/main.c:97: break;
-    00000138 18 67            [12]  254 	jr	00118$
-                                    255 ;src/main.c:99: case STATE_GAME_RUNNING:
-    0000013A                        256 00106$:
-                                    257 ;src/main.c:100: if(last_state != STATE_GAME_RUNNING) {
-    0000013A FAr17r00         [16]  258 	ld	a, (#_last_state)
-    0000013D D6 03            [ 8]  259 	sub	a, #0x03
-    0000013F 28 0B            [12]  260 	jr	Z, 00108$
-                                    261 ;src/main.c:101: character_init(&p);
-    00000141 11r00r00         [12]  262 	ld	de, #_p
-    00000144 CDr00r00         [24]  263 	call	_character_init
-                                    264 ;src/main.c:102: last_state = STATE_GAME_RUNNING;
-    00000147 21r17r00         [12]  265 	ld	hl, #_last_state
-    0000014A 36 03            [12]  266 	ld	(hl), #0x03
-    0000014C                        267 00108$:
-                                    268 ;src/main.c:104: update_character(&p);
-    0000014C 11r00r00         [12]  269 	ld	de, #_p
-    0000014F CDr00r00         [24]  270 	call	_update_character
-                                    271 ;src/main.c:107: if(joypad() & J_A){
-    00000152 CDr00r00         [24]  272 	call	_joypad
-    00000155 CB 67            [ 8]  273 	bit	4, a
-    00000157 28 48            [12]  274 	jr	Z, 00118$
-                                    275 ;src/main.c:108: HIDE_WIN;
-    00000159 F0r00            [12]  276 	ldh	a, (_LCDC_REG + 0)
-    0000015B E6 DF            [ 8]  277 	and	a, #0xdf
-    0000015D E0r00            [12]  278 	ldh	(_LCDC_REG + 0), a
-                                    279 ;src/main.c:109: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
-    0000015F 01 00 00         [12]  280 	ld	bc, #0x0000
-    00000162                        281 00123$:
-    00000162 59               [ 4]  282 	ld	e, c
-    00000163 50               [ 4]  283 	ld	d, b
-    00000164 7B               [ 4]  284 	ld	a, e
-    00000165 D6 2C            [ 8]  285 	sub	a, #0x2c
-    00000167 7A               [ 4]  286 	ld	a, d
-    00000168 DE 01            [ 8]  287 	sbc	a, #0x01
-    0000016A 30 35            [12]  288 	jr	NC, 00118$
-                                    289 ;src/main.c:110: printf("%d",global_colision_map[i]);
-    0000016C 21r00r00         [12]  290 	ld	hl, #_global_colision_map
-    0000016F 09               [ 8]  291 	add	hl, bc
-    00000170 5E               [ 8]  292 	ld	e, (hl)
-    00000171 16 00            [ 8]  293 	ld	d, #0x00
-    00000173 21rA9r01         [12]  294 	ld	hl, #___str_0
-    00000176 C5               [16]  295 	push	bc
-    00000177 D5               [16]  296 	push	de
-    00000178 E5               [16]  297 	push	hl
-    00000179 CDr00r00         [24]  298 	call	_printf
-    0000017C E8 04            [16]  299 	add	sp, #4
-    0000017E C1               [12]  300 	pop	bc
-                                    301 ;src/main.c:109: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
-    0000017F 03               [ 8]  302 	inc	bc
-    00000180 18 E0            [12]  303 	jr	00123$
-                                    304 ;src/main.c:117: case STATE_GAME_OVER:
-    00000182                        305 00112$:
-                                    306 ;src/main.c:118: if(last_state != STATE_GAME_OVER) {
-    00000182 FAr17r00         [16]  307 	ld	a, (#_last_state)
-    00000185 D6 05            [ 8]  308 	sub	a, #0x05
-    00000187 28 0D            [12]  309 	jr	Z, 00114$
-                                    310 ;src/main.c:119: last_state = STATE_GAME_OVER;
-    00000189 21r17r00         [12]  311 	ld	hl, #_last_state
-    0000018C 36 05            [12]  312 	ld	(hl), #0x05
-                                    313 ;src/main.c:120: printf("You WIN!\nPress start to try again");
-    0000018E 11rACr01         [12]  314 	ld	de, #___str_1
-    00000191 D5               [16]  315 	push	de
-    00000192 CDr00r00         [24]  316 	call	_printf
-    00000195 E1               [12]  317 	pop	hl
-    00000196                        318 00114$:
-                                    319 ;src/main.c:122: if(joypad() & J_START){
-    00000196 CDr00r00         [24]  320 	call	_joypad
-    00000199 07               [ 4]  321 	rlca
-    0000019A 30 05            [12]  322 	jr	NC, 00118$
-                                    323 ;src/main.c:123: update_game_state(STATE_GAME_SETTING);
-    0000019C 3E 02            [ 8]  324 	ld	a, #0x02
-    0000019E CDr00r00         [24]  325 	call	_update_game_state
-                                    326 ;src/main.c:129: }
-    000001A1                        327 00118$:
-                                    328 ;src/main.c:130: performantdelay(10);
-    000001A1 3E 0A            [ 8]  329 	ld	a, #0x0a
-    000001A3 CDr00r00         [24]  330 	call	_performantdelay
-                                    331 ;src/main.c:132: }
-    000001A6 C3rECr00         [16]  332 	jp	00120$
-    000001A9                        333 ___str_0:
-    000001A9 25 64                  334 	.ascii "%d"
-    000001AB 00                     335 	.db 0x00
-    000001AC                        336 ___str_1:
-    000001AC 59 6F 75 20 57 49 4E   337 	.ascii "You WIN!"
+                                    199 ;src/main.c:75: init_game_title();
+    000000DE CDr00r00         [24]  200 	call	_init_game_title
+                                    201 ;src/main.c:79: global_game_state = STATE_MENU;
+    000000E1 AF               [ 4]  202 	xor	a, a
+    000000E2 EAr00r00         [16]  203 	ld	(#_global_game_state),a
+                                    204 ;src/main.c:81: while(1) {
+    000000E5                        205 00125$:
+                                    206 ;src/main.c:82: switch (global_game_state)
+    000000E5 FAr00r00         [16]  207 	ld	a, (#_global_game_state)
+    000000E8 B7               [ 4]  208 	or	a, a
+    000000E9 28 19            [12]  209 	jr	Z, 00101$
+    000000EB FAr00r00         [16]  210 	ld	a, (#_global_game_state)
+    000000EE D6 02            [ 8]  211 	sub	a, #0x02
+    000000F0 28 2E            [12]  212 	jr	Z, 00106$
+    000000F2 FAr00r00         [16]  213 	ld	a, (#_global_game_state)
+    000000F5 D6 03            [ 8]  214 	sub	a, #0x03
+    000000F7 28 62            [12]  215 	jr	Z, 00111$
+    000000F9 FAr00r00         [16]  216 	ld	a, (#_global_game_state)
+    000000FC D6 05            [ 8]  217 	sub	a, #0x05
+    000000FE CArA3r01         [16]  218 	jp	Z, 00117$
+    00000101 C3rC2r01         [16]  219 	jp	00123$
+                                    220 ;src/main.c:85: case STATE_MENU:
+    00000104                        221 00101$:
+                                    222 ;src/main.c:86: if(last_state != STATE_MENU) {
+    00000104 21r17r00         [12]  223 	ld	hl, #_last_state
+    00000107 7E               [ 8]  224 	ld	a, (hl)
+    00000108 B7               [ 4]  225 	or	a, a
+    00000109 28 02            [12]  226 	jr	Z, 00103$
+                                    227 ;src/main.c:87: last_state = STATE_MENU;
+    0000010B 36 00            [12]  228 	ld	(hl), #0x00
+    0000010D                        229 00103$:
+                                    230 ;src/main.c:90: if(joypad() & J_START){
+    0000010D CDr00r00         [24]  231 	call	_joypad
+    00000110 07               [ 4]  232 	rlca
+    00000111 30 05            [12]  233 	jr	NC, 00105$
+                                    234 ;src/main.c:91: update_game_state(STATE_GAME_SETTING);
+    00000113 3E 02            [ 8]  235 	ld	a, #0x02
+    00000115 CDr00r00         [24]  236 	call	_update_game_state
+    00000118                        237 00105$:
+                                    238 ;src/main.c:94: performantdelay(3);
+    00000118 3E 03            [ 8]  239 	ld	a, #0x03
+    0000011A CDr00r00         [24]  240 	call	_performantdelay
+                                    241 ;src/main.c:95: break;
+    0000011D C3rC2r01         [16]  242 	jp	00123$
+                                    243 ;src/main.c:98: case STATE_GAME_SETTING:
+    00000120                        244 00106$:
+                                    245 ;src/main.c:99: if(last_state != STATE_GAME_SETTING) {
+    00000120 FAr17r00         [16]  246 	ld	a, (#_last_state)
+    00000123 D6 02            [ 8]  247 	sub	a, #0x02
+    00000125 28 1E            [12]  248 	jr	Z, 00108$
+                                    249 ;src/main.c:100: init_gfx();
+    00000127 CDr00r00         [24]  250 	call	_init_gfx
+                                    251 ;src/main.c:101: pointer_init(&s);
+    0000012A 11r0Fr00         [12]  252 	ld	de, #_s
+    0000012D CDr00r00         [24]  253 	call	_pointer_init
+                                    254 ;src/main.c:102: init_level(0);
+    00000130 AF               [ 4]  255 	xor	a, a
+    00000131 CDr00r00         [24]  256 	call	_init_level
+                                    257 ;src/main.c:103: get_colision_from_map(map1_alt, global_colision_map);
+    00000134 01r00r00         [12]  258 	ld	bc, #_global_colision_map
+    00000137 11r00r00         [12]  259 	ld	de, #_map1_alt
+    0000013A CDr00r00         [24]  260 	call	_get_colision_from_map
+                                    261 ;src/main.c:105: print_objects_in_screen();
+    0000013D CDr00r00         [24]  262 	call	_print_objects_in_screen
+                                    263 ;src/main.c:106: last_state = STATE_GAME_SETTING;
+    00000140 21r17r00         [12]  264 	ld	hl, #_last_state
+    00000143 36 02            [12]  265 	ld	(hl), #0x02
+    00000145                        266 00108$:
+                                    267 ;src/main.c:108: update_pointer(&s);
+    00000145 11r0Fr00         [12]  268 	ld	de, #_s
+    00000148 CDr00r00         [24]  269 	call	_update_pointer
+                                    270 ;src/main.c:109: if(joypad() & J_START){
+    0000014B CDr00r00         [24]  271 	call	_joypad
+    0000014E 07               [ 4]  272 	rlca
+    0000014F 30 71            [12]  273 	jr	NC, 00123$
+                                    274 ;src/main.c:110: hide_pointer();
+    00000151 CDr00r00         [24]  275 	call	_hide_pointer
+                                    276 ;src/main.c:111: update_game_state(STATE_GAME_RUNNING);
+    00000154 3E 03            [ 8]  277 	ld	a, #0x03
+    00000156 CDr00r00         [24]  278 	call	_update_game_state
+                                    279 ;src/main.c:113: break;
+    00000159 18 67            [12]  280 	jr	00123$
+                                    281 ;src/main.c:115: case STATE_GAME_RUNNING:
+    0000015B                        282 00111$:
+                                    283 ;src/main.c:116: if(last_state != STATE_GAME_RUNNING) {
+    0000015B FAr17r00         [16]  284 	ld	a, (#_last_state)
+    0000015E D6 03            [ 8]  285 	sub	a, #0x03
+    00000160 28 0B            [12]  286 	jr	Z, 00113$
+                                    287 ;src/main.c:117: character_init(&p);
+    00000162 11r00r00         [12]  288 	ld	de, #_p
+    00000165 CDr00r00         [24]  289 	call	_character_init
+                                    290 ;src/main.c:118: last_state = STATE_GAME_RUNNING;
+    00000168 21r17r00         [12]  291 	ld	hl, #_last_state
+    0000016B 36 03            [12]  292 	ld	(hl), #0x03
+    0000016D                        293 00113$:
+                                    294 ;src/main.c:120: update_character(&p);
+    0000016D 11r00r00         [12]  295 	ld	de, #_p
+    00000170 CDr00r00         [24]  296 	call	_update_character
+                                    297 ;src/main.c:123: if(joypad() & J_A){
+    00000173 CDr00r00         [24]  298 	call	_joypad
+    00000176 CB 67            [ 8]  299 	bit	4, a
+    00000178 28 48            [12]  300 	jr	Z, 00123$
+                                    301 ;src/main.c:124: HIDE_WIN;
+    0000017A F0r00            [12]  302 	ldh	a, (_LCDC_REG + 0)
+    0000017C E6 DF            [ 8]  303 	and	a, #0xdf
+    0000017E E0r00            [12]  304 	ldh	(_LCDC_REG + 0), a
+                                    305 ;src/main.c:125: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+    00000180 01 00 00         [12]  306 	ld	bc, #0x0000
+    00000183                        307 00128$:
+    00000183 59               [ 4]  308 	ld	e, c
+    00000184 50               [ 4]  309 	ld	d, b
+    00000185 7B               [ 4]  310 	ld	a, e
+    00000186 D6 2C            [ 8]  311 	sub	a, #0x2c
+    00000188 7A               [ 4]  312 	ld	a, d
+    00000189 DE 01            [ 8]  313 	sbc	a, #0x01
+    0000018B 30 35            [12]  314 	jr	NC, 00123$
+                                    315 ;src/main.c:126: printf("%d",global_colision_map[i]);
+    0000018D 21r00r00         [12]  316 	ld	hl, #_global_colision_map
+    00000190 09               [ 8]  317 	add	hl, bc
+    00000191 5E               [ 8]  318 	ld	e, (hl)
+    00000192 AF               [ 4]  319 	xor	a, a
+    00000193 C5               [16]  320 	push	bc
+    00000194 57               [ 4]  321 	ld	d, a
+    00000195 D5               [16]  322 	push	de
+    00000196 11rCAr01         [12]  323 	ld	de, #___str_0
+    00000199 D5               [16]  324 	push	de
+    0000019A CDr00r00         [24]  325 	call	_printf
+    0000019D E8 04            [16]  326 	add	sp, #4
+    0000019F C1               [12]  327 	pop	bc
+                                    328 ;src/main.c:125: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+    000001A0 03               [ 8]  329 	inc	bc
+    000001A1 18 E0            [12]  330 	jr	00128$
+                                    331 ;src/main.c:133: case STATE_GAME_OVER:
+    000001A3                        332 00117$:
+                                    333 ;src/main.c:134: if(last_state != STATE_GAME_OVER) {
+    000001A3 FAr17r00         [16]  334 	ld	a, (#_last_state)
+    000001A6 D6 05            [ 8]  335 	sub	a, #0x05
+    000001A8 28 0D            [12]  336 	jr	Z, 00119$
+                                    337 ;src/main.c:135: last_state = STATE_GAME_OVER;
+    000001AA 21r17r00         [12]  338 	ld	hl, #_last_state
+    000001AD 36 05            [12]  339 	ld	(hl), #0x05
+                                    340 ;src/main.c:136: printf("You WIN!\nPress start to try again");
+    000001AF 11rCDr01         [12]  341 	ld	de, #___str_1
+    000001B2 D5               [16]  342 	push	de
+    000001B3 CDr00r00         [24]  343 	call	_printf
+    000001B6 E1               [12]  344 	pop	hl
+    000001B7                        345 00119$:
+                                    346 ;src/main.c:138: if(joypad() & J_START){
+    000001B7 CDr00r00         [24]  347 	call	_joypad
+    000001BA 07               [ 4]  348 	rlca
+    000001BB 30 05            [12]  349 	jr	NC, 00123$
+                                    350 ;src/main.c:139: update_game_state(STATE_GAME_SETTING);
+    000001BD 3E 02            [ 8]  351 	ld	a, #0x02
+    000001BF CDr00r00         [24]  352 	call	_update_game_state
+                                    353 ;src/main.c:145: }
+    000001C2                        354 00123$:
+                                    355 ;src/main.c:146: performantdelay(10);
+    000001C2 3E 0A            [ 8]  356 	ld	a, #0x0a
+    000001C4 CDr00r00         [24]  357 	call	_performantdelay
+                                    358 ;src/main.c:148: }
+    000001C7 C3rE5r00         [16]  359 	jp	00125$
+    000001CA                        360 ___str_0:
+    000001CA 25 64                  361 	.ascii "%d"
+    000001CC 00                     362 	.db 0x00
+    000001CD                        363 ___str_1:
+    000001CD 59 6F 75 20 57 49 4E   364 	.ascii "You WIN!"
              21
-    000001B4 0A                     338 	.db 0x0a
-    000001B5 50 72 65 73 73 20 73   339 	.ascii "Press start to try again"
+    000001D5 0A                     365 	.db 0x0a
+    000001D6 50 72 65 73 73 20 73   366 	.ascii "Press start to try again"
              74 61 72 74 20 74 6F
              20 74 72 79 20 61 67
              61 69 6E
-    000001CD 00                     340 	.db 0x00
-                                    341 	.area _CODE
-                                    342 	.area _INITIALIZER
-                                    343 	.area _CABS (ABS)
+    000001EE 00                     367 	.db 0x00
+                                    368 	.area _CODE
+                                    369 	.area _INITIALIZER
+                                    370 	.area _CABS (ABS)
