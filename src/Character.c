@@ -22,8 +22,8 @@ void character_init(Character* p) {
     p->y = player_y;
     p->w = 8;
     p->h = 8;
-    p->dir_x = 1;  
-    p->dir_y = 0; 
+    p->dir_x = global_first_x;  
+    p->dir_y = global_first_y; 
     p->speed = 8;
     for(uint8_t i = 0;i<=3;i++){
         p->sprite_ids[i] = i;
@@ -43,39 +43,8 @@ void move_character(Character* p) {
 
 uint8_t canplayermove(Character* p){
     //devuelve 1 si el personaje puede andar, y 0 si no puede
-    uint16_t tileindexBR = p->next_tileindexBR;
-    uint16_t tileindexTL = tileindexBR -21;
-    uint16_t tileindexTR = tileindexBR -20;
-    uint16_t tileindexBL = tileindexBR -1;
-
-    //comprobar solidos
-    if ((global_colision_map[tileindexTL] == SOLID) || 
-    (global_colision_map[tileindexTR] == SOLID) || 
-    (global_colision_map[tileindexBL] == SOLID) ||
-    (global_colision_map[tileindexBR] == SOLID))
-    {
-        return 0;
-    }
-    //comprobar puerta
-    if ((global_colision_map[tileindexTL] == DOOR) && 
-    (global_colision_map[tileindexTR] == DOOR) && 
-    (global_colision_map[tileindexBL] == DOOR) &&
-    (global_colision_map[tileindexBR] == DOOR))
-    {
-        if(global_keyset>0){
-            global_keyset--;
-            change_colision_map_at(tileindexBR, EMPTY);
-            change_bkg_tile_16x16(tileindexBR, 0);
-            return 1;
-        } else {
-            return 0;
-        }
-
-    }
-
-    //comprobar eventos 
     uint8_t event = player_tileBR_over_a_block(p->tileindexBR);
-    if(event!=EMPTY){
+    if(event != EMPTY){
         if(global_blocks_active){
             switch(event){
                 case RIGHT:
@@ -96,14 +65,47 @@ uint8_t canplayermove(Character* p){
                 case COUNTER_CLOCKWISE:
                     rotate_direction(p, 0);
                     break;
-
                 default:
                     break;
             }
+            p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
         } else {
             global_blocks_active = 1;
         }
     }
+
+    uint16_t tileindexBR = p->next_tileindexBR;
+    uint8_t col = tileindexBR % 20;
+    uint8_t row = tileindexBR / 20;
+    uint16_t tileindexTL = tileindexBR - 21;
+    uint16_t tileindexTR = tileindexBR - 20;
+    uint16_t tileindexBL = tileindexBR - 1;
+
+    uint8_t isDoorTL = (row > 0 && col > 0) && (global_colision_map[tileindexTL] == DOOR);
+    uint8_t isDoorTR = (row > 0) && (global_colision_map[tileindexTR] == DOOR);
+    uint8_t isDoorBL = (col > 0) && (global_colision_map[tileindexBL] == DOOR);
+    uint8_t isDoorBR = (global_colision_map[tileindexBR] == DOOR);
+
+    if (isDoorTL && isDoorTR && isDoorBL && isDoorBR) {
+        if(global_keyset > 0){
+            global_keyset--;
+            change_colision_map_at(tileindexBR, EMPTY);
+            change_bkg_tile_16x16(tileindexBR, 0);
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    uint8_t solidTL = (row == 0 || col == 0) || (global_colision_map[tileindexTL] == SOLID);
+    uint8_t solidTR = (row == 0) || (global_colision_map[tileindexTR] == SOLID);
+    uint8_t solidBL = (col == 0) || (global_colision_map[tileindexBL] == SOLID);
+    uint8_t solidBR = (global_colision_map[tileindexBR] == SOLID);
+
+    if (solidTL || solidTR || solidBL || solidBR) {
+        return 0;
+    }
+
     return 1;
 }
 
@@ -121,7 +123,7 @@ void flip_direction(Character* p){
 void rotate_direction(Character*p, uint8_t sentido){
     //sentido = 1 horario
     //sentido = 0 antihorario
-    uint8_t aux_x = p->dir_x;
+    int8_t aux_x = p->dir_x;
 
     if(sentido){
         //(dx, dy) -> (-dy, dx)

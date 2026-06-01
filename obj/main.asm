@@ -66,12 +66,12 @@ _last_state::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;src/main.c:26: void init_gfx(void){
+;src/main.c:28: void init_gfx(void){
 ;	---------------------------------
 ; Function init_gfx
 ; ---------------------------------
 _init_gfx::
-;src/main.c:28: set_sprite_data(0, 4, duck);
+;src/main.c:30: set_sprite_data(0, 4, duck);
 	ld	de, #_duck
 	push	de
 	ld	hl, #0x400
@@ -87,7 +87,7 @@ _init_gfx::
 	ld	(hl), #0x02
 	ld	hl, #(_shadow_OAM + 14)
 	ld	(hl), #0x03
-;src/main.c:35: set_sprite_data(4, 4, selector);
+;src/main.c:37: set_sprite_data(4, 4, selector);
 	ld	de, #_selector
 	push	de
 	ld	hl, #0x404
@@ -103,7 +103,7 @@ _init_gfx::
 	ld	(hl), #0x06
 	ld	hl, #(_shadow_OAM + 30)
 	ld	(hl), #0x07
-;src/main.c:42: set_sprite_data(8,8,object_sprites);
+;src/main.c:44: set_sprite_data(8,8,object_sprites);
 	ld	de, #_object_sprites
 	push	de
 	ld	hl, #0x808
@@ -127,7 +127,7 @@ _init_gfx::
 	ld	(hl), #0x0e
 	ld	hl, #(_shadow_OAM + 62)
 	ld	(hl), #0x0f
-;src/main.c:53: set_sprite_data(16,1,block_pointer);
+;src/main.c:55: set_sprite_data(16,1,block_pointer);
 	ld	de, #_block_pointer
 	push	de
 	ld	hl, #0x110
@@ -137,20 +137,28 @@ _init_gfx::
 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
 	ld	hl, #(_shadow_OAM + 66)
 	ld	(hl), #0x10
-;src/main.c:56: SHOW_SPRITES;
+;src/main.c:58: SHOW_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x02
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:59: set_bkg_data(0, 96, map_tiles_alt);
+;src/main.c:61: set_bkg_data(0, 96, map_tiles_alt);
 	ld	de, #_map_tiles_alt
 	push	de
 	ld	hl, #0x6000
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;src/main.c:60: set_bkg_tiles(0,0,20,16,map1_alt);
-	ld	de, #_map1_alt
-	push	de
+;src/main.c:62: set_bkg_tiles(0,0,20,16,global_levels_array[global_actual_level]);
+	ld	bc, #_global_levels_array+0
+	ld	a, (_global_actual_level)
+	ld	h, #0x00
+	ld	l, a
+	add	hl, hl
+	add	hl, bc
+	ld	a, (hl+)
+	ld	c, a
+	ld	b, (hl)
+	push	bc
 	ld	hl, #0x1014
 	push	hl
 	xor	a, a
@@ -158,18 +166,18 @@ _init_gfx::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;src/main.c:61: SHOW_BKG;
+;src/main.c:63: SHOW_BKG;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x01
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:65: set_win_data(96,28, hud_tiles);
+;src/main.c:67: set_win_data(96,28, hud_tiles);
 	ld	de, #_hud_tiles
 	push	de
 	ld	hl, #0x1c60
 	push	hl
 	call	_set_win_data
 	add	sp, #4
-;src/main.c:66: set_win_tiles(0,0,20,4, hud_selector);
+;src/main.c:68: set_win_tiles(0,0,20,4, hud_selector);
 	ld	de, #_hud_selector
 	push	de
 	ld	hl, #0x414
@@ -179,28 +187,30 @@ _init_gfx::
 	push	af
 	call	_set_win_tiles
 	add	sp, #6
-;src/main.c:67: SHOW_WIN;
+;src/main.c:69: SHOW_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x20
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:68: WX_REG = 7;      // SIEMPRE 7
+;src/main.c:70: WX_REG = 7;      // SIEMPRE 7
 	ld	a, #0x07
 	ldh	(_WX_REG + 0), a
-;src/main.c:69: WY_REG = 120;    // 144 - 24
+;src/main.c:71: WY_REG = 120;    // 144 - 24
 	ld	a, #0x78
 	ldh	(_WY_REG + 0), a
-;src/main.c:71: }
+;src/main.c:73: }
 	ret
-;src/main.c:73: void main(void)
+;src/main.c:75: void main(void)
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
 _main::
-;src/main.c:75: init_game_title();
+;src/main.c:77: init_game_title();
 	call	_init_game_title
-;src/main.c:79: global_game_state = STATE_MENU;
+;src/main.c:78: global_game_state = STATE_MENU;
+;src/main.c:79: global_actual_level = 0;
 	xor	a, a
-	ld	(#_global_game_state),a
+	ld	(#_global_game_state), a
+	ld	(#_global_actual_level),a
 ;src/main.c:81: while(1) {
 00125$:
 ;src/main.c:82: switch (global_game_state)
@@ -235,8 +245,8 @@ _main::
 	ld	a, #0x02
 	call	_update_game_state
 00105$:
-;src/main.c:94: performantdelay(3);
-	ld	a, #0x03
+;src/main.c:94: performantdelay(5);
+	ld	a, #0x05
 	call	_performantdelay
 ;src/main.c:95: break;
 	jp	00123$
@@ -251,12 +261,21 @@ _main::
 ;src/main.c:101: pointer_init(&s);
 	ld	de, #_s
 	call	_pointer_init
-;src/main.c:102: init_level(0);
-	xor	a, a
+;src/main.c:102: init_level(global_actual_level);
+	ld	a, (_global_actual_level)
 	call	_init_level
-;src/main.c:103: get_colision_from_map(map1_alt, global_colision_map);
-	ld	bc, #_global_colision_map
-	ld	de, #_map1_alt
+;src/main.c:103: get_colision_from_map(global_levels_array[global_actual_level], global_colision_map);
+	ld	bc, #_global_colision_map+0
+	ld	de, #_global_levels_array+0
+	ld	a, (_global_actual_level)
+	ld	l, a
+	ld	h, #0x00
+	add	hl, hl
+	add	hl, de
+	ld	a, (hl+)
+	ld	l, (hl)
+	ld	e, a
+	ld	d, l
 	call	_get_colision_from_map
 ;src/main.c:105: print_objects_in_screen();
 	call	_print_objects_in_screen
@@ -302,7 +321,7 @@ _main::
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xdf
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:125: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/main.c:126: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	ld	bc, #0x0000
 00128$:
 	ld	e, c
@@ -312,7 +331,7 @@ _main::
 	ld	a, d
 	sbc	a, #0x01
 	jr	NC, 00123$
-;src/main.c:126: printf("%d",global_colision_map[i]);
+;src/main.c:127: printf("%d",global_colision_map[i]);
 	ld	hl, #_global_colision_map
 	add	hl, bc
 	ld	e, (hl)
@@ -325,37 +344,37 @@ _main::
 	call	_printf
 	add	sp, #4
 	pop	bc
-;src/main.c:125: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/main.c:126: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	inc	bc
 	jr	00128$
-;src/main.c:133: case STATE_GAME_OVER:
+;src/main.c:134: case STATE_GAME_OVER:
 00117$:
-;src/main.c:134: if(last_state != STATE_GAME_OVER) {
+;src/main.c:135: if(last_state != STATE_GAME_OVER) {
 	ld	a, (#_last_state)
 	sub	a, #0x05
 	jr	Z, 00119$
-;src/main.c:135: last_state = STATE_GAME_OVER;
+;src/main.c:136: last_state = STATE_GAME_OVER;
 	ld	hl, #_last_state
 	ld	(hl), #0x05
-;src/main.c:136: printf("You WIN!\nPress start to try again");
+;src/main.c:137: printf("You WIN!\nPress start to try again");
 	ld	de, #___str_1
 	push	de
 	call	_printf
 	pop	hl
 00119$:
-;src/main.c:138: if(joypad() & J_START){
+;src/main.c:139: if(joypad() & J_START){
 	call	_joypad
 	rlca
 	jr	NC, 00123$
-;src/main.c:139: update_game_state(STATE_GAME_SETTING);
+;src/main.c:140: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	call	_update_game_state
-;src/main.c:145: }
+;src/main.c:146: }
 00123$:
-;src/main.c:146: performantdelay(10);
+;src/main.c:147: performantdelay(10);
 	ld	a, #0x0a
 	call	_performantdelay
-;src/main.c:148: }
+;src/main.c:149: }
 	jp	00125$
 ___str_0:
 	.ascii "%d"

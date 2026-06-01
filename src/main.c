@@ -7,6 +7,8 @@
 
 #include "../res/map_tiles_alt.h"
 #include "../res/map1_alt.h"
+#include "../res/map2.h"
+#include"../res/map_test.h"
 
 #include "../res/object_sprites.h"
 #include "../res/hud_tiles.h"
@@ -57,7 +59,7 @@ void init_gfx(void){
 
     //map
     set_bkg_data(0, 96, map_tiles_alt);
-    set_bkg_tiles(0,0,20,16,map1_alt);
+    set_bkg_tiles(0,0,20,16,global_levels_array[global_actual_level]);
     SHOW_BKG;
 
     //HUD
@@ -74,6 +76,7 @@ void main(void)
 {   
     init_game_title();
     global_game_state = STATE_MENU;
+    global_actual_level = 0;
     
     while(1) {
         switch (global_game_state)
@@ -96,8 +99,8 @@ void main(void)
             if(last_state != STATE_GAME_SETTING) {
                 init_gfx();
                 pointer_init(&s);
-                init_level(0);
-                get_colision_from_map(map1_alt, global_colision_map);
+                init_level(global_actual_level);
+                get_colision_from_map(global_levels_array[global_actual_level], global_colision_map);
 
                 print_objects_in_screen();
                 last_state = STATE_GAME_SETTING;
@@ -119,6 +122,7 @@ void main(void)
             //DEBUG
             if(joypad() & J_A){
                 HIDE_WIN;
+                //printf("%d",global_keyset);
                 for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
                     printf("%d",global_colision_map[i]);
                 }

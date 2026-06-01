@@ -7,7 +7,7 @@
 #define EMPTY 0 //no colision
 #define SOLID 1 //colision
 #define OBJECT 2 //valor nulo para objetos (objetos te encuentras, bloques los pones)
-#define SOURCE 3 //punto de inicio
+#define SOURCE_R 3 //punto de inicio
 #define DESTINATION 4 //punto de llegada
 #define BLOCK  5 //valor nulo para bloques (objetos te encuentras, bloques los pones)
 #define RIGHT 6 //bloque que mueve a la derecha
@@ -18,6 +18,9 @@
 #define COUNTER_CLOCKWISE 11
 #define FALL 12
 #define DOOR 13
+#define SOURCE_L 14
+#define SOURCE_U 15
+#define SOURCE_D 16
 
 #define UMBRAL_COLISION_UP 5
 #define UMBRAL_COLISION_DOWN 20
@@ -34,9 +37,14 @@ extern uint8_t global_blocks_available[NUMBER_OF_BLOCKS];
 extern int8_t global_selected_block;
 //variable global array de niveles disponibles (o mapas)
 extern const unsigned char* global_levels_array[];
+extern const unsigned char* global_level_objects_array[];
+extern const unsigned char* global_level_blocks_array[];
+
+extern uint8_t global_actual_level;
 
 extern uint8_t global_keyset;
-
+extern int8_t global_first_x;
+extern int8_t global_first_y;
 
 typedef enum {
     STATE_MENU,

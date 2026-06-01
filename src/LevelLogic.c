@@ -6,6 +6,8 @@
 #include <gb/gb.h>
 #include <gbdk/console.h>
 #include "../res/map1_alt.h"
+#include "../res/map2.h"
+#include "../res/map_test.h"
 #include "../res/png_prueba.h"
 
 //variables globales
@@ -18,7 +20,14 @@ uint8_t global_keyset;
 uint8_t global_blocks_available[NUMBER_OF_BLOCKS] = {0}; 
 int8_t global_selected_block = 0;
 
-const unsigned char* global_levels_array[] = {map1_alt};
+int8_t global_first_x = 0;
+int8_t global_first_y = 0;
+
+const unsigned char* global_levels_array[] = {map_test, map1_alt, map2};
+const unsigned char* global_level_objects_array[] = {objects_map_test, objects_map1_alt, objects_map2};
+const unsigned char* global_level_blocks_array[] = { blocks_map_test, blocks_map1_alt, blocks_map2 };
+
+uint8_t global_actual_level = 0;
 
 void init_game_title(){
     
@@ -41,10 +50,8 @@ void init_level(uint8_t level_number){
     }
 
     get_colision_from_map(global_levels_array[level_number], global_colision_map);
-    
-    //TODO: Those values in params (objects_map1, blocks_map should be decided by the level. Not alway map1)
-    read_global_object_info_from_map(objects_map1_alt);
-    read_global_block_info_from_map(blocks_map1_alt);
+    read_global_object_info_from_map(global_level_objects_array[level_number]);
+    read_global_block_info_from_map(global_level_blocks_array[level_number]);
 
     for(uint8_t e = 0; e < NUMBER_OF_BLOCKS; e++){
         update_values_in_hud(RIGHT+e, global_blocks_available[e]);
@@ -63,7 +70,13 @@ void get_colision_from_map(const unsigned char in[], uint8_t out[]){
     uint8_t e = 0;
     for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
         if(in[i] == 51){
-            out[i] = SOURCE;
+            out[i] = SOURCE_R;
+        } else if(in[i] == 55){
+            out[i] = SOURCE_L;
+        } else if(in[i] == 59){
+            out[i] = SOURCE_U;
+        } else if(in[i] == 63){
+            out[i] = SOURCE_D;
         } else if(in[i] >= 64 && in[i] <= 67){
             out[i] = DESTINATION;
         } else if(in[i] >= 21 && in[i] <= 29){
@@ -120,9 +133,17 @@ uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah
 //get init point from colision map
 void get_init_point_from_map(uint8_t colision_map[NUMBER_OF_TILES_IN_GRID]){
      for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
-          if(colision_map[i] == SOURCE){
-               global_init_point = i;
-               break;
+            if(colision_map[i] == SOURCE_L || colision_map[i] == SOURCE_R || colision_map[i] == SOURCE_U || colision_map[i] == SOURCE_D){
+                global_init_point = i;
+                if(colision_map[i]==SOURCE_L){
+                    global_first_x = -1;
+                } else if(colision_map[i]==SOURCE_R){
+                    global_first_x = 1;
+                }else if(colision_map[i]==SOURCE_U){
+                    global_first_y = -1;
+                }else if(colision_map[i]==SOURCE_D){
+                    global_first_y = 1;
+                }
           }
      }
 }
