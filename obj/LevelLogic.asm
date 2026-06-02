@@ -828,15 +828,15 @@ _move_foward_block_id::
 	dec	(hl)
 ;src/LevelLogic.c:167: }
 00104$:
-;src/LevelLogic.c:169: if(global_selected_block >= NUMBER_OF_BLOCKS){
+;src/LevelLogic.c:169: if(global_selected_block >= NUMBER_OF_BLOCKS+2){
 	ld	hl, #_global_selected_block
 	ld	a, (hl)
 	xor	a, #0x80
-	sub	a, #0x86
+	sub	a, #0x88
 	jr	C, 00108$
-;src/LevelLogic.c:170: global_selected_block -= NUMBER_OF_BLOCKS;
+;src/LevelLogic.c:170: global_selected_block -= NUMBER_OF_BLOCKS+2;
 	ld	a, (hl)
-	add	a, #0xfa
+	add	a, #0xf8
 	ld	(hl), a
 	ret
 00108$:
@@ -844,9 +844,9 @@ _move_foward_block_id::
 	ld	hl, #_global_selected_block
 	bit	7, (hl)
 	ret	Z
-;src/LevelLogic.c:172: global_selected_block += NUMBER_OF_BLOCKS;
+;src/LevelLogic.c:172: global_selected_block += NUMBER_OF_BLOCKS+2;
 	ld	a, (hl)
-	add	a, #0x06
+	add	a, #0x08
 	ld	(hl), a
 ;src/LevelLogic.c:174: }
 	ret

@@ -64,7 +64,7 @@ void init_gfx(void){
 
     //HUD
     // Activa la window
-    set_win_data(96,28, hud_tiles);
+    set_win_data(96,44, hud_tiles);
     set_win_tiles(0,0,20,4, hud_selector);
     SHOW_WIN;
     WX_REG = 7;      // SIEMPRE 7
@@ -84,6 +84,7 @@ void main(void)
 
         case STATE_MENU:
             if(last_state != STATE_MENU) {
+                init_game_title();
                 last_state = STATE_MENU;
             }
 

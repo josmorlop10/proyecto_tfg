@@ -166,10 +166,10 @@ void move_foward_block_id(uint8_t button_pressed){
         break;
     }
 
-    if(global_selected_block >= NUMBER_OF_BLOCKS){
-        global_selected_block -= NUMBER_OF_BLOCKS;
+    if(global_selected_block >= NUMBER_OF_BLOCKS+2){
+        global_selected_block -= NUMBER_OF_BLOCKS+2;
     } else if(global_selected_block < 0){
-        global_selected_block += NUMBER_OF_BLOCKS;
+        global_selected_block += NUMBER_OF_BLOCKS+2;
     }
 }
 

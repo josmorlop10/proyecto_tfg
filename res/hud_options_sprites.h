@@ -1,6 +1,6 @@
 /*
 
- HUD_TILES.H
+ HUD_OPTIONS_SPRITES.H
 
  Include File.
 
@@ -10,7 +10,7 @@
   Compression          : None.
   Counter              : None.
   Tile size            : 8 x 8
-  Tiles                : 0 to 44
+  Tiles                : 0 to 16
 
   Palette colors       : None.
   SGB Palette          : None.
@@ -22,14 +22,14 @@
 
 */
 
-#ifndef __hud_tiles_h_INCLUDE
-#define __hud_tiles_h_INCLUDE
+#ifndef __hud_options_sprites_h_INCLUDE
+#define __hud_options_sprites_h_INCLUDE
 
 /* Bank of tiles. */
-#define hud_tilesBank 0
+#define hud_options_spritesBank 0
 /* Start of tile array. */
-extern const unsigned char hud_tiles[];
+extern const unsigned char hud_options_sprites[];
 
 #endif
 
-/* End of HUD_TILES.H */
+/* End of HUD_OPTIONS_SPRITES.H */

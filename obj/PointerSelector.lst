@@ -339,11 +339,11 @@
     00000119 3B               [ 8]  339 	dec	sp
     0000011A 3B               [ 8]  340 	dec	sp
     0000011B F8 01            [12]  341 	ldhl	sp,	#1
-                                    342 ;src/PointerSelector.c:51: uint8_t block_index = block_type - RIGHT;
+                                    342 ;src/PointerSelector.c:50: uint8_t block_index = block_type - RIGHT;
     0000011D 32               [ 8]  343 	ld	(hl-), a
     0000011E C6 FA            [ 8]  344 	add	a, #0xfa
     00000120 77               [ 8]  345 	ld	(hl), a
-                                    346 ;src/PointerSelector.c:52: change_colision_map_at(s->tileindexBR, EMPTY);
+                                    346 ;src/PointerSelector.c:51: change_colision_map_at(s->tileindexBR, EMPTY);
     00000121 21 06 00         [12]  347 	ld	hl, #0x0006
     00000124 19               [ 8]  348 	add	hl, de
     00000125 4D               [ 4]  349 	ld	c,l
@@ -356,7 +356,7 @@
     0000012C 5D               [ 4]  356 	ld	e, l
     0000012D 54               [ 4]  357 	ld	d, h
     0000012E CDr00r00         [24]  358 	call	_change_colision_map_at
-                                    359 ;src/PointerSelector.c:53: change_bkg_tile_xy(s->tileindexBR, 0);
+                                    359 ;src/PointerSelector.c:52: change_bkg_tile_xy(s->tileindexBR, 0);
     00000131 E1               [12]  360 	pop	hl
     00000132 2A               [ 8]  361 	ld	a, (hl+)
     00000133 4F               [ 4]  362 	ld	c, a
@@ -365,7 +365,7 @@
     00000136 59               [ 4]  365 	ld	e, c
     00000137 50               [ 4]  366 	ld	d, b
     00000138 CDr00r00         [24]  367 	call	_change_bkg_tile_xy
-                                    368 ;src/PointerSelector.c:54: global_blocks_available[block_index]++;
+                                    368 ;src/PointerSelector.c:53: global_blocks_available[block_index]++;
     0000013B 11r00r00         [12]  369 	ld	de, #_global_blocks_available
     0000013E F8 00            [12]  370 	ldhl	sp,	#0
     00000140 6E               [ 8]  371 	ld	l, (hl)
@@ -376,23 +376,23 @@
     00000146 0A               [ 8]  376 	ld	a, (bc)
     00000147 3C               [ 4]  377 	inc	a
     00000148 02               [ 8]  378 	ld	(bc), a
-                                    379 ;src/PointerSelector.c:55: update_values_in_hud(block_type, global_blocks_available[block_index]);
+                                    379 ;src/PointerSelector.c:54: update_values_in_hud(block_type, global_blocks_available[block_index]);
     00000149 5F               [ 4]  380 	ld	e, a
     0000014A F8 01            [12]  381 	ldhl	sp,	#1
     0000014C 7E               [ 8]  382 	ld	a, (hl)
     0000014D 33               [ 8]  383 	inc	sp
     0000014E 33               [ 8]  384 	inc	sp
     0000014F C3r00r00         [16]  385 	jp	_update_values_in_hud
-                                    386 ;src/PointerSelector.c:56: }
+                                    386 ;src/PointerSelector.c:55: }
     00000152 33               [ 8]  387 	inc	sp
     00000153 33               [ 8]  388 	inc	sp
     00000154 C9               [16]  389 	ret
-                                    390 ;src/PointerSelector.c:58: uint8_t block_is_not_placed_below(Pointer* s){
+                                    390 ;src/PointerSelector.c:57: uint8_t block_is_not_placed_below(Pointer* s){
                                     391 ;	---------------------------------
                                     392 ; Function block_is_not_placed_below
                                     393 ; ---------------------------------
     00000155                        394 _block_is_not_placed_below::
-                                    395 ;src/PointerSelector.c:59: return (global_colision_map[s->tileindexBR] == EMPTY) 
+                                    395 ;src/PointerSelector.c:58: return (global_colision_map[s->tileindexBR] == EMPTY) 
     00000155 01r00r00         [12]  396 	ld	bc, #_global_colision_map+0
     00000158 21 06 00         [12]  397 	ld	hl, #0x0006
     0000015B 19               [ 8]  398 	add	hl, de
@@ -407,7 +407,7 @@
     00000164 1A               [ 8]  407 	ld	a, (de)
     00000165 B7               [ 4]  408 	or	a, a
     00000166 20 22            [12]  409 	jr	NZ, 00103$
-                                    410 ;src/PointerSelector.c:60: && (global_colision_map[s->tileindexBR-1] == EMPTY)
+                                    410 ;src/PointerSelector.c:59: && (global_colision_map[s->tileindexBR-1] == EMPTY)
     00000168 5D               [ 4]  411 	ld	e,l
     00000169 54               [ 4]  412 	ld	d,h
     0000016A 2B               [ 8]  413 	dec	hl
@@ -415,7 +415,7 @@
     0000016C 7E               [ 8]  415 	ld	a, (hl)
     0000016D B7               [ 4]  416 	or	a, a
     0000016E 20 1A            [12]  417 	jr	NZ, 00103$
-                                    418 ;src/PointerSelector.c:61: && (global_colision_map[s->tileindexBR-20] == EMPTY)
+                                    418 ;src/PointerSelector.c:60: && (global_colision_map[s->tileindexBR-20] == EMPTY)
     00000170 7B               [ 4]  419 	ld	a, e
     00000171 C6 EC            [ 8]  420 	add	a, #0xec
     00000173 6F               [ 4]  421 	ld	l, a
@@ -426,7 +426,7 @@
     00000179 7E               [ 8]  426 	ld	a, (hl)
     0000017A B7               [ 4]  427 	or	a, a
     0000017B 20 0D            [12]  428 	jr	NZ, 00103$
-                                    429 ;src/PointerSelector.c:62: && (global_colision_map[s->tileindexBR-21] == EMPTY);
+                                    429 ;src/PointerSelector.c:61: && (global_colision_map[s->tileindexBR-21] == EMPTY);
     0000017D 7B               [ 4]  430 	ld	a, e
     0000017E C6 EB            [ 8]  431 	add	a, #0xeb
     00000180 6F               [ 4]  432 	ld	l, a
@@ -442,17 +442,17 @@
     0000018B C9               [16]  442 	ret
     0000018C                        443 00104$:
     0000018C 3E 01            [ 8]  444 	ld	a, #0x01
-                                    445 ;src/PointerSelector.c:63: }
+                                    445 ;src/PointerSelector.c:62: }
     0000018E C9               [16]  446 	ret
-                                    447 ;src/PointerSelector.c:65: uint8_t block_is_placed_below(Pointer* s){
+                                    447 ;src/PointerSelector.c:64: uint8_t block_is_placed_below(Pointer* s){
                                     448 ;	---------------------------------
                                     449 ; Function block_is_placed_below
                                     450 ; ---------------------------------
     0000018F                        451 _block_is_placed_below::
     0000018F E8 FD            [16]  452 	add	sp, #-3
-                                    453 ;src/PointerSelector.c:71: uint8_t res = 0;
+                                    453 ;src/PointerSelector.c:70: uint8_t res = 0;
     00000191 0E 00            [ 8]  454 	ld	c, #0x00
-                                    455 ;src/PointerSelector.c:72: if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=RIGHT+NUMBER_OF_BLOCKS) 
+                                    455 ;src/PointerSelector.c:71: if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=RIGHT+NUMBER_OF_BLOCKS) 
     00000193 21 06 00         [12]  456 	ld	hl, #0x0006
     00000196 19               [ 8]  457 	add	hl, de
     00000197 5D               [ 4]  458 	ld	e, l
@@ -477,7 +477,7 @@
     000001B0 3E 0C            [ 8]  477 	ld	a, #0x0c
     000001B2 96               [ 8]  478 	sub	a, (hl)
     000001B3 38 37            [12]  479 	jr	C, 00102$
-                                    480 ;src/PointerSelector.c:73: && (global_colision_map[s->tileindexBR-1] == BLOCK)
+                                    480 ;src/PointerSelector.c:72: && (global_colision_map[s->tileindexBR-1] == BLOCK)
     000001B5 D1               [12]  481 	pop	de
     000001B6 D5               [16]  482 	push	de
     000001B7 6B               [ 4]  483 	ld	l, e
@@ -490,7 +490,7 @@
     000001C0 7E               [ 8]  490 	ld	a, (hl)
     000001C1 D6 05            [ 8]  491 	sub	a, #0x05
     000001C3 20 27            [12]  492 	jr	NZ, 00102$
-                                    493 ;src/PointerSelector.c:74: && (global_colision_map[s->tileindexBR-20] == BLOCK)
+                                    493 ;src/PointerSelector.c:73: && (global_colision_map[s->tileindexBR-20] == BLOCK)
     000001C5 7B               [ 4]  494 	ld	a, e
     000001C6 C6 EC            [ 8]  495 	add	a, #0xec
     000001C8 6F               [ 4]  496 	ld	l, a
@@ -504,7 +504,7 @@
     000001D3 7E               [ 8]  504 	ld	a, (hl)
     000001D4 D6 05            [ 8]  505 	sub	a, #0x05
     000001D6 20 14            [12]  506 	jr	NZ, 00102$
-                                    507 ;src/PointerSelector.c:75: && (global_colision_map[s->tileindexBR-21] == BLOCK)){
+                                    507 ;src/PointerSelector.c:74: && (global_colision_map[s->tileindexBR-21] == BLOCK)){
     000001D8 7B               [ 4]  508 	ld	a, e
     000001D9 C6 EB            [ 8]  509 	add	a, #0xeb
     000001DB 6F               [ 4]  510 	ld	l, a
@@ -516,22 +516,22 @@
     000001E4 7E               [ 8]  516 	ld	a, (hl)
     000001E5 D6 05            [ 8]  517 	sub	a, #0x05
     000001E7 20 03            [12]  518 	jr	NZ, 00102$
-                                    519 ;src/PointerSelector.c:76: res = global_colision_map[s->tileindexBR];
+                                    519 ;src/PointerSelector.c:75: res = global_colision_map[s->tileindexBR];
     000001E9 F8 02            [12]  520 	ldhl	sp,	#2
     000001EB 4E               [ 8]  521 	ld	c, (hl)
     000001EC                        522 00102$:
-                                    523 ;src/PointerSelector.c:78: return res;
+                                    523 ;src/PointerSelector.c:77: return res;
     000001EC 79               [ 4]  524 	ld	a, c
-                                    525 ;src/PointerSelector.c:79: }
+                                    525 ;src/PointerSelector.c:78: }
     000001ED E8 03            [16]  526 	add	sp, #3
     000001EF C9               [16]  527 	ret
-                                    528 ;src/PointerSelector.c:81: void control_pointer(Pointer* s){
+                                    528 ;src/PointerSelector.c:80: void control_pointer(Pointer* s){
                                     529 ;	---------------------------------
                                     530 ; Function control_pointer
                                     531 ; ---------------------------------
     000001F0                        532 _control_pointer::
     000001F0 D5               [16]  533 	push	de
-                                    534 ;src/PointerSelector.c:85: if(global_hud_selected==0){
+                                    534 ;src/PointerSelector.c:84: if(global_hud_selected==0){
     000001F1 FAr00r00         [16]  535 	ld	a, (#_global_hud_selected)
     000001F4 B7               [ 4]  536 	or	a, a
     000001F5 C2r24r03         [16]  537 	jp	NZ, 00146$

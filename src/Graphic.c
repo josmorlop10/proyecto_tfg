@@ -51,6 +51,30 @@ void change_bkg_tile_16x16(uint16_t tile_index, uint8_t tile_id_BR){
 }
 
 
+void change_win_tile_16x16(uint16_t tile_index, uint8_t tile_id_BR){
+
+    /** Cambia un conjunto de 2x2 tiles (16x16 px) todos por un conjunto
+     * de tiles que esten de seguido en la VRAM. Hay que especificar el
+     * tile que esté abajo a la derecha. (Botton Right BR).
+
+    @param tile_index la posicion del tileindex que quieres cambiar
+    @param tile_id_BR el nuevo tile index
+    */
+
+    tile_id_BR = tile_id_BR + hud_selectorTileOffset;
+
+    uint8_t y = (tile_index / 20);
+    uint8_t x = (tile_index % 20);
+
+    uint8_t tile_id_TR = tile_id_BR - 0x01;
+    uint8_t tile_id_BL = tile_id_BR - 0x02;
+    uint8_t tile_id_TL = tile_id_BR - 0x03;
+
+    set_win_tiles(x,y,1,1,&tile_id_BR);
+    set_win_tiles(x-1,y,1,1,&tile_id_BL);
+    set_win_tiles(x,y-1,1,1,&tile_id_TR);
+    set_win_tiles(x-1,y-1,1,1,&tile_id_TL);
+}
 
 //Changing graphics HUD (WIN)
 
@@ -61,7 +85,13 @@ void move_sprite_block_pointer(uint8_t direction){
     //3 abajo
     //4 clockwise
     //5 counter-clockwise
-    move_sprite(16, 40 + direction * 16 , 144 - global_hud_selected * 4);
+    //6-7 OPTIONS
+    if(direction<6){
+        move_sprite(16, 24 + direction * 16 , 144 - global_hud_selected * 4);
+    } else {
+        move_sprite(16, 0 , 0);
+        //change_win_tile_16x16(58,35);
+    }
 }
 
 //TODO:TEMPORAL
@@ -83,27 +113,27 @@ void update_values_in_hud(uint8_t position, uint8_t new_value){
     switch (position)
     {
     case RIGHT:
-        x = 4;
+        x = 2;
         y = 2;
         break;
     case LEFT:
-        x = 6;
+        x = 4;
         y = 2;
         break;
     case UP:
-        x = 8;
+        x = 6;
         y = 2;
         break;
     case DOWN:
-        x = 10;
+        x = 8;
         y = 2;
         break;
     case CLOCKWISE:
-        x = 12;
+        x = 10;
         y = 2;
         break;
     case COUNTER_CLOCKWISE:
-        x = 14;
+        x = 12;
         y = 2;
         break;
 

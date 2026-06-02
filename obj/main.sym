@@ -10,8 +10,8 @@ Symbol Table
     _LCDC_REG                                                       ******** GX
     _WX_REG                                                         ******** GX
     _WY_REG                                                         ******** GX
-  0 ___str_0                                                        000001E6 R
-  0 ___str_1                                                        000001E9 R
+  0 ___str_0                                                        000001EA R
+  0 ___str_1                                                        000001ED R
     _block_pointer                                                  ******** GX
     _character_init                                                 ******** GX
     _duck                                                           ******** GX
@@ -54,7 +54,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      20B   flags    0
+   0 _CODE                                      size      20F   flags    0
    1 _DATA                                      size       18   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

@@ -47,7 +47,6 @@ void place_object_at_pointer(Pointer* s, uint8_t block_type){
 }
 
 void remove_object_at_pointer(Pointer* s, uint8_t block_type){
-    
     uint8_t block_index = block_type - RIGHT;
     change_colision_map_at(s->tileindexBR, EMPTY);
     change_bkg_tile_xy(s->tileindexBR, 0);
@@ -83,6 +82,7 @@ void control_pointer(Pointer* s){
     //TODO: refactor this function entirely
 
     if(global_hud_selected==0){
+
         if(joypad() & J_UP) {
             if (can_pointer_move(s, 0, -1)){
                 s->y -= 8;
@@ -120,7 +120,7 @@ void control_pointer(Pointer* s){
             set_win_tile_xy(0,1,hud_selectorTileOffset+26);
         }
 
-    } else {
+    } else { //esta seleccionado el HUD
 
         if(joypad() & J_LEFT) {
             move_foward_block_id(1);

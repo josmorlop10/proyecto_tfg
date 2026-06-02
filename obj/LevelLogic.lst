@@ -828,15 +828,15 @@
     00000348 35               [12]  828 	dec	(hl)
                                     829 ;src/LevelLogic.c:167: }
     00000349                        830 00104$:
-                                    831 ;src/LevelLogic.c:169: if(global_selected_block >= NUMBER_OF_BLOCKS){
+                                    831 ;src/LevelLogic.c:169: if(global_selected_block >= NUMBER_OF_BLOCKS+2){
     00000349 21r32r01         [12]  832 	ld	hl, #_global_selected_block
     0000034C 7E               [ 8]  833 	ld	a, (hl)
     0000034D EE 80            [ 8]  834 	xor	a, #0x80
-    0000034F D6 86            [ 8]  835 	sub	a, #0x86
+    0000034F D6 88            [ 8]  835 	sub	a, #0x88
     00000351 38 05            [12]  836 	jr	C, 00108$
-                                    837 ;src/LevelLogic.c:170: global_selected_block -= NUMBER_OF_BLOCKS;
+                                    837 ;src/LevelLogic.c:170: global_selected_block -= NUMBER_OF_BLOCKS+2;
     00000353 7E               [ 8]  838 	ld	a, (hl)
-    00000354 C6 FA            [ 8]  839 	add	a, #0xfa
+    00000354 C6 F8            [ 8]  839 	add	a, #0xf8
     00000356 77               [ 8]  840 	ld	(hl), a
     00000357 C9               [16]  841 	ret
     00000358                        842 00108$:
@@ -844,9 +844,9 @@
     00000358 21r32r01         [12]  844 	ld	hl, #_global_selected_block
     0000035B CB 7E            [12]  845 	bit	7, (hl)
     0000035D C8               [20]  846 	ret	Z
-                                    847 ;src/LevelLogic.c:172: global_selected_block += NUMBER_OF_BLOCKS;
+                                    847 ;src/LevelLogic.c:172: global_selected_block += NUMBER_OF_BLOCKS+2;
     0000035E 7E               [ 8]  848 	ld	a, (hl)
-    0000035F C6 06            [ 8]  849 	add	a, #0x06
+    0000035F C6 08            [ 8]  849 	add	a, #0x08
     00000361 77               [ 8]  850 	ld	(hl), a
                                     851 ;src/LevelLogic.c:174: }
     00000362 C9               [16]  852 	ret
