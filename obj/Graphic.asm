@@ -10,12 +10,14 @@
 	.globl _set_win_tile_xy
 	.globl _set_win_tiles
 	.globl _set_bkg_tiles
+	.globl _delay
 	.globl _change_bkg_tile_xy
 	.globl _change_bkg_tile_16x16
 	.globl _change_win_tile_16x16
 	.globl _move_sprite_block_pointer
 	.globl _print_counter
 	.globl _update_values_in_hud
+	.globl _move_win_screen
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -451,6 +453,61 @@ _update_values_in_hud::
 	call	_set_win_tile_xy
 ;src/Graphic.c:144: }
 	ret
+;src/Graphic.c:146: void move_win_screen(int8_t pixeles){
+;	---------------------------------
+; Function move_win_screen
+; ---------------------------------
+_move_win_screen::
+	ld	c, a
+;src/Graphic.c:148: if(pixeles < 0){
+	bit	7, c
+	jr	Z, 00118$
+;src/Graphic.c:149: pixeles = -pixeles;
+	xor	a, a
+	sub	a, c
+	ld	c, a
+;src/Graphic.c:150: for(uint8_t i = 1;i<=pixeles;i++){
+	ld	b, #0x01
+00107$:
+	ld	e, b
+	ld	d, c
+	ld	a, d
+	sub	a, e
+	ret	C
+;src/Graphic.c:151: WY_REG = WY_REG - 1;
+	ldh	a, (_WY_REG + 0)
+	dec	a
+	ldh	(_WY_REG + 0), a
+;src/Graphic.c:152: delay(10);
+	push	bc
+	ld	de, #0x000a
+	call	_delay
+	pop	bc
+;src/Graphic.c:150: for(uint8_t i = 1;i<=pixeles;i++){
+	inc	b
+	jr	00107$
+;src/Graphic.c:155: for(uint8_t i = 1;i<=pixeles;i++){
+00118$:
+	ld	b, #0x01
+00110$:
+	ld	e, b
+	ld	d, c
+	ld	a, d
+	sub	a, e
+	ret	C
+;src/Graphic.c:156: WY_REG = WY_REG + 1;
+	ldh	a, (_WY_REG + 0)
+	inc	a
+	ldh	(_WY_REG + 0), a
+;src/Graphic.c:157: delay(10);
+	push	bc
+	ld	de, #0x000a
+	call	_delay
+	pop	bc
+;src/Graphic.c:155: for(uint8_t i = 1;i<=pixeles;i++){
+	inc	b
+;src/Graphic.c:160: } 
+	jr	00110$
 	.area _CODE
 	.area _INITIALIZER
 	.area _CABS (ABS)

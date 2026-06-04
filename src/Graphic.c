@@ -142,3 +142,19 @@ void update_values_in_hud(uint8_t position, uint8_t new_value){
 
     set_win_tile_xy(x,y, new_value + hud_selectorTileOffset + 1);
 }
+
+void move_win_screen(int8_t pixeles){
+    //(si pixeles negativo, ira hacia arriba. Si pixeles positivos, hacia abajo)
+    if(pixeles < 0){
+        pixeles = -pixeles;
+        for(uint8_t i = 1;i<=pixeles;i++){
+            WY_REG = WY_REG - 1;
+            delay(10);
+        }
+    } else {
+        for(uint8_t i = 1;i<=pixeles;i++){
+            WY_REG = WY_REG + 1;
+            delay(10);
+        }   
+    }
+} 

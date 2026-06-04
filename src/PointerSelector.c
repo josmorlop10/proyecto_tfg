@@ -115,10 +115,7 @@ void control_pointer(Pointer* s){
         } else if(joypad() & J_SELECT) {
             global_hud_selected = !global_hud_selected;
             move_sprite_block_pointer(global_selected_block);
-            for(uint8_t i = 1;i<=4;i++){
-                WY_REG = 120 - i;
-                delay(10);
-            }
+            move_win_screen(-4);
             set_win_tile_xy(0,1,hud_selectorTileOffset+26);
         }
     } else { //esta seleccionado el HUD
@@ -142,12 +139,7 @@ void control_pointer(Pointer* s){
         } else if(joypad() & J_SELECT) {
             global_hud_selected = !global_hud_selected;
             move_sprite_block_pointer(global_selected_block);
-
-            for(uint8_t i = 1; i <= 4; i++) {
-                WY_REG = 116 + i;
-                delay(10);
-            }
-
+            move_win_screen(4);
             set_win_tile_xy(0,1,hud_selectorTileOffset+27);
         }
     }

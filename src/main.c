@@ -65,7 +65,7 @@ void init_gfx(void){
 
     //HUD
     // Activa la window
-    set_win_data(96,44, hud_tiles);
+    set_win_data(96,55, hud_tiles);
     set_win_tiles(0,0,20,4, hud_selector);
     draw_game_hud_buttons();
 
@@ -140,17 +140,16 @@ void main(void)
         case STATE_GAME_OVER:
             if(last_state != STATE_GAME_OVER) {
                 last_state = STATE_GAME_OVER;
-                
+                init_game_over_screen();
             }
-            init_game_over_screen();
             update_game_over_screen();
             break;
 
         case STATE_VICTORY:
             if(last_state != STATE_VICTORY) {
                 last_state = STATE_VICTORY;
+                init_victory_screen();
             }
-            init_victory_screen();
             update_victory_screen();
             break;
 

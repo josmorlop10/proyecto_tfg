@@ -82,6 +82,7 @@ void init_start_selection_menu(void);
 void update_start_selection_menu(void);
 void init_game_over_screen(void);
 void update_game_over_screen(void);
-
+void init_victory_screen(void);
+void update_victory_screen(void);
 
 #endif

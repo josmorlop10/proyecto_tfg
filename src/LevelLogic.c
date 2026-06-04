@@ -11,6 +11,7 @@
 #include "../res/png_prueba.h"
 #include "../res/selection_menu.h"
 #include "../res/map_tiles_alt.h"
+#include "../res/hud_tiles.h"
 #include "../res/game_over_screen.h"
 #include "../res/victory_screen.h"
 
@@ -35,7 +36,7 @@ const unsigned char* global_levels_array[] = {map_test, map1_alt, map2};
 const unsigned char* global_level_objects_array[] = {objects_map_test, objects_map1_alt, objects_map2};
 const unsigned char* global_level_blocks_array[] = { blocks_map_test, blocks_map1_alt, blocks_map2 };
 
-uint8_t global_actual_level = 2;
+uint8_t global_actual_level = 0;
 
 void init_game_title(void){
     
@@ -196,11 +197,10 @@ void update_start_selection_menu(void){
 
 void init_victory_screen(void){
     HIDE_SPRITES;
-    HIDE_WIN;
     hide_character();
-    set_bkg_data(0,232,map_tiles_alt);
-    set_bkg_tiles(0,0,20,18,victory_screen);
-    SHOW_BKG;
+    set_win_tiles(0,0,20,12,victory_screen);
+    move_win_screen(-64);
+    SHOW_WIN;
 }
 
 void update_victory_screen(void){
@@ -211,11 +211,10 @@ void update_victory_screen(void){
 
 void init_game_over_screen(void){
     HIDE_SPRITES;
-    HIDE_WIN;
     hide_character();
-    set_bkg_data(0,232,map_tiles_alt);
-    set_bkg_tiles(0,0,20,18,game_over_screen);
-    SHOW_BKG;
+    set_win_tiles(0,0,20,12,game_over_screen);
+    move_win_screen(-64);
+    SHOW_WIN;
 }
 
 void update_game_over_screen(void){

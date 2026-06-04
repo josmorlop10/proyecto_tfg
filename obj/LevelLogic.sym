@@ -43,7 +43,7 @@ Symbol Table
     _global_object_information                                      ******** GX
   2 _global_selected_block                                          00000132 GR
     _hide_character                                                 ******** GX
-  0 _init_game_over_screen                                          000003D1 GR
+  0 _init_game_over_screen                                          000003C3 GR
   0 _init_game_title                                                00000000 GR
   0 _init_level                                                     0000002A GR
   0 _init_start_selection_menu                                      00000366 GR
@@ -54,35 +54,36 @@ Symbol Table
     _map_test                                                       ******** GX
     _map_tiles_alt                                                  ******** GX
   0 _move_foward_block_id                                           0000033A GR
+    _move_win_screen                                                ******** GX
     _objects_map1_alt                                               ******** GX
     _objects_map2                                                   ******** GX
     _objects_map_test                                               ******** GX
-    _png_prueba_map                                                 ******** GX
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Symbol Table
 
+    _png_prueba_map                                                 ******** GX
     _png_prueba_tiles                                               ******** GX
   0 _read_global_block_info_from_map                                000001D9 GR
   0 _read_global_object_info_from_map                               00000156 GR
     _selection_menu                                                 ******** GX
     _set_bkg_data                                                   ******** GX
     _set_bkg_tiles                                                  ******** GX
-  0 _update_game_over_screen                                        00000404 GR
+    _set_win_tiles                                                  ******** GX
+  0 _update_game_over_screen                                        000003E8 GR
   0 _update_game_state                                              000000AD GR
   0 _update_start_selection_menu                                    0000038A GR
     _update_values_in_hud                                           ******** GX
-  0 _update_victory_screen                                          000003C7 GR
+  0 _update_victory_screen                                          000003B9 GR
     _victory_screen                                                 ******** GX
-
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 3
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      40E   flags    0
+   0 _CODE                                      size      3F2   flags    0
    1 _DATA                                      size       2C   flags    0
    2 _INITIALIZED                               size      148   flags    0
    3 _DABS                                      size        0   flags    8

@@ -13,6 +13,8 @@
 	.globl _print_objects_in_screen
 	.globl _update_pointer
 	.globl _pointer_init
+	.globl _update_victory_screen
+	.globl _init_victory_screen
 	.globl _update_game_over_screen
 	.globl _init_game_over_screen
 	.globl _update_start_selection_menu
@@ -174,10 +176,10 @@ _init_gfx::
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x01
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:68: set_win_data(96,44, hud_tiles);
+;src/main.c:68: set_win_data(96,55, hud_tiles);
 	ld	de, #_hud_tiles
 	push	de
-	ld	hl, #0x2c60
+	ld	hl, #0x3760
 	push	hl
 	call	_set_win_data
 	add	sp, #4
@@ -378,33 +380,33 @@ _main::
 ;src/main.c:142: last_state = STATE_GAME_OVER;
 	ld	hl, #_last_state
 	ld	(hl), #0x05
-00120$:
-;src/main.c:145: init_game_over_screen();
+;src/main.c:143: init_game_over_screen();
 	call	_init_game_over_screen
-;src/main.c:146: update_game_over_screen();
+00120$:
+;src/main.c:145: update_game_over_screen();
 	call	_update_game_over_screen
-;src/main.c:147: break;
+;src/main.c:146: break;
 	jr	00125$
-;src/main.c:149: case STATE_VICTORY:
+;src/main.c:148: case STATE_VICTORY:
 00121$:
-;src/main.c:150: if(last_state != STATE_VICTORY) {
+;src/main.c:149: if(last_state != STATE_VICTORY) {
 	ld	a, (#_last_state)
 	sub	a, #0x06
 	jr	Z, 00123$
-;src/main.c:151: last_state = STATE_VICTORY;
+;src/main.c:150: last_state = STATE_VICTORY;
 	ld	hl, #_last_state
 	ld	(hl), #0x06
-00123$:
-;src/main.c:153: init_victory_screen();
+;src/main.c:151: init_victory_screen();
 	call	_init_victory_screen
-;src/main.c:154: update_victory_screen();
+00123$:
+;src/main.c:153: update_victory_screen();
 	call	_update_victory_screen
-;src/main.c:159: }
+;src/main.c:158: }
 00125$:
-;src/main.c:160: performantdelay(10);
+;src/main.c:159: performantdelay(10);
 	ld	a, #0x0a
 	call	_performantdelay
-;src/main.c:162: }
+;src/main.c:161: }
 	jp	00127$
 ___str_0:
 	.ascii "%d"
