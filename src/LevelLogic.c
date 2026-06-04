@@ -9,6 +9,8 @@
 #include "../res/map2.h"
 #include "../res/map_test.h"
 #include "../res/png_prueba.h"
+#include "Headers/HUD_button.h"
+
 
 //variables globales
 GameState global_game_state;
@@ -29,7 +31,7 @@ const unsigned char* global_level_blocks_array[] = { blocks_map_test, blocks_map
 
 uint8_t global_actual_level = 0;
 
-void init_game_title(){
+void init_game_title(void){
     
     set_bkg_data(0,232,png_prueba_tiles);
     set_bkg_tiles(0,0,20,18,png_prueba_map);
@@ -166,10 +168,11 @@ void move_foward_block_id(uint8_t button_pressed){
         break;
     }
 
-    if(global_selected_block >= NUMBER_OF_BLOCKS+2){
-        global_selected_block -= NUMBER_OF_BLOCKS+2;
-    } else if(global_selected_block < 0){
-        global_selected_block += NUMBER_OF_BLOCKS+2;
+
+    if(global_selected_block >= HUD_ITEM_COUNT) {
+        global_selected_block -= HUD_ITEM_COUNT;
+    } else if(global_selected_block < 0) {
+        global_selected_block += HUD_ITEM_COUNT;
     }
 }
 

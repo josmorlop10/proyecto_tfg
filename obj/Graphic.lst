@@ -7,12 +7,12 @@
                                       7 ;--------------------------------------------------------
                                       8 ; Public variables in this module
                                       9 ;--------------------------------------------------------
-                                     10 	.globl _change_win_tile_16x16
-                                     11 	.globl _set_win_tile_xy
-                                     12 	.globl _set_win_tiles
-                                     13 	.globl _set_bkg_tiles
-                                     14 	.globl _change_bkg_tile_xy
-                                     15 	.globl _change_bkg_tile_16x16
+                                     10 	.globl _set_win_tile_xy
+                                     11 	.globl _set_win_tiles
+                                     12 	.globl _set_bkg_tiles
+                                     13 	.globl _change_bkg_tile_xy
+                                     14 	.globl _change_bkg_tile_16x16
+                                     15 	.globl _change_win_tile_16x16
                                      16 	.globl _move_sprite_block_pointer
                                      17 	.globl _print_counter
                                      18 	.globl _update_values_in_hud
@@ -216,44 +216,44 @@
                                     216 ;src/Graphic.c:51: }
     000000DB E8 0B            [16]  217 	add	sp, #11
     000000DD C9               [16]  218 	ret
-                                    219 ;src/Graphic.c:54: void change_win_tile_16x16(uint16_t tile_index, uint8_t tile_id_BR){
+                                    219 ;src/Graphic.c:55: void change_win_tile_16x16(uint16_t tile_index, uint8_t tile_id_BR){
                                     220 ;	---------------------------------
                                     221 ; Function change_win_tile_16x16
                                     222 ; ---------------------------------
     000000DE                        223 _change_win_tile_16x16::
     000000DE E8 FB            [16]  224 	add	sp, #-5
     000000E0 F8 04            [12]  225 	ldhl	sp,	#4
-                                    226 ;src/Graphic.c:64: tile_id_BR = tile_id_BR + hud_selectorTileOffset;
+                                    226 ;src/Graphic.c:65: tile_id_BR = tile_id_BR + hud_selectorTileOffset;
     000000E2 77               [ 8]  227 	ld	(hl), a
     000000E3 C6 60            [ 8]  228 	add	a, #0x60
     000000E5 77               [ 8]  229 	ld	(hl), a
-                                    230 ;src/Graphic.c:66: uint8_t y = (tile_index / 20);
+                                    230 ;src/Graphic.c:67: uint8_t y = (tile_index / 20);
     000000E6 D5               [16]  231 	push	de
     000000E7 01 14 00         [12]  232 	ld	bc, #0x0014
     000000EA CDr00r00         [24]  233 	call	__divuint
     000000ED D1               [12]  234 	pop	de
     000000EE F8 03            [12]  235 	ldhl	sp,	#3
     000000F0 71               [ 8]  236 	ld	(hl), c
-                                    237 ;src/Graphic.c:67: uint8_t x = (tile_index % 20);
+                                    237 ;src/Graphic.c:68: uint8_t x = (tile_index % 20);
     000000F1 01 14 00         [12]  238 	ld	bc, #0x0014
     000000F4 CDr00r00         [24]  239 	call	__moduint
     000000F7 59               [ 4]  240 	ld	e, c
-                                    241 ;src/Graphic.c:69: uint8_t tile_id_TR = tile_id_BR - 0x01;
+                                    241 ;src/Graphic.c:70: uint8_t tile_id_TR = tile_id_BR - 0x01;
     000000F8 F8 04            [12]  242 	ldhl	sp,	#4
     000000FA 4E               [ 8]  243 	ld	c, (hl)
     000000FB 79               [ 4]  244 	ld	a, c
     000000FC 3D               [ 4]  245 	dec	a
     000000FD F8 00            [12]  246 	ldhl	sp,	#0
-                                    247 ;src/Graphic.c:70: uint8_t tile_id_BL = tile_id_BR - 0x02;
+                                    247 ;src/Graphic.c:71: uint8_t tile_id_BL = tile_id_BR - 0x02;
     000000FF 22               [ 8]  248 	ld	(hl+), a
     00000100 79               [ 4]  249 	ld	a, c
     00000101 C6 FE            [ 8]  250 	add	a, #0xfe
-                                    251 ;src/Graphic.c:71: uint8_t tile_id_TL = tile_id_BR - 0x03;
+                                    251 ;src/Graphic.c:72: uint8_t tile_id_TL = tile_id_BR - 0x03;
     00000103 22               [ 8]  252 	ld	(hl+), a
     00000104 79               [ 4]  253 	ld	a, c
     00000105 C6 FD            [ 8]  254 	add	a, #0xfd
     00000107 77               [ 8]  255 	ld	(hl), a
-                                    256 ;src/Graphic.c:73: set_win_tiles(x,y,1,1,&tile_id_BR);
+                                    256 ;src/Graphic.c:74: set_win_tiles(x,y,1,1,&tile_id_BR);
     00000108 21 04 00         [12]  257 	ld	hl, #4
     0000010B 39               [ 8]  258 	add	hl, sp
     0000010C D5               [16]  259 	push	de
@@ -266,7 +266,7 @@
     00000116 CDr00r00         [24]  266 	call	_set_win_tiles
     00000119 E8 06            [16]  267 	add	sp, #6
     0000011B D1               [12]  268 	pop	de
-                                    269 ;src/Graphic.c:74: set_win_tiles(x-1,y,1,1,&tile_id_BL);
+                                    269 ;src/Graphic.c:75: set_win_tiles(x-1,y,1,1,&tile_id_BL);
     0000011C 4B               [ 4]  270 	ld	c, e
     0000011D 0D               [ 4]  271 	dec	c
     0000011E D5               [16]  272 	push	de
@@ -281,7 +281,7 @@
     0000012C CDr00r00         [24]  281 	call	_set_win_tiles
     0000012F E8 06            [16]  282 	add	sp, #6
     00000131 D1               [12]  283 	pop	de
-                                    284 ;src/Graphic.c:75: set_win_tiles(x,y-1,1,1,&tile_id_TR);
+                                    284 ;src/Graphic.c:76: set_win_tiles(x,y-1,1,1,&tile_id_TR);
     00000132 F8 03            [12]  285 	ldhl	sp,	#3
     00000134 46               [ 8]  286 	ld	b, (hl)
     00000135 05               [ 4]  287 	dec	b
@@ -297,7 +297,7 @@
     00000143 33               [ 8]  297 	inc	sp
     00000144 CDr00r00         [24]  298 	call	_set_win_tiles
     00000147 E8 06            [16]  299 	add	sp, #6
-                                    300 ;src/Graphic.c:76: set_win_tiles(x-1,y-1,1,1,&tile_id_TL);
+                                    300 ;src/Graphic.c:77: set_win_tiles(x-1,y-1,1,1,&tile_id_TL);
     00000149 21 02 00         [12]  301 	ld	hl, #2
     0000014C 39               [ 8]  302 	add	hl, sp
     0000014D E5               [16]  303 	push	hl
@@ -309,19 +309,19 @@
     00000155 F5               [16]  309 	push	af
     00000156 33               [ 8]  310 	inc	sp
     00000157 CDr00r00         [24]  311 	call	_set_win_tiles
-                                    312 ;src/Graphic.c:77: }
+                                    312 ;src/Graphic.c:78: }
     0000015A E8 0B            [16]  313 	add	sp, #11
     0000015C C9               [16]  314 	ret
-                                    315 ;src/Graphic.c:81: void move_sprite_block_pointer(uint8_t direction){
+                                    315 ;src/Graphic.c:80: void move_sprite_block_pointer(uint8_t direction){
                                     316 ;	---------------------------------
                                     317 ; Function move_sprite_block_pointer
                                     318 ; ---------------------------------
     0000015D                        319 _move_sprite_block_pointer::
-                                    320 ;src/Graphic.c:89: if(direction<6){
+                                    320 ;src/Graphic.c:88: if(direction<6){
     0000015D 4F               [ 4]  321 	ld	c, a
     0000015E D6 06            [ 8]  322 	sub	a, #0x06
     00000160 30 19            [12]  323 	jr	NC, 00102$
-                                    324 ;src/Graphic.c:90: move_sprite(16, 24 + direction * 16 , 144 - global_hud_selected * 4);
+                                    324 ;src/Graphic.c:89: move_sprite(16, 24 + direction * 16 , 144 - global_hud_selected * 4);
     00000162 FAr00r00         [16]  325 	ld	a, (_global_hud_selected)
     00000165 87               [ 4]  326 	add	a, a
     00000166 87               [ 4]  327 	add	a, a
@@ -340,7 +340,7 @@
     00000177 7B               [ 4]  340 	ld	a, e
     00000178 22               [ 8]  341 	ld	(hl+), a
     00000179 71               [ 8]  342 	ld	(hl), c
-                                    343 ;src/Graphic.c:90: move_sprite(16, 24 + direction * 16 , 144 - global_hud_selected * 4);
+                                    343 ;src/Graphic.c:89: move_sprite(16, 24 + direction * 16 , 144 - global_hud_selected * 4);
     0000017A C9               [16]  344 	ret
     0000017B                        345 00102$:
                                     346 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
@@ -349,34 +349,34 @@
     0000017E AF               [ 4]  349 	xor	a, a
     0000017F 22               [ 8]  350 	ld	(hl+), a
     00000180 77               [ 8]  351 	ld	(hl), a
-                                    352 ;src/Graphic.c:92: move_sprite(16, 0 , 0);
-                                    353 ;src/Graphic.c:95: }
+                                    352 ;src/Graphic.c:91: move_sprite(16, 0 , 0);
+                                    353 ;src/Graphic.c:94: }
     00000181 C9               [16]  354 	ret
-                                    355 ;src/Graphic.c:98: void print_counter(void){
+                                    355 ;src/Graphic.c:97: void print_counter(void){
                                     356 ;	---------------------------------
                                     357 ; Function print_counter
                                     358 ; ---------------------------------
     00000182                        359 _print_counter::
-                                    360 ;src/Graphic.c:99: uint8_t tile_id = global_selected_block + 115;
+                                    360 ;src/Graphic.c:98: uint8_t tile_id = global_selected_block + 115;
     00000182 FAr00r00         [16]  361 	ld	a, (#_global_selected_block)
     00000185 C6 73            [ 8]  362 	add	a, #0x73
-                                    363 ;src/Graphic.c:100: set_win_tile_xy(0, 0, tile_id);
+                                    363 ;src/Graphic.c:99: set_win_tile_xy(0, 0, tile_id);
     00000187 F5               [16]  364 	push	af
     00000188 33               [ 8]  365 	inc	sp
     00000189 AF               [ 4]  366 	xor	a, a
     0000018A 5F               [ 4]  367 	ld	e, a
     0000018B CDr00r00         [24]  368 	call	_set_win_tile_xy
-                                    369 ;src/Graphic.c:101: }
+                                    369 ;src/Graphic.c:100: }
     0000018E C9               [16]  370 	ret
-                                    371 ;src/Graphic.c:103: void update_values_in_hud(uint8_t position, uint8_t new_value){
+                                    371 ;src/Graphic.c:102: void update_values_in_hud(uint8_t position, uint8_t new_value){
                                     372 ;	---------------------------------
                                     373 ; Function update_values_in_hud
                                     374 ; ---------------------------------
     0000018F                        375 _update_values_in_hud::
-                                    376 ;src/Graphic.c:110: uint8_t x = 0;
-                                    377 ;src/Graphic.c:111: uint8_t y = 0;
+                                    376 ;src/Graphic.c:109: uint8_t x = 0;
+                                    377 ;src/Graphic.c:110: uint8_t y = 0;
     0000018F 01 00 00         [12]  378 	ld	bc, #0x0
-                                    379 ;src/Graphic.c:113: switch (position)
+                                    379 ;src/Graphic.c:112: switch (position)
     00000192 FE 06            [ 8]  380 	cp	a, #0x06
     00000194 38 3B            [12]  381 	jr	C, 00108$
     00000196 FE 0C            [ 8]  382 	cp	a, #0x0c
@@ -399,49 +399,49 @@
     000001AFrC4r01                  399 	.dw	00104$
     000001B1rC9r01                  400 	.dw	00105$
     000001B3rCEr01                  401 	.dw	00106$
-                                    402 ;src/Graphic.c:115: case RIGHT:
+                                    402 ;src/Graphic.c:114: case RIGHT:
     000001B5                        403 00101$:
-                                    404 ;src/Graphic.c:116: x = 2;
-                                    405 ;src/Graphic.c:117: y = 2;
+                                    404 ;src/Graphic.c:115: x = 2;
+                                    405 ;src/Graphic.c:116: y = 2;
     000001B5 01 02 02         [12]  406 	ld	bc, #0x202
-                                    407 ;src/Graphic.c:118: break;
+                                    407 ;src/Graphic.c:117: break;
     000001B8 18 17            [12]  408 	jr	00108$
-                                    409 ;src/Graphic.c:119: case LEFT:
+                                    409 ;src/Graphic.c:118: case LEFT:
     000001BA                        410 00102$:
-                                    411 ;src/Graphic.c:120: x = 4;
-                                    412 ;src/Graphic.c:121: y = 2;
+                                    411 ;src/Graphic.c:119: x = 4;
+                                    412 ;src/Graphic.c:120: y = 2;
     000001BA 01 04 02         [12]  413 	ld	bc, #0x204
-                                    414 ;src/Graphic.c:122: break;
+                                    414 ;src/Graphic.c:121: break;
     000001BD 18 12            [12]  415 	jr	00108$
-                                    416 ;src/Graphic.c:123: case UP:
+                                    416 ;src/Graphic.c:122: case UP:
     000001BF                        417 00103$:
-                                    418 ;src/Graphic.c:124: x = 6;
-                                    419 ;src/Graphic.c:125: y = 2;
+                                    418 ;src/Graphic.c:123: x = 6;
+                                    419 ;src/Graphic.c:124: y = 2;
     000001BF 01 06 02         [12]  420 	ld	bc, #0x206
-                                    421 ;src/Graphic.c:126: break;
+                                    421 ;src/Graphic.c:125: break;
     000001C2 18 0D            [12]  422 	jr	00108$
-                                    423 ;src/Graphic.c:127: case DOWN:
+                                    423 ;src/Graphic.c:126: case DOWN:
     000001C4                        424 00104$:
-                                    425 ;src/Graphic.c:128: x = 8;
-                                    426 ;src/Graphic.c:129: y = 2;
+                                    425 ;src/Graphic.c:127: x = 8;
+                                    426 ;src/Graphic.c:128: y = 2;
     000001C4 01 08 02         [12]  427 	ld	bc, #0x208
-                                    428 ;src/Graphic.c:130: break;
+                                    428 ;src/Graphic.c:129: break;
     000001C7 18 08            [12]  429 	jr	00108$
-                                    430 ;src/Graphic.c:131: case CLOCKWISE:
+                                    430 ;src/Graphic.c:130: case CLOCKWISE:
     000001C9                        431 00105$:
-                                    432 ;src/Graphic.c:132: x = 10;
-                                    433 ;src/Graphic.c:133: y = 2;
+                                    432 ;src/Graphic.c:131: x = 10;
+                                    433 ;src/Graphic.c:132: y = 2;
     000001C9 01 0A 02         [12]  434 	ld	bc, #0x20a
-                                    435 ;src/Graphic.c:134: break;
+                                    435 ;src/Graphic.c:133: break;
     000001CC 18 03            [12]  436 	jr	00108$
-                                    437 ;src/Graphic.c:135: case COUNTER_CLOCKWISE:
+                                    437 ;src/Graphic.c:134: case COUNTER_CLOCKWISE:
     000001CE                        438 00106$:
-                                    439 ;src/Graphic.c:136: x = 12;
-                                    440 ;src/Graphic.c:137: y = 2;
+                                    439 ;src/Graphic.c:135: x = 12;
+                                    440 ;src/Graphic.c:136: y = 2;
     000001CE 01 0C 02         [12]  441 	ld	bc, #0x20c
-                                    442 ;src/Graphic.c:142: }
+                                    442 ;src/Graphic.c:141: }
     000001D1                        443 00108$:
-                                    444 ;src/Graphic.c:144: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset + 1);
+                                    444 ;src/Graphic.c:143: set_win_tile_xy(x,y, new_value + hud_selectorTileOffset + 1);
     000001D1 7B               [ 4]  445 	ld	a, e
     000001D2 C6 61            [ 8]  446 	add	a, #0x61
     000001D4 F5               [16]  447 	push	af
@@ -449,7 +449,7 @@
     000001D6 58               [ 4]  449 	ld	e, b
     000001D7 79               [ 4]  450 	ld	a, c
     000001D8 CDr00r00         [24]  451 	call	_set_win_tile_xy
-                                    452 ;src/Graphic.c:145: }
+                                    452 ;src/Graphic.c:144: }
     000001DB C9               [16]  453 	ret
                                     454 	.area _CODE
                                     455 	.area _INITIALIZER

@@ -26,10 +26,6 @@ Character p;
 Pointer s;
 GameState last_state;
 
-HUD_button hud_buttons[] = {
-    {16,2,BOT_DELETE,NULL}
-};
-
 void init_gfx(void){
     //player
     set_sprite_data(0, 4, duck);
@@ -71,6 +67,8 @@ void init_gfx(void){
     // Activa la window
     set_win_data(96,44, hud_tiles);
     set_win_tiles(0,0,20,4, hud_selector);
+    draw_game_hud_buttons();
+
     SHOW_WIN;
     WX_REG = 7;      // SIEMPRE 7
     WY_REG = 120;    // 144 - 24
@@ -112,10 +110,6 @@ void main(void)
                 last_state = STATE_GAME_SETTING;
             }
             update_pointer(&s);
-            if(joypad() & J_START){
-                hide_pointer();
-                update_game_state(STATE_GAME_RUNNING);
-            }
             break;
 
         case STATE_GAME_RUNNING:

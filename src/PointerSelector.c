@@ -4,6 +4,7 @@
 #include "Headers/Object.h"
 #include "Headers/Graphic.h"
 #include "../res/hud_selector.h"
+#include "Headers/HUD_button.h"
 #include <gb/gb.h>
 #include <stdio.h>
 
@@ -100,10 +101,11 @@ void control_pointer(Pointer* s){
                 s->x += 8;
             }
         } else if(joypad() & J_A) {
-            if(block_is_not_placed_below(s) 
-            && (global_blocks_available[global_selected_block]>0)
-            && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1) , 16, 16) == 255){
-                place_object_at_pointer(s, global_selected_block + 6);
+            if(global_selected_block < NUMBER_OF_BLOCKS
+            && block_is_not_placed_below(s)
+            && (global_blocks_available[global_selected_block] > 0)
+            && check_colision_with_object(s->x - (16 >> 1), s->y - (16 >> 1), 16, 16) == 255) {
+                place_object_at_pointer(s, global_selected_block + RIGHT);
             }
         } else if(joypad() & J_B) {
             uint8_t block = block_is_placed_below(s);
@@ -119,23 +121,33 @@ void control_pointer(Pointer* s){
             }
             set_win_tile_xy(0,1,hud_selectorTileOffset+26);
         }
-
     } else { //esta seleccionado el HUD
-
         if(joypad() & J_LEFT) {
+            uint8_t previous = global_selected_block;
+
             move_foward_block_id(1);
             move_sprite_block_pointer(global_selected_block);
+            update_game_hud_button_selection(previous, global_selected_block);
+
         } else if(joypad() & J_RIGHT) {
+            uint8_t previous = global_selected_block;
+
             move_foward_block_id(0);
             move_sprite_block_pointer(global_selected_block);
+            update_game_hud_button_selection(previous, global_selected_block);
+
+        } else if(joypad() & J_A) {
+            press_game_hud_button(global_selected_block);
 
         } else if(joypad() & J_SELECT) {
             global_hud_selected = !global_hud_selected;
             move_sprite_block_pointer(global_selected_block);
-            for(uint8_t i = 1;i<=4;i++){
+
+            for(uint8_t i = 1; i <= 4; i++) {
                 WY_REG = 116 + i;
                 delay(10);
             }
+
             set_win_tile_xy(0,1,hud_selectorTileOffset+27);
         }
     }
@@ -144,12 +156,15 @@ void control_pointer(Pointer* s){
 void update_pointer(Pointer* s) { 
     s->tileindexBR = tileindex_from_xy(s->x, s->y);
     control_pointer(s);
-    move_pointer(s);
+    if(global_game_state == STATE_GAME_SETTING) {
+        move_pointer(s);
+    }
 }
 
 void hide_pointer(void){
     for(uint8_t i= 4; i<=7; i++){
         move_sprite(i, 0, 0);
     }
+    move_sprite(16, 0, 0);
 }
 
