@@ -92,12 +92,21 @@ void main(void)
             }
 
             if(joypad() & J_START){
-                update_game_state(STATE_GAME_SETTING);
+                update_game_state(STATE_SELECTION);
             }
 
             performantdelay(5);
             break;
+        
+        case STATE_SELECTION:
+            if(last_state != STATE_SELECTION) {
+                    init_start_selection_menu();
+                    last_state = STATE_SELECTION;
+            }
 
+            update_start_selection_menu();
+            break;
+        
         
         case STATE_GAME_SETTING:
             if(last_state != STATE_GAME_SETTING) {

@@ -13,6 +13,8 @@
 	.globl _print_objects_in_screen
 	.globl _update_pointer
 	.globl _pointer_init
+	.globl _update_start_selection_menu
+	.globl _init_start_selection_menu
 	.globl _init_level
 	.globl _get_colision_from_map
 	.globl _update_game_state
@@ -214,21 +216,29 @@ _main::
 	ld	(#_global_game_state), a
 	ld	(#_global_actual_level),a
 ;src/main.c:84: while(1) {
-00123$:
+00126$:
 ;src/main.c:85: switch (global_game_state)
-	ld	a, (#_global_game_state)
-	or	a, a
-	jr	Z, 00101$
-	ld	a, (#_global_game_state)
-	sub	a, #0x02
-	jr	Z, 00106$
-	ld	a, (#_global_game_state)
-	sub	a, #0x03
-	jr	Z, 00109$
-	ld	a, (#_global_game_state)
-	sub	a, #0x05
-	jp	Z, 00115$
-	jp	00121$
+	ld	a, #0x05
+	ld	hl, #_global_game_state
+	sub	a, (hl)
+	jp	C, 00124$
+	ld	c, (hl)
+	ld	b, #0x00
+	ld	hl, #00218$
+	add	hl, bc
+	add	hl, bc
+	ld	c, (hl)
+	inc	hl
+	ld	h, (hl)
+	ld	l, c
+	jp	(hl)
+00218$:
+	.dw	00101$
+	.dw	00106$
+	.dw	00109$
+	.dw	00112$
+	.dw	00124$
+	.dw	00118$
 ;src/main.c:88: case STATE_MENU:
 00101$:
 ;src/main.c:89: if(last_state != STATE_MENU) {
@@ -245,31 +255,46 @@ _main::
 	call	_joypad
 	rlca
 	jr	NC, 00105$
-;src/main.c:95: update_game_state(STATE_GAME_SETTING);
-	ld	a, #0x02
+;src/main.c:95: update_game_state(STATE_SELECTION);
+	ld	a, #0x01
 	call	_update_game_state
 00105$:
 ;src/main.c:98: performantdelay(5);
 	ld	a, #0x05
 	call	_performantdelay
 ;src/main.c:99: break;
-	jp	00121$
-;src/main.c:102: case STATE_GAME_SETTING:
+	jp	00124$
+;src/main.c:101: case STATE_SELECTION:
 00106$:
-;src/main.c:103: if(last_state != STATE_GAME_SETTING) {
+;src/main.c:102: if(last_state != STATE_SELECTION) {
+	ld	a, (#_last_state)
+	dec	a
+	jr	Z, 00108$
+;src/main.c:103: init_start_selection_menu();
+	call	_init_start_selection_menu
+;src/main.c:104: last_state = STATE_SELECTION;
+	ld	hl, #_last_state
+	ld	(hl), #0x01
+00108$:
+;src/main.c:107: update_start_selection_menu();
+	call	_update_start_selection_menu
+;src/main.c:108: break;
+	jp	00124$
+;src/main.c:111: case STATE_GAME_SETTING:
+00109$:
+;src/main.c:112: if(last_state != STATE_GAME_SETTING) {
 	ld	a, (#_last_state)
 	sub	a, #0x02
-	jr	Z, 00108$
-;src/main.c:104: init_gfx();
+	jr	Z, 00111$
+;src/main.c:113: init_gfx();
 	call	_init_gfx
-;src/main.c:105: pointer_init(&s);
+;src/main.c:114: pointer_init(&s);
 	ld	de, #_s
 	call	_pointer_init
-;src/main.c:106: init_level(global_actual_level);
+;src/main.c:115: init_level(global_actual_level);
 	ld	a, (_global_actual_level)
 	call	_init_level
-;src/main.c:107: get_colision_from_map(global_levels_array[global_actual_level], global_colision_map);
-	ld	bc, #_global_colision_map+0
+;src/main.c:116: get_colision_from_map(global_levels_array[global_actual_level], global_colision_map);
 	ld	a, (_global_actual_level)
 	ld	h, #0x00
 	ld	l, a
@@ -278,55 +303,56 @@ _main::
 	add	hl, de
 	ld	a, (hl+)
 	ld	l, (hl)
+	ld	bc, #_global_colision_map
 	ld	e, a
 	ld	d, l
 	call	_get_colision_from_map
-;src/main.c:109: print_objects_in_screen();
+;src/main.c:118: print_objects_in_screen();
 	call	_print_objects_in_screen
-;src/main.c:110: last_state = STATE_GAME_SETTING;
+;src/main.c:119: last_state = STATE_GAME_SETTING;
 	ld	hl, #_last_state
 	ld	(hl), #0x02
-00108$:
-;src/main.c:112: update_pointer(&s);
+00111$:
+;src/main.c:121: update_pointer(&s);
 	ld	de, #_s
 	call	_update_pointer
-;src/main.c:113: break;
-	jr	00121$
-;src/main.c:115: case STATE_GAME_RUNNING:
-00109$:
-;src/main.c:116: if(last_state != STATE_GAME_RUNNING) {
+;src/main.c:122: break;
+	jr	00124$
+;src/main.c:124: case STATE_GAME_RUNNING:
+00112$:
+;src/main.c:125: if(last_state != STATE_GAME_RUNNING) {
 	ld	a, (#_last_state)
 	sub	a, #0x03
-	jr	Z, 00111$
-;src/main.c:117: character_init(&p);
+	jr	Z, 00114$
+;src/main.c:126: character_init(&p);
 	ld	de, #_p
 	call	_character_init
-;src/main.c:118: last_state = STATE_GAME_RUNNING;
+;src/main.c:127: last_state = STATE_GAME_RUNNING;
 	ld	hl, #_last_state
 	ld	(hl), #0x03
-00111$:
-;src/main.c:120: update_character(&p);
+00114$:
+;src/main.c:129: update_character(&p);
 	ld	de, #_p
 	call	_update_character
-;src/main.c:123: if(joypad() & J_A){
+;src/main.c:132: if(joypad() & J_A){
 	call	_joypad
 	bit	4, a
-	jr	Z, 00121$
-;src/main.c:124: HIDE_WIN;
+	jr	Z, 00124$
+;src/main.c:133: HIDE_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xdf
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:126: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/main.c:135: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	ld	bc, #0x0000
-00126$:
+00129$:
 	ld	e, c
 	ld	d, b
 	ld	a, e
 	sub	a, #0x2c
 	ld	a, d
 	sbc	a, #0x01
-	jr	NC, 00121$
-;src/main.c:127: printf("%d",global_colision_map[i]);
+	jr	NC, 00124$
+;src/main.c:136: printf("%d",global_colision_map[i]);
 	ld	hl, #_global_colision_map
 	add	hl, bc
 	ld	e, (hl)
@@ -339,38 +365,38 @@ _main::
 	call	_printf
 	add	sp, #4
 	pop	bc
-;src/main.c:126: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/main.c:135: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	inc	bc
-	jr	00126$
-;src/main.c:134: case STATE_GAME_OVER:
-00115$:
-;src/main.c:135: if(last_state != STATE_GAME_OVER) {
+	jr	00129$
+;src/main.c:143: case STATE_GAME_OVER:
+00118$:
+;src/main.c:144: if(last_state != STATE_GAME_OVER) {
 	ld	a, (#_last_state)
 	sub	a, #0x05
-	jr	Z, 00117$
-;src/main.c:136: last_state = STATE_GAME_OVER;
+	jr	Z, 00120$
+;src/main.c:145: last_state = STATE_GAME_OVER;
 	ld	hl, #_last_state
 	ld	(hl), #0x05
-;src/main.c:137: printf("You WIN!\nPress start to try again");
+;src/main.c:146: printf("You WIN!\nPress start to try again");
 	ld	de, #___str_1
 	push	de
 	call	_printf
 	pop	hl
-00117$:
-;src/main.c:139: if(joypad() & J_START){
+00120$:
+;src/main.c:148: if(joypad() & J_START){
 	call	_joypad
 	rlca
-	jr	NC, 00121$
-;src/main.c:140: update_game_state(STATE_GAME_SETTING);
+	jr	NC, 00124$
+;src/main.c:149: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	call	_update_game_state
-;src/main.c:146: }
-00121$:
-;src/main.c:147: performantdelay(10);
+;src/main.c:155: }
+00124$:
+;src/main.c:156: performantdelay(10);
 	ld	a, #0x0a
 	call	_performantdelay
-;src/main.c:149: }
-	jp	00123$
+;src/main.c:158: }
+	jp	00126$
 ___str_0:
 	.ascii "%d"
 	.db 0x00

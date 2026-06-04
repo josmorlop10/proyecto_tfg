@@ -10,8 +10,8 @@ Symbol Table
     _LCDC_REG                                                       ******** GX
     _WX_REG                                                         ******** GX
     _WY_REG                                                         ******** GX
-  0 ___str_0                                                        000001DF R
-  0 ___str_1                                                        000001E2 R
+  0 ___str_0                                                        000001F6 R
+  0 ___str_1                                                        000001F9 R
     _block_pointer                                                  ******** GX
     _character_init                                                 ******** GX
     _draw_game_hud_buttons                                          ******** GX
@@ -26,6 +26,7 @@ Symbol Table
     _init_game_title                                                ******** GX
   0 _init_gfx                                                       00000000 GR
     _init_level                                                     ******** GX
+    _init_start_selection_menu                                      ******** GX
     _joypad                                                         ******** GX
   1 _last_state                                                     00000017 GR
   0 _main                                                           000000EC GR
@@ -47,6 +48,7 @@ Symbol Table
     _update_character                                               ******** GX
     _update_game_state                                              ******** GX
     _update_pointer                                                 ******** GX
+    _update_start_selection_menu                                    ******** GX
 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
@@ -54,7 +56,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      204   flags    0
+   0 _CODE                                      size      21B   flags    0
    1 _DATA                                      size       18   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

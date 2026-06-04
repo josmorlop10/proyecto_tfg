@@ -77,5 +77,8 @@ void init_level(uint8_t level_number);
 uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah, uint8_t bx, uint8_t by, uint8_t bw, uint8_t bh);
 void read_global_object_info_from_map(unsigned char* objects_map);
 void read_global_block_info_from_map(unsigned char* blocks_map);
+void init_start_selection_menu(void);
+void update_start_selection_menu(void);
+
 
 #endif

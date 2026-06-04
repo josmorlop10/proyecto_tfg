@@ -9,6 +9,10 @@
 #include "../res/map2.h"
 #include "../res/map_test.h"
 #include "../res/png_prueba.h"
+#include "../res/selection_menu.h"
+#include "../res/map_tiles_alt.h"
+
+
 #include "Headers/HUD_button.h"
 
 
@@ -176,3 +180,13 @@ void move_foward_block_id(uint8_t button_pressed){
     }
 }
 
+void init_start_selection_menu(void){
+    set_bkg_data(0,232,map_tiles_alt);
+    set_bkg_tiles(0,0,20,18,selection_menu);
+    SHOW_BKG;
+}
+void update_start_selection_menu(void){
+    if(joypad() & J_START){
+        update_game_state(STATE_GAME_SETTING);
+    }
+}

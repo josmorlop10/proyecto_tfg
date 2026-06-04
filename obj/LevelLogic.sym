@@ -42,9 +42,12 @@ Symbol Table
   2 _global_selected_block                                          00000132 GR
   0 _init_game_title                                                00000000 GR
   0 _init_level                                                     0000002A GR
+  0 _init_start_selection_menu                                      00000363 GR
+    _joypad                                                         ******** GX
     _map1_alt                                                       ******** GX
     _map2                                                           ******** GX
     _map_test                                                       ******** GX
+    _map_tiles_alt                                                  ******** GX
   0 _move_foward_block_id                                           00000337 GR
     _objects_map1_alt                                               ******** GX
     _objects_map2                                                   ******** GX
@@ -53,17 +56,25 @@ Symbol Table
     _png_prueba_tiles                                               ******** GX
   0 _read_global_block_info_from_map                                000001D6 GR
   0 _read_global_object_info_from_map                               00000153 GR
+    _selection_menu                                                 ******** GX
     _set_bkg_data                                                   ******** GX
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
+Hexadecimal [32-Bits]
+
+Symbol Table
+
     _set_bkg_tiles                                                  ******** GX
   0 _update_game_state                                              000000AA GR
+  0 _update_start_selection_menu                                    00000387 GR
     _update_values_in_hud                                           ******** GX
 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 3
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      363   flags    0
+   0 _CODE                                      size      391   flags    0
    1 _DATA                                      size       2C   flags    0
    2 _INITIALIZED                               size      148   flags    0
    3 _DABS                                      size        0   flags    8
