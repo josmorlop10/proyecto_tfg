@@ -20,10 +20,15 @@
 #include "Headers/PointerSelector.h"
 #include "Headers/Object.h"
 #include "Headers/Graphic.h"
+#include "Headers/HUD_button.h"
 
 Character p;
 Pointer s;
 GameState last_state;
+
+HUD_button hud_buttons[] = {
+    {16,2,BOT_DELETE,NULL}
+};
 
 void init_gfx(void){
     //player

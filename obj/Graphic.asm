@@ -337,8 +337,8 @@ _move_sprite_block_pointer::
 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
 	ld	hl, #(_shadow_OAM + 64)
 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-	ld	(hl), e
-	inc	hl
+	ld	a, e
+	ld	(hl+), a
 	ld	(hl), c
 ;src/Graphic.c:90: move_sprite(16, 24 + direction * 16 , 144 - global_hud_selected * 4);
 	ret
@@ -349,11 +349,9 @@ _move_sprite_block_pointer::
 	xor	a, a
 	ld	(hl+), a
 	ld	(hl), a
-;src/Graphic.c:93: change_win_tile_16x16(58,35);
-	ld	a, #0x23
-	ld	de, #0x003a
+;src/Graphic.c:92: move_sprite(16, 0 , 0);
 ;src/Graphic.c:95: }
-	jp	_change_win_tile_16x16
+	ret
 ;src/Graphic.c:98: void print_counter(void){
 ;	---------------------------------
 ; Function print_counter

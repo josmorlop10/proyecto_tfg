@@ -50,6 +50,7 @@ void change_bkg_tile_16x16(uint16_t tile_index, uint8_t tile_id_BR){
     set_bkg_tiles(x-1,y-1,1,1,&tile_id_TL);
 }
 
+//Changing graphics HUD (WIN)
 
 void change_win_tile_16x16(uint16_t tile_index, uint8_t tile_id_BR){
 
@@ -75,8 +76,6 @@ void change_win_tile_16x16(uint16_t tile_index, uint8_t tile_id_BR){
     set_win_tiles(x,y-1,1,1,&tile_id_TR);
     set_win_tiles(x-1,y-1,1,1,&tile_id_TL);
 }
-
-//Changing graphics HUD (WIN)
 
 void move_sprite_block_pointer(uint8_t direction){
     //0 der
