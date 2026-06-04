@@ -8,6 +8,7 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _take_effect
+	.globl _hide_character
 	.globl _change_bkg_tile_16x16
 	.globl _check_colision_with_object
 	.globl _hide_object
@@ -260,11 +261,38 @@ _move_character::
 	ld	(hl+), a
 	ld	(hl), c
 ;src/Character.c:40: move_sprite(3, p->x, p->y);
-;src/Character.c:42: }
+;src/Character.c:41: }
 	inc	sp
 	inc	sp
 	ret
-;src/Character.c:44: uint8_t canplayermove(Character* p){
+;src/Character.c:43: void hide_character(void){
+;	---------------------------------
+; Function hide_character
+; ---------------------------------
+_hide_character::
+;src/Character.c:44: for(uint8_t i = 0;i<=3;i++){
+	ld	c, #0x00
+00104$:
+	ld	a, #0x03
+	sub	a, c
+	ret	C
+;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+	ld	de, #_shadow_OAM+0
+	ld	l, c
+	xor	a, a
+	ld	h, a
+	add	hl, hl
+	add	hl, hl
+	add	hl, de
+;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
+	xor	a, a
+	ld	(hl+), a
+	ld	(hl), a
+;src/Character.c:44: for(uint8_t i = 0;i<=3;i++){
+	inc	c
+;src/Character.c:47: }
+	jr	00104$
+;src/Character.c:49: uint8_t canplayermove(Character* p){
 ;	---------------------------------
 ; Function canplayermove
 ; ---------------------------------
@@ -273,7 +301,7 @@ _canplayermove::
 	ldhl	sp,	#12
 	ld	a, e
 	ld	(hl+), a
-;src/Character.c:46: uint8_t event = player_tileBR_over_a_block(p->tileindexBR);
+;src/Character.c:51: uint8_t event = player_tileBR_over_a_block(p->tileindexBR);
 	ld	a, d
 	ld	(hl-), a
 	ld	a, (hl+)
@@ -303,7 +331,7 @@ _canplayermove::
 	ld	d, (hl)
 	call	_player_tileBR_over_a_block
 	ld	c, a
-;src/Character.c:71: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
+;src/Character.c:76: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
 	ldhl	sp,#12
 	ld	a, (hl+)
 	ld	e, a
@@ -318,15 +346,15 @@ _canplayermove::
 	ld	a, h
 	ldhl	sp,	#11
 	ld	(hl), a
-;src/Character.c:47: if(event != EMPTY){
+;src/Character.c:52: if(event != EMPTY){
 	ld	a, c
 	or	a, a
 	jp	Z, 00113$
-;src/Character.c:48: if(global_blocks_active){
+;src/Character.c:53: if(global_blocks_active){
 	ld	a, (#_global_blocks_active)
 	or	a, a
 	jp	Z, 00110$
-;src/Character.c:49: switch(event){
+;src/Character.c:54: switch(event){
 	ld	a, c
 	sub	a, #0x06
 	jr	C, 00108$
@@ -352,9 +380,9 @@ _canplayermove::
 	.dw	00104$
 	.dw	00105$
 	.dw	00106$
-;src/Character.c:50: case RIGHT:
+;src/Character.c:55: case RIGHT:
 00101$:
-;src/Character.c:51: set_direction(p, 1, 0);
+;src/Character.c:56: set_direction(p, 1, 0);
 	xor	a, a
 	push	af
 	inc	sp
@@ -364,11 +392,11 @@ _canplayermove::
 	inc	hl
 	ld	d, (hl)
 	call	_set_direction
-;src/Character.c:52: break;
+;src/Character.c:57: break;
 	jr	00108$
-;src/Character.c:53: case LEFT:
+;src/Character.c:58: case LEFT:
 00102$:
-;src/Character.c:54: set_direction(p, -1, 0);
+;src/Character.c:59: set_direction(p, -1, 0);
 	xor	a, a
 	push	af
 	inc	sp
@@ -378,11 +406,11 @@ _canplayermove::
 	inc	hl
 	ld	d, (hl)
 	call	_set_direction
-;src/Character.c:55: break;
+;src/Character.c:60: break;
 	jr	00108$
-;src/Character.c:56: case UP:
+;src/Character.c:61: case UP:
 00103$:
-;src/Character.c:57: set_direction(p, 0, -1);
+;src/Character.c:62: set_direction(p, 0, -1);
 	ld	a, #0xff
 	push	af
 	inc	sp
@@ -392,11 +420,11 @@ _canplayermove::
 	inc	hl
 	ld	d, (hl)
 	call	_set_direction
-;src/Character.c:58: break;
+;src/Character.c:63: break;
 	jr	00108$
-;src/Character.c:59: case DOWN:
+;src/Character.c:64: case DOWN:
 00104$:
-;src/Character.c:60: set_direction(p, 0, 1);
+;src/Character.c:65: set_direction(p, 0, 1);
 	ld	a, #0x01
 	push	af
 	inc	sp
@@ -406,31 +434,31 @@ _canplayermove::
 	inc	hl
 	ld	d, (hl)
 	call	_set_direction
-;src/Character.c:61: break;
+;src/Character.c:66: break;
 	jr	00108$
-;src/Character.c:62: case CLOCKWISE:
+;src/Character.c:67: case CLOCKWISE:
 00105$:
-;src/Character.c:63: rotate_direction(p, 1);
+;src/Character.c:68: rotate_direction(p, 1);
 	ld	a, #0x01
 	ldhl	sp,	#12
 	ld	e, (hl)
 	inc	hl
 	ld	d, (hl)
 	call	_rotate_direction
-;src/Character.c:64: break;
+;src/Character.c:69: break;
 	jr	00108$
-;src/Character.c:65: case COUNTER_CLOCKWISE:
+;src/Character.c:70: case COUNTER_CLOCKWISE:
 00106$:
-;src/Character.c:66: rotate_direction(p, 0);
+;src/Character.c:71: rotate_direction(p, 0);
 	xor	a, a
 	ldhl	sp,	#12
 	ld	e, (hl)
 	inc	hl
 	ld	d, (hl)
 	call	_rotate_direction
-;src/Character.c:70: }
+;src/Character.c:75: }
 00108$:
-;src/Character.c:71: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
+;src/Character.c:76: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
 	ldhl	sp,#12
 	ld	a, (hl+)
 	ld	e, a
@@ -489,11 +517,11 @@ _canplayermove::
 	ld	(hl), b
 	jr	00113$
 00110$:
-;src/Character.c:73: global_blocks_active = 1;
+;src/Character.c:78: global_blocks_active = 1;
 	ld	hl, #_global_blocks_active
 	ld	(hl), #0x01
 00113$:
-;src/Character.c:77: uint16_t tileindexBR = p->next_tileindexBR;
+;src/Character.c:82: uint16_t tileindexBR = p->next_tileindexBR;
 	ldhl	sp,#10
 	ld	a, (hl+)
 	ld	e, a
@@ -504,7 +532,7 @@ _canplayermove::
 	inc	de
 	ld	a, (de)
 	ld	(hl), a
-;src/Character.c:78: uint8_t col = tileindexBR % 20;
+;src/Character.c:83: uint8_t col = tileindexBR % 20;
 	pop	de
 	push	de
 	push	de
@@ -513,13 +541,13 @@ _canplayermove::
 	pop	de
 	ldhl	sp,	#2
 	ld	(hl), c
-;src/Character.c:79: uint8_t row = tileindexBR / 20;
+;src/Character.c:84: uint8_t row = tileindexBR / 20;
 	push	de
 	ld	bc, #0x0014
 	call	__divuint
 	pop	de
 	ldhl	sp,	#3
-;src/Character.c:80: uint16_t tileindexTL = tileindexBR - 21;
+;src/Character.c:85: uint16_t tileindexTL = tileindexBR - 21;
 	ld	a, c
 	ld	(hl+), a
 	ld	a, e
@@ -529,8 +557,8 @@ _canplayermove::
 	adc	a, #0xff
 	ld	(hl), c
 	inc	hl
-;src/Character.c:81: uint16_t tileindexTR = tileindexBR - 20;
-;src/Character.c:82: uint16_t tileindexBL = tileindexBR - 1;
+;src/Character.c:86: uint16_t tileindexTR = tileindexBR - 20;
+;src/Character.c:87: uint16_t tileindexBL = tileindexBR - 1;
 	ld	(hl+), a
 	ld	a, e
 	add	a, #0xec
@@ -542,7 +570,7 @@ _canplayermove::
 	ld	a, e
 	ld	(hl+), a
 	ld	(hl), d
-;src/Character.c:84: uint8_t isDoorTL = (row > 0 && col > 0) && (global_colision_map[tileindexTL] == DOOR);
+;src/Character.c:89: uint8_t isDoorTL = (row > 0 && col > 0) && (global_colision_map[tileindexTL] == DOOR);
 	ldhl	sp,	#3
 	ld	a, (hl)
 	or	a, a
@@ -571,7 +599,7 @@ _canplayermove::
 00131$:
 	ldhl	sp,	#8
 	ld	(hl), a
-;src/Character.c:85: uint8_t isDoorTR = (row > 0) && (global_colision_map[tileindexTR] == DOOR);
+;src/Character.c:90: uint8_t isDoorTR = (row > 0) && (global_colision_map[tileindexTR] == DOOR);
 	ldhl	sp,	#3
 	ld	a, (hl)
 	or	a, a
@@ -589,7 +617,7 @@ _canplayermove::
 00137$:
 	ldhl	sp,	#9
 	ld	(hl), a
-;src/Character.c:86: uint8_t isDoorBL = (col > 0) && (global_colision_map[tileindexBL] == DOOR);
+;src/Character.c:91: uint8_t isDoorBL = (col > 0) && (global_colision_map[tileindexBL] == DOOR);
 	ldhl	sp,	#2
 	ld	a, (hl)
 	or	a, a
@@ -613,7 +641,7 @@ _canplayermove::
 00140$:
 	ldhl	sp,	#10
 	ld	(hl), a
-;src/Character.c:87: uint8_t isDoorBR = (global_colision_map[tileindexBR] == DOOR);
+;src/Character.c:92: uint8_t isDoorBR = (global_colision_map[tileindexBR] == DOOR);
 	ld	de, #_global_colision_map
 	pop	hl
 	push	hl
@@ -629,7 +657,7 @@ _canplayermove::
 	xor	a, a
 00318$:
 	ld	e, a
-;src/Character.c:89: if (isDoorTL && isDoorTR && isDoorBL && isDoorBR) {
+;src/Character.c:94: if (isDoorTL && isDoorTR && isDoorBL && isDoorBR) {
 	ldhl	sp,	#8
 	ld	a, (hl)
 	or	a, a
@@ -645,32 +673,32 @@ _canplayermove::
 	ld	a, e
 	or	a, a
 	jr	Z, 00118$
-;src/Character.c:90: if(global_keyset > 0){
+;src/Character.c:95: if(global_keyset > 0){
 	ld	hl, #_global_keyset
 	ld	a, (hl)
 	or	a, a
 	jr	Z, 00115$
-;src/Character.c:91: global_keyset--;
+;src/Character.c:96: global_keyset--;
 	dec	(hl)
-;src/Character.c:92: change_colision_map_at(tileindexBR, EMPTY);
+;src/Character.c:97: change_colision_map_at(tileindexBR, EMPTY);
 	xor	a, a
 	pop	de
 	push	de
 	call	_change_colision_map_at
-;src/Character.c:93: change_bkg_tile_16x16(tileindexBR, 0);
+;src/Character.c:98: change_bkg_tile_16x16(tileindexBR, 0);
 	xor	a, a
 	pop	de
 	push	de
 	call	_change_bkg_tile_16x16
-;src/Character.c:94: return 1;
+;src/Character.c:99: return 1;
 	ld	a, #0x01
 	jr	00127$
 00115$:
-;src/Character.c:96: return 0;
+;src/Character.c:101: return 0;
 	xor	a, a
 	jr	00127$
 00118$:
-;src/Character.c:100: uint8_t solidTL = (row == 0 || col == 0) || (global_colision_map[tileindexTL] == SOLID);
+;src/Character.c:105: uint8_t solidTL = (row == 0 || col == 0) || (global_colision_map[tileindexTL] == SOLID);
 	ldhl	sp,	#3
 	ld	a, (hl)
 	or	a, a
@@ -694,7 +722,7 @@ _canplayermove::
 00142$:
 	ld	e, #0x01
 00143$:
-;src/Character.c:101: uint8_t solidTR = (row == 0) || (global_colision_map[tileindexTR] == SOLID);
+;src/Character.c:106: uint8_t solidTR = (row == 0) || (global_colision_map[tileindexTR] == SOLID);
 	ldhl	sp,	#3
 	ld	a, (hl)
 	or	a, a
@@ -709,7 +737,7 @@ _canplayermove::
 00148$:
 	ld	d, #0x01
 00149$:
-;src/Character.c:102: uint8_t solidBL = (col == 0) || (global_colision_map[tileindexBL] == SOLID);
+;src/Character.c:107: uint8_t solidBL = (col == 0) || (global_colision_map[tileindexBL] == SOLID);
 	ldhl	sp,	#2
 	ld	a, (hl)
 	or	a, a
@@ -731,7 +759,7 @@ _canplayermove::
 00151$:
 	ld	c, #0x01
 00152$:
-;src/Character.c:103: uint8_t solidBR = (global_colision_map[tileindexBR] == SOLID);
+;src/Character.c:108: uint8_t solidBR = (global_colision_map[tileindexBR] == SOLID);
 	ldhl	sp,	#11
 	ld	a, (hl)
 	dec	a
@@ -739,7 +767,7 @@ _canplayermove::
 	jr	Z, 00323$
 	xor	a, a
 00323$:
-;src/Character.c:105: if (solidTL || solidTR || solidBL || solidBR) {
+;src/Character.c:110: if (solidTL || solidTR || solidBL || solidBR) {
 	inc	e
 	dec	e
 	jr	NZ, 00122$
@@ -752,27 +780,27 @@ _canplayermove::
 	or	a, a
 	jr	Z, 00123$
 00122$:
-;src/Character.c:106: return 0;
+;src/Character.c:111: return 0;
 	xor	a, a
 	jr	00127$
 00123$:
-;src/Character.c:109: return 1;
+;src/Character.c:114: return 1;
 	ld	a, #0x01
 00127$:
-;src/Character.c:110: }
+;src/Character.c:115: }
 	add	sp, #14
 	ret
-;src/Character.c:113: void set_direction(Character* p,  int8_t x, int8_t y){
+;src/Character.c:118: void set_direction(Character* p,  int8_t x, int8_t y){
 ;	---------------------------------
 ; Function set_direction
 ; ---------------------------------
 _set_direction::
 	ld	c, a
-;src/Character.c:114: p->dir_x = x;
+;src/Character.c:119: p->dir_x = x;
 	ld	hl, #0x0008
 	add	hl, de
 	ld	(hl), c
-;src/Character.c:115: p->dir_y = y;
+;src/Character.c:120: p->dir_y = y;
 	ld	hl, #0x0009
 	add	hl, de
 	ld	c, l
@@ -780,37 +808,37 @@ _set_direction::
 	ldhl	sp,	#2
 	ld	a, (hl)
 	ld	(bc), a
-;src/Character.c:116: }
+;src/Character.c:121: }
 	pop	hl
 	inc	sp
 	jp	(hl)
-;src/Character.c:118: void flip_direction(Character* p){
+;src/Character.c:123: void flip_direction(Character* p){
 ;	---------------------------------
 ; Function flip_direction
 ; ---------------------------------
 _flip_direction::
-;src/Character.c:119: p->dir_x = - p->dir_x;
+;src/Character.c:124: p->dir_x = - p->dir_x;
 	ld	hl, #0x0008
 	add	hl, de
 	xor	a, a
 	sub	a, (hl)
 	ld	(hl), a
-;src/Character.c:120: p->dir_y = - p->dir_y;
+;src/Character.c:125: p->dir_y = - p->dir_y;
 	ld	hl, #0x0009
 	add	hl, de
 	xor	a, a
 	sub	a, (hl)
 	ld	(hl), a
-;src/Character.c:121: }
+;src/Character.c:126: }
 	ret
-;src/Character.c:123: void rotate_direction(Character*p, uint8_t sentido){
+;src/Character.c:128: void rotate_direction(Character*p, uint8_t sentido){
 ;	---------------------------------
 ; Function rotate_direction
 ; ---------------------------------
 _rotate_direction::
 	dec	sp
 	ld	l, a
-;src/Character.c:126: int8_t aux_x = p->dir_x;
+;src/Character.c:131: int8_t aux_x = p->dir_x;
 	ld	a, e
 	add	a, #0x08
 	ld	c, a
@@ -822,7 +850,7 @@ _rotate_direction::
 	ldhl	sp,	#2
 	ld	(hl), a
 	pop	hl
-;src/Character.c:130: p->dir_x = -p->dir_y;
+;src/Character.c:135: p->dir_x = -p->dir_y;
 	ld	a, e
 	add	a, #0x09
 	ld	e, a
@@ -831,40 +859,40 @@ _rotate_direction::
 00113$:
 	ld	a, (de)
 	ld	h, a
-;src/Character.c:128: if(sentido){
+;src/Character.c:133: if(sentido){
 	ld	a, l
 	or	a, a
 	jr	Z, 00102$
-;src/Character.c:130: p->dir_x = -p->dir_y;
+;src/Character.c:135: p->dir_x = -p->dir_y;
 	xor	a, a
 	sub	a, h
 	ld	(bc), a
-;src/Character.c:131: p->dir_y = aux_x;
+;src/Character.c:136: p->dir_y = aux_x;
 	ldhl	sp,	#0
 	ld	a, (hl)
 	ld	(de), a
 	jr	00104$
 00102$:
-;src/Character.c:134: p->dir_x = p->dir_y;
+;src/Character.c:139: p->dir_x = p->dir_y;
 	ld	a, h
 	ld	(bc), a
-;src/Character.c:135: p->dir_y = -aux_x;
+;src/Character.c:140: p->dir_y = -aux_x;
 	xor	a, a
 	ldhl	sp,	#0
 	sub	a, (hl)
 	ld	(de), a
 00104$:
-;src/Character.c:138: }
+;src/Character.c:143: }
 	inc	sp
 	ret
-;src/Character.c:140: void take_effect(Character* p, uint8_t index){
+;src/Character.c:145: void take_effect(Character* p, uint8_t index){
 ;	---------------------------------
 ; Function take_effect
 ; ---------------------------------
 _take_effect::
 	ld	c, e
 	ld	b, d
-;src/Character.c:145: uint8_t type = global_object_information[index*3+2];
+;src/Character.c:150: uint8_t type = global_object_information[index*3+2];
 	ld	e, a
 	add	a, a
 	add	a, e
@@ -876,7 +904,7 @@ _take_effect::
 	ld	hl, #_global_object_information
 	add	hl, de
 	ld	a, (hl)
-;src/Character.c:146: switch (type)
+;src/Character.c:151: switch (type)
 	cp	a, #0x08
 	ret	C
 	cp	a, #0x10
@@ -901,16 +929,16 @@ _take_effect::
 	.dw	00101$
 	.dw	00107$
 	.dw	00111$
-;src/Character.c:148: case NO_ACTION:
+;src/Character.c:153: case NO_ACTION:
 00101$:
-;src/Character.c:149: global_blocks_active = 0;
+;src/Character.c:154: global_blocks_active = 0;
 	xor	a, a
 	ld	(#_global_blocks_active),a
-;src/Character.c:150: break;
+;src/Character.c:155: break;
 	ret
-;src/Character.c:152: case GO_RIGHT:
+;src/Character.c:157: case GO_RIGHT:
 00102$:
-;src/Character.c:153: set_direction(p,1,0);
+;src/Character.c:158: set_direction(p,1,0);
 	xor	a, a
 	push	af
 	inc	sp
@@ -918,11 +946,11 @@ _take_effect::
 	ld	e, c
 	ld	d, b
 	call	_set_direction
-;src/Character.c:154: break;
+;src/Character.c:159: break;
 	ret
-;src/Character.c:156: case GO_LEFT:
+;src/Character.c:161: case GO_LEFT:
 00103$:
-;src/Character.c:157: set_direction(p,-1,0);
+;src/Character.c:162: set_direction(p,-1,0);
 	xor	a, a
 	push	af
 	inc	sp
@@ -930,11 +958,11 @@ _take_effect::
 	ld	e, c
 	ld	d, b
 	call	_set_direction
-;src/Character.c:158: break;
+;src/Character.c:163: break;
 	ret
-;src/Character.c:160: case GO_UP:
+;src/Character.c:165: case GO_UP:
 00104$:
-;src/Character.c:161: set_direction(p,0,-1);
+;src/Character.c:166: set_direction(p,0,-1);
 	ld	a, #0xff
 	push	af
 	inc	sp
@@ -942,11 +970,11 @@ _take_effect::
 	ld	e, c
 	ld	d, b
 	call	_set_direction
-;src/Character.c:162: break;
+;src/Character.c:167: break;
 	ret
-;src/Character.c:164: case GO_DOWN:
+;src/Character.c:169: case GO_DOWN:
 00105$:
-;src/Character.c:165: set_direction(p,0,1);
+;src/Character.c:170: set_direction(p,0,1);
 	ld	a, #0x01
 	push	af
 	inc	sp
@@ -954,25 +982,25 @@ _take_effect::
 	ld	e, c
 	ld	d, b
 	call	_set_direction
-;src/Character.c:166: break;
+;src/Character.c:171: break;
 	ret
-;src/Character.c:168: case TURN_AROUND:
+;src/Character.c:173: case TURN_AROUND:
 00106$:
-;src/Character.c:169: flip_direction(p);
+;src/Character.c:174: flip_direction(p);
 	ld	e, c
-;src/Character.c:170: break;
+;src/Character.c:175: break;
 	ld	d, b
 	jp	_flip_direction
-;src/Character.c:172: case KEY:
+;src/Character.c:177: case KEY:
 00107$:
-;src/Character.c:173: global_keyset ++;
+;src/Character.c:178: global_keyset ++;
 	ld	hl, #_global_keyset
 	inc	(hl)
-;src/Character.c:181: }
+;src/Character.c:186: }
 00111$:
-;src/Character.c:182: }
+;src/Character.c:187: }
 	ret
-;src/Character.c:184: void update_character(Character* p) { //devuelve las teclas actuales
+;src/Character.c:189: void update_character(Character* p) { //devuelve las teclas actuales
 ;	---------------------------------
 ; Function update_character
 ; ---------------------------------
@@ -980,7 +1008,7 @@ _update_character::
 	add	sp, #-14
 	ld	c, e
 	ld	b, d
-;src/Character.c:186: if(player_tileBR_over_destination(p->next_tileindexBR)){
+;src/Character.c:191: if(player_tileBR_over_destination(p->next_tileindexBR)){
 	ld	hl, #0x000d
 	add	hl, bc
 	inc	sp
@@ -999,13 +1027,13 @@ _update_character::
 	pop	bc
 	or	a, a
 	jr	Z, 00102$
-;src/Character.c:187: update_game_state(STATE_GAME_OVER);
-	ld	a, #0x05
+;src/Character.c:192: update_game_state(STATE_VICTORY);
+	ld	a, #0x06
 	call	_update_game_state
-;src/Character.c:188: return;
+;src/Character.c:193: return;
 	jp	00110$
 00102$:
-;src/Character.c:191: if(player_over_fall(p->next_tileindexBR)){
+;src/Character.c:196: if(player_over_fall(p->next_tileindexBR)){
 	pop	de
 	push	de
 	ld	a, (de)
@@ -1018,7 +1046,7 @@ _update_character::
 	call	_player_over_fall
 	ld	e, a
 	pop	bc
-;src/Character.c:192: p->speed = 0;
+;src/Character.c:198: p->speed = 0;
 	ld	hl, #0x000a
 	add	hl, bc
 	push	hl
@@ -1029,20 +1057,23 @@ _update_character::
 	ld	a, h
 	ldhl	sp,	#3
 	ld	(hl), a
-;src/Character.c:191: if(player_over_fall(p->next_tileindexBR)){
+;src/Character.c:196: if(player_over_fall(p->next_tileindexBR)){
 	ld	a, e
 	or	a, a
 	jr	Z, 00104$
-;src/Character.c:192: p->speed = 0;
-	dec	hl
+;src/Character.c:197: update_game_state(STATE_GAME_OVER);
+	ld	a, #0x05
+	call	_update_game_state
+;src/Character.c:198: p->speed = 0;
+	ldhl	sp,	#2
 	ld	a, (hl+)
 	ld	h, (hl)
 	ld	l, a
 	ld	(hl), #0x00
-;src/Character.c:193: return;
+;src/Character.c:199: return;
 	jp	00110$
 00104$:
-;src/Character.c:196: uint8_t object_index_in_array = check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
+;src/Character.c:202: uint8_t object_index_in_array = check_colision_with_object( p->x - (p->w >> 1), p->y - (p->h >> 1) , p->w, p->h );
 	ld	hl, #0x0007
 	add	hl, bc
 	ld	a, (hl)
@@ -1106,11 +1137,11 @@ _update_character::
 	call	_check_colision_with_object
 	ld	e, a
 	pop	bc
-;src/Character.c:197: if(object_index_in_array != 255){ 
+;src/Character.c:203: if(object_index_in_array != 255){ 
 	ld	a, e
 	inc	a
 	jr	Z, 00106$
-;src/Character.c:198: take_effect(p, object_index_in_array);
+;src/Character.c:204: take_effect(p, object_index_in_array);
 	push	bc
 	push	de
 	ld	a, e
@@ -1118,12 +1149,12 @@ _update_character::
 	ld	d, b
 	call	_take_effect
 	pop	de
-;src/Character.c:199: hide_object(object_index_in_array);
+;src/Character.c:205: hide_object(object_index_in_array);
 	ld	a, e
 	call	_hide_object
 	pop	bc
 00106$:
-;src/Character.c:202: p->tileindexBR = tileindex_from_xy(p->x, p->y);
+;src/Character.c:208: p->tileindexBR = tileindex_from_xy(p->x, p->y);
 	ld	hl, #0x000b
 	add	hl, bc
 	push	hl
@@ -1166,7 +1197,7 @@ _update_character::
 	inc	de
 	ld	a, (hl)
 	ld	(de), a
-;src/Character.c:203: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
+;src/Character.c:209: p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
 	ldhl	sp,#4
 	ld	a, (hl+)
 	ld	e, a
@@ -1241,7 +1272,7 @@ _update_character::
 	inc	de
 	ld	a, (hl)
 	ld	(de), a
-;src/Character.c:205: if(canplayermove(p)) {
+;src/Character.c:211: if(canplayermove(p)) {
 	push	bc
 	ld	e, c
 	ld	d, b
@@ -1249,7 +1280,7 @@ _update_character::
 	pop	bc
 	or	a, a
 	jr	Z, 00108$
-;src/Character.c:206: p->x += p->speed * p->dir_x;
+;src/Character.c:212: p->x += p->speed * p->dir_x;
 	ldhl	sp,#6
 	ld	a, (hl+)
 	ld	e, a
@@ -1284,7 +1315,7 @@ _update_character::
 	ld	h, (hl)
 	ld	l, e
 	ld	(hl), a
-;src/Character.c:207: p->y += p->speed * p->dir_y;
+;src/Character.c:213: p->y += p->speed * p->dir_y;
 	ldhl	sp,#4
 	ld	a, (hl+)
 	ld	e, a
@@ -1321,19 +1352,19 @@ _update_character::
 	ld	(hl), a
 	jr	00109$
 00108$:
-;src/Character.c:209: flip_direction(p);
+;src/Character.c:215: flip_direction(p);
 	push	bc
 	ld	e, c
 	ld	d, b
 	call	_flip_direction
 	pop	bc
 00109$:
-;src/Character.c:211: move_character(p);
+;src/Character.c:217: move_character(p);
 	ld	e, c
 	ld	d, b
 	call	_move_character
 00110$:
-;src/Character.c:212: }
+;src/Character.c:218: }
 	add	sp, #14
 	ret
 	.area _CODE

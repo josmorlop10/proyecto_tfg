@@ -79,7 +79,6 @@ void main(void)
 {   
     init_game_title();
     global_game_state = STATE_MENU;
-    global_actual_level = 0;
     
     while(1) {
         switch (global_game_state)
@@ -136,18 +135,23 @@ void main(void)
                     printf("%d",global_colision_map[i]);
                 }
             }
-
-           
             break;
         
         case STATE_GAME_OVER:
             if(last_state != STATE_GAME_OVER) {
                 last_state = STATE_GAME_OVER;
-                printf("You WIN!\nPress start to try again");
+                
             }
-            if(joypad() & J_START){
-                update_game_state(STATE_GAME_SETTING);
+            init_game_over_screen();
+            update_game_over_screen();
+            break;
+
+        case STATE_VICTORY:
+            if(last_state != STATE_VICTORY) {
+                last_state = STATE_VICTORY;
             }
+            init_victory_screen();
+            update_victory_screen();
             break;
 
         default:

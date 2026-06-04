@@ -11,8 +11,10 @@
 #include "../res/png_prueba.h"
 #include "../res/selection_menu.h"
 #include "../res/map_tiles_alt.h"
+#include "../res/game_over_screen.h"
+#include "../res/victory_screen.h"
 
-
+#include "Headers/PointerSelector.h"
 #include "Headers/HUD_button.h"
 
 
@@ -33,7 +35,7 @@ const unsigned char* global_levels_array[] = {map_test, map1_alt, map2};
 const unsigned char* global_level_objects_array[] = {objects_map_test, objects_map1_alt, objects_map2};
 const unsigned char* global_level_blocks_array[] = { blocks_map_test, blocks_map1_alt, blocks_map2 };
 
-uint8_t global_actual_level = 0;
+uint8_t global_actual_level = 2;
 
 void init_game_title(void){
     
@@ -46,7 +48,7 @@ void init_game_title(void){
 void init_level(uint8_t level_number){
 
     global_keyset = 0;
-
+    global_hud_selected = 0;
     if(level_number >= sizeof(global_levels_array)){
         level_number = level_number % sizeof(global_levels_array);
     }
@@ -185,7 +187,38 @@ void init_start_selection_menu(void){
     set_bkg_tiles(0,0,20,18,selection_menu);
     SHOW_BKG;
 }
+
 void update_start_selection_menu(void){
+    if(joypad() & J_START){
+        update_game_state(STATE_GAME_SETTING);
+    }
+}
+
+void init_victory_screen(void){
+    HIDE_SPRITES;
+    HIDE_WIN;
+    hide_character();
+    set_bkg_data(0,232,map_tiles_alt);
+    set_bkg_tiles(0,0,20,18,victory_screen);
+    SHOW_BKG;
+}
+
+void update_victory_screen(void){
+    if(joypad() & J_START){
+        update_game_state(STATE_SELECTION);
+    }
+}
+
+void init_game_over_screen(void){
+    HIDE_SPRITES;
+    HIDE_WIN;
+    hide_character();
+    set_bkg_data(0,232,map_tiles_alt);
+    set_bkg_tiles(0,0,20,18,game_over_screen);
+    SHOW_BKG;
+}
+
+void update_game_over_screen(void){
     if(joypad() & J_START){
         update_game_state(STATE_GAME_SETTING);
     }

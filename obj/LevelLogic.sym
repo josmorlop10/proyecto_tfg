@@ -21,11 +21,12 @@ Symbol Table
     _blocks_map1_alt                                                ******** GX
     _blocks_map2                                                    ******** GX
     _blocks_map_test                                                ******** GX
-  0 _change_colision_map_BR                                         0000024C GR
-  0 _change_colision_map_at                                         00000201 GR
-  0 _check_colision_of_sprites                                      0000025B GR
-  0 _get_colision_from_map                                          000000AE GR
-  0 _get_init_point_from_map                                        000002E1 GR
+  0 _change_colision_map_BR                                         0000024F GR
+  0 _change_colision_map_at                                         00000204 GR
+  0 _check_colision_of_sprites                                      0000025E GR
+    _game_over_screen                                               ******** GX
+  0 _get_colision_from_map                                          000000B1 GR
+  0 _get_init_point_from_map                                        000002E4 GR
   2 _global_actual_level                                            00000147 GR
   2 _global_blocks_available                                        0000012C GR
   2 _global_colision_map                                            00000000 GR
@@ -33,6 +34,7 @@ Symbol Table
   2 _global_first_x                                                 00000133 GR
   2 _global_first_y                                                 00000134 GR
   1 _global_game_state                                              00000000 GR
+    _global_hud_selected                                            ******** GX
   1 _global_init_point                                              00000029 GR
   1 _global_keyset                                                  0000002B GR
   2 _global_level_blocks_array                                      00000141 GR
@@ -40,33 +42,39 @@ Symbol Table
   2 _global_levels_array                                            00000135 GR
     _global_object_information                                      ******** GX
   2 _global_selected_block                                          00000132 GR
+    _hide_character                                                 ******** GX
+  0 _init_game_over_screen                                          000003D1 GR
   0 _init_game_title                                                00000000 GR
   0 _init_level                                                     0000002A GR
-  0 _init_start_selection_menu                                      00000363 GR
+  0 _init_start_selection_menu                                      00000366 GR
+  0 _init_victory_screen                                            00000394 GR
     _joypad                                                         ******** GX
     _map1_alt                                                       ******** GX
     _map2                                                           ******** GX
     _map_test                                                       ******** GX
     _map_tiles_alt                                                  ******** GX
-  0 _move_foward_block_id                                           00000337 GR
+  0 _move_foward_block_id                                           0000033A GR
     _objects_map1_alt                                               ******** GX
     _objects_map2                                                   ******** GX
     _objects_map_test                                               ******** GX
     _png_prueba_map                                                 ******** GX
-    _png_prueba_tiles                                               ******** GX
-  0 _read_global_block_info_from_map                                000001D6 GR
-  0 _read_global_object_info_from_map                               00000153 GR
-    _selection_menu                                                 ******** GX
-    _set_bkg_data                                                   ******** GX
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Symbol Table
 
+    _png_prueba_tiles                                               ******** GX
+  0 _read_global_block_info_from_map                                000001D9 GR
+  0 _read_global_object_info_from_map                               00000156 GR
+    _selection_menu                                                 ******** GX
+    _set_bkg_data                                                   ******** GX
     _set_bkg_tiles                                                  ******** GX
-  0 _update_game_state                                              000000AA GR
-  0 _update_start_selection_menu                                    00000387 GR
+  0 _update_game_over_screen                                        00000404 GR
+  0 _update_game_state                                              000000AD GR
+  0 _update_start_selection_menu                                    0000038A GR
     _update_values_in_hud                                           ******** GX
+  0 _update_victory_screen                                          000003C7 GR
+    _victory_screen                                                 ******** GX
 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 3
@@ -74,7 +82,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      391   flags    0
+   0 _CODE                                      size      40E   flags    0
    1 _DATA                                      size       2C   flags    0
    2 _INITIALIZED                               size      148   flags    0
    3 _DABS                                      size        0   flags    8

@@ -38,7 +38,12 @@ void move_character(Character* p) {
     move_sprite(1, p->x-SPRITESIZE, p->y);
     move_sprite(2, p->x, p->y-SPRITESIZE);
     move_sprite(3, p->x, p->y);
+}
 
+void hide_character(void){
+     for(uint8_t i = 0;i<=3;i++){
+        move_sprite(i, 0, 0);
+    }
 }
 
 uint8_t canplayermove(Character* p){
@@ -184,11 +189,12 @@ void take_effect(Character* p, uint8_t index){
 void update_character(Character* p) { //devuelve las teclas actuales
 
     if(player_tileBR_over_destination(p->next_tileindexBR)){
-        update_game_state(STATE_GAME_OVER);
+        update_game_state(STATE_VICTORY);
         return;
     }
 
     if(player_over_fall(p->next_tileindexBR)){
+        update_game_state(STATE_GAME_OVER);
         p->speed = 0;
         return;
     }

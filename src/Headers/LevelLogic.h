@@ -52,7 +52,8 @@ typedef enum {
     STATE_GAME_SETTING,
     STATE_GAME_RUNNING,
     STATE_GAME_PAUSED,
-    STATE_GAME_OVER
+    STATE_GAME_OVER,
+    STATE_VICTORY
 } GameState;
 
 struct TileEvent {
@@ -79,6 +80,8 @@ void read_global_object_info_from_map(unsigned char* objects_map);
 void read_global_block_info_from_map(unsigned char* blocks_map);
 void init_start_selection_menu(void);
 void update_start_selection_menu(void);
+void init_game_over_screen(void);
+void update_game_over_screen(void);
 
 
 #endif
