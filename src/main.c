@@ -56,11 +56,9 @@ void init_gfx(void){
     set_sprite_data(16,1,block_pointer);
     set_sprite_tile(16,16);
 
-    SHOW_SPRITES;
-
     //map
     set_bkg_data(0, 96, map_tiles_alt);
-    set_bkg_tiles(0,0,20,16,global_levels_array[global_actual_level]);
+    set_bkg_tiles(0,0,20,15,global_levels_array[global_actual_level]);
     SHOW_BKG;
 
     //HUD
@@ -69,9 +67,10 @@ void init_gfx(void){
     set_win_tiles(0,0,20,4, hud_selector);
     draw_game_hud_buttons();
 
-    SHOW_WIN;
     WX_REG = 7;      // SIEMPRE 7
     WY_REG = 120;    // 144 - 24
+    SHOW_WIN;
+    SHOW_SPRITES;
 
 }
 

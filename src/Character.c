@@ -42,7 +42,7 @@ void move_character(Character* p) {
 
 void hide_character(void){
      for(uint8_t i = 0;i<=3;i++){
-        move_sprite(i, 0, 0);
+        move_sprite(i, 0, 160);
     }
 }
 

@@ -21,7 +21,7 @@ S _global_colision_map Ref00000000
 S _global_blocks_available Ref00000000
 S _change_bkg_tile_xy Ref00000000
 S _set_win_tile_xy Ref00000000
-A _CODE size 3F7 flags 0 addr 0
+A _CODE size 3FB flags 0 addr 0
 S _control_pointer Def000001F0
 S _update_pointer Def000003B0
 S _can_pointer_move Def0000008B
@@ -305,13 +305,13 @@ T DA 03 00 00 0E 04
 R 00 00 00 00
 T DC 03 00 00
 R 00 00 00 00
-T DC 03 00 00 3E 07 91 38 0F 11 00 00 69 AF 67 29
+T DC 03 00 00 3E 07 91 38 11 11 00 00 69 AF 67 29
 R 00 00 00 00 02 0A 0B 00
-T E8 03 00 00 29 19 AF 22 77 0C 18 EC
+T E8 03 00 00 29 19 3E A0 22 36 00 0C 18 EA
 R 00 00 00 00
-T F0 03 00 00
+T F2 03 00 00
 R 00 00 00 00
-T F0 03 00 00 21 40 00 AF 22 77 C9
+T F2 03 00 00 21 40 00 3E A0 22 36 00 C9
 R 00 00 00 00 02 05 0B 00
 T 00 00 00 00
 R 00 00 07 00

@@ -23,7 +23,7 @@ void print_objects_in_screen(void){
 void hide_object(uint8_t i){
     global_object_information[i*3] = 255;
     global_object_information[(i*3)+1] = 255;
-    move_sprite(8+i, 0, 0);
+    move_sprite(8+i, 0, 160);
 }
 
 uint8_t check_colision_with_object(uint8_t x, uint8_t y, uint8_t w, uint8_t h){

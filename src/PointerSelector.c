@@ -155,8 +155,8 @@ void update_pointer(Pointer* s) {
 
 void hide_pointer(void){
     for(uint8_t i= 4; i<=7; i++){
-        move_sprite(i, 0, 0);
+        move_sprite(i, 0, 160);
     }
-    move_sprite(16, 0, 0);
+    move_sprite(16, 0, 160);
 }
 

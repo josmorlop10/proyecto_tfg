@@ -169,7 +169,7 @@ _hide_object::
 	ld	hl, #_global_object_information
 	add	hl, de
 	ld	(hl), #0xff
-;src/Object.c:26: move_sprite(8+i, 0, 0);
+;src/Object.c:26: move_sprite(8+i, 0, 160);
 	ld	a, c
 	add	a, #0x08
 	ld	e, a
@@ -182,10 +182,10 @@ _hide_object::
 	add	hl, hl
 	add	hl, bc
 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-	xor	a, a
+	ld	a, #0xa0
 	ld	(hl+), a
-	ld	(hl), a
-;src/Object.c:26: move_sprite(8+i, 0, 0);
+	ld	(hl), #0x00
+;src/Object.c:26: move_sprite(8+i, 0, 160);
 ;src/Object.c:27: }
 	ret
 ;src/Object.c:29: uint8_t check_colision_with_object(uint8_t x, uint8_t y, uint8_t w, uint8_t h){

@@ -8,7 +8,6 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _take_effect
-	.globl _hide_character
 	.globl _change_bkg_tile_16x16
 	.globl _check_colision_with_object
 	.globl _hide_object
@@ -23,6 +22,7 @@
 	.globl _debug
 	.globl _character_init
 	.globl _move_character
+	.globl _hide_character
 	.globl _canplayermove
 	.globl _set_direction
 	.globl _flip_direction
@@ -285,9 +285,9 @@ _hide_character::
 	add	hl, hl
 	add	hl, de
 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-	xor	a, a
+	ld	a, #0xa0
 	ld	(hl+), a
-	ld	(hl), a
+	ld	(hl), #0x00
 ;src/Character.c:44: for(uint8_t i = 0;i<=3;i++){
 	inc	c
 ;src/Character.c:47: }

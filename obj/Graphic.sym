@@ -17,20 +17,20 @@ Symbol Table
     _global_hud_selected                                            ******** GX
     _global_selected_block                                          ******** GX
   0 _move_sprite_block_pointer                                      0000015D GR
-  0 _move_win_screen                                                000001DC GR
-  0 _print_counter                                                  00000182 GR
+  0 _move_win_screen                                                000001DE GR
+  0 _print_counter                                                  00000184 GR
     _set_bkg_tiles                                                  ******** GX
     _set_win_tile_xy                                                ******** GX
     _set_win_tiles                                                  ******** GX
     _shadow_OAM                                                     ******** GX
-  0 _update_values_in_hud                                           0000018F GR
+  0 _update_values_in_hud                                           00000191 GR
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      212   flags    0
+   0 _CODE                                      size      214   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

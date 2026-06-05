@@ -905,9 +905,9 @@ _hide_pointer::
 	add	hl, hl
 	add	hl, de
 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-	xor	a, a
+	ld	a, #0xa0
 	ld	(hl+), a
-	ld	(hl), a
+	ld	(hl), #0x00
 ;src/PointerSelector.c:157: for(uint8_t i= 4; i<=7; i++){
 	inc	c
 	jr	00105$
@@ -915,10 +915,10 @@ _hide_pointer::
 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
 	ld	hl, #(_shadow_OAM + 64)
 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-	xor	a, a
+	ld	a, #0xa0
 	ld	(hl+), a
-	ld	(hl), a
-;src/PointerSelector.c:160: move_sprite(16, 0, 0);
+	ld	(hl), #0x00
+;src/PointerSelector.c:160: move_sprite(16, 0, 160);
 ;src/PointerSelector.c:161: }
 	ret
 	.area _CODE

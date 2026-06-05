@@ -348,10 +348,10 @@ _move_sprite_block_pointer::
 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
 	ld	hl, #(_shadow_OAM + 64)
 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-	xor	a, a
+	ld	a, #0xa0
 	ld	(hl+), a
-	ld	(hl), a
-;src/Graphic.c:91: move_sprite(16, 0 , 0);
+	ld	(hl), #0x00
+;src/Graphic.c:91: move_sprite(16, 0 , 160);
 ;src/Graphic.c:94: }
 	ret
 ;src/Graphic.c:97: void print_counter(void){

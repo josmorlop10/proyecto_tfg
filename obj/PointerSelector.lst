@@ -895,7 +895,7 @@
     000003DC                        895 00105$:
     000003DC 3E 07            [ 8]  896 	ld	a, #0x07
     000003DE 91               [ 4]  897 	sub	a, c
-    000003DF 38 0F            [12]  898 	jr	C, 00101$
+    000003DF 38 11            [12]  898 	jr	C, 00101$
                                     899 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
     000003E1 11r00r00         [12]  900 	ld	de, #_shadow_OAM+0
     000003E4 69               [ 4]  901 	ld	l, c
@@ -905,22 +905,22 @@
     000003E8 29               [ 8]  905 	add	hl, hl
     000003E9 19               [ 8]  906 	add	hl, de
                                     907 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    000003EA AF               [ 4]  908 	xor	a, a
-    000003EB 22               [ 8]  909 	ld	(hl+), a
-    000003EC 77               [ 8]  910 	ld	(hl), a
+    000003EA 3E A0            [ 8]  908 	ld	a, #0xa0
+    000003EC 22               [ 8]  909 	ld	(hl+), a
+    000003ED 36 00            [12]  910 	ld	(hl), #0x00
                                     911 ;src/PointerSelector.c:157: for(uint8_t i= 4; i<=7; i++){
-    000003ED 0C               [ 4]  912 	inc	c
-    000003EE 18 EC            [12]  913 	jr	00105$
-    000003F0                        914 00101$:
+    000003EF 0C               [ 4]  912 	inc	c
+    000003F0 18 EA            [12]  913 	jr	00105$
+    000003F2                        914 00101$:
                                     915 ;/home/josem/gbdk/include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    000003F0 21r40r00         [12]  916 	ld	hl, #(_shadow_OAM + 64)
+    000003F2 21r40r00         [12]  916 	ld	hl, #(_shadow_OAM + 64)
                                     917 ;/home/josem/gbdk/include/gb/gb.h:1974: itm->y=y, itm->x=x;
-    000003F3 AF               [ 4]  918 	xor	a, a
-    000003F4 22               [ 8]  919 	ld	(hl+), a
-    000003F5 77               [ 8]  920 	ld	(hl), a
-                                    921 ;src/PointerSelector.c:160: move_sprite(16, 0, 0);
+    000003F5 3E A0            [ 8]  918 	ld	a, #0xa0
+    000003F7 22               [ 8]  919 	ld	(hl+), a
+    000003F8 36 00            [12]  920 	ld	(hl), #0x00
+                                    921 ;src/PointerSelector.c:160: move_sprite(16, 0, 160);
                                     922 ;src/PointerSelector.c:161: }
-    000003F6 C9               [16]  923 	ret
+    000003FA C9               [16]  923 	ret
                                     924 	.area _CODE
                                     925 	.area _INITIALIZER
     00000000                        926 __xinit__global_hud_selected:

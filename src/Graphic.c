@@ -88,7 +88,7 @@ void move_sprite_block_pointer(uint8_t direction){
     if(direction<6){
         move_sprite(16, 24 + direction * 16 , 144 - global_hud_selected * 4);
     } else {
-        move_sprite(16, 0 , 0);
+        move_sprite(16, 0 , 160);
         //change_win_tile_16x16(58,35);
     }
 }

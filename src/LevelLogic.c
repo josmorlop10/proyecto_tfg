@@ -35,14 +35,16 @@ int8_t global_first_y = 0;
 const unsigned char* global_levels_array[] = {map_test, map1_alt, map2};
 const unsigned char* global_level_objects_array[] = {objects_map_test, objects_map1_alt, objects_map2};
 const unsigned char* global_level_blocks_array[] = { blocks_map_test, blocks_map1_alt, blocks_map2 };
+#define LEVEL_COUNT (sizeof(global_levels_array) / sizeof(global_levels_array[0]))
 
 uint8_t global_actual_level = 0;
 
 void init_game_title(void){
     
+    HIDE_WIN;
+    HIDE_SPRITES;
     set_bkg_data(0,232,png_prueba_tiles);
     set_bkg_tiles(0,0,20,18,png_prueba_map);
-    SHOW_SPRITES;
     SHOW_BKG;
 }
 
@@ -50,8 +52,8 @@ void init_level(uint8_t level_number){
 
     global_keyset = 0;
     global_hud_selected = 0;
-    if(level_number >= sizeof(global_levels_array)){
-        level_number = level_number % sizeof(global_levels_array);
+    if(level_number >= LEVEL_COUNT){
+        level_number = level_number % LEVEL_COUNT;
     }
     //map
     for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
@@ -184,6 +186,8 @@ void move_foward_block_id(uint8_t button_pressed){
 }
 
 void init_start_selection_menu(void){
+    HIDE_WIN;
+    HIDE_SPRITES;
     set_bkg_data(0,232,map_tiles_alt);
     set_bkg_tiles(0,0,20,18,selection_menu);
     SHOW_BKG;
