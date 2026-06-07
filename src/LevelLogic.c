@@ -147,7 +147,10 @@ uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah
 
 //get init point from colision map
 void get_init_point_from_map(uint8_t colision_map[NUMBER_OF_TILES_IN_GRID]){
-     for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+    global_first_x = 0;
+    global_first_y = 0;
+
+    for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
             if(colision_map[i] == SOURCE_L || colision_map[i] == SOURCE_R || colision_map[i] == SOURCE_U || colision_map[i] == SOURCE_D){
                 global_init_point = i;
                 if(colision_map[i]==SOURCE_L){

@@ -189,6 +189,12 @@ void take_effect(Character* p, uint8_t index){
 void update_character(Character* p) { //devuelve las teclas actuales
 
     if(player_tileBR_over_destination(p->next_tileindexBR)){
+        global_actual_level++;
+        /*
+        if(global_actual_level >= 3 ){
+            printf("VICTORY!");
+        }
+        */
         update_game_state(STATE_VICTORY);
         return;
     }

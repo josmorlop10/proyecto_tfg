@@ -14,9 +14,7 @@ Symbol Table
     _character_init                                                 ******** GX
     _draw_game_hud_buttons                                          ******** GX
     _duck                                                           ******** GX
-    _get_colision_from_map                                          ******** GX
     _global_actual_level                                            ******** GX
-    _global_colision_map                                            ******** GX
     _global_game_state                                              ******** GX
     _global_levels_array                                            ******** GX
     _hud_selector                                                   ******** GX
@@ -51,13 +49,12 @@ Symbol Table
     _update_start_selection_menu                                    ******** GX
     _update_victory_screen                                          ******** GX
 
-
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      1CD   flags    0
+   0 _CODE                                      size      1B7   flags    0
    1 _DATA                                      size       18   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

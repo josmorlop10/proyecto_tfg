@@ -110,8 +110,6 @@ void main(void)
                 init_gfx();
                 pointer_init(&s);
                 init_level(global_actual_level);
-                get_colision_from_map(global_levels_array[global_actual_level], global_colision_map);
-
                 print_objects_in_screen();
                 last_state = STATE_GAME_SETTING;
             }

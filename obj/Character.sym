@@ -20,6 +20,7 @@ Symbol Table
   2 _debug                                                          00000000 GR
   0 _flip_direction                                                 00000363 GR
     _get_init_point_from_map                                        ******** GX
+    _global_actual_level                                            ******** GX
   2 _global_blocks_active                                           00000001 GR
     _global_colision_map                                            ******** GX
     _global_first_x                                                 ******** GX
@@ -47,7 +48,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      5C8   flags    0
+   0 _CODE                                      size      5CC   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        2   flags    0
    3 _DABS                                      size        0   flags    8

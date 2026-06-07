@@ -758,7 +758,12 @@ _check_colision_of_sprites::
 ; Function get_init_point_from_map
 ; ---------------------------------
 _get_init_point_from_map::
-;src/LevelLogic.c:150: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/LevelLogic.c:150: global_first_x = 0;
+;src/LevelLogic.c:151: global_first_y = 0;
+	xor	a, a
+	ld	(#_global_first_x), a
+	ld	(#_global_first_y),a
+;src/LevelLogic.c:153: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	ld	bc, #0x0000
 00119$:
 	ld	l, c
@@ -768,7 +773,7 @@ _get_init_point_from_map::
 	ld	a, h
 	sbc	a, #0x01
 	ret	NC
-;src/LevelLogic.c:151: if(colision_map[i] == SOURCE_L || colision_map[i] == SOURCE_R || colision_map[i] == SOURCE_U || colision_map[i] == SOURCE_D){
+;src/LevelLogic.c:154: if(colision_map[i] == SOURCE_L || colision_map[i] == SOURCE_R || colision_map[i] == SOURCE_U || colision_map[i] == SOURCE_D){
 	ld	l, c
 	ld	h, b
 	add	hl, de
@@ -782,115 +787,115 @@ _get_init_point_from_map::
 	sub	a, #0x10
 	jr	NZ, 00120$
 00112$:
-;src/LevelLogic.c:152: global_init_point = i;
+;src/LevelLogic.c:155: global_init_point = i;
 	ld	a, c
 	ld	(_global_init_point), a
 	ld	a, b
 	ld	(_global_init_point + 1), a
-;src/LevelLogic.c:153: if(colision_map[i]==SOURCE_L){
+;src/LevelLogic.c:156: if(colision_map[i]==SOURCE_L){
 	ld	a, (hl)
 	cp	a, #0x0e
 	jr	NZ, 00110$
-;src/LevelLogic.c:154: global_first_x = -1;
+;src/LevelLogic.c:157: global_first_x = -1;
 	ld	hl, #_global_first_x
 	ld	(hl), #0xff
 	jr	00120$
 00110$:
-;src/LevelLogic.c:155: } else if(colision_map[i]==SOURCE_R){
+;src/LevelLogic.c:158: } else if(colision_map[i]==SOURCE_R){
 	cp	a, #0x03
 	jr	NZ, 00107$
-;src/LevelLogic.c:156: global_first_x = 1;
+;src/LevelLogic.c:159: global_first_x = 1;
 	ld	hl, #_global_first_x
 	ld	(hl), #0x01
 	jr	00120$
 00107$:
-;src/LevelLogic.c:157: }else if(colision_map[i]==SOURCE_U){
+;src/LevelLogic.c:160: }else if(colision_map[i]==SOURCE_U){
 	cp	a, #0x0f
 	jr	NZ, 00104$
-;src/LevelLogic.c:158: global_first_y = -1;
+;src/LevelLogic.c:161: global_first_y = -1;
 	ld	hl, #_global_first_y
 	ld	(hl), #0xff
 	jr	00120$
 00104$:
-;src/LevelLogic.c:159: }else if(colision_map[i]==SOURCE_D){
+;src/LevelLogic.c:162: }else if(colision_map[i]==SOURCE_D){
 	sub	a, #0x10
 	jr	NZ, 00120$
-;src/LevelLogic.c:160: global_first_y = 1;
+;src/LevelLogic.c:163: global_first_y = 1;
 	ld	hl, #_global_first_y
 	ld	(hl), #0x01
 00120$:
-;src/LevelLogic.c:150: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/LevelLogic.c:153: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	inc	bc
-;src/LevelLogic.c:164: }
+;src/LevelLogic.c:167: }
 	jr	00119$
-;src/LevelLogic.c:166: void move_foward_block_id(uint8_t button_pressed){
+;src/LevelLogic.c:169: void move_foward_block_id(uint8_t button_pressed){
 ;	---------------------------------
 ; Function move_foward_block_id
 ; ---------------------------------
 _move_foward_block_id::
-;src/LevelLogic.c:170: switch (button_pressed)
+;src/LevelLogic.c:173: switch (button_pressed)
 	or	a, a
 	jr	Z, 00101$
 	dec	a
 	jr	Z, 00102$
 	jr	00104$
-;src/LevelLogic.c:172: case 0:
+;src/LevelLogic.c:175: case 0:
 00101$:
-;src/LevelLogic.c:173: global_selected_block ++;
+;src/LevelLogic.c:176: global_selected_block ++;
 	ld	hl, #_global_selected_block
 	inc	(hl)
-;src/LevelLogic.c:174: break;
+;src/LevelLogic.c:177: break;
 	jr	00104$
-;src/LevelLogic.c:176: case 1:
+;src/LevelLogic.c:179: case 1:
 00102$:
-;src/LevelLogic.c:177: global_selected_block --;
+;src/LevelLogic.c:180: global_selected_block --;
 	ld	hl, #_global_selected_block
 	dec	(hl)
-;src/LevelLogic.c:182: }
+;src/LevelLogic.c:185: }
 00104$:
-;src/LevelLogic.c:185: if(global_selected_block >= HUD_ITEM_COUNT) {
+;src/LevelLogic.c:188: if(global_selected_block >= HUD_ITEM_COUNT) {
 	ld	hl, #_global_selected_block
 	ld	a, (hl)
 	xor	a, #0x80
 	sub	a, #0x88
 	jr	C, 00108$
-;src/LevelLogic.c:186: global_selected_block -= HUD_ITEM_COUNT;
+;src/LevelLogic.c:189: global_selected_block -= HUD_ITEM_COUNT;
 	ld	a, (hl)
 	add	a, #0xf8
 	ld	(hl), a
 	ret
 00108$:
-;src/LevelLogic.c:187: } else if(global_selected_block < 0) {
+;src/LevelLogic.c:190: } else if(global_selected_block < 0) {
 	ld	hl, #_global_selected_block
 	bit	7, (hl)
 	ret	Z
-;src/LevelLogic.c:188: global_selected_block += HUD_ITEM_COUNT;
+;src/LevelLogic.c:191: global_selected_block += HUD_ITEM_COUNT;
 	ld	a, (hl)
 	add	a, #0x08
 	ld	(hl), a
-;src/LevelLogic.c:190: }
+;src/LevelLogic.c:193: }
 	ret
-;src/LevelLogic.c:192: void init_start_selection_menu(void){
+;src/LevelLogic.c:195: void init_start_selection_menu(void){
 ;	---------------------------------
 ; Function init_start_selection_menu
 ; ---------------------------------
 _init_start_selection_menu::
-;src/LevelLogic.c:193: HIDE_WIN;
+;src/LevelLogic.c:196: HIDE_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xdf
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:194: HIDE_SPRITES;
+;src/LevelLogic.c:197: HIDE_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xfd
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:195: set_bkg_data(0,232,map_tiles_alt);
+;src/LevelLogic.c:198: set_bkg_data(0,232,map_tiles_alt);
 	ld	de, #_map_tiles_alt
 	push	de
 	ld	hl, #0xe800
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;src/LevelLogic.c:196: set_bkg_tiles(0,0,20,18,selection_menu);
+;src/LevelLogic.c:199: set_bkg_tiles(0,0,20,18,selection_menu);
 	ld	de, #_selection_menu
 	push	de
 	ld	hl, #0x1214
@@ -900,40 +905,40 @@ _init_start_selection_menu::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;src/LevelLogic.c:197: SHOW_BKG;
+;src/LevelLogic.c:200: SHOW_BKG;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x01
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:198: }
+;src/LevelLogic.c:201: }
 	ret
-;src/LevelLogic.c:200: void update_start_selection_menu(void){
+;src/LevelLogic.c:203: void update_start_selection_menu(void){
 ;	---------------------------------
 ; Function update_start_selection_menu
 ; ---------------------------------
 _update_start_selection_menu::
-;src/LevelLogic.c:201: if(joypad() & J_START){
+;src/LevelLogic.c:204: if(joypad() & J_START){
 	call	_joypad
 	rlca
 	ret	NC
-;src/LevelLogic.c:202: update_game_state(STATE_GAME_SETTING);
+;src/LevelLogic.c:205: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
-;src/LevelLogic.c:204: }
+;src/LevelLogic.c:207: }
 	jp	_update_game_state
-;src/LevelLogic.c:206: void init_victory_screen(void){
+;src/LevelLogic.c:209: void init_victory_screen(void){
 ;	---------------------------------
 ; Function init_victory_screen
 ; ---------------------------------
 _init_victory_screen::
-;src/LevelLogic.c:207: global_option_selection_from_menu = 0;
+;src/LevelLogic.c:210: global_option_selection_from_menu = 0;
 	xor	a, a
 	ld	(#_global_option_selection_from_menu),a
-;src/LevelLogic.c:208: HIDE_SPRITES;
+;src/LevelLogic.c:211: HIDE_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xfd
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:209: hide_character();
+;src/LevelLogic.c:212: hide_character();
 	call	_hide_character
-;src/LevelLogic.c:210: set_win_tiles(0,0,20,12,victory_screen);
+;src/LevelLogic.c:213: set_win_tiles(0,0,20,12,victory_screen);
 	ld	de, #_victory_screen
 	push	de
 	ld	hl, #0xc14
@@ -943,53 +948,53 @@ _init_victory_screen::
 	push	af
 	call	_set_win_tiles
 	add	sp, #6
-;src/LevelLogic.c:211: move_win_screen(-64);
+;src/LevelLogic.c:214: move_win_screen(-64);
 	ld	a, #0xc0
 	call	_move_win_screen
-;src/LevelLogic.c:212: SHOW_WIN;
+;src/LevelLogic.c:215: SHOW_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x20
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:213: }
+;src/LevelLogic.c:216: }
 	ret
-;src/LevelLogic.c:215: void update_victory_screen(void){
+;src/LevelLogic.c:218: void update_victory_screen(void){
 ;	---------------------------------
 ; Function update_victory_screen
 ; ---------------------------------
 _update_victory_screen::
-;src/LevelLogic.c:216: update_menu_pointer();
+;src/LevelLogic.c:219: update_menu_pointer();
 	call	_update_menu_pointer
-;src/LevelLogic.c:217: if(joypad() & (J_START | J_A)){
+;src/LevelLogic.c:220: if(joypad() & (J_START | J_A)){
 	call	_joypad
 	and	a, #0x90
 	ret	Z
-;src/LevelLogic.c:218: if(global_option_selection_from_menu == 0){
+;src/LevelLogic.c:221: if(global_option_selection_from_menu == 0){
 	ld	a, (#_global_option_selection_from_menu)
 	or	a, a
 	jr	NZ, 00102$
-;src/LevelLogic.c:219: update_game_state(STATE_GAME_SETTING);
+;src/LevelLogic.c:222: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	jp	_update_game_state
 00102$:
-;src/LevelLogic.c:221: update_game_state(STATE_SELECTION);
+;src/LevelLogic.c:224: update_game_state(STATE_SELECTION);
 	ld	a, #0x01
-;src/LevelLogic.c:224: }
+;src/LevelLogic.c:227: }
 	jp	_update_game_state
-;src/LevelLogic.c:226: void init_game_over_screen(void){
+;src/LevelLogic.c:229: void init_game_over_screen(void){
 ;	---------------------------------
 ; Function init_game_over_screen
 ; ---------------------------------
 _init_game_over_screen::
-;src/LevelLogic.c:227: global_option_selection_from_menu = 0;
+;src/LevelLogic.c:230: global_option_selection_from_menu = 0;
 	xor	a, a
 	ld	(#_global_option_selection_from_menu),a
-;src/LevelLogic.c:228: HIDE_SPRITES;
+;src/LevelLogic.c:231: HIDE_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xfd
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:229: hide_character();
+;src/LevelLogic.c:232: hide_character();
 	call	_hide_character
-;src/LevelLogic.c:230: set_win_tiles(0,0,20,12,game_over_screen);
+;src/LevelLogic.c:233: set_win_tiles(0,0,20,12,game_over_screen);
 	ld	de, #_game_over_screen
 	push	de
 	ld	hl, #0xc14
@@ -999,37 +1004,37 @@ _init_game_over_screen::
 	push	af
 	call	_set_win_tiles
 	add	sp, #6
-;src/LevelLogic.c:231: move_win_screen(-64);
+;src/LevelLogic.c:234: move_win_screen(-64);
 	ld	a, #0xc0
 	call	_move_win_screen
-;src/LevelLogic.c:232: SHOW_WIN;
+;src/LevelLogic.c:235: SHOW_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x20
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:233: }
+;src/LevelLogic.c:236: }
 	ret
-;src/LevelLogic.c:235: void update_game_over_screen(void){
+;src/LevelLogic.c:238: void update_game_over_screen(void){
 ;	---------------------------------
 ; Function update_game_over_screen
 ; ---------------------------------
 _update_game_over_screen::
-;src/LevelLogic.c:236: update_menu_pointer();
+;src/LevelLogic.c:239: update_menu_pointer();
 	call	_update_menu_pointer
-;src/LevelLogic.c:237: if(joypad() & (J_START | J_A)){
+;src/LevelLogic.c:240: if(joypad() & (J_START | J_A)){
 	call	_joypad
 	and	a, #0x90
 	ret	Z
-;src/LevelLogic.c:238: if(global_option_selection_from_menu == 0){
+;src/LevelLogic.c:241: if(global_option_selection_from_menu == 0){
 	ld	a, (#_global_option_selection_from_menu)
 	or	a, a
 	jr	NZ, 00102$
-;src/LevelLogic.c:239: update_game_state(STATE_GAME_SETTING);
+;src/LevelLogic.c:242: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	jp	_update_game_state
 00102$:
-;src/LevelLogic.c:241: update_game_state(STATE_SELECTION);
+;src/LevelLogic.c:244: update_game_state(STATE_SELECTION);
 	ld	a, #0x01
-;src/LevelLogic.c:244: }
+;src/LevelLogic.c:247: }
 	jp	_update_game_state
 	.area _CODE
 	.area _INITIALIZER
