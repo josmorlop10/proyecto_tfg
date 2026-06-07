@@ -56,6 +56,7 @@ uint8_t canplayermove(Character* p){
     if(!global_blocks_active && global_block_ignored_tileindex != NUMBER_OF_TILES_IN_GRID && p->tileindexBR != global_block_ignored_tileindex){
         global_blocks_active = 1;
         global_block_ignored_tileindex = NUMBER_OF_TILES_IN_GRID;
+        restore_all_block_tiles();
     }
 
     if(event != EMPTY){
@@ -164,6 +165,7 @@ void take_effect(Character* p, uint8_t index){
     case NO_ACTION:
         global_blocks_active = 0;
         global_block_ignored_tileindex = NUMBER_OF_TILES_IN_GRID;
+        change_all_block_tiles(95);
         break;
     
     case GO_RIGHT:

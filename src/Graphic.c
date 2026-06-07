@@ -50,6 +50,40 @@ void change_bkg_tile_16x16(uint16_t tile_index, uint8_t tile_id_BR){
     set_bkg_tiles(x-1,y-1,1,1,&tile_id_TL);
 }
 
+void change_all_block_tiles(uint8_t tile_id_BR){
+    uint8_t block_type;
+
+    for(uint16_t i = 0; i < NUMBER_OF_TILES_IN_GRID; i++){
+        block_type = global_colision_map[i];
+
+        if(i >= 21 && block_type >= RIGHT && block_type < RIGHT + NUMBER_OF_BLOCKS){
+            if(global_colision_map[i-1] == BLOCK &&
+               global_colision_map[i-20] == BLOCK &&
+               global_colision_map[i-21] == BLOCK){
+                change_bkg_tile_16x16(i, tile_id_BR);
+            }
+        }
+    }
+}
+
+void restore_all_block_tiles(void){
+    uint8_t block_type;
+    uint8_t tile_id_BR;
+
+    for(uint16_t i = 0; i < NUMBER_OF_TILES_IN_GRID; i++){
+        block_type = global_colision_map[i];
+
+        if(i >= 21 && block_type >= RIGHT && block_type < RIGHT + NUMBER_OF_BLOCKS){
+            if(global_colision_map[i-1] == BLOCK &&
+               global_colision_map[i-20] == BLOCK &&
+               global_colision_map[i-21] == BLOCK){
+                tile_id_BR = (block_type - RIGHT) * 4 + UMBRAL_BLOCKS;
+                change_bkg_tile_16x16(i, tile_id_BR);
+            }
+        }
+    }
+}
+
 //Changing graphics HUD (WIN)
 
 void change_win_tile_16x16(uint16_t tile_index, uint8_t tile_id_BR){
