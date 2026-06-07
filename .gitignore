@@ -1,0 +1,16 @@
+# Build artifacts
+obj/
+
+# GBDK temporary files
+*.map
+*.sym
+*.rel
+*.ihx
+*.asm
+*.lst
+
+# Editor files
+*.swp
+*.swo
+*.tmp
+*.bak

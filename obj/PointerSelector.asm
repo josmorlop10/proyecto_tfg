@@ -32,6 +32,7 @@
 	.globl _control_pointer
 	.globl _update_pointer
 	.globl _hide_pointer
+	.globl _update_menu_pointer
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -921,6 +922,58 @@ _hide_pointer::
 ;src/PointerSelector.c:160: move_sprite(16, 0, 160);
 ;src/PointerSelector.c:161: }
 	ret
+;src/PointerSelector.c:163: static void update_menu_selector_tiles(uint8_t selected_option){
+;	---------------------------------
+; Function update_menu_selector_tiles
+; ---------------------------------
+_update_menu_selector_tiles:
+;src/PointerSelector.c:164: const uint8_t cursor_row = selected_option == 0 ? 8 : 10;
+	or	a, a
+	ld	c, #0x08
+	jr	Z, 00104$
+	ld	c, #0x0a
+00104$:
+;src/PointerSelector.c:165: const uint8_t blank_row = selected_option == 0 ? 10 : 8;
+	or	a, a
+	ld	e, #0x0a
+	jr	Z, 00106$
+	ld	e, #0x08
+00106$:
+;src/PointerSelector.c:167: set_win_tile_xy(6, blank_row, 0);
+	push	bc
+	xor	a, a
+	push	af
+	inc	sp
+	ld	a, #0x06
+	call	_set_win_tile_xy
+	pop	bc
+;src/PointerSelector.c:168: set_win_tile_xy(6, cursor_row, hud_selectorTileOffset + 11);
+	ld	a, #0x6b
+	push	af
+	inc	sp
+	ld	e, c
+	ld	a, #0x06
+	call	_set_win_tile_xy
+;src/PointerSelector.c:169: }
+	ret
+;src/PointerSelector.c:171: void update_menu_pointer(void){
+;	---------------------------------
+; Function update_menu_pointer
+; ---------------------------------
+_update_menu_pointer::
+;src/PointerSelector.c:172: const uint8_t currentJoy = joypad();
+	call	_joypad
+;src/PointerSelector.c:174: if(currentJoy & (J_UP | J_DOWN)){
+	and	a, #0x0c
+	ret	Z
+;src/PointerSelector.c:175: global_option_selection_from_menu ^= 1;
+	ld	hl, #_global_option_selection_from_menu
+	ld	a, (hl)
+	xor	a, #0x01
+;src/PointerSelector.c:176: update_menu_selector_tiles(global_option_selection_from_menu);
+	ld	(hl), a
+;src/PointerSelector.c:178: }
+	jp	_update_menu_selector_tiles
 	.area _CODE
 	.area _INITIALIZER
 __xinit__global_hud_selected:

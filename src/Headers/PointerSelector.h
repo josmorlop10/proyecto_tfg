@@ -16,6 +16,7 @@ void move_pointer(Pointer* s);
 void control_pointer(Pointer* s);
 void update_pointer(Pointer* s);
 void hide_pointer(void);
+void update_menu_pointer(void);
 void place_object_at_pointer(Pointer* s, uint8_t block_type);
 void remove_object_at_pointer(Pointer* s, uint8_t block_type);
 uint8_t block_is_placed_below(Pointer* s);

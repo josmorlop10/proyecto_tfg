@@ -21,6 +21,7 @@ Symbol Table
     _global_colision_map                                            ******** GX
     _global_game_state                                              ******** GX
   2 _global_hud_selected                                            00000000 GR
+    _global_option_selection_from_menu                              ******** GX
     _global_selected_block                                          ******** GX
   0 _hide_pointer                                                   000003DA GR
     _joypad                                                         ******** GX
@@ -36,6 +37,8 @@ Symbol Table
     _shadow_OAM                                                     ******** GX
     _tileindex_from_xy                                              ******** GX
     _update_game_hud_button_selection                               ******** GX
+  0 _update_menu_pointer                                            0000041E GR
+  0 _update_menu_selector_tiles                                     000003FB R
   0 _update_pointer                                                 000003B0 GR
     _update_values_in_hud                                           ******** GX
 
@@ -45,7 +48,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      3FB   flags    0
+   0 _CODE                                      size      42E   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        1   flags    0
    3 _DABS                                      size        0   flags    8

@@ -1,4 +1,6 @@
 #include "Headers/LevelLogic.h"
+#include "Headers/Character.h"
+#include "Headers/PointerSelector.h"
 #include "Headers/Object.h"
 #include "Headers/Graphic.h"
 
@@ -35,9 +37,11 @@ int8_t global_first_y = 0;
 const unsigned char* global_levels_array[] = {map_test, map1_alt, map2};
 const unsigned char* global_level_objects_array[] = {objects_map_test, objects_map1_alt, objects_map2};
 const unsigned char* global_level_blocks_array[] = { blocks_map_test, blocks_map1_alt, blocks_map2 };
+
 #define LEVEL_COUNT (sizeof(global_levels_array) / sizeof(global_levels_array[0]))
 
 uint8_t global_actual_level = 0;
+uint8_t global_option_selection_from_menu = 0;
 
 void init_game_title(void){
     
@@ -100,7 +104,7 @@ void get_colision_from_map(const unsigned char in[], uint8_t out[]){
     }
 }
 
-void read_global_object_info_from_map(unsigned char* objects_map){
+void read_global_object_info_from_map(const unsigned char* objects_map){
     for(uint8_t e=0; e<NUMBER_OF_OBJECTS; e++){
         global_object_information[e*3] = objects_map[e*3];
         global_object_information[e*3+1] = objects_map[e*3+1];
@@ -108,7 +112,7 @@ void read_global_object_info_from_map(unsigned char* objects_map){
     }
 }
 
-void read_global_block_info_from_map(unsigned char* blocks_map){
+void read_global_block_info_from_map(const unsigned char* blocks_map){
     for(uint8_t e=0; e<NUMBER_OF_BLOCKS; e++){
         global_blocks_available[e] = blocks_map[e];
     }
@@ -200,6 +204,7 @@ void update_start_selection_menu(void){
 }
 
 void init_victory_screen(void){
+    global_option_selection_from_menu = 0;
     HIDE_SPRITES;
     hide_character();
     set_win_tiles(0,0,20,12,victory_screen);
@@ -208,12 +213,18 @@ void init_victory_screen(void){
 }
 
 void update_victory_screen(void){
-    if(joypad() & J_START){
-        update_game_state(STATE_SELECTION);
+    update_menu_pointer();
+    if(joypad() & (J_START | J_A)){
+        if(global_option_selection_from_menu == 0){
+            update_game_state(STATE_GAME_SETTING);
+        } else {
+            update_game_state(STATE_SELECTION);
+        }
     }
 }
 
 void init_game_over_screen(void){
+    global_option_selection_from_menu = 0;
     HIDE_SPRITES;
     hide_character();
     set_win_tiles(0,0,20,12,game_over_screen);
@@ -222,7 +233,12 @@ void init_game_over_screen(void){
 }
 
 void update_game_over_screen(void){
-    if(joypad() & J_START){
-        update_game_state(STATE_GAME_SETTING);
+    update_menu_pointer();
+    if(joypad() & (J_START | J_A)){
+        if(global_option_selection_from_menu == 0){
+            update_game_state(STATE_GAME_SETTING);
+        } else {
+            update_game_state(STATE_SELECTION);
+        }
     }
 }

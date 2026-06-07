@@ -41,6 +41,7 @@ extern const unsigned char* global_level_objects_array[];
 extern const unsigned char* global_level_blocks_array[];
 
 extern uint8_t global_actual_level;
+extern uint8_t global_option_selection_from_menu;
 
 extern uint8_t global_keyset;
 extern int8_t global_first_x;
@@ -69,6 +70,7 @@ extern GameState global_game_state;
 extern uint16_t global_init_point;
 
 void update_game_state(GameState new_value);
+void init_game_title(void);
 void get_colision_from_map(const unsigned char in[], uint8_t out[]);
 void get_init_point_from_map(uint8_t colision_map[NUMBER_OF_TILES_IN_GRID]);
 void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value);
@@ -76,8 +78,8 @@ void change_colision_map_BR(uint16_t tileindexBR, uint8_t new_value);
 void move_foward_block_id(uint8_t button_pressed);
 void init_level(uint8_t level_number);
 uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah, uint8_t bx, uint8_t by, uint8_t bw, uint8_t bh);
-void read_global_object_info_from_map(unsigned char* objects_map);
-void read_global_block_info_from_map(unsigned char* blocks_map);
+void read_global_object_info_from_map(const unsigned char* objects_map);
+void read_global_block_info_from_map(const unsigned char* blocks_map);
 void init_start_selection_menu(void);
 void update_start_selection_menu(void);
 void init_game_over_screen(void);

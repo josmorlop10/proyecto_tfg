@@ -63,7 +63,7 @@ void init_gfx(void){
 
     //HUD
     // Activa la window
-    set_win_data(96,55, hud_tiles);
+    set_win_data(96,68, hud_tiles);
     set_win_tiles(0,0,20,4, hud_selector);
     draw_game_hud_buttons();
 
@@ -105,7 +105,6 @@ void main(void)
             update_start_selection_menu();
             break;
         
-        
         case STATE_GAME_SETTING:
             if(last_state != STATE_GAME_SETTING) {
                 init_gfx();
@@ -125,17 +124,8 @@ void main(void)
                 last_state = STATE_GAME_RUNNING;
             }
             update_character(&p);
-            
-            //DEBUG
-            if(joypad() & J_A){
-                HIDE_WIN;
-                //printf("%d",global_keyset);
-                for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
-                    printf("%d",global_colision_map[i]);
-                }
-            }
             break;
-        
+            
         case STATE_GAME_OVER:
             if(last_state != STATE_GAME_OVER) {
                 last_state = STATE_GAME_OVER;

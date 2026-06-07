@@ -160,3 +160,19 @@ void hide_pointer(void){
     move_sprite(16, 0, 160);
 }
 
+static void update_menu_selector_tiles(uint8_t selected_option){
+    const uint8_t cursor_row = selected_option == 0 ? 8 : 10;
+    const uint8_t blank_row = selected_option == 0 ? 10 : 8;
+
+    set_win_tile_xy(6, blank_row, 0);
+    set_win_tile_xy(6, cursor_row, hud_selectorTileOffset + 11);
+}
+
+void update_menu_pointer(void){
+    const uint8_t currentJoy = joypad();
+
+    if(currentJoy & (J_UP | J_DOWN)){
+        global_option_selection_from_menu ^= 1;
+        update_menu_selector_tiles(global_option_selection_from_menu);
+    }
+}

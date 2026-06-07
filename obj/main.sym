@@ -10,7 +10,6 @@ Symbol Table
     _LCDC_REG                                                       ******** GX
     _WX_REG                                                         ******** GX
     _WY_REG                                                         ******** GX
-  0 ___str_0                                                        000001FC R
     _block_pointer                                                  ******** GX
     _character_init                                                 ******** GX
     _draw_game_hud_buttons                                          ******** GX
@@ -37,7 +36,6 @@ Symbol Table
     _performantdelay                                                ******** GX
     _pointer_init                                                   ******** GX
     _print_objects_in_screen                                        ******** GX
-    _printf                                                         ******** GX
   1 _s                                                              0000000F GR
     _selector                                                       ******** GX
     _set_bkg_data                                                   ******** GX
@@ -59,7 +57,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      1FF   flags    0
+   0 _CODE                                      size      1CD   flags    0
    1 _DATA                                      size       18   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8
