@@ -10,6 +10,7 @@
 uint8_t debug = 0;
 
 uint8_t global_blocks_active = 1;
+uint16_t global_block_ignored_tileindex = NUMBER_OF_TILES_IN_GRID;
 
 //Character
 void character_init(Character* p) {
@@ -30,6 +31,8 @@ void character_init(Character* p) {
     }
     p->tileindexBR = 0;
     p->next_tileindexBR = 0;
+    global_blocks_active = 1;
+    global_block_ignored_tileindex = NUMBER_OF_TILES_IN_GRID;
 }
 
 void move_character(Character* p) {
@@ -49,6 +52,12 @@ void hide_character(void){
 uint8_t canplayermove(Character* p){
     //devuelve 1 si el personaje puede andar, y 0 si no puede
     uint8_t event = player_tileBR_over_a_block(p->tileindexBR);
+
+    if(!global_blocks_active && global_block_ignored_tileindex != NUMBER_OF_TILES_IN_GRID && p->tileindexBR != global_block_ignored_tileindex){
+        global_blocks_active = 1;
+        global_block_ignored_tileindex = NUMBER_OF_TILES_IN_GRID;
+    }
+
     if(event != EMPTY){
         if(global_blocks_active){
             switch(event){
@@ -75,7 +84,9 @@ uint8_t canplayermove(Character* p){
             }
             p->next_tileindexBR = tileindex_from_xy(p->x + SPRITESIZE * p->dir_x, p->y + SPRITESIZE * p->dir_y);
         } else {
-            global_blocks_active = 1;
+            if(global_block_ignored_tileindex == NUMBER_OF_TILES_IN_GRID){
+                global_block_ignored_tileindex = p->tileindexBR;
+            }
         }
     }
 
@@ -152,6 +163,7 @@ void take_effect(Character* p, uint8_t index){
     {
     case NO_ACTION:
         global_blocks_active = 0;
+        global_block_ignored_tileindex = NUMBER_OF_TILES_IN_GRID;
         break;
     
     case GO_RIGHT:
