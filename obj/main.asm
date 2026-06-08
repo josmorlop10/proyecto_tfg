@@ -21,7 +21,9 @@
 	.globl _init_start_selection_menu
 	.globl _init_level
 	.globl _init_game_title
+	.globl _normalize_level_number
 	.globl _update_game_state
+	.globl _hide_character
 	.globl _update_character
 	.globl _character_init
 	.globl _performantdelay
@@ -71,12 +73,12 @@ _last_state::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;src/main.c:29: void init_gfx(void){
+;src/main.c:30: void init_gfx(void){
 ;	---------------------------------
 ; Function init_gfx
 ; ---------------------------------
 _init_gfx::
-;src/main.c:31: set_sprite_data(0, 4, duck);
+;src/main.c:32: set_sprite_data(0, 4, duck);
 	ld	de, #_duck
 	push	de
 	ld	hl, #0x400
@@ -92,7 +94,7 @@ _init_gfx::
 	ld	(hl), #0x02
 	ld	hl, #(_shadow_OAM + 14)
 	ld	(hl), #0x03
-;src/main.c:38: set_sprite_data(4, 4, selector);
+;src/main.c:39: set_sprite_data(4, 4, selector);
 	ld	de, #_selector
 	push	de
 	ld	hl, #0x404
@@ -108,7 +110,7 @@ _init_gfx::
 	ld	(hl), #0x06
 	ld	hl, #(_shadow_OAM + 30)
 	ld	(hl), #0x07
-;src/main.c:45: set_sprite_data(8,8,object_sprites);
+;src/main.c:46: set_sprite_data(8,8,object_sprites);
 	ld	de, #_object_sprites
 	push	de
 	ld	hl, #0x808
@@ -132,7 +134,7 @@ _init_gfx::
 	ld	(hl), #0x0e
 	ld	hl, #(_shadow_OAM + 62)
 	ld	(hl), #0x0f
-;src/main.c:56: set_sprite_data(16,1,block_pointer);
+;src/main.c:57: set_sprite_data(16,1,block_pointer);
 	ld	de, #_block_pointer
 	push	de
 	ld	hl, #0x110
@@ -142,14 +144,18 @@ _init_gfx::
 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
 	ld	hl, #(_shadow_OAM + 66)
 	ld	(hl), #0x10
-;src/main.c:60: set_bkg_data(0, 96, map_tiles_alt);
+;src/main.c:61: global_actual_level = normalize_level_number(global_actual_level);
+	ld	a, (_global_actual_level)
+	call	_normalize_level_number
+	ld	(#_global_actual_level),a
+;src/main.c:62: set_bkg_data(0, 96, map_tiles_alt);
 	ld	de, #_map_tiles_alt
 	push	de
 	ld	hl, #0x6000
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;src/main.c:61: set_bkg_tiles(0,0,20,15,global_levels_array[global_actual_level]);
+;src/main.c:63: set_bkg_tiles(0,0,20,15,global_levels_array[global_actual_level]);
 	ld	bc, #_global_levels_array+0
 	ld	a, (_global_actual_level)
 	ld	h, #0x00
@@ -167,18 +173,18 @@ _init_gfx::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;src/main.c:62: SHOW_BKG;
+;src/main.c:64: SHOW_BKG;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x01
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:66: set_win_data(96,68, hud_tiles);
+;src/main.c:68: set_win_data(96,68, hud_tiles);
 	ld	de, #_hud_tiles
 	push	de
 	ld	hl, #0x4460
 	push	hl
 	call	_set_win_data
 	add	sp, #4
-;src/main.c:67: set_win_tiles(0,0,20,4, hud_selector);
+;src/main.c:69: set_win_tiles(0,0,20,4, hud_selector);
 	ld	de, #_hud_selector
 	push	de
 	ld	hl, #0x414
@@ -188,44 +194,44 @@ _init_gfx::
 	push	af
 	call	_set_win_tiles
 	add	sp, #6
-;src/main.c:68: draw_game_hud_buttons();
+;src/main.c:70: draw_game_hud_buttons();
 	call	_draw_game_hud_buttons
-;src/main.c:70: WX_REG = 7;      // SIEMPRE 7
+;src/main.c:72: WX_REG = 7;      // SIEMPRE 7
 	ld	a, #0x07
 	ldh	(_WX_REG + 0), a
-;src/main.c:71: WY_REG = 120;    // 144 - 24
+;src/main.c:73: WY_REG = 120;    // 144 - 24
 	ld	a, #0x78
 	ldh	(_WY_REG + 0), a
-;src/main.c:72: SHOW_WIN;
+;src/main.c:74: SHOW_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x20
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:73: SHOW_SPRITES;
+;src/main.c:75: SHOW_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x02
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:75: }
+;src/main.c:77: }
 	ret
-;src/main.c:77: void main(void)
+;src/main.c:79: void main(void)
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
 _main::
-;src/main.c:79: init_game_title();
+;src/main.c:81: init_game_title();
 	call	_init_game_title
-;src/main.c:80: global_game_state = STATE_MENU;
+;src/main.c:82: global_game_state = STATE_MENU;
 	xor	a, a
 	ld	(#_global_game_state),a
-;src/main.c:82: while(1) {
-00124$:
-;src/main.c:83: switch (global_game_state)
-	ld	a, #0x06
+;src/main.c:84: while(1) {
+00129$:
+;src/main.c:85: switch (global_game_state)
+	ld	a, #0x07
 	ld	hl, #_global_game_state
 	sub	a, (hl)
-	jp	C, 00122$
+	jp	C, 00127$
 	ld	c, (hl)
 	ld	b, #0x00
-	ld	hl, #00191$
+	ld	hl, #00210$
 	add	hl, bc
 	add	hl, bc
 	ld	c, (hl)
@@ -233,135 +239,183 @@ _main::
 	ld	h, (hl)
 	ld	l, c
 	jp	(hl)
-00191$:
+00210$:
 	.dw	00101$
 	.dw	00106$
 	.dw	00109$
 	.dw	00112$
-	.dw	00122$
+	.dw	00127$
 	.dw	00115$
 	.dw	00118$
-;src/main.c:86: case STATE_MENU:
+	.dw	00121$
+;src/main.c:88: case STATE_MENU:
 00101$:
-;src/main.c:87: if(last_state != STATE_MENU) {
+;src/main.c:89: if(last_state != STATE_MENU) {
 	ld	a, (#_last_state)
 	or	a, a
 	jr	Z, 00103$
-;src/main.c:88: init_game_title();
+;src/main.c:90: init_game_title();
 	call	_init_game_title
-;src/main.c:89: last_state = STATE_MENU;
+;src/main.c:91: last_state = STATE_MENU;
 	xor	a, a
 	ld	(#_last_state),a
 00103$:
-;src/main.c:92: if(joypad() & J_START){
+;src/main.c:94: if(joypad() & J_START){
 	call	_joypad
 	rlca
 	jr	NC, 00105$
-;src/main.c:93: update_game_state(STATE_SELECTION);
+;src/main.c:95: update_game_state(STATE_SELECTION);
 	ld	a, #0x01
 	call	_update_game_state
 00105$:
-;src/main.c:96: performantdelay(5);
+;src/main.c:98: performantdelay(5);
 	ld	a, #0x05
 	call	_performantdelay
-;src/main.c:97: break;
-	jr	00122$
-;src/main.c:99: case STATE_SELECTION:
+;src/main.c:99: break;
+	jp	00127$
+;src/main.c:101: case STATE_SELECTION:
 00106$:
-;src/main.c:100: if(last_state != STATE_SELECTION) {
+;src/main.c:102: if(last_state != STATE_SELECTION) {
 	ld	a, (#_last_state)
 	dec	a
 	jr	Z, 00108$
-;src/main.c:101: init_start_selection_menu();
+;src/main.c:103: init_start_selection_menu();
 	call	_init_start_selection_menu
-;src/main.c:102: last_state = STATE_SELECTION;
+;src/main.c:104: last_state = STATE_SELECTION;
 	ld	hl, #_last_state
 	ld	(hl), #0x01
 00108$:
-;src/main.c:105: update_start_selection_menu();
+;src/main.c:107: update_start_selection_menu();
 	call	_update_start_selection_menu
-;src/main.c:106: break;
-	jr	00122$
-;src/main.c:108: case STATE_GAME_SETTING:
+;src/main.c:108: break;
+	jp	00127$
+;src/main.c:110: case STATE_GAME_SETTING:
 00109$:
-;src/main.c:109: if(last_state != STATE_GAME_SETTING) {
+;src/main.c:111: if(last_state != STATE_GAME_SETTING) {
 	ld	a, (#_last_state)
 	sub	a, #0x02
 	jr	Z, 00111$
-;src/main.c:110: init_gfx();
+;src/main.c:112: init_gfx();
 	call	_init_gfx
-;src/main.c:111: pointer_init(&s);
+;src/main.c:113: pointer_init(&s);
 	ld	de, #_s
 	call	_pointer_init
-;src/main.c:112: init_level(global_actual_level);
+;src/main.c:114: init_level(global_actual_level);
 	ld	a, (_global_actual_level)
 	call	_init_level
-;src/main.c:113: print_objects_in_screen();
+;src/main.c:115: print_objects_in_screen();
 	call	_print_objects_in_screen
-;src/main.c:114: last_state = STATE_GAME_SETTING;
+;src/main.c:116: last_state = STATE_GAME_SETTING;
 	ld	hl, #_last_state
 	ld	(hl), #0x02
 00111$:
-;src/main.c:116: update_pointer(&s);
+;src/main.c:118: update_pointer(&s);
 	ld	de, #_s
 	call	_update_pointer
-;src/main.c:117: break;
-	jr	00122$
-;src/main.c:119: case STATE_GAME_RUNNING:
+;src/main.c:119: break;
+	jp	00127$
+;src/main.c:121: case STATE_GAME_RUNNING:
 00112$:
-;src/main.c:120: if(last_state != STATE_GAME_RUNNING) {
+;src/main.c:122: if(last_state != STATE_GAME_RUNNING) {
 	ld	a, (#_last_state)
 	sub	a, #0x03
 	jr	Z, 00114$
-;src/main.c:121: character_init(&p);
+;src/main.c:123: character_init(&p);
 	ld	de, #_p
 	call	_character_init
-;src/main.c:122: last_state = STATE_GAME_RUNNING;
+;src/main.c:124: last_state = STATE_GAME_RUNNING;
 	ld	hl, #_last_state
 	ld	(hl), #0x03
 00114$:
-;src/main.c:124: update_character(&p);
+;src/main.c:126: update_character(&p);
 	ld	de, #_p
 	call	_update_character
-;src/main.c:125: break;
-	jr	00122$
-;src/main.c:127: case STATE_GAME_OVER:
+;src/main.c:127: break;
+	jr	00127$
+;src/main.c:129: case STATE_GAME_OVER:
 00115$:
-;src/main.c:128: if(last_state != STATE_GAME_OVER) {
+;src/main.c:130: if(last_state != STATE_GAME_OVER) {
 	ld	a, (#_last_state)
 	sub	a, #0x05
 	jr	Z, 00117$
-;src/main.c:129: last_state = STATE_GAME_OVER;
+;src/main.c:131: last_state = STATE_GAME_OVER;
 	ld	hl, #_last_state
 	ld	(hl), #0x05
-;src/main.c:130: init_game_over_screen();
+;src/main.c:132: init_game_over_screen();
 	call	_init_game_over_screen
 00117$:
-;src/main.c:132: update_game_over_screen();
+;src/main.c:134: update_game_over_screen();
 	call	_update_game_over_screen
-;src/main.c:133: break;
-	jr	00122$
-;src/main.c:135: case STATE_VICTORY:
+;src/main.c:135: break;
+	jr	00127$
+;src/main.c:137: case STATE_VICTORY:
 00118$:
-;src/main.c:136: if(last_state != STATE_VICTORY) {
+;src/main.c:138: if(last_state != STATE_VICTORY) {
 	ld	a, (#_last_state)
 	sub	a, #0x06
 	jr	Z, 00120$
-;src/main.c:137: last_state = STATE_VICTORY;
+;src/main.c:139: last_state = STATE_VICTORY;
 	ld	hl, #_last_state
 	ld	(hl), #0x06
-;src/main.c:138: init_victory_screen();
+;src/main.c:140: init_victory_screen();
 	call	_init_victory_screen
 00120$:
-;src/main.c:140: update_victory_screen();
+;src/main.c:142: update_victory_screen();
 	call	_update_victory_screen
-;src/main.c:145: }
-00122$:
-;src/main.c:146: performantdelay(10);
+;src/main.c:143: break;
+	jr	00127$
+;src/main.c:145: case STATE_FINAL_MESSAGE:
+00121$:
+;src/main.c:146: if(last_state != STATE_FINAL_MESSAGE) {
+	ld	a, (#_last_state)
+	sub	a, #0x07
+	jr	Z, 00123$
+;src/main.c:147: last_state = STATE_FINAL_MESSAGE;
+	ld	hl, #_last_state
+	ld	(hl), #0x07
+;src/main.c:148: HIDE_SPRITES;
+	ldh	a, (_LCDC_REG + 0)
+	and	a, #0xfd
+	ldh	(_LCDC_REG + 0), a
+;src/main.c:149: hide_character();
+	call	_hide_character
+;src/main.c:150: WX_REG = 0;
+	xor	a, a
+	ldh	(_WX_REG + 0), a
+;src/main.c:151: WY_REG = 0;
+	xor	a, a
+	ldh	(_WY_REG + 0), a
+;src/main.c:152: set_win_tiles(0,0,20,18,final_message);
+	ld	de, #_final_message
+	push	de
+	ld	hl, #0x1214
+	push	hl
+	xor	a, a
+	rrca
+	push	af
+	call	_set_win_tiles
+	add	sp, #6
+;src/main.c:153: SHOW_WIN;
+	ldh	a, (_LCDC_REG + 0)
+	or	a, #0x20
+	ldh	(_LCDC_REG + 0), a
+00123$:
+;src/main.c:155: if(joypad() & (J_START | J_A)){
+	call	_joypad
+	and	a, #0x90
+	jr	Z, 00127$
+;src/main.c:156: global_actual_level = 0;
+;src/main.c:157: update_game_state(STATE_MENU);
+	xor	a, a
+	ld	(#_global_actual_level), a
+	call	_update_game_state
+;src/main.c:163: }
+00127$:
+;src/main.c:164: performantdelay(10);
 	ld	a, #0x0a
 	call	_performantdelay
-;src/main.c:148: }
-	jp	00124$
+;src/main.c:166: }
+	jp	00129$
 	.area _CODE
 	.area _INITIALIZER
 	.area _CABS (ABS)

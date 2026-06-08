@@ -14,9 +14,11 @@ Symbol Table
     _character_init                                                 ******** GX
     _draw_game_hud_buttons                                          ******** GX
     _duck                                                           ******** GX
+    _final_message                                                  ******** GX
     _global_actual_level                                            ******** GX
     _global_game_state                                              ******** GX
     _global_levels_array                                            ******** GX
+    _hide_character                                                 ******** GX
     _hud_selector                                                   ******** GX
     _hud_tiles                                                      ******** GX
     _init_game_over_screen                                          ******** GX
@@ -27,8 +29,9 @@ Symbol Table
     _init_victory_screen                                            ******** GX
     _joypad                                                         ******** GX
   1 _last_state                                                     00000017 GR
-  0 _main                                                           000000EC GR
+  0 _main                                                           000000F5 GR
     _map_tiles_alt                                                  ******** GX
+    _normalize_level_number                                         ******** GX
     _object_sprites                                                 ******** GX
   1 _p                                                              00000000 GR
     _performantdelay                                                ******** GX
@@ -54,7 +57,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      1B7   flags    0
+   0 _CODE                                      size      206   flags    0
    1 _DATA                                      size       18   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

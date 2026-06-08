@@ -28,6 +28,7 @@
 
 #define NUMBER_OF_BLOCKS 6
 #define NUMBER_OF_TILES_IN_GRID 300 //20x15
+#define NUMBER_OF_LEVELS 3
 
 //Global variable for block selected.Indicará la cantidad de bloques disponibles.
 //Siendo index 1 = DER, 2= IZQ, 3=ARRIBA, 4=ABAJO, 5=CLOCKWISE 6 = COUNTERCLOCKWISE
@@ -54,7 +55,8 @@ typedef enum {
     STATE_GAME_RUNNING,
     STATE_GAME_PAUSED,
     STATE_GAME_OVER,
-    STATE_VICTORY
+    STATE_VICTORY,
+    STATE_FINAL_MESSAGE
 } GameState;
 
 struct TileEvent {
@@ -70,6 +72,7 @@ extern GameState global_game_state;
 extern uint16_t global_init_point;
 
 void update_game_state(GameState new_value);
+uint8_t normalize_level_number(uint8_t level_number);
 void init_game_title(void);
 void get_colision_from_map(const unsigned char in[], uint8_t out[]);
 void get_init_point_from_map(uint8_t colision_map[NUMBER_OF_TILES_IN_GRID]);

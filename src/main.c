@@ -13,6 +13,7 @@
 #include "../res/object_sprites.h"
 #include "../res/hud_tiles.h"
 #include "../res/hud_selector.h"
+#include "../res/final_message.h"
 
 #include "Headers/Common.h"
 #include "Headers/Character.h"
@@ -57,6 +58,7 @@ void init_gfx(void){
     set_sprite_tile(16,16);
 
     //map
+    global_actual_level = normalize_level_number(global_actual_level);
     set_bkg_data(0, 96, map_tiles_alt);
     set_bkg_tiles(0,0,20,15,global_levels_array[global_actual_level]);
     SHOW_BKG;
@@ -139,6 +141,22 @@ void main(void)
             }
             update_victory_screen();
             break;
+        
+        case STATE_FINAL_MESSAGE:
+            if(last_state != STATE_FINAL_MESSAGE) {
+                last_state = STATE_FINAL_MESSAGE;
+                HIDE_SPRITES;
+                hide_character();
+                WX_REG = 0;
+                WY_REG = 0;
+                set_win_tiles(0,0,20,18,final_message);
+                SHOW_WIN;
+            }
+            if(joypad() & (J_START | J_A)){
+                global_actual_level = 0;
+                update_game_state(STATE_MENU);
+           }
+           break;
 
         default:
             break;

@@ -51,6 +51,7 @@ void change_bkg_tile_16x16(uint16_t tile_index, uint8_t tile_id_BR){
 }
 
 void change_all_block_tiles(uint8_t tile_id_BR){
+    //cambia el tile de todos los bloques del mapa por el tile que se le pase por parametro.
     uint8_t block_type;
 
     for(uint16_t i = 0; i < NUMBER_OF_TILES_IN_GRID; i++){

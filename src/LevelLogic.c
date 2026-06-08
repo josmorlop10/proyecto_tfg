@@ -43,6 +43,14 @@ const unsigned char* global_level_blocks_array[] = { blocks_map_test, blocks_map
 uint8_t global_actual_level = 0;
 uint8_t global_option_selection_from_menu = 0;
 
+uint8_t normalize_level_number(uint8_t level_number){
+    if(level_number >= NUMBER_OF_LEVELS){
+        level_number = level_number % NUMBER_OF_LEVELS;
+    }
+
+    return level_number;
+}
+
 void init_game_title(void){
     
     HIDE_WIN;
@@ -56,9 +64,9 @@ void init_level(uint8_t level_number){
 
     global_keyset = 0;
     global_hud_selected = 0;
-    if(level_number >= LEVEL_COUNT){
-        level_number = level_number % LEVEL_COUNT;
-    }
+    level_number = normalize_level_number(level_number);
+    global_actual_level = level_number;
+
     //map
     for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
         global_colision_map[i] = EMPTY;
