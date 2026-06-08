@@ -187,7 +187,7 @@ _victory_screen:
 	.db #0x60	; 96
 	.db #0x60	; 96
 	.db #0x60	; 96
-	.db #0x9b	; 155
+	.db #0x60	; 96
 	.db #0x60	; 96
 	.db #0x60	; 96
 	.db #0x60	; 96

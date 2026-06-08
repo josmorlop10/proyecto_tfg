@@ -8,9 +8,11 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _set_win_tiles
+	.globl _set_win_data
 	.globl _set_bkg_tiles
 	.globl _set_bkg_data
 	.globl _joypad
+	.globl _performantdelay
 	.globl _move_win_screen
 	.globl _update_values_in_hud
 	.globl _update_menu_pointer
@@ -106,42 +108,42 @@ _global_option_selection_from_menu::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;src/LevelLogic.c:46: uint8_t normalize_level_number(uint8_t level_number){
+;src/LevelLogic.c:47: uint8_t normalize_level_number(uint8_t level_number){
 ;	---------------------------------
 ; Function normalize_level_number
 ; ---------------------------------
 _normalize_level_number::
-;src/LevelLogic.c:47: if(level_number >= NUMBER_OF_LEVELS){
+;src/LevelLogic.c:48: if(level_number >= NUMBER_OF_LEVELS){
 	cp	a, #0x03
 	ret	C
-;src/LevelLogic.c:48: level_number = level_number % NUMBER_OF_LEVELS;
+;src/LevelLogic.c:49: level_number = level_number % NUMBER_OF_LEVELS;
 	ld	e, #0x03
 	call	__moduchar
 	ld	a, c
-;src/LevelLogic.c:51: return level_number;
-;src/LevelLogic.c:52: }
+;src/LevelLogic.c:52: return level_number;
+;src/LevelLogic.c:53: }
 	ret
-;src/LevelLogic.c:54: void init_game_title(void){
+;src/LevelLogic.c:55: void init_game_title(void){
 ;	---------------------------------
 ; Function init_game_title
 ; ---------------------------------
 _init_game_title::
-;src/LevelLogic.c:56: HIDE_WIN;
+;src/LevelLogic.c:57: HIDE_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xdf
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:57: HIDE_SPRITES;
+;src/LevelLogic.c:58: HIDE_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xfd
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:58: set_bkg_data(0,232,png_prueba_tiles);
+;src/LevelLogic.c:59: set_bkg_data(0,232,png_prueba_tiles);
 	ld	de, #_png_prueba_tiles
 	push	de
 	ld	hl, #0xe800
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;src/LevelLogic.c:59: set_bkg_tiles(0,0,20,18,png_prueba_map);
+;src/LevelLogic.c:60: set_bkg_tiles(0,0,20,18,png_prueba_map);
 	ld	de, #_png_prueba_map
 	push	de
 	ld	hl, #0x1214
@@ -151,32 +153,32 @@ _init_game_title::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;src/LevelLogic.c:60: SHOW_BKG;
+;src/LevelLogic.c:61: SHOW_BKG;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x01
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:61: }
+;src/LevelLogic.c:62: }
 	ret
-;src/LevelLogic.c:63: void init_level(uint8_t level_number){
+;src/LevelLogic.c:64: void init_level(uint8_t level_number){
 ;	---------------------------------
 ; Function init_level
 ; ---------------------------------
 _init_level::
 	dec	sp
 	dec	sp
-;src/LevelLogic.c:65: global_keyset = 0;
+;src/LevelLogic.c:66: global_keyset = 0;
 	ld	hl, #_global_keyset
 	ld	(hl), #0x00
-;src/LevelLogic.c:66: global_hud_selected = 0;
+;src/LevelLogic.c:67: global_hud_selected = 0;
 	ld	hl, #_global_hud_selected
 	ld	(hl), #0x00
-;src/LevelLogic.c:67: level_number = normalize_level_number(level_number);
+;src/LevelLogic.c:68: level_number = normalize_level_number(level_number);
 	call	_normalize_level_number
 	ld	c, a
-;src/LevelLogic.c:68: global_actual_level = level_number;
+;src/LevelLogic.c:69: global_actual_level = level_number;
 	ld	hl, #_global_actual_level
 	ld	(hl), c
-;src/LevelLogic.c:71: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/LevelLogic.c:72: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	ld	de, #0x0000
 00104$:
 	ld	a, e
@@ -185,15 +187,15 @@ _init_level::
 	ld	a, l
 	sbc	a, #0x01
 	jr	NC, 00101$
-;src/LevelLogic.c:72: global_colision_map[i] = EMPTY;
+;src/LevelLogic.c:73: global_colision_map[i] = EMPTY;
 	ld	hl, #_global_colision_map
 	add	hl, de
 	ld	(hl), #0x00
-;src/LevelLogic.c:71: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/LevelLogic.c:72: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	inc	de
 	jr	00104$
 00101$:
-;src/LevelLogic.c:75: get_colision_from_map(global_levels_array[level_number], global_colision_map);
+;src/LevelLogic.c:76: get_colision_from_map(global_levels_array[level_number], global_colision_map);
 	ld	de, #_global_levels_array+0
 	ld	b, #0x00
 	sla	c
@@ -210,7 +212,7 @@ _init_level::
 	ld	bc, #_global_colision_map
 	ld	d, h
 	call	_get_colision_from_map
-;src/LevelLogic.c:76: read_global_object_info_from_map(global_level_objects_array[level_number]);
+;src/LevelLogic.c:77: read_global_object_info_from_map(global_level_objects_array[level_number]);
 	ld	bc, #_global_level_objects_array+0
 	pop	hl
 	push	hl
@@ -221,7 +223,7 @@ _init_level::
 	ld	e, c
 	ld	d, a
 	call	_read_global_object_info_from_map
-;src/LevelLogic.c:77: read_global_block_info_from_map(global_level_blocks_array[level_number]);
+;src/LevelLogic.c:78: read_global_block_info_from_map(global_level_blocks_array[level_number]);
 	ld	bc, #_global_level_blocks_array+0
 	pop	hl
 	push	hl
@@ -232,13 +234,13 @@ _init_level::
 	ld	e, c
 	ld	d, a
 	call	_read_global_block_info_from_map
-;src/LevelLogic.c:79: for(uint8_t e = 0; e < NUMBER_OF_BLOCKS; e++){
+;src/LevelLogic.c:80: for(uint8_t e = 0; e < NUMBER_OF_BLOCKS; e++){
 	ld	c, #0x00
 00107$:
 	ld	a, c
 	sub	a, #0x06
 	jr	NC, 00102$
-;src/LevelLogic.c:80: update_values_in_hud(RIGHT+e, global_blocks_available[e]);
+;src/LevelLogic.c:81: update_values_in_hud(RIGHT+e, global_blocks_available[e]);
 	ld	hl, #_global_blocks_available
 	ld	b, #0x00
 	add	hl, bc
@@ -248,29 +250,29 @@ _init_level::
 	push	bc
 	call	_update_values_in_hud
 	pop	bc
-;src/LevelLogic.c:79: for(uint8_t e = 0; e < NUMBER_OF_BLOCKS; e++){
+;src/LevelLogic.c:80: for(uint8_t e = 0; e < NUMBER_OF_BLOCKS; e++){
 	inc	c
 	jr	00107$
 00102$:
-;src/LevelLogic.c:83: get_init_point_from_map(global_colision_map);
+;src/LevelLogic.c:84: get_init_point_from_map(global_colision_map);
 	ld	de, #_global_colision_map
 	inc	sp
 	inc	sp
 	jp	_get_init_point_from_map
-;src/LevelLogic.c:85: }
+;src/LevelLogic.c:86: }
 	inc	sp
 	inc	sp
 	ret
-;src/LevelLogic.c:87: void update_game_state(GameState new_value){
+;src/LevelLogic.c:88: void update_game_state(GameState new_value){
 ;	---------------------------------
 ; Function update_game_state
 ; ---------------------------------
 _update_game_state::
 	ld	(#_global_game_state),a
-;src/LevelLogic.c:88: global_game_state = new_value;
-;src/LevelLogic.c:89: }
+;src/LevelLogic.c:89: global_game_state = new_value;
+;src/LevelLogic.c:90: }
 	ret
-;src/LevelLogic.c:92: void get_colision_from_map(const unsigned char in[], uint8_t out[]){
+;src/LevelLogic.c:93: void get_colision_from_map(const unsigned char in[], uint8_t out[]){
 ;	---------------------------------
 ; Function get_colision_from_map
 ; ---------------------------------
@@ -284,7 +286,7 @@ _get_colision_from_map::
 	ld	a, c
 	ld	(hl+), a
 	ld	(hl), b
-;src/LevelLogic.c:94: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/LevelLogic.c:95: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	ld	bc, #0x0000
 00130$:
 	ld	e, c
@@ -294,7 +296,7 @@ _get_colision_from_map::
 	ld	a, d
 	sbc	a, #0x01
 	jp	NC, 00132$
-;src/LevelLogic.c:95: if(in[i] == 51){
+;src/LevelLogic.c:96: if(in[i] == 51){
 	ldhl	sp,	#3
 	ld	a,	(hl+)
 	ld	h, (hl)
@@ -302,10 +304,10 @@ _get_colision_from_map::
 	add	hl, bc
 	ld	e, l
 	ld	d, h
-;src/LevelLogic.c:105: } else if(in[i] >= 21 && in[i] <= 29){
+;src/LevelLogic.c:106: } else if(in[i] >= 21 && in[i] <= 29){
 	ld	a, (de)
 	ldhl	sp,	#0
-;src/LevelLogic.c:96: out[i] = SOURCE_R;
+;src/LevelLogic.c:97: out[i] = SOURCE_R;
 	ld	(hl+), a
 	ld	a,	(hl+)
 	ld	h, (hl)
@@ -313,47 +315,47 @@ _get_colision_from_map::
 	add	hl, bc
 	ld	e, l
 	ld	d, h
-;src/LevelLogic.c:95: if(in[i] == 51){
+;src/LevelLogic.c:96: if(in[i] == 51){
 	ldhl	sp,	#0
 	ld	a, (hl)
 	sub	a, #0x33
 	jr	NZ, 00126$
-;src/LevelLogic.c:96: out[i] = SOURCE_R;
+;src/LevelLogic.c:97: out[i] = SOURCE_R;
 	ld	a, #0x03
 	ld	(de), a
 	jr	00131$
 00126$:
-;src/LevelLogic.c:97: } else if(in[i] == 55){
+;src/LevelLogic.c:98: } else if(in[i] == 55){
 	ldhl	sp,	#0
 	ld	a, (hl)
 	sub	a, #0x37
 	jr	NZ, 00123$
-;src/LevelLogic.c:98: out[i] = SOURCE_L;
+;src/LevelLogic.c:99: out[i] = SOURCE_L;
 	ld	a, #0x0e
 	ld	(de), a
 	jr	00131$
 00123$:
-;src/LevelLogic.c:99: } else if(in[i] == 59){
+;src/LevelLogic.c:100: } else if(in[i] == 59){
 	ldhl	sp,	#0
 	ld	a, (hl)
 	sub	a, #0x3b
 	jr	NZ, 00120$
-;src/LevelLogic.c:100: out[i] = SOURCE_U;
+;src/LevelLogic.c:101: out[i] = SOURCE_U;
 	ld	a, #0x0f
 	ld	(de), a
 	jr	00131$
 00120$:
-;src/LevelLogic.c:101: } else if(in[i] == 63){
+;src/LevelLogic.c:102: } else if(in[i] == 63){
 	ldhl	sp,	#0
 	ld	a, (hl)
 	sub	a, #0x3f
 	jr	NZ, 00117$
-;src/LevelLogic.c:102: out[i] = SOURCE_D;
+;src/LevelLogic.c:103: out[i] = SOURCE_D;
 	ld	a, #0x10
 	ld	(de), a
 	jr	00131$
 00117$:
-;src/LevelLogic.c:103: } else if(in[i] >= 64 && in[i] <= 67){
+;src/LevelLogic.c:104: } else if(in[i] >= 64 && in[i] <= 67){
 	ldhl	sp,	#0
 	ld	a, (hl)
 	sub	a, #0x40
@@ -361,12 +363,12 @@ _get_colision_from_map::
 	ld	a, #0x43
 	sub	a, (hl)
 	jr	C, 00113$
-;src/LevelLogic.c:104: out[i] = DESTINATION;
+;src/LevelLogic.c:105: out[i] = DESTINATION;
 	ld	a, #0x04
 	ld	(de), a
 	jr	00131$
 00113$:
-;src/LevelLogic.c:105: } else if(in[i] >= 21 && in[i] <= 29){
+;src/LevelLogic.c:106: } else if(in[i] >= 21 && in[i] <= 29){
 	ldhl	sp,	#0
 	ld	a, (hl)
 	sub	a, #0x15
@@ -374,12 +376,12 @@ _get_colision_from_map::
 	ld	a, #0x1d
 	sub	a, (hl)
 	jr	C, 00109$
-;src/LevelLogic.c:106: out[i] = FALL;
+;src/LevelLogic.c:107: out[i] = FALL;
 	ld	a, #0x0c
 	ld	(de), a
 	jr	00131$
 00109$:
-;src/LevelLogic.c:107: } else if(in[i] >= UMBRAL_COLISION_UP && in[i] <= UMBRAL_COLISION_DOWN){
+;src/LevelLogic.c:108: } else if(in[i] >= UMBRAL_COLISION_UP && in[i] <= UMBRAL_COLISION_DOWN){
 	ldhl	sp,	#0
 	ld	a, (hl)
 	sub	a, #0x05
@@ -387,12 +389,12 @@ _get_colision_from_map::
 	ld	a, #0x14
 	sub	a, (hl)
 	jr	C, 00105$
-;src/LevelLogic.c:108: out[i] = SOLID;
+;src/LevelLogic.c:109: out[i] = SOLID;
 	ld	a, #0x01
 	ld	(de), a
 	jr	00131$
 00105$:
-;src/LevelLogic.c:109: } else if(in[i] >= 32 && in[i] <= 39){
+;src/LevelLogic.c:110: } else if(in[i] >= 32 && in[i] <= 39){
 	ldhl	sp,	#0
 	ld	a, (hl)
 	sub	a, #0x20
@@ -400,18 +402,18 @@ _get_colision_from_map::
 	ld	a, #0x27
 	sub	a, (hl)
 	jr	C, 00131$
-;src/LevelLogic.c:110: out[i] = DOOR;
+;src/LevelLogic.c:111: out[i] = DOOR;
 	ld	a, #0x0d
 	ld	(de), a
 00131$:
-;src/LevelLogic.c:94: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/LevelLogic.c:95: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	inc	bc
 	jp	00130$
 00132$:
-;src/LevelLogic.c:113: }
+;src/LevelLogic.c:114: }
 	add	sp, #5
 	ret
-;src/LevelLogic.c:115: void read_global_object_info_from_map(const unsigned char* objects_map){
+;src/LevelLogic.c:116: void read_global_object_info_from_map(const unsigned char* objects_map){
 ;	---------------------------------
 ; Function read_global_object_info_from_map
 ; ---------------------------------
@@ -420,7 +422,7 @@ _read_global_object_info_from_map::
 	ldhl	sp,	#3
 	ld	a, e
 	ld	(hl+), a
-;src/LevelLogic.c:116: for(uint8_t e=0; e<NUMBER_OF_OBJECTS; e++){
+;src/LevelLogic.c:117: for(uint8_t e=0; e<NUMBER_OF_OBJECTS; e++){
 	ld	a, d
 	ld	(hl+), a
 	ld	(hl), #0x00
@@ -429,7 +431,7 @@ _read_global_object_info_from_map::
 	ld	a, (hl)
 	sub	a, #0x08
 	jr	NC, 00105$
-;src/LevelLogic.c:117: global_object_information[e*3] = objects_map[e*3];
+;src/LevelLogic.c:118: global_object_information[e*3] = objects_map[e*3];
 	ld	c, (hl)
 	ld	b, #0x00
 	ld	l, c
@@ -461,7 +463,7 @@ _read_global_object_info_from_map::
 	ld	h, (hl)
 	ld	l, e
 	ld	(hl), a
-;src/LevelLogic.c:118: global_object_information[e*3+1] = objects_map[e*3+1];
+;src/LevelLogic.c:119: global_object_information[e*3+1] = objects_map[e*3+1];
 	ldhl	sp,	#5
 	ld	a, (hl)
 	ld	e, a
@@ -498,7 +500,7 @@ _read_global_object_info_from_map::
 	ld	h, (hl)
 	ld	l, e
 	ld	(hl), a
-;src/LevelLogic.c:119: global_object_information[e*3+2] = objects_map[e*3+2];
+;src/LevelLogic.c:120: global_object_information[e*3+2] = objects_map[e*3+2];
 	ldhl	sp,	#0
 	ld	a, (hl)
 	inc	a
@@ -519,22 +521,22 @@ _read_global_object_info_from_map::
 	ld	b, h
 	ld	a, (bc)
 	ld	(de), a
-;src/LevelLogic.c:116: for(uint8_t e=0; e<NUMBER_OF_OBJECTS; e++){
+;src/LevelLogic.c:117: for(uint8_t e=0; e<NUMBER_OF_OBJECTS; e++){
 	ldhl	sp,	#5
 	inc	(hl)
 	jr	00103$
 00105$:
-;src/LevelLogic.c:121: }
+;src/LevelLogic.c:122: }
 	add	sp, #6
 	ret
-;src/LevelLogic.c:123: void read_global_block_info_from_map(const unsigned char* blocks_map){
+;src/LevelLogic.c:124: void read_global_block_info_from_map(const unsigned char* blocks_map){
 ;	---------------------------------
 ; Function read_global_block_info_from_map
 ; ---------------------------------
 _read_global_block_info_from_map::
 	add	sp, #-1
 	push	de
-;src/LevelLogic.c:124: for(uint8_t e=0; e<NUMBER_OF_BLOCKS; e++){
+;src/LevelLogic.c:125: for(uint8_t e=0; e<NUMBER_OF_BLOCKS; e++){
 	ldhl	sp,	#2
 	ld	(hl), #0x00
 00103$:
@@ -542,7 +544,7 @@ _read_global_block_info_from_map::
 	ld	a, (hl)
 	sub	a, #0x06
 	jr	NC, 00105$
-;src/LevelLogic.c:125: global_blocks_available[e] = blocks_map[e];
+;src/LevelLogic.c:126: global_blocks_available[e] = blocks_map[e];
 	ld	de, #_global_blocks_available
 	ld	l, (hl)
 	ld	h, #0x00
@@ -559,15 +561,15 @@ _read_global_block_info_from_map::
 	ld	d, h
 	ld	a, (de)
 	ld	(bc), a
-;src/LevelLogic.c:124: for(uint8_t e=0; e<NUMBER_OF_BLOCKS; e++){
+;src/LevelLogic.c:125: for(uint8_t e=0; e<NUMBER_OF_BLOCKS; e++){
 	ldhl	sp,	#2
 	inc	(hl)
 	jr	00103$
 00105$:
-;src/LevelLogic.c:127: }
+;src/LevelLogic.c:128: }
 	add	sp, #3
 	ret
-;src/LevelLogic.c:129: void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value){
+;src/LevelLogic.c:130: void change_colision_map_at(uint16_t tileindexBR, uint8_t new_value){
 ;	---------------------------------
 ; Function change_colision_map_at
 ; ---------------------------------
@@ -575,7 +577,7 @@ _change_colision_map_at::
 	dec	sp
 	ldhl	sp,	#0
 	ld	(hl), a
-;src/LevelLogic.c:130: if(tileindexBR < NUMBER_OF_TILES_IN_GRID){
+;src/LevelLogic.c:131: if(tileindexBR < NUMBER_OF_TILES_IN_GRID){
 	ld	c, e
 	ld	b, d
 	ld	a, c
@@ -583,7 +585,7 @@ _change_colision_map_at::
 	ld	a, b
 	sbc	a, #0x01
 	jr	NC, 00103$
-;src/LevelLogic.c:131: global_colision_map[tileindexBR] = new_value;
+;src/LevelLogic.c:132: global_colision_map[tileindexBR] = new_value;
 	ld	hl, #_global_colision_map
 	add	hl, de
 	ld	e, l
@@ -591,7 +593,7 @@ _change_colision_map_at::
 	ldhl	sp,	#0
 	ld	a, (hl)
 	ld	(de), a
-;src/LevelLogic.c:132: global_colision_map[tileindexBR-1] = new_value;
+;src/LevelLogic.c:133: global_colision_map[tileindexBR-1] = new_value;
 	ld	e, c
 	ld	d, b
 	dec	de
@@ -602,7 +604,7 @@ _change_colision_map_at::
 	ldhl	sp,	#0
 	ld	a, (hl)
 	ld	(de), a
-;src/LevelLogic.c:133: global_colision_map[tileindexBR-20] = new_value;
+;src/LevelLogic.c:134: global_colision_map[tileindexBR-20] = new_value;
 	ld	a, c
 	add	a, #0xec
 	ld	e, a
@@ -616,7 +618,7 @@ _change_colision_map_at::
 	ldhl	sp,	#0
 	ld	a, (hl)
 	ld	(de), a
-;src/LevelLogic.c:134: global_colision_map[tileindexBR-21] = new_value;
+;src/LevelLogic.c:135: global_colision_map[tileindexBR-21] = new_value;
 	ld	a, c
 	add	a, #0xeb
 	ld	c, a
@@ -631,29 +633,29 @@ _change_colision_map_at::
 	ld	a, (hl)
 	ld	(bc), a
 00103$:
-;src/LevelLogic.c:136: }
+;src/LevelLogic.c:137: }
 	inc	sp
 	ret
-;src/LevelLogic.c:138: void change_colision_map_BR(uint16_t tileindexBR, uint8_t new_value){
+;src/LevelLogic.c:139: void change_colision_map_BR(uint16_t tileindexBR, uint8_t new_value){
 ;	---------------------------------
 ; Function change_colision_map_BR
 ; ---------------------------------
 _change_colision_map_BR::
 	ld	c, a
-;src/LevelLogic.c:139: if(tileindexBR < NUMBER_OF_TILES_IN_GRID){
+;src/LevelLogic.c:140: if(tileindexBR < NUMBER_OF_TILES_IN_GRID){
 	ld	a, e
 	ld	l, d
 	sub	a, #0x2c
 	ld	a, l
 	sbc	a, #0x01
 	ret	NC
-;src/LevelLogic.c:140: global_colision_map[tileindexBR] = new_value;
+;src/LevelLogic.c:141: global_colision_map[tileindexBR] = new_value;
 	ld	hl, #_global_colision_map
 	add	hl, de
 	ld	(hl), c
-;src/LevelLogic.c:142: }
+;src/LevelLogic.c:143: }
 	ret
-;src/LevelLogic.c:144: uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah, uint8_t bx, uint8_t by, uint8_t bw, uint8_t bh){
+;src/LevelLogic.c:145: uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah, uint8_t bx, uint8_t by, uint8_t bw, uint8_t bh){
 ;	---------------------------------
 ; Function check_colision_of_sprites
 ; ---------------------------------
@@ -662,10 +664,10 @@ _check_colision_of_sprites::
 	ld	c, a
 	ldhl	sp,	#5
 	ld	(hl), e
-;src/LevelLogic.c:145: uint8_t res = 0; //no colision of sprites
+;src/LevelLogic.c:146: uint8_t res = 0; //no colision of sprites
 	ldhl	sp,	#0
 	ld	(hl), #0x00
-;src/LevelLogic.c:147: if(ax < bx + bw &&
+;src/LevelLogic.c:148: if(ax < bx + bw &&
 	ldhl	sp,	#10
 	ld	a, (hl)
 	ldhl	sp,	#1
@@ -694,7 +696,7 @@ _check_colision_of_sprites::
 	ld	a, b
 	sbc	a, (hl)
 	jr	NC, 00102$
-;src/LevelLogic.c:148: ax + aw > bx &&
+;src/LevelLogic.c:149: ax + aw > bx &&
 	ldhl	sp,	#8
 	ld	a, (hl)
 	ld	e, #0x00
@@ -709,7 +711,7 @@ _check_colision_of_sprites::
 	ld	a, (hl)
 	sbc	a, b
 	jr	NC, 00102$
-;src/LevelLogic.c:149: ay < by + bh &&
+;src/LevelLogic.c:150: ay < by + bh &&
 	ldhl	sp,	#11
 	ld	a, (hl)
 	ldhl	sp,	#1
@@ -736,7 +738,7 @@ _check_colision_of_sprites::
 	ld	a, (hl)
 	sbc	a, b
 	jr	NC, 00102$
-;src/LevelLogic.c:150: ay + ah > by){
+;src/LevelLogic.c:151: ay + ah > by){
 	ldhl	sp,	#9
 	ld	c, (hl)
 	ld	b, #0x00
@@ -753,30 +755,30 @@ _check_colision_of_sprites::
 	ld	a, (hl)
 	sbc	a, b
 	jr	NC, 00102$
-;src/LevelLogic.c:151: res = 1;
+;src/LevelLogic.c:152: res = 1;
 	dec	hl
 	dec	hl
 	ld	(hl), #0x01
 00102$:
-;src/LevelLogic.c:153: return res;
+;src/LevelLogic.c:154: return res;
 	ldhl	sp,	#0
 	ld	a, (hl)
-;src/LevelLogic.c:154: }
+;src/LevelLogic.c:155: }
 	add	sp, #6
 	pop	hl
 	add	sp, #6
 	jp	(hl)
-;src/LevelLogic.c:157: void get_init_point_from_map(uint8_t colision_map[NUMBER_OF_TILES_IN_GRID]){
+;src/LevelLogic.c:158: void get_init_point_from_map(uint8_t colision_map[NUMBER_OF_TILES_IN_GRID]){
 ;	---------------------------------
 ; Function get_init_point_from_map
 ; ---------------------------------
 _get_init_point_from_map::
-;src/LevelLogic.c:158: global_first_x = 0;
-;src/LevelLogic.c:159: global_first_y = 0;
+;src/LevelLogic.c:159: global_first_x = 0;
+;src/LevelLogic.c:160: global_first_y = 0;
 	xor	a, a
 	ld	(#_global_first_x), a
 	ld	(#_global_first_y),a
-;src/LevelLogic.c:161: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/LevelLogic.c:162: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	ld	bc, #0x0000
 00119$:
 	ld	l, c
@@ -786,7 +788,7 @@ _get_init_point_from_map::
 	ld	a, h
 	sbc	a, #0x01
 	ret	NC
-;src/LevelLogic.c:162: if(colision_map[i] == SOURCE_L || colision_map[i] == SOURCE_R || colision_map[i] == SOURCE_U || colision_map[i] == SOURCE_D){
+;src/LevelLogic.c:163: if(colision_map[i] == SOURCE_L || colision_map[i] == SOURCE_R || colision_map[i] == SOURCE_U || colision_map[i] == SOURCE_D){
 	ld	l, c
 	ld	h, b
 	add	hl, de
@@ -800,116 +802,159 @@ _get_init_point_from_map::
 	sub	a, #0x10
 	jr	NZ, 00120$
 00112$:
-;src/LevelLogic.c:163: global_init_point = i;
+;src/LevelLogic.c:164: global_init_point = i;
 	ld	a, c
 	ld	(_global_init_point), a
 	ld	a, b
 	ld	(_global_init_point + 1), a
-;src/LevelLogic.c:164: if(colision_map[i]==SOURCE_L){
+;src/LevelLogic.c:165: if(colision_map[i]==SOURCE_L){
 	ld	a, (hl)
 	cp	a, #0x0e
 	jr	NZ, 00110$
-;src/LevelLogic.c:165: global_first_x = -1;
+;src/LevelLogic.c:166: global_first_x = -1;
 	ld	hl, #_global_first_x
 	ld	(hl), #0xff
 	jr	00120$
 00110$:
-;src/LevelLogic.c:166: } else if(colision_map[i]==SOURCE_R){
+;src/LevelLogic.c:167: } else if(colision_map[i]==SOURCE_R){
 	cp	a, #0x03
 	jr	NZ, 00107$
-;src/LevelLogic.c:167: global_first_x = 1;
+;src/LevelLogic.c:168: global_first_x = 1;
 	ld	hl, #_global_first_x
 	ld	(hl), #0x01
 	jr	00120$
 00107$:
-;src/LevelLogic.c:168: }else if(colision_map[i]==SOURCE_U){
+;src/LevelLogic.c:169: }else if(colision_map[i]==SOURCE_U){
 	cp	a, #0x0f
 	jr	NZ, 00104$
-;src/LevelLogic.c:169: global_first_y = -1;
+;src/LevelLogic.c:170: global_first_y = -1;
 	ld	hl, #_global_first_y
 	ld	(hl), #0xff
 	jr	00120$
 00104$:
-;src/LevelLogic.c:170: }else if(colision_map[i]==SOURCE_D){
+;src/LevelLogic.c:171: }else if(colision_map[i]==SOURCE_D){
 	sub	a, #0x10
 	jr	NZ, 00120$
-;src/LevelLogic.c:171: global_first_y = 1;
+;src/LevelLogic.c:172: global_first_y = 1;
 	ld	hl, #_global_first_y
 	ld	(hl), #0x01
 00120$:
-;src/LevelLogic.c:161: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
+;src/LevelLogic.c:162: for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
 	inc	bc
-;src/LevelLogic.c:175: }
+;src/LevelLogic.c:176: }
 	jr	00119$
-;src/LevelLogic.c:177: void move_foward_block_id(uint8_t button_pressed){
+;src/LevelLogic.c:178: void move_foward_block_id(uint8_t button_pressed){
 ;	---------------------------------
 ; Function move_foward_block_id
 ; ---------------------------------
 _move_foward_block_id::
-;src/LevelLogic.c:181: switch (button_pressed)
+;src/LevelLogic.c:182: switch (button_pressed)
 	or	a, a
 	jr	Z, 00101$
 	dec	a
 	jr	Z, 00102$
 	jr	00104$
-;src/LevelLogic.c:183: case 0:
+;src/LevelLogic.c:184: case 0:
 00101$:
-;src/LevelLogic.c:184: global_selected_block ++;
+;src/LevelLogic.c:185: global_selected_block ++;
 	ld	hl, #_global_selected_block
 	inc	(hl)
-;src/LevelLogic.c:185: break;
+;src/LevelLogic.c:186: break;
 	jr	00104$
-;src/LevelLogic.c:187: case 1:
+;src/LevelLogic.c:188: case 1:
 00102$:
-;src/LevelLogic.c:188: global_selected_block --;
+;src/LevelLogic.c:189: global_selected_block --;
 	ld	hl, #_global_selected_block
 	dec	(hl)
-;src/LevelLogic.c:193: }
+;src/LevelLogic.c:194: }
 00104$:
-;src/LevelLogic.c:196: if(global_selected_block >= HUD_ITEM_COUNT) {
+;src/LevelLogic.c:197: if(global_selected_block >= HUD_ITEM_COUNT) {
 	ld	hl, #_global_selected_block
 	ld	a, (hl)
 	xor	a, #0x80
 	sub	a, #0x88
 	jr	C, 00108$
-;src/LevelLogic.c:197: global_selected_block -= HUD_ITEM_COUNT;
+;src/LevelLogic.c:198: global_selected_block -= HUD_ITEM_COUNT;
 	ld	a, (hl)
 	add	a, #0xf8
 	ld	(hl), a
 	ret
 00108$:
-;src/LevelLogic.c:198: } else if(global_selected_block < 0) {
+;src/LevelLogic.c:199: } else if(global_selected_block < 0) {
 	ld	hl, #_global_selected_block
 	bit	7, (hl)
 	ret	Z
-;src/LevelLogic.c:199: global_selected_block += HUD_ITEM_COUNT;
+;src/LevelLogic.c:200: global_selected_block += HUD_ITEM_COUNT;
 	ld	a, (hl)
 	add	a, #0x08
 	ld	(hl), a
-;src/LevelLogic.c:201: }
+;src/LevelLogic.c:202: }
 	ret
-;src/LevelLogic.c:203: void init_start_selection_menu(void){
+;src/LevelLogic.c:204: void init_start_selection_menu(void){
 ;	---------------------------------
 ; Function init_start_selection_menu
 ; ---------------------------------
 _init_start_selection_menu::
-;src/LevelLogic.c:204: HIDE_WIN;
-	ldh	a, (_LCDC_REG + 0)
-	and	a, #0xdf
-	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:205: HIDE_SPRITES;
-	ldh	a, (_LCDC_REG + 0)
-	and	a, #0xfd
-	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:206: set_bkg_data(0,232,map_tiles_alt);
-	ld	de, #_map_tiles_alt
+;src/LevelLogic.c:205: set_win_data(96,68, hud_tiles);
+	ld	de, #_hud_tiles
 	push	de
-	ld	hl, #0xe800
+	ld	hl, #0x4460
 	push	hl
-	call	_set_bkg_data
+	call	_set_win_data
 	add	sp, #4
-;src/LevelLogic.c:207: set_bkg_tiles(0,0,20,18,selection_menu);
+;src/LevelLogic.c:206: set_win_tiles(0,0,20,18, selection_menu);
 	ld	de, #_selection_menu
+	push	de
+	ld	hl, #0x1214
+	push	hl
+	xor	a, a
+	rrca
+	push	af
+	call	_set_win_tiles
+	add	sp, #6
+;src/LevelLogic.c:207: SHOW_WIN;
+	ldh	a, (_LCDC_REG + 0)
+	or	a, #0x20
+	ldh	(_LCDC_REG + 0), a
+;src/LevelLogic.c:208: performantdelay(10);
+	ld	a, #0x0a
+;src/LevelLogic.c:209: }
+	jp	_performantdelay
+;src/LevelLogic.c:211: void update_start_selection_menu(void){
+;	---------------------------------
+; Function update_start_selection_menu
+; ---------------------------------
+_update_start_selection_menu::
+	ld	hl, #-360
+	add	hl, sp
+	ld	sp, hl
+;src/LevelLogic.c:212: if(joypad() & J_START){
+	call	_joypad
+	rlca
+	jr	NC, 00107$
+;src/LevelLogic.c:214: for(uint16_t i = 0; i < 20 * 18; i++) {
+	ldhl	sp,	#0
+	ld	e, l
+	ld	d, h
+	ld	bc, #0x0000
+00105$:
+	ld	l, c
+	ld	h, b
+	ld	a, l
+	sub	a, #0x68
+	ld	a, h
+	sbc	a, #0x01
+	jr	NC, 00101$
+;src/LevelLogic.c:215: blank_map[i] = 96;
+	ld	l, e
+	ld	h, d
+	add	hl, bc
+	ld	(hl), #0x60
+;src/LevelLogic.c:214: for(uint16_t i = 0; i < 20 * 18; i++) {
+	inc	bc
+	jr	00105$
+00101$:
+;src/LevelLogic.c:217: set_bkg_tiles(0, 0, 20, 18, blank_map);
 	push	de
 	ld	hl, #0x1214
 	push	hl
@@ -918,40 +963,39 @@ _init_start_selection_menu::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;src/LevelLogic.c:208: SHOW_BKG;
-	ldh	a, (_LCDC_REG + 0)
-	or	a, #0x01
-	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:209: }
-	ret
-;src/LevelLogic.c:211: void update_start_selection_menu(void){
-;	---------------------------------
-; Function update_start_selection_menu
-; ---------------------------------
-_update_start_selection_menu::
-;src/LevelLogic.c:212: if(joypad() & J_START){
-	call	_joypad
-	rlca
-	ret	NC
-;src/LevelLogic.c:213: update_game_state(STATE_GAME_SETTING);
+;src/LevelLogic.c:218: move_win_screen(120);
+	ld	a, #0x78
+	call	_move_win_screen
+;src/LevelLogic.c:219: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
-;src/LevelLogic.c:215: }
-	jp	_update_game_state
-;src/LevelLogic.c:217: void init_victory_screen(void){
+	call	_update_game_state
+00107$:
+;src/LevelLogic.c:221: }
+	ld	hl, #360
+	add	hl, sp
+	ld	sp, hl
+	ret
+;src/LevelLogic.c:223: void init_victory_screen(void){
 ;	---------------------------------
 ; Function init_victory_screen
 ; ---------------------------------
 _init_victory_screen::
-;src/LevelLogic.c:218: global_option_selection_from_menu = 0;
+;src/LevelLogic.c:224: global_option_selection_from_menu = 0;
 	xor	a, a
 	ld	(#_global_option_selection_from_menu),a
-;src/LevelLogic.c:219: HIDE_SPRITES;
+;src/LevelLogic.c:225: HIDE_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xfd
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:220: hide_character();
+;src/LevelLogic.c:226: hide_character();
 	call	_hide_character
-;src/LevelLogic.c:221: set_win_tiles(0,0,20,12,victory_screen);
+;src/LevelLogic.c:227: WX_REG = 7;
+	ld	a, #0x07
+	ldh	(_WX_REG + 0), a
+;src/LevelLogic.c:228: WY_REG = 120;
+	ld	a, #0x78
+	ldh	(_WY_REG + 0), a
+;src/LevelLogic.c:229: set_win_tiles(0,0,20,12,victory_screen);
 	ld	de, #_victory_screen
 	push	de
 	ld	hl, #0xc14
@@ -961,53 +1005,59 @@ _init_victory_screen::
 	push	af
 	call	_set_win_tiles
 	add	sp, #6
-;src/LevelLogic.c:222: move_win_screen(-64);
+;src/LevelLogic.c:230: move_win_screen(-64);
 	ld	a, #0xc0
 	call	_move_win_screen
-;src/LevelLogic.c:223: SHOW_WIN;
+;src/LevelLogic.c:231: SHOW_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x20
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:224: }
+;src/LevelLogic.c:232: }
 	ret
-;src/LevelLogic.c:226: void update_victory_screen(void){
+;src/LevelLogic.c:234: void update_victory_screen(void){
 ;	---------------------------------
 ; Function update_victory_screen
 ; ---------------------------------
 _update_victory_screen::
-;src/LevelLogic.c:227: update_menu_pointer();
+;src/LevelLogic.c:235: update_menu_pointer();
 	call	_update_menu_pointer
-;src/LevelLogic.c:228: if(joypad() & (J_START | J_A)){
+;src/LevelLogic.c:236: if(joypad() & (J_START | J_A)){
 	call	_joypad
 	and	a, #0x90
 	ret	Z
-;src/LevelLogic.c:229: if(global_option_selection_from_menu == 0){
+;src/LevelLogic.c:237: if(global_option_selection_from_menu == 0){
 	ld	a, (#_global_option_selection_from_menu)
 	or	a, a
 	jr	NZ, 00102$
-;src/LevelLogic.c:230: update_game_state(STATE_GAME_SETTING);
+;src/LevelLogic.c:238: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	jp	_update_game_state
 00102$:
-;src/LevelLogic.c:232: update_game_state(STATE_SELECTION);
+;src/LevelLogic.c:240: update_game_state(STATE_SELECTION);
 	ld	a, #0x01
-;src/LevelLogic.c:235: }
+;src/LevelLogic.c:243: }
 	jp	_update_game_state
-;src/LevelLogic.c:237: void init_game_over_screen(void){
+;src/LevelLogic.c:245: void init_game_over_screen(void){
 ;	---------------------------------
 ; Function init_game_over_screen
 ; ---------------------------------
 _init_game_over_screen::
-;src/LevelLogic.c:238: global_option_selection_from_menu = 0;
+;src/LevelLogic.c:246: global_option_selection_from_menu = 0;
 	xor	a, a
 	ld	(#_global_option_selection_from_menu),a
-;src/LevelLogic.c:239: HIDE_SPRITES;
+;src/LevelLogic.c:247: HIDE_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xfd
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:240: hide_character();
+;src/LevelLogic.c:248: hide_character();
 	call	_hide_character
-;src/LevelLogic.c:241: set_win_tiles(0,0,20,12,game_over_screen);
+;src/LevelLogic.c:249: WX_REG = 7;
+	ld	a, #0x07
+	ldh	(_WX_REG + 0), a
+;src/LevelLogic.c:250: WY_REG = 120;
+	ld	a, #0x78
+	ldh	(_WY_REG + 0), a
+;src/LevelLogic.c:251: set_win_tiles(0,0,20,12,game_over_screen);
 	ld	de, #_game_over_screen
 	push	de
 	ld	hl, #0xc14
@@ -1017,37 +1067,37 @@ _init_game_over_screen::
 	push	af
 	call	_set_win_tiles
 	add	sp, #6
-;src/LevelLogic.c:242: move_win_screen(-64);
+;src/LevelLogic.c:252: move_win_screen(-64);
 	ld	a, #0xc0
 	call	_move_win_screen
-;src/LevelLogic.c:243: SHOW_WIN;
+;src/LevelLogic.c:253: SHOW_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x20
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:244: }
+;src/LevelLogic.c:254: }
 	ret
-;src/LevelLogic.c:246: void update_game_over_screen(void){
+;src/LevelLogic.c:256: void update_game_over_screen(void){
 ;	---------------------------------
 ; Function update_game_over_screen
 ; ---------------------------------
 _update_game_over_screen::
-;src/LevelLogic.c:247: update_menu_pointer();
+;src/LevelLogic.c:257: update_menu_pointer();
 	call	_update_menu_pointer
-;src/LevelLogic.c:248: if(joypad() & (J_START | J_A)){
+;src/LevelLogic.c:258: if(joypad() & (J_START | J_A)){
 	call	_joypad
 	and	a, #0x90
 	ret	Z
-;src/LevelLogic.c:249: if(global_option_selection_from_menu == 0){
+;src/LevelLogic.c:259: if(global_option_selection_from_menu == 0){
 	ld	a, (#_global_option_selection_from_menu)
 	or	a, a
 	jr	NZ, 00102$
-;src/LevelLogic.c:250: update_game_state(STATE_GAME_SETTING);
+;src/LevelLogic.c:260: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	jp	_update_game_state
 00102$:
-;src/LevelLogic.c:252: update_game_state(STATE_SELECTION);
+;src/LevelLogic.c:262: update_game_state(STATE_SELECTION);
 	ld	a, #0x01
-;src/LevelLogic.c:255: }
+;src/LevelLogic.c:265: }
 	jp	_update_game_state
 	.area _CODE
 	.area _INITIALIZER

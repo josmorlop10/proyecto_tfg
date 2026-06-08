@@ -8,6 +8,8 @@ Symbol Table
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
     _LCDC_REG                                                       ******** GX
+    _WX_REG                                                         ******** GX
+    _WY_REG                                                         ******** GX
     __moduchar                                                      ******** GX
   7 __xinit__global_actual_level                                    00000147 R
   7 __xinit__global_blocks_available                                0000012C R
@@ -45,27 +47,28 @@ Symbol Table
   2 _global_option_selection_from_menu                              00000148 GR
   2 _global_selected_block                                          00000132 GR
     _hide_character                                                 ******** GX
-  0 _init_game_over_screen                                          000003F8 GR
+    _hud_tiles                                                      ******** GX
+  0 _init_game_over_screen                                          0000042F GR
   0 _init_game_title                                                0000000A GR
   0 _init_level                                                     0000003A GR
   0 _init_start_selection_menu                                      0000037C GR
-  0 _init_victory_screen                                            000003B6 GR
+  0 _init_victory_screen                                            000003E5 GR
     _joypad                                                         ******** GX
     _map1_alt                                                       ******** GX
     _map2                                                           ******** GX
     _map_test                                                       ******** GX
-    _map_tiles_alt                                                  ******** GX
   0 _move_foward_block_id                                           00000350 GR
-    _move_win_screen                                                ******** GX
-  0 _normalize_level_number                                         00000000 GR
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Symbol Table
 
+    _move_win_screen                                                ******** GX
+  0 _normalize_level_number                                         00000000 GR
     _objects_map1_alt                                               ******** GX
     _objects_map2                                                   ******** GX
     _objects_map_test                                               ******** GX
+    _performantdelay                                                ******** GX
     _png_prueba_map                                                 ******** GX
     _png_prueba_tiles                                               ******** GX
   0 _read_global_block_info_from_map                                000001E8 GR
@@ -73,13 +76,14 @@ Symbol Table
     _selection_menu                                                 ******** GX
     _set_bkg_data                                                   ******** GX
     _set_bkg_tiles                                                  ******** GX
+    _set_win_data                                                   ******** GX
     _set_win_tiles                                                  ******** GX
-  0 _update_game_over_screen                                        00000421 GR
+  0 _update_game_over_screen                                        00000460 GR
   0 _update_game_state                                              000000BC GR
     _update_menu_pointer                                            ******** GX
-  0 _update_start_selection_menu                                    000003AC GR
+  0 _update_start_selection_menu                                    000003A4 GR
     _update_values_in_hud                                           ******** GX
-  0 _update_victory_screen                                          000003DF GR
+  0 _update_victory_screen                                          00000416 GR
     _victory_screen                                                 ******** GX
 
 
@@ -88,7 +92,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      43A   flags    0
+   0 _CODE                                      size      479   flags    0
    1 _DATA                                      size       2C   flags    0
    2 _INITIALIZED                               size      149   flags    0
    3 _DABS                                      size        0   flags    8

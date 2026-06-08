@@ -3,6 +3,7 @@
 #include "Headers/PointerSelector.h"
 #include "Headers/Object.h"
 #include "Headers/Graphic.h"
+#include "Headers/Common.h"
 
 #include <stdio.h>
 #include <gb/gb.h>
@@ -201,15 +202,20 @@ void move_foward_block_id(uint8_t button_pressed){
 }
 
 void init_start_selection_menu(void){
-    HIDE_WIN;
-    HIDE_SPRITES;
-    set_bkg_data(0,232,map_tiles_alt);
-    set_bkg_tiles(0,0,20,18,selection_menu);
-    SHOW_BKG;
+    set_win_data(96,68, hud_tiles);
+    set_win_tiles(0,0,20,18, selection_menu);
+    SHOW_WIN;
+    performantdelay(10);
 }
 
 void update_start_selection_menu(void){
     if(joypad() & J_START){
+        uint8_t blank_map[20 * 18];
+        for(uint16_t i = 0; i < 20 * 18; i++) {
+            blank_map[i] = 96;
+        }
+        set_bkg_tiles(0, 0, 20, 18, blank_map);
+        move_win_screen(120);
         update_game_state(STATE_GAME_SETTING);
     }
 }
@@ -218,6 +224,8 @@ void init_victory_screen(void){
     global_option_selection_from_menu = 0;
     HIDE_SPRITES;
     hide_character();
+    WX_REG = 7;
+    WY_REG = 120;
     set_win_tiles(0,0,20,12,victory_screen);
     move_win_screen(-64);
     SHOW_WIN;
@@ -238,6 +246,8 @@ void init_game_over_screen(void){
     global_option_selection_from_menu = 0;
     HIDE_SPRITES;
     hide_character();
+    WX_REG = 7;
+    WY_REG = 120;
     set_win_tiles(0,0,20,12,game_over_screen);
     move_win_screen(-64);
     SHOW_WIN;

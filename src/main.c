@@ -70,7 +70,7 @@ void init_gfx(void){
     draw_game_hud_buttons();
 
     WX_REG = 7;      // SIEMPRE 7
-    WY_REG = 120;    // 144 - 24
+    //WY_REG = 120;    // 144 - 24
     SHOW_WIN;
     SHOW_SPRITES;
 
@@ -94,22 +94,20 @@ void main(void)
             if(joypad() & J_START){
                 update_game_state(STATE_SELECTION);
             }
-
-            performantdelay(5);
             break;
         
         case STATE_SELECTION:
             if(last_state != STATE_SELECTION) {
-                    init_start_selection_menu();
-                    last_state = STATE_SELECTION;
+                init_start_selection_menu();
+                last_state = STATE_SELECTION;
             }
-
             update_start_selection_menu();
             break;
         
         case STATE_GAME_SETTING:
             if(last_state != STATE_GAME_SETTING) {
                 init_gfx();
+                WY_REG = 120;
                 pointer_init(&s);
                 init_level(global_actual_level);
                 print_objects_in_screen();

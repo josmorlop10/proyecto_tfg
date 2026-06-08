@@ -29,7 +29,7 @@ Symbol Table
     _init_victory_screen                                            ******** GX
     _joypad                                                         ******** GX
   1 _last_state                                                     00000017 GR
-  0 _main                                                           000000F5 GR
+  0 _main                                                           000000F1 GR
     _map_tiles_alt                                                  ******** GX
     _normalize_level_number                                         ******** GX
     _object_sprites                                                 ******** GX
@@ -57,7 +57,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      206   flags    0
+   0 _CODE                                      size      202   flags    0
    1 _DATA                                      size       18   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

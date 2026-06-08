@@ -199,223 +199,219 @@
                                     199 ;src/main.c:72: WX_REG = 7;      // SIEMPRE 7
     000000E0 3E 07            [ 8]  200 	ld	a, #0x07
     000000E2 E0r00            [12]  201 	ldh	(_WX_REG + 0), a
-                                    202 ;src/main.c:73: WY_REG = 120;    // 144 - 24
-    000000E4 3E 78            [ 8]  203 	ld	a, #0x78
-    000000E6 E0r00            [12]  204 	ldh	(_WY_REG + 0), a
-                                    205 ;src/main.c:74: SHOW_WIN;
-    000000E8 F0r00            [12]  206 	ldh	a, (_LCDC_REG + 0)
-    000000EA F6 20            [ 8]  207 	or	a, #0x20
-    000000EC E0r00            [12]  208 	ldh	(_LCDC_REG + 0), a
-                                    209 ;src/main.c:75: SHOW_SPRITES;
-    000000EE F0r00            [12]  210 	ldh	a, (_LCDC_REG + 0)
-    000000F0 F6 02            [ 8]  211 	or	a, #0x02
-    000000F2 E0r00            [12]  212 	ldh	(_LCDC_REG + 0), a
-                                    213 ;src/main.c:77: }
-    000000F4 C9               [16]  214 	ret
-                                    215 ;src/main.c:79: void main(void)
-                                    216 ;	---------------------------------
-                                    217 ; Function main
-                                    218 ; ---------------------------------
-    000000F5                        219 _main::
-                                    220 ;src/main.c:81: init_game_title();
-    000000F5 CDr00r00         [24]  221 	call	_init_game_title
-                                    222 ;src/main.c:82: global_game_state = STATE_MENU;
-    000000F8 AF               [ 4]  223 	xor	a, a
-    000000F9 EAr00r00         [16]  224 	ld	(#_global_game_state),a
-                                    225 ;src/main.c:84: while(1) {
-    000000FC                        226 00129$:
-                                    227 ;src/main.c:85: switch (global_game_state)
-    000000FC 3E 07            [ 8]  228 	ld	a, #0x07
-    000000FE 21r00r00         [12]  229 	ld	hl, #_global_game_state
-    00000101 96               [ 8]  230 	sub	a, (hl)
-    00000102 DArFEr01         [16]  231 	jp	C, 00127$
-    00000105 4E               [ 8]  232 	ld	c, (hl)
-    00000106 06 00            [ 8]  233 	ld	b, #0x00
-    00000108 21r12r01         [12]  234 	ld	hl, #00210$
-    0000010B 09               [ 8]  235 	add	hl, bc
-    0000010C 09               [ 8]  236 	add	hl, bc
-    0000010D 4E               [ 8]  237 	ld	c, (hl)
-    0000010E 23               [ 8]  238 	inc	hl
-    0000010F 66               [ 8]  239 	ld	h, (hl)
-    00000110 69               [ 4]  240 	ld	l, c
-    00000111 E9               [ 4]  241 	jp	(hl)
-    00000112                        242 00210$:
-    00000112r22r01                  243 	.dw	00101$
-    00000114r42r01                  244 	.dw	00106$
-    00000116r56r01                  245 	.dw	00109$
-    00000118r7Dr01                  246 	.dw	00112$
-    0000011ArFEr01                  247 	.dw	00127$
-    0000011Cr97r01                  248 	.dw	00115$
-    0000011ErABr01                  249 	.dw	00118$
-    00000120rBFr01                  250 	.dw	00121$
-                                    251 ;src/main.c:88: case STATE_MENU:
-    00000122                        252 00101$:
-                                    253 ;src/main.c:89: if(last_state != STATE_MENU) {
-    00000122 FAr17r00         [16]  254 	ld	a, (#_last_state)
-    00000125 B7               [ 4]  255 	or	a, a
-    00000126 28 07            [12]  256 	jr	Z, 00103$
-                                    257 ;src/main.c:90: init_game_title();
-    00000128 CDr00r00         [24]  258 	call	_init_game_title
-                                    259 ;src/main.c:91: last_state = STATE_MENU;
-    0000012B AF               [ 4]  260 	xor	a, a
-    0000012C EAr17r00         [16]  261 	ld	(#_last_state),a
-    0000012F                        262 00103$:
-                                    263 ;src/main.c:94: if(joypad() & J_START){
-    0000012F CDr00r00         [24]  264 	call	_joypad
-    00000132 07               [ 4]  265 	rlca
-    00000133 30 05            [12]  266 	jr	NC, 00105$
-                                    267 ;src/main.c:95: update_game_state(STATE_SELECTION);
-    00000135 3E 01            [ 8]  268 	ld	a, #0x01
-    00000137 CDr00r00         [24]  269 	call	_update_game_state
-    0000013A                        270 00105$:
-                                    271 ;src/main.c:98: performantdelay(5);
-    0000013A 3E 05            [ 8]  272 	ld	a, #0x05
-    0000013C CDr00r00         [24]  273 	call	_performantdelay
-                                    274 ;src/main.c:99: break;
-    0000013F C3rFEr01         [16]  275 	jp	00127$
-                                    276 ;src/main.c:101: case STATE_SELECTION:
-    00000142                        277 00106$:
-                                    278 ;src/main.c:102: if(last_state != STATE_SELECTION) {
-    00000142 FAr17r00         [16]  279 	ld	a, (#_last_state)
-    00000145 3D               [ 4]  280 	dec	a
-    00000146 28 08            [12]  281 	jr	Z, 00108$
-                                    282 ;src/main.c:103: init_start_selection_menu();
-    00000148 CDr00r00         [24]  283 	call	_init_start_selection_menu
-                                    284 ;src/main.c:104: last_state = STATE_SELECTION;
-    0000014B 21r17r00         [12]  285 	ld	hl, #_last_state
-    0000014E 36 01            [12]  286 	ld	(hl), #0x01
-    00000150                        287 00108$:
-                                    288 ;src/main.c:107: update_start_selection_menu();
-    00000150 CDr00r00         [24]  289 	call	_update_start_selection_menu
-                                    290 ;src/main.c:108: break;
-    00000153 C3rFEr01         [16]  291 	jp	00127$
-                                    292 ;src/main.c:110: case STATE_GAME_SETTING:
-    00000156                        293 00109$:
-                                    294 ;src/main.c:111: if(last_state != STATE_GAME_SETTING) {
-    00000156 FAr17r00         [16]  295 	ld	a, (#_last_state)
-    00000159 D6 02            [ 8]  296 	sub	a, #0x02
-    0000015B 28 17            [12]  297 	jr	Z, 00111$
-                                    298 ;src/main.c:112: init_gfx();
-    0000015D CDr00r00         [24]  299 	call	_init_gfx
-                                    300 ;src/main.c:113: pointer_init(&s);
-    00000160 11r0Fr00         [12]  301 	ld	de, #_s
-    00000163 CDr00r00         [24]  302 	call	_pointer_init
-                                    303 ;src/main.c:114: init_level(global_actual_level);
-    00000166 FAr00r00         [16]  304 	ld	a, (_global_actual_level)
-    00000169 CDr00r00         [24]  305 	call	_init_level
-                                    306 ;src/main.c:115: print_objects_in_screen();
-    0000016C CDr00r00         [24]  307 	call	_print_objects_in_screen
-                                    308 ;src/main.c:116: last_state = STATE_GAME_SETTING;
-    0000016F 21r17r00         [12]  309 	ld	hl, #_last_state
-    00000172 36 02            [12]  310 	ld	(hl), #0x02
-    00000174                        311 00111$:
-                                    312 ;src/main.c:118: update_pointer(&s);
-    00000174 11r0Fr00         [12]  313 	ld	de, #_s
-    00000177 CDr00r00         [24]  314 	call	_update_pointer
-                                    315 ;src/main.c:119: break;
-    0000017A C3rFEr01         [16]  316 	jp	00127$
-                                    317 ;src/main.c:121: case STATE_GAME_RUNNING:
-    0000017D                        318 00112$:
-                                    319 ;src/main.c:122: if(last_state != STATE_GAME_RUNNING) {
-    0000017D FAr17r00         [16]  320 	ld	a, (#_last_state)
-    00000180 D6 03            [ 8]  321 	sub	a, #0x03
-    00000182 28 0B            [12]  322 	jr	Z, 00114$
-                                    323 ;src/main.c:123: character_init(&p);
-    00000184 11r00r00         [12]  324 	ld	de, #_p
-    00000187 CDr00r00         [24]  325 	call	_character_init
-                                    326 ;src/main.c:124: last_state = STATE_GAME_RUNNING;
-    0000018A 21r17r00         [12]  327 	ld	hl, #_last_state
-    0000018D 36 03            [12]  328 	ld	(hl), #0x03
-    0000018F                        329 00114$:
-                                    330 ;src/main.c:126: update_character(&p);
-    0000018F 11r00r00         [12]  331 	ld	de, #_p
-    00000192 CDr00r00         [24]  332 	call	_update_character
-                                    333 ;src/main.c:127: break;
-    00000195 18 67            [12]  334 	jr	00127$
-                                    335 ;src/main.c:129: case STATE_GAME_OVER:
-    00000197                        336 00115$:
-                                    337 ;src/main.c:130: if(last_state != STATE_GAME_OVER) {
-    00000197 FAr17r00         [16]  338 	ld	a, (#_last_state)
-    0000019A D6 05            [ 8]  339 	sub	a, #0x05
-    0000019C 28 08            [12]  340 	jr	Z, 00117$
-                                    341 ;src/main.c:131: last_state = STATE_GAME_OVER;
-    0000019E 21r17r00         [12]  342 	ld	hl, #_last_state
-    000001A1 36 05            [12]  343 	ld	(hl), #0x05
-                                    344 ;src/main.c:132: init_game_over_screen();
-    000001A3 CDr00r00         [24]  345 	call	_init_game_over_screen
-    000001A6                        346 00117$:
-                                    347 ;src/main.c:134: update_game_over_screen();
-    000001A6 CDr00r00         [24]  348 	call	_update_game_over_screen
-                                    349 ;src/main.c:135: break;
-    000001A9 18 53            [12]  350 	jr	00127$
-                                    351 ;src/main.c:137: case STATE_VICTORY:
-    000001AB                        352 00118$:
-                                    353 ;src/main.c:138: if(last_state != STATE_VICTORY) {
-    000001AB FAr17r00         [16]  354 	ld	a, (#_last_state)
-    000001AE D6 06            [ 8]  355 	sub	a, #0x06
-    000001B0 28 08            [12]  356 	jr	Z, 00120$
-                                    357 ;src/main.c:139: last_state = STATE_VICTORY;
-    000001B2 21r17r00         [12]  358 	ld	hl, #_last_state
-    000001B5 36 06            [12]  359 	ld	(hl), #0x06
-                                    360 ;src/main.c:140: init_victory_screen();
-    000001B7 CDr00r00         [24]  361 	call	_init_victory_screen
-    000001BA                        362 00120$:
-                                    363 ;src/main.c:142: update_victory_screen();
-    000001BA CDr00r00         [24]  364 	call	_update_victory_screen
-                                    365 ;src/main.c:143: break;
-    000001BD 18 3F            [12]  366 	jr	00127$
-                                    367 ;src/main.c:145: case STATE_FINAL_MESSAGE:
-    000001BF                        368 00121$:
-                                    369 ;src/main.c:146: if(last_state != STATE_FINAL_MESSAGE) {
-    000001BF FAr17r00         [16]  370 	ld	a, (#_last_state)
-    000001C2 D6 07            [ 8]  371 	sub	a, #0x07
-    000001C4 28 2A            [12]  372 	jr	Z, 00123$
-                                    373 ;src/main.c:147: last_state = STATE_FINAL_MESSAGE;
-    000001C6 21r17r00         [12]  374 	ld	hl, #_last_state
-    000001C9 36 07            [12]  375 	ld	(hl), #0x07
-                                    376 ;src/main.c:148: HIDE_SPRITES;
-    000001CB F0r00            [12]  377 	ldh	a, (_LCDC_REG + 0)
-    000001CD E6 FD            [ 8]  378 	and	a, #0xfd
-    000001CF E0r00            [12]  379 	ldh	(_LCDC_REG + 0), a
-                                    380 ;src/main.c:149: hide_character();
-    000001D1 CDr00r00         [24]  381 	call	_hide_character
-                                    382 ;src/main.c:150: WX_REG = 0;
-    000001D4 AF               [ 4]  383 	xor	a, a
-    000001D5 E0r00            [12]  384 	ldh	(_WX_REG + 0), a
-                                    385 ;src/main.c:151: WY_REG = 0;
-    000001D7 AF               [ 4]  386 	xor	a, a
-    000001D8 E0r00            [12]  387 	ldh	(_WY_REG + 0), a
-                                    388 ;src/main.c:152: set_win_tiles(0,0,20,18,final_message);
-    000001DA 11r00r00         [12]  389 	ld	de, #_final_message
-    000001DD D5               [16]  390 	push	de
-    000001DE 21 14 12         [12]  391 	ld	hl, #0x1214
-    000001E1 E5               [16]  392 	push	hl
-    000001E2 AF               [ 4]  393 	xor	a, a
-    000001E3 0F               [ 4]  394 	rrca
-    000001E4 F5               [16]  395 	push	af
-    000001E5 CDr00r00         [24]  396 	call	_set_win_tiles
-    000001E8 E8 06            [16]  397 	add	sp, #6
-                                    398 ;src/main.c:153: SHOW_WIN;
-    000001EA F0r00            [12]  399 	ldh	a, (_LCDC_REG + 0)
-    000001EC F6 20            [ 8]  400 	or	a, #0x20
-    000001EE E0r00            [12]  401 	ldh	(_LCDC_REG + 0), a
-    000001F0                        402 00123$:
-                                    403 ;src/main.c:155: if(joypad() & (J_START | J_A)){
-    000001F0 CDr00r00         [24]  404 	call	_joypad
-    000001F3 E6 90            [ 8]  405 	and	a, #0x90
-    000001F5 28 07            [12]  406 	jr	Z, 00127$
-                                    407 ;src/main.c:156: global_actual_level = 0;
-                                    408 ;src/main.c:157: update_game_state(STATE_MENU);
-    000001F7 AF               [ 4]  409 	xor	a, a
-    000001F8 EAr00r00         [16]  410 	ld	(#_global_actual_level), a
-    000001FB CDr00r00         [24]  411 	call	_update_game_state
-                                    412 ;src/main.c:163: }
-    000001FE                        413 00127$:
-                                    414 ;src/main.c:164: performantdelay(10);
-    000001FE 3E 0A            [ 8]  415 	ld	a, #0x0a
-    00000200 CDr00r00         [24]  416 	call	_performantdelay
-                                    417 ;src/main.c:166: }
-    00000203 C3rFCr00         [16]  418 	jp	00129$
-                                    419 	.area _CODE
-                                    420 	.area _INITIALIZER
-                                    421 	.area _CABS (ABS)
+                                    202 ;src/main.c:74: SHOW_WIN;
+    000000E4 F0r00            [12]  203 	ldh	a, (_LCDC_REG + 0)
+    000000E6 F6 20            [ 8]  204 	or	a, #0x20
+    000000E8 E0r00            [12]  205 	ldh	(_LCDC_REG + 0), a
+                                    206 ;src/main.c:75: SHOW_SPRITES;
+    000000EA F0r00            [12]  207 	ldh	a, (_LCDC_REG + 0)
+    000000EC F6 02            [ 8]  208 	or	a, #0x02
+    000000EE E0r00            [12]  209 	ldh	(_LCDC_REG + 0), a
+                                    210 ;src/main.c:77: }
+    000000F0 C9               [16]  211 	ret
+                                    212 ;src/main.c:79: void main(void)
+                                    213 ;	---------------------------------
+                                    214 ; Function main
+                                    215 ; ---------------------------------
+    000000F1                        216 _main::
+                                    217 ;src/main.c:81: init_game_title();
+    000000F1 CDr00r00         [24]  218 	call	_init_game_title
+                                    219 ;src/main.c:82: global_game_state = STATE_MENU;
+    000000F4 AF               [ 4]  220 	xor	a, a
+    000000F5 EAr00r00         [16]  221 	ld	(#_global_game_state),a
+                                    222 ;src/main.c:84: while(1) {
+    000000F8                        223 00129$:
+                                    224 ;src/main.c:85: switch (global_game_state)
+    000000F8 3E 07            [ 8]  225 	ld	a, #0x07
+    000000FA 21r00r00         [12]  226 	ld	hl, #_global_game_state
+    000000FD 96               [ 8]  227 	sub	a, (hl)
+    000000FE DArFAr01         [16]  228 	jp	C, 00127$
+    00000101 4E               [ 8]  229 	ld	c, (hl)
+    00000102 06 00            [ 8]  230 	ld	b, #0x00
+    00000104 21r0Er01         [12]  231 	ld	hl, #00210$
+    00000107 09               [ 8]  232 	add	hl, bc
+    00000108 09               [ 8]  233 	add	hl, bc
+    00000109 4E               [ 8]  234 	ld	c, (hl)
+    0000010A 23               [ 8]  235 	inc	hl
+    0000010B 66               [ 8]  236 	ld	h, (hl)
+    0000010C 69               [ 4]  237 	ld	l, c
+    0000010D E9               [ 4]  238 	jp	(hl)
+    0000010E                        239 00210$:
+    0000010Er1Er01                  240 	.dw	00101$
+    00000110r3Ar01                  241 	.dw	00106$
+    00000112r4Er01                  242 	.dw	00109$
+    00000114r79r01                  243 	.dw	00112$
+    00000116rFAr01                  244 	.dw	00127$
+    00000118r93r01                  245 	.dw	00115$
+    0000011ArA7r01                  246 	.dw	00118$
+    0000011CrBBr01                  247 	.dw	00121$
+                                    248 ;src/main.c:88: case STATE_MENU:
+    0000011E                        249 00101$:
+                                    250 ;src/main.c:89: if(last_state != STATE_MENU) {
+    0000011E FAr17r00         [16]  251 	ld	a, (#_last_state)
+    00000121 B7               [ 4]  252 	or	a, a
+    00000122 28 07            [12]  253 	jr	Z, 00103$
+                                    254 ;src/main.c:90: init_game_title();
+    00000124 CDr00r00         [24]  255 	call	_init_game_title
+                                    256 ;src/main.c:91: last_state = STATE_MENU;
+    00000127 AF               [ 4]  257 	xor	a, a
+    00000128 EAr17r00         [16]  258 	ld	(#_last_state),a
+    0000012B                        259 00103$:
+                                    260 ;src/main.c:94: if(joypad() & J_START){
+    0000012B CDr00r00         [24]  261 	call	_joypad
+    0000012E 07               [ 4]  262 	rlca
+    0000012F D2rFAr01         [16]  263 	jp	NC, 00127$
+                                    264 ;src/main.c:95: update_game_state(STATE_SELECTION);
+    00000132 3E 01            [ 8]  265 	ld	a, #0x01
+    00000134 CDr00r00         [24]  266 	call	_update_game_state
+                                    267 ;src/main.c:97: break;
+    00000137 C3rFAr01         [16]  268 	jp	00127$
+                                    269 ;src/main.c:99: case STATE_SELECTION:
+    0000013A                        270 00106$:
+                                    271 ;src/main.c:100: if(last_state != STATE_SELECTION) {
+    0000013A FAr17r00         [16]  272 	ld	a, (#_last_state)
+    0000013D 3D               [ 4]  273 	dec	a
+    0000013E 28 08            [12]  274 	jr	Z, 00108$
+                                    275 ;src/main.c:101: init_start_selection_menu();
+    00000140 CDr00r00         [24]  276 	call	_init_start_selection_menu
+                                    277 ;src/main.c:102: last_state = STATE_SELECTION;
+    00000143 21r17r00         [12]  278 	ld	hl, #_last_state
+    00000146 36 01            [12]  279 	ld	(hl), #0x01
+    00000148                        280 00108$:
+                                    281 ;src/main.c:104: update_start_selection_menu();
+    00000148 CDr00r00         [24]  282 	call	_update_start_selection_menu
+                                    283 ;src/main.c:105: break;
+    0000014B C3rFAr01         [16]  284 	jp	00127$
+                                    285 ;src/main.c:107: case STATE_GAME_SETTING:
+    0000014E                        286 00109$:
+                                    287 ;src/main.c:108: if(last_state != STATE_GAME_SETTING) {
+    0000014E FAr17r00         [16]  288 	ld	a, (#_last_state)
+    00000151 D6 02            [ 8]  289 	sub	a, #0x02
+    00000153 28 1B            [12]  290 	jr	Z, 00111$
+                                    291 ;src/main.c:109: init_gfx();
+    00000155 CDr00r00         [24]  292 	call	_init_gfx
+                                    293 ;src/main.c:110: WY_REG = 120;
+    00000158 3E 78            [ 8]  294 	ld	a, #0x78
+    0000015A E0r00            [12]  295 	ldh	(_WY_REG + 0), a
+                                    296 ;src/main.c:111: pointer_init(&s);
+    0000015C 11r0Fr00         [12]  297 	ld	de, #_s
+    0000015F CDr00r00         [24]  298 	call	_pointer_init
+                                    299 ;src/main.c:112: init_level(global_actual_level);
+    00000162 FAr00r00         [16]  300 	ld	a, (_global_actual_level)
+    00000165 CDr00r00         [24]  301 	call	_init_level
+                                    302 ;src/main.c:113: print_objects_in_screen();
+    00000168 CDr00r00         [24]  303 	call	_print_objects_in_screen
+                                    304 ;src/main.c:114: last_state = STATE_GAME_SETTING;
+    0000016B 21r17r00         [12]  305 	ld	hl, #_last_state
+    0000016E 36 02            [12]  306 	ld	(hl), #0x02
+    00000170                        307 00111$:
+                                    308 ;src/main.c:116: update_pointer(&s);
+    00000170 11r0Fr00         [12]  309 	ld	de, #_s
+    00000173 CDr00r00         [24]  310 	call	_update_pointer
+                                    311 ;src/main.c:117: break;
+    00000176 C3rFAr01         [16]  312 	jp	00127$
+                                    313 ;src/main.c:119: case STATE_GAME_RUNNING:
+    00000179                        314 00112$:
+                                    315 ;src/main.c:120: if(last_state != STATE_GAME_RUNNING) {
+    00000179 FAr17r00         [16]  316 	ld	a, (#_last_state)
+    0000017C D6 03            [ 8]  317 	sub	a, #0x03
+    0000017E 28 0B            [12]  318 	jr	Z, 00114$
+                                    319 ;src/main.c:121: character_init(&p);
+    00000180 11r00r00         [12]  320 	ld	de, #_p
+    00000183 CDr00r00         [24]  321 	call	_character_init
+                                    322 ;src/main.c:122: last_state = STATE_GAME_RUNNING;
+    00000186 21r17r00         [12]  323 	ld	hl, #_last_state
+    00000189 36 03            [12]  324 	ld	(hl), #0x03
+    0000018B                        325 00114$:
+                                    326 ;src/main.c:124: update_character(&p);
+    0000018B 11r00r00         [12]  327 	ld	de, #_p
+    0000018E CDr00r00         [24]  328 	call	_update_character
+                                    329 ;src/main.c:125: break;
+    00000191 18 67            [12]  330 	jr	00127$
+                                    331 ;src/main.c:127: case STATE_GAME_OVER:
+    00000193                        332 00115$:
+                                    333 ;src/main.c:128: if(last_state != STATE_GAME_OVER) {
+    00000193 FAr17r00         [16]  334 	ld	a, (#_last_state)
+    00000196 D6 05            [ 8]  335 	sub	a, #0x05
+    00000198 28 08            [12]  336 	jr	Z, 00117$
+                                    337 ;src/main.c:129: last_state = STATE_GAME_OVER;
+    0000019A 21r17r00         [12]  338 	ld	hl, #_last_state
+    0000019D 36 05            [12]  339 	ld	(hl), #0x05
+                                    340 ;src/main.c:130: init_game_over_screen();
+    0000019F CDr00r00         [24]  341 	call	_init_game_over_screen
+    000001A2                        342 00117$:
+                                    343 ;src/main.c:132: update_game_over_screen();
+    000001A2 CDr00r00         [24]  344 	call	_update_game_over_screen
+                                    345 ;src/main.c:133: break;
+    000001A5 18 53            [12]  346 	jr	00127$
+                                    347 ;src/main.c:135: case STATE_VICTORY:
+    000001A7                        348 00118$:
+                                    349 ;src/main.c:136: if(last_state != STATE_VICTORY) {
+    000001A7 FAr17r00         [16]  350 	ld	a, (#_last_state)
+    000001AA D6 06            [ 8]  351 	sub	a, #0x06
+    000001AC 28 08            [12]  352 	jr	Z, 00120$
+                                    353 ;src/main.c:137: last_state = STATE_VICTORY;
+    000001AE 21r17r00         [12]  354 	ld	hl, #_last_state
+    000001B1 36 06            [12]  355 	ld	(hl), #0x06
+                                    356 ;src/main.c:138: init_victory_screen();
+    000001B3 CDr00r00         [24]  357 	call	_init_victory_screen
+    000001B6                        358 00120$:
+                                    359 ;src/main.c:140: update_victory_screen();
+    000001B6 CDr00r00         [24]  360 	call	_update_victory_screen
+                                    361 ;src/main.c:141: break;
+    000001B9 18 3F            [12]  362 	jr	00127$
+                                    363 ;src/main.c:143: case STATE_FINAL_MESSAGE:
+    000001BB                        364 00121$:
+                                    365 ;src/main.c:144: if(last_state != STATE_FINAL_MESSAGE) {
+    000001BB FAr17r00         [16]  366 	ld	a, (#_last_state)
+    000001BE D6 07            [ 8]  367 	sub	a, #0x07
+    000001C0 28 2A            [12]  368 	jr	Z, 00123$
+                                    369 ;src/main.c:145: last_state = STATE_FINAL_MESSAGE;
+    000001C2 21r17r00         [12]  370 	ld	hl, #_last_state
+    000001C5 36 07            [12]  371 	ld	(hl), #0x07
+                                    372 ;src/main.c:146: HIDE_SPRITES;
+    000001C7 F0r00            [12]  373 	ldh	a, (_LCDC_REG + 0)
+    000001C9 E6 FD            [ 8]  374 	and	a, #0xfd
+    000001CB E0r00            [12]  375 	ldh	(_LCDC_REG + 0), a
+                                    376 ;src/main.c:147: hide_character();
+    000001CD CDr00r00         [24]  377 	call	_hide_character
+                                    378 ;src/main.c:148: WX_REG = 0;
+    000001D0 AF               [ 4]  379 	xor	a, a
+    000001D1 E0r00            [12]  380 	ldh	(_WX_REG + 0), a
+                                    381 ;src/main.c:149: WY_REG = 0;
+    000001D3 AF               [ 4]  382 	xor	a, a
+    000001D4 E0r00            [12]  383 	ldh	(_WY_REG + 0), a
+                                    384 ;src/main.c:150: set_win_tiles(0,0,20,18,final_message);
+    000001D6 11r00r00         [12]  385 	ld	de, #_final_message
+    000001D9 D5               [16]  386 	push	de
+    000001DA 21 14 12         [12]  387 	ld	hl, #0x1214
+    000001DD E5               [16]  388 	push	hl
+    000001DE AF               [ 4]  389 	xor	a, a
+    000001DF 0F               [ 4]  390 	rrca
+    000001E0 F5               [16]  391 	push	af
+    000001E1 CDr00r00         [24]  392 	call	_set_win_tiles
+    000001E4 E8 06            [16]  393 	add	sp, #6
+                                    394 ;src/main.c:151: SHOW_WIN;
+    000001E6 F0r00            [12]  395 	ldh	a, (_LCDC_REG + 0)
+    000001E8 F6 20            [ 8]  396 	or	a, #0x20
+    000001EA E0r00            [12]  397 	ldh	(_LCDC_REG + 0), a
+    000001EC                        398 00123$:
+                                    399 ;src/main.c:153: if(joypad() & (J_START | J_A)){
+    000001EC CDr00r00         [24]  400 	call	_joypad
+    000001EF E6 90            [ 8]  401 	and	a, #0x90
+    000001F1 28 07            [12]  402 	jr	Z, 00127$
+                                    403 ;src/main.c:154: global_actual_level = 0;
+                                    404 ;src/main.c:155: update_game_state(STATE_MENU);
+    000001F3 AF               [ 4]  405 	xor	a, a
+    000001F4 EAr00r00         [16]  406 	ld	(#_global_actual_level), a
+    000001F7 CDr00r00         [24]  407 	call	_update_game_state
+                                    408 ;src/main.c:161: }
+    000001FA                        409 00127$:
+                                    410 ;src/main.c:162: performantdelay(10);
+    000001FA 3E 0A            [ 8]  411 	ld	a, #0x0a
+    000001FC CDr00r00         [24]  412 	call	_performantdelay
+                                    413 ;src/main.c:164: }
+    000001FF C3rF8r00         [16]  414 	jp	00129$
+                                    415 	.area _CODE
+                                    416 	.area _INITIALIZER
+                                    417 	.area _CABS (ABS)
