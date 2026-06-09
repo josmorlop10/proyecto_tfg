@@ -183,15 +183,18 @@ _press_game_hud_button::
 00101$:
 ;src/HUD_button.c:41: init_gfx();
 	call	_init_gfx
-;src/HUD_button.c:42: global_hud_selected = 0;
-;src/HUD_button.c:43: global_selected_block = 0;
+;src/HUD_button.c:42: WY_REG = 120;
+	ld	a, #0x78
+	ldh	(_WY_REG + 0), a
+;src/HUD_button.c:43: global_hud_selected = 0;
+;src/HUD_button.c:44: global_selected_block = 0;
 	xor	a, a
 	ld	(#_global_hud_selected), a
 	ld	(#_global_selected_block),a
-;src/HUD_button.c:44: init_level(global_actual_level);
+;src/HUD_button.c:45: init_level(global_actual_level);
 	ld	a, (_global_actual_level)
 	call	_init_level
-;src/HUD_button.c:45: get_colision_from_map(global_levels_array[global_actual_level], global_colision_map);
+;src/HUD_button.c:46: get_colision_from_map(global_levels_array[global_actual_level], global_colision_map);
 	ld	bc, #_global_colision_map+0
 	ld	de, #_global_levels_array+0
 	ld	a, (_global_actual_level)
@@ -204,17 +207,17 @@ _press_game_hud_button::
 	ld	e, a
 	ld	d, l
 	call	_get_colision_from_map
-;src/HUD_button.c:47: print_objects_in_screen();
-;src/HUD_button.c:48: break;
+;src/HUD_button.c:48: print_objects_in_screen();
+;src/HUD_button.c:49: break;
 	jp	_print_objects_in_screen
-;src/HUD_button.c:50: case HUD_ITEM_GO:
+;src/HUD_button.c:51: case HUD_ITEM_GO:
 00102$:
-;src/HUD_button.c:51: hide_pointer();
+;src/HUD_button.c:52: hide_pointer();
 	call	_hide_pointer
-;src/HUD_button.c:52: update_game_state(STATE_GAME_RUNNING);
+;src/HUD_button.c:53: update_game_state(STATE_GAME_RUNNING);
 	ld	a, #0x03
-;src/HUD_button.c:57: }
 ;src/HUD_button.c:58: }
+;src/HUD_button.c:59: }
 	jp	_update_game_state
 	.area _CODE
 	.area _INITIALIZER

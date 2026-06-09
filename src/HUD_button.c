@@ -39,6 +39,7 @@ void press_game_hud_button(uint8_t selected_item) {
     switch(selected_item) {
         case HUD_ITEM_RESET:
             init_gfx();
+            WY_REG = 120;
             global_hud_selected = 0;
             global_selected_block = 0;
             init_level(global_actual_level);

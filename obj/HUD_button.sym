@@ -7,6 +7,7 @@ Symbol Table
     .__.ABS.                                                    =   00000000 G
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
+    _WY_REG                                                         ******** GX
     _change_win_tile_16x16                                          ******** GX
   0 _draw_game_hud_buttons                                          0000003B GR
   0 _draw_hud_button                                                00000000 GR
@@ -25,12 +26,13 @@ Symbol Table
   0 _update_game_hud_button_selection                               00000049 GR
     _update_game_state                                              ******** GX
 
+
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       B8   flags    0
+   0 _CODE                                      size       BC   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

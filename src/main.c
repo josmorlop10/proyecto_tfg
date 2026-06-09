@@ -114,6 +114,7 @@ void main(void)
                 last_state = STATE_GAME_SETTING;
             }
             update_pointer(&s);
+            update_HUD();
             break;
 
         case STATE_GAME_RUNNING:

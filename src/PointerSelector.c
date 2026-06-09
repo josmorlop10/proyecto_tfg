@@ -78,9 +78,25 @@ uint8_t block_is_placed_below(Pointer* s){
     return res;
 }
 
-void control_pointer(Pointer* s){
+void update_HUD(void){
+    if(global_hud_selected==0 && (joypad() & J_SELECT)) {
+        global_hud_selected = !global_hud_selected;
+        move_sprite_block_pointer(global_selected_block);
+        move_win_screen(-4);
+        set_win_tile_xy(0,1,hud_selectorTileOffset+26);
+    } else if(global_hud_selected==1 && (joypad() & (J_SELECT | J_A))) {
+        if(global_selected_block >= NUMBER_OF_BLOCKS) {
+            press_game_hud_button(global_selected_block);
+        } else {
+            global_hud_selected = !global_hud_selected;
+            move_sprite_block_pointer(global_selected_block);
+            move_win_screen(4);
+            set_win_tile_xy(0,1,hud_selectorTileOffset+27);
+        }
+    }
+}
 
-    //TODO: refactor this function entirely
+void control_pointer(Pointer* s){
 
     if(global_hud_selected==0){
 
@@ -112,11 +128,6 @@ void control_pointer(Pointer* s){
             if(block>=6){
                 remove_object_at_pointer(s, block);
             }
-        } else if(joypad() & J_SELECT) {
-            global_hud_selected = !global_hud_selected;
-            move_sprite_block_pointer(global_selected_block);
-            move_win_screen(-4);
-            set_win_tile_xy(0,1,hud_selectorTileOffset+26);
         }
     } else { //esta seleccionado el HUD
         if(joypad() & J_LEFT) {
@@ -133,14 +144,6 @@ void control_pointer(Pointer* s){
             move_sprite_block_pointer(global_selected_block);
             update_game_hud_button_selection(previous, global_selected_block);
 
-        } else if(joypad() & J_A) {
-            press_game_hud_button(global_selected_block);
-
-        } else if(joypad() & J_SELECT) {
-            global_hud_selected = !global_hud_selected;
-            move_sprite_block_pointer(global_selected_block);
-            move_win_screen(4);
-            set_win_tile_xy(0,1,hud_selectorTileOffset+27);
         }
     }
 }

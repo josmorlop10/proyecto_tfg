@@ -16,14 +16,14 @@ Symbol Table
     _change_colision_map_BR                                         ******** GX
     _change_colision_map_at                                         ******** GX
     _check_colision_with_object                                     ******** GX
-  0 _control_pointer                                                000001F0 GR
+  0 _control_pointer                                                00000256 GR
     _global_blocks_available                                        ******** GX
     _global_colision_map                                            ******** GX
     _global_game_state                                              ******** GX
   2 _global_hud_selected                                            00000000 GR
     _global_option_selection_from_menu                              ******** GX
     _global_selected_block                                          ******** GX
-  0 _hide_pointer                                                   000003DA GR
+  0 _hide_pointer                                                   000003DC GR
     _joypad                                                         ******** GX
     _move_foward_block_id                                           ******** GX
   0 _move_pointer                                                   00000032 GR
@@ -36,19 +36,19 @@ Symbol Table
     _set_win_tile_xy                                                ******** GX
     _shadow_OAM                                                     ******** GX
     _tileindex_from_xy                                              ******** GX
+  0 _update_HUD                                                     000001F0 GR
     _update_game_hud_button_selection                               ******** GX
-  0 _update_menu_pointer                                            0000041E GR
-  0 _update_menu_selector_tiles                                     000003FB R
-  0 _update_pointer                                                 000003B0 GR
+  0 _update_menu_pointer                                            00000420 GR
+  0 _update_menu_selector_tiles                                     000003FD R
+  0 _update_pointer                                                 000003B2 GR
     _update_values_in_hud                                           ******** GX
-
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      42E   flags    0
+   0 _CODE                                      size      430   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        1   flags    0
    3 _DABS                                      size        0   flags    8

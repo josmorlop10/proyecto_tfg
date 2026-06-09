@@ -45,6 +45,7 @@ Symbol Table
     _set_win_data                                                   ******** GX
     _set_win_tiles                                                  ******** GX
     _shadow_OAM                                                     ******** GX
+    _update_HUD                                                     ******** GX
     _update_character                                               ******** GX
     _update_game_over_screen                                        ******** GX
     _update_game_state                                              ******** GX
@@ -52,12 +53,13 @@ Symbol Table
     _update_start_selection_menu                                    ******** GX
     _update_victory_screen                                          ******** GX
 
+
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      202   flags    0
+   0 _CODE                                      size      205   flags    0
    1 _DATA                                      size       18   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

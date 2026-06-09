@@ -177,45 +177,48 @@
     0000007F FE 06            [ 8]  177 	cp	a, #0x06
     00000081 28 05            [12]  178 	jr	Z, 00101$
     00000083 D6 07            [ 8]  179 	sub	a, #0x07
-    00000085 28 29            [12]  180 	jr	Z, 00102$
+    00000085 28 2D            [12]  180 	jr	Z, 00102$
     00000087 C9               [16]  181 	ret
                                     182 ;src/HUD_button.c:40: case HUD_ITEM_RESET:
     00000088                        183 00101$:
                                     184 ;src/HUD_button.c:41: init_gfx();
     00000088 CDr00r00         [24]  185 	call	_init_gfx
-                                    186 ;src/HUD_button.c:42: global_hud_selected = 0;
-                                    187 ;src/HUD_button.c:43: global_selected_block = 0;
-    0000008B AF               [ 4]  188 	xor	a, a
-    0000008C EAr00r00         [16]  189 	ld	(#_global_hud_selected), a
-    0000008F EAr00r00         [16]  190 	ld	(#_global_selected_block),a
-                                    191 ;src/HUD_button.c:44: init_level(global_actual_level);
-    00000092 FAr00r00         [16]  192 	ld	a, (_global_actual_level)
-    00000095 CDr00r00         [24]  193 	call	_init_level
-                                    194 ;src/HUD_button.c:45: get_colision_from_map(global_levels_array[global_actual_level], global_colision_map);
-    00000098 01r00r00         [12]  195 	ld	bc, #_global_colision_map+0
-    0000009B 11r00r00         [12]  196 	ld	de, #_global_levels_array+0
-    0000009E FAr00r00         [16]  197 	ld	a, (_global_actual_level)
-    000000A1 6F               [ 4]  198 	ld	l, a
-    000000A2 26 00            [ 8]  199 	ld	h, #0x00
-    000000A4 29               [ 8]  200 	add	hl, hl
-    000000A5 19               [ 8]  201 	add	hl, de
-    000000A6 2A               [ 8]  202 	ld	a, (hl+)
-    000000A7 6E               [ 8]  203 	ld	l, (hl)
-    000000A8 5F               [ 4]  204 	ld	e, a
-    000000A9 55               [ 4]  205 	ld	d, l
-    000000AA CDr00r00         [24]  206 	call	_get_colision_from_map
-                                    207 ;src/HUD_button.c:47: print_objects_in_screen();
-                                    208 ;src/HUD_button.c:48: break;
-    000000AD C3r00r00         [16]  209 	jp	_print_objects_in_screen
-                                    210 ;src/HUD_button.c:50: case HUD_ITEM_GO:
-    000000B0                        211 00102$:
-                                    212 ;src/HUD_button.c:51: hide_pointer();
-    000000B0 CDr00r00         [24]  213 	call	_hide_pointer
-                                    214 ;src/HUD_button.c:52: update_game_state(STATE_GAME_RUNNING);
-    000000B3 3E 03            [ 8]  215 	ld	a, #0x03
-                                    216 ;src/HUD_button.c:57: }
-                                    217 ;src/HUD_button.c:58: }
-    000000B5 C3r00r00         [16]  218 	jp	_update_game_state
-                                    219 	.area _CODE
-                                    220 	.area _INITIALIZER
-                                    221 	.area _CABS (ABS)
+                                    186 ;src/HUD_button.c:42: WY_REG = 120;
+    0000008B 3E 78            [ 8]  187 	ld	a, #0x78
+    0000008D E0r00            [12]  188 	ldh	(_WY_REG + 0), a
+                                    189 ;src/HUD_button.c:43: global_hud_selected = 0;
+                                    190 ;src/HUD_button.c:44: global_selected_block = 0;
+    0000008F AF               [ 4]  191 	xor	a, a
+    00000090 EAr00r00         [16]  192 	ld	(#_global_hud_selected), a
+    00000093 EAr00r00         [16]  193 	ld	(#_global_selected_block),a
+                                    194 ;src/HUD_button.c:45: init_level(global_actual_level);
+    00000096 FAr00r00         [16]  195 	ld	a, (_global_actual_level)
+    00000099 CDr00r00         [24]  196 	call	_init_level
+                                    197 ;src/HUD_button.c:46: get_colision_from_map(global_levels_array[global_actual_level], global_colision_map);
+    0000009C 01r00r00         [12]  198 	ld	bc, #_global_colision_map+0
+    0000009F 11r00r00         [12]  199 	ld	de, #_global_levels_array+0
+    000000A2 FAr00r00         [16]  200 	ld	a, (_global_actual_level)
+    000000A5 6F               [ 4]  201 	ld	l, a
+    000000A6 26 00            [ 8]  202 	ld	h, #0x00
+    000000A8 29               [ 8]  203 	add	hl, hl
+    000000A9 19               [ 8]  204 	add	hl, de
+    000000AA 2A               [ 8]  205 	ld	a, (hl+)
+    000000AB 6E               [ 8]  206 	ld	l, (hl)
+    000000AC 5F               [ 4]  207 	ld	e, a
+    000000AD 55               [ 4]  208 	ld	d, l
+    000000AE CDr00r00         [24]  209 	call	_get_colision_from_map
+                                    210 ;src/HUD_button.c:48: print_objects_in_screen();
+                                    211 ;src/HUD_button.c:49: break;
+    000000B1 C3r00r00         [16]  212 	jp	_print_objects_in_screen
+                                    213 ;src/HUD_button.c:51: case HUD_ITEM_GO:
+    000000B4                        214 00102$:
+                                    215 ;src/HUD_button.c:52: hide_pointer();
+    000000B4 CDr00r00         [24]  216 	call	_hide_pointer
+                                    217 ;src/HUD_button.c:53: update_game_state(STATE_GAME_RUNNING);
+    000000B7 3E 03            [ 8]  218 	ld	a, #0x03
+                                    219 ;src/HUD_button.c:58: }
+                                    220 ;src/HUD_button.c:59: }
+    000000B9 C3r00r00         [16]  221 	jp	_update_game_state
+                                    222 	.area _CODE
+                                    223 	.area _INITIALIZER
+                                    224 	.area _CABS (ABS)
