@@ -193,7 +193,6 @@ void move_foward_block_id(uint8_t button_pressed){
         break;
     }
 
-
     if(global_selected_block >= HUD_ITEM_COUNT) {
         global_selected_block -= HUD_ITEM_COUNT;
     } else if(global_selected_block < 0) {
@@ -202,6 +201,7 @@ void move_foward_block_id(uint8_t button_pressed){
 }
 
 void init_start_selection_menu(void){
+    WY_REG = 0;
     set_win_data(96,68, hud_tiles);
     set_win_tiles(0,0,20,18, selection_menu);
     SHOW_WIN;
@@ -220,14 +220,15 @@ void update_start_selection_menu(void){
     }
 }
 
-void init_victory_screen(void){
-    global_option_selection_from_menu = 0;
+void init_win_screen(const unsigned char* screen, uint8_t wx, uint8_t wy, uint8_t width, uint8_t height, int8_t movement){
     HIDE_SPRITES;
     hide_character();
-    WX_REG = 7;
-    WY_REG = 120;
-    set_win_tiles(0,0,20,12,victory_screen);
-    move_win_screen(-64);
+    WX_REG = wx;
+    WY_REG = wy;
+    set_win_tiles(0,0,width,height,screen);
+    if(movement != 0){
+        move_win_screen(movement);
+    }
     SHOW_WIN;
 }
 
@@ -242,17 +243,6 @@ void update_victory_screen(void){
     }
 }
 
-void init_game_over_screen(void){
-    global_option_selection_from_menu = 0;
-    HIDE_SPRITES;
-    hide_character();
-    WX_REG = 7;
-    WY_REG = 120;
-    set_win_tiles(0,0,20,12,game_over_screen);
-    move_win_screen(-64);
-    SHOW_WIN;
-}
-
 void update_game_over_screen(void){
     update_menu_pointer();
     if(joypad() & (J_START | J_A)){
@@ -263,3 +253,14 @@ void update_game_over_screen(void){
         }
     }
 }
+
+void update_pausa_screen(void) {
+    update_menu_pointer();
+    if(joypad() & (J_START | J_A)){
+        if(global_option_selection_from_menu == 0){
+            update_game_state(STATE_GAME_SETTING);
+        } else {
+            update_game_state(STATE_SELECTION);
+        }
+    }
+} 

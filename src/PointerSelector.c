@@ -144,7 +144,7 @@ void control_pointer(Pointer* s){
             move_sprite_block_pointer(global_selected_block);
             update_game_hud_button_selection(previous, global_selected_block);
 
-        }
+        } 
     }
 }
 
@@ -164,8 +164,8 @@ void hide_pointer(void){
 }
 
 static void update_menu_selector_tiles(uint8_t selected_option){
-    const uint8_t cursor_row = selected_option == 0 ? 8 : 10;
-    const uint8_t blank_row = selected_option == 0 ? 10 : 8;
+    const uint8_t cursor_row = selected_option == 0 ? 7 : 9;
+    const uint8_t blank_row = selected_option == 0 ? 9 : 7;
 
     set_win_tile_xy(6, blank_row, 0);
     set_win_tile_xy(6, cursor_row, hud_selectorTileOffset + 11);

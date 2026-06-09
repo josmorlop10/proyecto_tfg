@@ -812,60 +812,60 @@ _control_pointer::
 	call	_remove_object_at_pointer
 	jr	00141$
 00139$:
-;src/PointerSelector.c:138: if(joypad() & J_LEFT) {
+;src/PointerSelector.c:133: if(joypad() & J_LEFT) {
 	call	_joypad
 	bit	1, a
 	jr	Z, 00136$
-;src/PointerSelector.c:139: uint8_t previous = global_selected_block;
+;src/PointerSelector.c:134: uint8_t previous = global_selected_block;
 	ld	a, (_global_selected_block)
 	ld	c, a
-;src/PointerSelector.c:141: move_foward_block_id(1);
+;src/PointerSelector.c:136: move_foward_block_id(1);
 	push	bc
 	ld	a, #0x01
 	call	_move_foward_block_id
-;src/PointerSelector.c:142: move_sprite_block_pointer(global_selected_block);
+;src/PointerSelector.c:137: move_sprite_block_pointer(global_selected_block);
 	ld	a, (_global_selected_block)
 	call	_move_sprite_block_pointer
 	pop	bc
-;src/PointerSelector.c:143: update_game_hud_button_selection(previous, global_selected_block);
+;src/PointerSelector.c:138: update_game_hud_button_selection(previous, global_selected_block);
 	ld	a, (_global_selected_block)
 	ld	e, a
 	ld	a, c
 	call	_update_game_hud_button_selection
 	jr	00141$
 00136$:
-;src/PointerSelector.c:145: } else if(joypad() & J_RIGHT) {
+;src/PointerSelector.c:140: } else if(joypad() & J_RIGHT) {
 	call	_joypad
 	rrca
 	jr	NC, 00141$
-;src/PointerSelector.c:146: uint8_t previous = global_selected_block;
+;src/PointerSelector.c:141: uint8_t previous = global_selected_block;
 	ld	a, (_global_selected_block)
 	ld	c, a
-;src/PointerSelector.c:148: move_foward_block_id(0);
+;src/PointerSelector.c:143: move_foward_block_id(0);
 	push	bc
 	xor	a, a
 	call	_move_foward_block_id
-;src/PointerSelector.c:149: move_sprite_block_pointer(global_selected_block);
+;src/PointerSelector.c:144: move_sprite_block_pointer(global_selected_block);
 	ld	a, (_global_selected_block)
 	call	_move_sprite_block_pointer
 	pop	bc
-;src/PointerSelector.c:150: update_game_hud_button_selection(previous, global_selected_block);
+;src/PointerSelector.c:145: update_game_hud_button_selection(previous, global_selected_block);
 	ld	a, (_global_selected_block)
 	ld	e, a
 	ld	a, c
 	call	_update_game_hud_button_selection
 00141$:
-;src/PointerSelector.c:163: }
+;src/PointerSelector.c:149: }
 	add	sp, #4
 	ret
-;src/PointerSelector.c:165: void update_pointer(Pointer* s) { 
+;src/PointerSelector.c:151: void update_pointer(Pointer* s) { 
 ;	---------------------------------
 ; Function update_pointer
 ; ---------------------------------
 _update_pointer::
 	ld	c, e
 	ld	b, d
-;src/PointerSelector.c:166: s->tileindexBR = tileindex_from_xy(s->x, s->y);
+;src/PointerSelector.c:152: s->tileindexBR = tileindex_from_xy(s->x, s->y);
 	ld	hl, #0x0006
 	add	hl, bc
 	ld	e, c
@@ -884,27 +884,27 @@ _update_pointer::
 	ld	a, e
 	ld	(hl+), a
 	ld	(hl), d
-;src/PointerSelector.c:167: control_pointer(s);
+;src/PointerSelector.c:153: control_pointer(s);
 	push	bc
 	ld	e, c
 	ld	d, b
 	call	_control_pointer
 	pop	bc
-;src/PointerSelector.c:168: if(global_game_state == STATE_GAME_SETTING) {
+;src/PointerSelector.c:154: if(global_game_state == STATE_GAME_SETTING) {
 	ld	a, (#_global_game_state)
 	sub	a, #0x02
 	ret	NZ
-;src/PointerSelector.c:169: move_pointer(s);
+;src/PointerSelector.c:155: move_pointer(s);
 	ld	e, c
 	ld	d, b
-;src/PointerSelector.c:171: }
+;src/PointerSelector.c:157: }
 	jp	_move_pointer
-;src/PointerSelector.c:173: void hide_pointer(void){
+;src/PointerSelector.c:159: void hide_pointer(void){
 ;	---------------------------------
 ; Function hide_pointer
 ; ---------------------------------
 _hide_pointer::
-;src/PointerSelector.c:174: for(uint8_t i= 4; i<=7; i++){
+;src/PointerSelector.c:160: for(uint8_t i= 4; i<=7; i++){
 	ld	c, #0x04
 00105$:
 	ld	a, #0x07
@@ -922,7 +922,7 @@ _hide_pointer::
 	ld	a, #0xa0
 	ld	(hl+), a
 	ld	(hl), #0x00
-;src/PointerSelector.c:174: for(uint8_t i= 4; i<=7; i++){
+;src/PointerSelector.c:160: for(uint8_t i= 4; i<=7; i++){
 	inc	c
 	jr	00105$
 00101$:
@@ -932,27 +932,27 @@ _hide_pointer::
 	ld	a, #0xa0
 	ld	(hl+), a
 	ld	(hl), #0x00
-;src/PointerSelector.c:177: move_sprite(16, 0, 160);
-;src/PointerSelector.c:178: }
+;src/PointerSelector.c:163: move_sprite(16, 0, 160);
+;src/PointerSelector.c:164: }
 	ret
-;src/PointerSelector.c:180: static void update_menu_selector_tiles(uint8_t selected_option){
+;src/PointerSelector.c:166: static void update_menu_selector_tiles(uint8_t selected_option){
 ;	---------------------------------
 ; Function update_menu_selector_tiles
 ; ---------------------------------
 _update_menu_selector_tiles:
-;src/PointerSelector.c:181: const uint8_t cursor_row = selected_option == 0 ? 8 : 10;
+;src/PointerSelector.c:167: const uint8_t cursor_row = selected_option == 0 ? 7 : 9;
 	or	a, a
-	ld	c, #0x08
+	ld	c, #0x07
 	jr	Z, 00104$
-	ld	c, #0x0a
+	ld	c, #0x09
 00104$:
-;src/PointerSelector.c:182: const uint8_t blank_row = selected_option == 0 ? 10 : 8;
+;src/PointerSelector.c:168: const uint8_t blank_row = selected_option == 0 ? 9 : 7;
 	or	a, a
-	ld	e, #0x0a
+	ld	e, #0x09
 	jr	Z, 00106$
-	ld	e, #0x08
+	ld	e, #0x07
 00106$:
-;src/PointerSelector.c:184: set_win_tile_xy(6, blank_row, 0);
+;src/PointerSelector.c:170: set_win_tile_xy(6, blank_row, 0);
 	push	bc
 	xor	a, a
 	push	af
@@ -960,32 +960,32 @@ _update_menu_selector_tiles:
 	ld	a, #0x06
 	call	_set_win_tile_xy
 	pop	bc
-;src/PointerSelector.c:185: set_win_tile_xy(6, cursor_row, hud_selectorTileOffset + 11);
+;src/PointerSelector.c:171: set_win_tile_xy(6, cursor_row, hud_selectorTileOffset + 11);
 	ld	a, #0x6b
 	push	af
 	inc	sp
 	ld	e, c
 	ld	a, #0x06
 	call	_set_win_tile_xy
-;src/PointerSelector.c:186: }
+;src/PointerSelector.c:172: }
 	ret
-;src/PointerSelector.c:188: void update_menu_pointer(void){
+;src/PointerSelector.c:174: void update_menu_pointer(void){
 ;	---------------------------------
 ; Function update_menu_pointer
 ; ---------------------------------
 _update_menu_pointer::
-;src/PointerSelector.c:189: const uint8_t currentJoy = joypad();
+;src/PointerSelector.c:175: const uint8_t currentJoy = joypad();
 	call	_joypad
-;src/PointerSelector.c:191: if(currentJoy & (J_UP | J_DOWN)){
+;src/PointerSelector.c:177: if(currentJoy & (J_UP | J_DOWN)){
 	and	a, #0x0c
 	ret	Z
-;src/PointerSelector.c:192: global_option_selection_from_menu ^= 1;
+;src/PointerSelector.c:178: global_option_selection_from_menu ^= 1;
 	ld	hl, #_global_option_selection_from_menu
 	ld	a, (hl)
 	xor	a, #0x01
-;src/PointerSelector.c:193: update_menu_selector_tiles(global_option_selection_from_menu);
+;src/PointerSelector.c:179: update_menu_selector_tiles(global_option_selection_from_menu);
 	ld	(hl), a
-;src/PointerSelector.c:195: }
+;src/PointerSelector.c:181: }
 	jp	_update_menu_selector_tiles
 	.area _CODE
 	.area _INITIALIZER

@@ -85,9 +85,11 @@ void read_global_object_info_from_map(const unsigned char* objects_map);
 void read_global_block_info_from_map(const unsigned char* blocks_map);
 void init_start_selection_menu(void);
 void update_start_selection_menu(void);
+void init_win_screen(const unsigned char* screen, uint8_t wx, uint8_t wy, uint8_t width, uint8_t height, int8_t movement);
 void init_game_over_screen(void);
 void update_game_over_screen(void);
 void init_victory_screen(void);
 void update_victory_screen(void);
+void update_pausa_screen(void);
 
 #endif

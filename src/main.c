@@ -14,6 +14,9 @@
 #include "../res/hud_tiles.h"
 #include "../res/hud_selector.h"
 #include "../res/final_message.h"
+#include "../res/pausa.h"
+#include "../res/game_over_screen.h"
+#include "../res/victory_screen.h"
 
 #include "Headers/Common.h"
 #include "Headers/Character.h"
@@ -123,12 +126,16 @@ void main(void)
                 last_state = STATE_GAME_RUNNING;
             }
             update_character(&p);
+            if(joypad() & J_START){
+                update_game_state(STATE_GAME_PAUSED);
+            }
             break;
             
         case STATE_GAME_OVER:
             if(last_state != STATE_GAME_OVER) {
                 last_state = STATE_GAME_OVER;
-                init_game_over_screen();
+                global_option_selection_from_menu = 0;
+                init_win_screen(game_over_screen, 7, 120, 20, 12, -72);
             }
             update_game_over_screen();
             break;
@@ -136,7 +143,8 @@ void main(void)
         case STATE_VICTORY:
             if(last_state != STATE_VICTORY) {
                 last_state = STATE_VICTORY;
-                init_victory_screen();
+                global_option_selection_from_menu = 0;
+                init_win_screen(victory_screen, 7, 120, 20, 12, -72);
             }
             update_victory_screen();
             break;
@@ -144,12 +152,7 @@ void main(void)
         case STATE_FINAL_MESSAGE:
             if(last_state != STATE_FINAL_MESSAGE) {
                 last_state = STATE_FINAL_MESSAGE;
-                HIDE_SPRITES;
-                hide_character();
-                WX_REG = 0;
-                WY_REG = 0;
-                set_win_tiles(0,0,20,18,final_message);
-                SHOW_WIN;
+                init_win_screen(final_message, 0, 0, 20, 18, 0);
             }
             if(joypad() & (J_START | J_A)){
                 global_actual_level = 0;
@@ -157,6 +160,15 @@ void main(void)
            }
            break;
 
+        case STATE_GAME_PAUSED:
+            if(last_state != STATE_GAME_PAUSED) {
+                    last_state = STATE_GAME_PAUSED;
+                    global_option_selection_from_menu = 0;
+                    init_win_screen(pausa, 7, 120, 20, 12, -72);
+                }
+            update_pausa_screen();
+            break;
+        
         default:
             break;
         }

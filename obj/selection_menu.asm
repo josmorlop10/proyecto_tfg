@@ -332,7 +332,7 @@ _selection_menu:
 	.db #0x9d	; 157
 	.db #0x8f	; 143
 	.db #0x90	; 144
-	.db #0x60	; 96
+	.db #0x9f	; 159
 	.db #0x8d	; 141
 	.db #0x91	; 145
 	.db #0x60	; 96

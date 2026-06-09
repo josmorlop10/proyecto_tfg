@@ -45,10 +45,10 @@
 	.globl _move_foward_block_id
 	.globl _init_start_selection_menu
 	.globl _update_start_selection_menu
-	.globl _init_victory_screen
+	.globl _init_win_screen
 	.globl _update_victory_screen
-	.globl _init_game_over_screen
 	.globl _update_game_over_screen
+	.globl _update_pausa_screen
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -868,33 +868,36 @@ _move_foward_block_id::
 	dec	(hl)
 ;src/LevelLogic.c:194: }
 00104$:
-;src/LevelLogic.c:197: if(global_selected_block >= HUD_ITEM_COUNT) {
+;src/LevelLogic.c:196: if(global_selected_block >= HUD_ITEM_COUNT) {
 	ld	hl, #_global_selected_block
 	ld	a, (hl)
 	xor	a, #0x80
 	sub	a, #0x88
 	jr	C, 00108$
-;src/LevelLogic.c:198: global_selected_block -= HUD_ITEM_COUNT;
+;src/LevelLogic.c:197: global_selected_block -= HUD_ITEM_COUNT;
 	ld	a, (hl)
 	add	a, #0xf8
 	ld	(hl), a
 	ret
 00108$:
-;src/LevelLogic.c:199: } else if(global_selected_block < 0) {
+;src/LevelLogic.c:198: } else if(global_selected_block < 0) {
 	ld	hl, #_global_selected_block
 	bit	7, (hl)
 	ret	Z
-;src/LevelLogic.c:200: global_selected_block += HUD_ITEM_COUNT;
+;src/LevelLogic.c:199: global_selected_block += HUD_ITEM_COUNT;
 	ld	a, (hl)
 	add	a, #0x08
 	ld	(hl), a
-;src/LevelLogic.c:202: }
+;src/LevelLogic.c:201: }
 	ret
-;src/LevelLogic.c:204: void init_start_selection_menu(void){
+;src/LevelLogic.c:203: void init_start_selection_menu(void){
 ;	---------------------------------
 ; Function init_start_selection_menu
 ; ---------------------------------
 _init_start_selection_menu::
+;src/LevelLogic.c:204: WY_REG = 0;
+	xor	a, a
+	ldh	(_WY_REG + 0), a
 ;src/LevelLogic.c:205: set_win_data(96,68, hud_tiles);
 	ld	de, #_hud_tiles
 	push	de
@@ -975,129 +978,126 @@ _update_start_selection_menu::
 	add	hl, sp
 	ld	sp, hl
 	ret
-;src/LevelLogic.c:223: void init_victory_screen(void){
+;src/LevelLogic.c:223: void init_win_screen(const unsigned char* screen, uint8_t wx, uint8_t wy, uint8_t width, uint8_t height, int8_t movement){
 ;	---------------------------------
-; Function init_victory_screen
+; Function init_win_screen
 ; ---------------------------------
-_init_victory_screen::
-;src/LevelLogic.c:224: global_option_selection_from_menu = 0;
-	xor	a, a
-	ld	(#_global_option_selection_from_menu),a
-;src/LevelLogic.c:225: HIDE_SPRITES;
+_init_win_screen::
+	ld	c, a
+;src/LevelLogic.c:224: HIDE_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xfd
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:226: hide_character();
-	call	_hide_character
-;src/LevelLogic.c:227: WX_REG = 7;
-	ld	a, #0x07
-	ldh	(_WX_REG + 0), a
-;src/LevelLogic.c:228: WY_REG = 120;
-	ld	a, #0x78
-	ldh	(_WY_REG + 0), a
-;src/LevelLogic.c:229: set_win_tiles(0,0,20,12,victory_screen);
-	ld	de, #_victory_screen
+;src/LevelLogic.c:225: hide_character();
+	push	bc
 	push	de
-	ld	hl, #0xc14
-	push	hl
+	call	_hide_character
+	pop	de
+	pop	bc
+;src/LevelLogic.c:226: WX_REG = wx;
+	ld	a, c
+	ldh	(_WX_REG + 0), a
+;src/LevelLogic.c:227: WY_REG = wy;
+	ldhl	sp,	#2
+;src/LevelLogic.c:228: set_win_tiles(0,0,width,height,screen);
+	ld	a, (hl+)
+	inc	hl
+	ldh	(_WY_REG + 0), a
+	push	de
+	ld	a, (hl-)
+	ld	d, a
+	ld	e, (hl)
+	push	de
 	xor	a, a
 	rrca
 	push	af
 	call	_set_win_tiles
 	add	sp, #6
-;src/LevelLogic.c:230: move_win_screen(-64);
-	ld	a, #0xc0
+;src/LevelLogic.c:229: if(movement != 0){
+	ldhl	sp,	#5
+	ld	a, (hl)
+	or	a, a
+	jr	Z, 00102$
+;src/LevelLogic.c:230: move_win_screen(movement);
+	ld	a, (hl)
 	call	_move_win_screen
-;src/LevelLogic.c:231: SHOW_WIN;
+00102$:
+;src/LevelLogic.c:232: SHOW_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x20
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:232: }
-	ret
-;src/LevelLogic.c:234: void update_victory_screen(void){
+;src/LevelLogic.c:233: }
+	pop	hl
+	add	sp, #4
+	jp	(hl)
+;src/LevelLogic.c:235: void update_victory_screen(void){
 ;	---------------------------------
 ; Function update_victory_screen
 ; ---------------------------------
 _update_victory_screen::
-;src/LevelLogic.c:235: update_menu_pointer();
+;src/LevelLogic.c:236: update_menu_pointer();
 	call	_update_menu_pointer
-;src/LevelLogic.c:236: if(joypad() & (J_START | J_A)){
+;src/LevelLogic.c:237: if(joypad() & (J_START | J_A)){
 	call	_joypad
 	and	a, #0x90
 	ret	Z
-;src/LevelLogic.c:237: if(global_option_selection_from_menu == 0){
+;src/LevelLogic.c:238: if(global_option_selection_from_menu == 0){
 	ld	a, (#_global_option_selection_from_menu)
 	or	a, a
 	jr	NZ, 00102$
-;src/LevelLogic.c:238: update_game_state(STATE_GAME_SETTING);
+;src/LevelLogic.c:239: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	jp	_update_game_state
 00102$:
-;src/LevelLogic.c:240: update_game_state(STATE_SELECTION);
+;src/LevelLogic.c:241: update_game_state(STATE_SELECTION);
 	ld	a, #0x01
-;src/LevelLogic.c:243: }
+;src/LevelLogic.c:244: }
 	jp	_update_game_state
-;src/LevelLogic.c:245: void init_game_over_screen(void){
-;	---------------------------------
-; Function init_game_over_screen
-; ---------------------------------
-_init_game_over_screen::
-;src/LevelLogic.c:246: global_option_selection_from_menu = 0;
-	xor	a, a
-	ld	(#_global_option_selection_from_menu),a
-;src/LevelLogic.c:247: HIDE_SPRITES;
-	ldh	a, (_LCDC_REG + 0)
-	and	a, #0xfd
-	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:248: hide_character();
-	call	_hide_character
-;src/LevelLogic.c:249: WX_REG = 7;
-	ld	a, #0x07
-	ldh	(_WX_REG + 0), a
-;src/LevelLogic.c:250: WY_REG = 120;
-	ld	a, #0x78
-	ldh	(_WY_REG + 0), a
-;src/LevelLogic.c:251: set_win_tiles(0,0,20,12,game_over_screen);
-	ld	de, #_game_over_screen
-	push	de
-	ld	hl, #0xc14
-	push	hl
-	xor	a, a
-	rrca
-	push	af
-	call	_set_win_tiles
-	add	sp, #6
-;src/LevelLogic.c:252: move_win_screen(-64);
-	ld	a, #0xc0
-	call	_move_win_screen
-;src/LevelLogic.c:253: SHOW_WIN;
-	ldh	a, (_LCDC_REG + 0)
-	or	a, #0x20
-	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:254: }
-	ret
-;src/LevelLogic.c:256: void update_game_over_screen(void){
+;src/LevelLogic.c:246: void update_game_over_screen(void){
 ;	---------------------------------
 ; Function update_game_over_screen
 ; ---------------------------------
 _update_game_over_screen::
-;src/LevelLogic.c:257: update_menu_pointer();
+;src/LevelLogic.c:247: update_menu_pointer();
 	call	_update_menu_pointer
-;src/LevelLogic.c:258: if(joypad() & (J_START | J_A)){
+;src/LevelLogic.c:248: if(joypad() & (J_START | J_A)){
 	call	_joypad
 	and	a, #0x90
 	ret	Z
-;src/LevelLogic.c:259: if(global_option_selection_from_menu == 0){
+;src/LevelLogic.c:249: if(global_option_selection_from_menu == 0){
 	ld	a, (#_global_option_selection_from_menu)
 	or	a, a
 	jr	NZ, 00102$
-;src/LevelLogic.c:260: update_game_state(STATE_GAME_SETTING);
+;src/LevelLogic.c:250: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	jp	_update_game_state
 00102$:
-;src/LevelLogic.c:262: update_game_state(STATE_SELECTION);
+;src/LevelLogic.c:252: update_game_state(STATE_SELECTION);
 	ld	a, #0x01
-;src/LevelLogic.c:265: }
+;src/LevelLogic.c:255: }
+	jp	_update_game_state
+;src/LevelLogic.c:257: void update_pausa_screen(void) {
+;	---------------------------------
+; Function update_pausa_screen
+; ---------------------------------
+_update_pausa_screen::
+;src/LevelLogic.c:258: update_menu_pointer();
+	call	_update_menu_pointer
+;src/LevelLogic.c:259: if(joypad() & (J_START | J_A)){
+	call	_joypad
+	and	a, #0x90
+	ret	Z
+;src/LevelLogic.c:260: if(global_option_selection_from_menu == 0){
+	ld	a, (#_global_option_selection_from_menu)
+	or	a, a
+	jr	NZ, 00102$
+;src/LevelLogic.c:261: update_game_state(STATE_GAME_SETTING);
+	ld	a, #0x02
+	jp	_update_game_state
+00102$:
+;src/LevelLogic.c:263: update_game_state(STATE_SELECTION);
+	ld	a, #0x01
+;src/LevelLogic.c:266: } 
 	jp	_update_game_state
 	.area _CODE
 	.area _INITIALIZER
