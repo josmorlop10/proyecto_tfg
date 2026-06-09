@@ -200,14 +200,6 @@ void move_foward_block_id(uint8_t button_pressed){
     }
 }
 
-void init_start_selection_menu(void){
-    WY_REG = 0;
-    set_win_data(96,68, hud_tiles);
-    set_win_tiles(0,0,20,18, selection_menu);
-    SHOW_WIN;
-    performantdelay(10);
-}
-
 void update_start_selection_menu(void){
     if(joypad() & J_START){
         uint8_t blank_map[20 * 18];

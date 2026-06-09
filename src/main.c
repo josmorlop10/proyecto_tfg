@@ -17,6 +17,7 @@
 #include "../res/pausa.h"
 #include "../res/game_over_screen.h"
 #include "../res/victory_screen.h"
+#include "../res/selection_menu.h"
 
 #include "Headers/Common.h"
 #include "Headers/Character.h"
@@ -101,8 +102,10 @@ void main(void)
         
         case STATE_SELECTION:
             if(last_state != STATE_SELECTION) {
-                init_start_selection_menu();
+                set_win_data(96,68, hud_tiles);
+                init_win_screen(selection_menu, 7, 0, 20, 18, 0);
                 last_state = STATE_SELECTION;
+                performantdelay(30);
             }
             update_start_selection_menu();
             break;

@@ -8,11 +8,9 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _set_win_tiles
-	.globl _set_win_data
 	.globl _set_bkg_tiles
 	.globl _set_bkg_data
 	.globl _joypad
-	.globl _performantdelay
 	.globl _move_win_screen
 	.globl _update_values_in_hud
 	.globl _update_menu_pointer
@@ -43,7 +41,6 @@
 	.globl _check_colision_of_sprites
 	.globl _get_init_point_from_map
 	.globl _move_foward_block_id
-	.globl _init_start_selection_menu
 	.globl _update_start_selection_menu
 	.globl _init_win_screen
 	.globl _update_victory_screen
@@ -890,40 +887,7 @@ _move_foward_block_id::
 	ld	(hl), a
 ;src/LevelLogic.c:201: }
 	ret
-;src/LevelLogic.c:203: void init_start_selection_menu(void){
-;	---------------------------------
-; Function init_start_selection_menu
-; ---------------------------------
-_init_start_selection_menu::
-;src/LevelLogic.c:204: WY_REG = 0;
-	xor	a, a
-	ldh	(_WY_REG + 0), a
-;src/LevelLogic.c:205: set_win_data(96,68, hud_tiles);
-	ld	de, #_hud_tiles
-	push	de
-	ld	hl, #0x4460
-	push	hl
-	call	_set_win_data
-	add	sp, #4
-;src/LevelLogic.c:206: set_win_tiles(0,0,20,18, selection_menu);
-	ld	de, #_selection_menu
-	push	de
-	ld	hl, #0x1214
-	push	hl
-	xor	a, a
-	rrca
-	push	af
-	call	_set_win_tiles
-	add	sp, #6
-;src/LevelLogic.c:207: SHOW_WIN;
-	ldh	a, (_LCDC_REG + 0)
-	or	a, #0x20
-	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:208: performantdelay(10);
-	ld	a, #0x0a
-;src/LevelLogic.c:209: }
-	jp	_performantdelay
-;src/LevelLogic.c:211: void update_start_selection_menu(void){
+;src/LevelLogic.c:203: void update_start_selection_menu(void){
 ;	---------------------------------
 ; Function update_start_selection_menu
 ; ---------------------------------
@@ -931,11 +895,11 @@ _update_start_selection_menu::
 	ld	hl, #-360
 	add	hl, sp
 	ld	sp, hl
-;src/LevelLogic.c:212: if(joypad() & J_START){
+;src/LevelLogic.c:204: if(joypad() & J_START){
 	call	_joypad
 	rlca
 	jr	NC, 00107$
-;src/LevelLogic.c:214: for(uint16_t i = 0; i < 20 * 18; i++) {
+;src/LevelLogic.c:206: for(uint16_t i = 0; i < 20 * 18; i++) {
 	ldhl	sp,	#0
 	ld	e, l
 	ld	d, h
@@ -948,16 +912,16 @@ _update_start_selection_menu::
 	ld	a, h
 	sbc	a, #0x01
 	jr	NC, 00101$
-;src/LevelLogic.c:215: blank_map[i] = 96;
+;src/LevelLogic.c:207: blank_map[i] = 96;
 	ld	l, e
 	ld	h, d
 	add	hl, bc
 	ld	(hl), #0x60
-;src/LevelLogic.c:214: for(uint16_t i = 0; i < 20 * 18; i++) {
+;src/LevelLogic.c:206: for(uint16_t i = 0; i < 20 * 18; i++) {
 	inc	bc
 	jr	00105$
 00101$:
-;src/LevelLogic.c:217: set_bkg_tiles(0, 0, 20, 18, blank_map);
+;src/LevelLogic.c:209: set_bkg_tiles(0, 0, 20, 18, blank_map);
 	push	de
 	ld	hl, #0x1214
 	push	hl
@@ -966,40 +930,40 @@ _update_start_selection_menu::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;src/LevelLogic.c:218: move_win_screen(120);
+;src/LevelLogic.c:210: move_win_screen(120);
 	ld	a, #0x78
 	call	_move_win_screen
-;src/LevelLogic.c:219: update_game_state(STATE_GAME_SETTING);
+;src/LevelLogic.c:211: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	call	_update_game_state
 00107$:
-;src/LevelLogic.c:221: }
+;src/LevelLogic.c:213: }
 	ld	hl, #360
 	add	hl, sp
 	ld	sp, hl
 	ret
-;src/LevelLogic.c:223: void init_win_screen(const unsigned char* screen, uint8_t wx, uint8_t wy, uint8_t width, uint8_t height, int8_t movement){
+;src/LevelLogic.c:215: void init_win_screen(const unsigned char* screen, uint8_t wx, uint8_t wy, uint8_t width, uint8_t height, int8_t movement){
 ;	---------------------------------
 ; Function init_win_screen
 ; ---------------------------------
 _init_win_screen::
 	ld	c, a
-;src/LevelLogic.c:224: HIDE_SPRITES;
+;src/LevelLogic.c:216: HIDE_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	and	a, #0xfd
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:225: hide_character();
+;src/LevelLogic.c:217: hide_character();
 	push	bc
 	push	de
 	call	_hide_character
 	pop	de
 	pop	bc
-;src/LevelLogic.c:226: WX_REG = wx;
+;src/LevelLogic.c:218: WX_REG = wx;
 	ld	a, c
 	ldh	(_WX_REG + 0), a
-;src/LevelLogic.c:227: WY_REG = wy;
+;src/LevelLogic.c:219: WY_REG = wy;
 	ldhl	sp,	#2
-;src/LevelLogic.c:228: set_win_tiles(0,0,width,height,screen);
+;src/LevelLogic.c:220: set_win_tiles(0,0,width,height,screen);
 	ld	a, (hl+)
 	inc	hl
 	ldh	(_WY_REG + 0), a
@@ -1013,91 +977,91 @@ _init_win_screen::
 	push	af
 	call	_set_win_tiles
 	add	sp, #6
-;src/LevelLogic.c:229: if(movement != 0){
+;src/LevelLogic.c:221: if(movement != 0){
 	ldhl	sp,	#5
 	ld	a, (hl)
 	or	a, a
 	jr	Z, 00102$
-;src/LevelLogic.c:230: move_win_screen(movement);
+;src/LevelLogic.c:222: move_win_screen(movement);
 	ld	a, (hl)
 	call	_move_win_screen
 00102$:
-;src/LevelLogic.c:232: SHOW_WIN;
+;src/LevelLogic.c:224: SHOW_WIN;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x20
 	ldh	(_LCDC_REG + 0), a
-;src/LevelLogic.c:233: }
+;src/LevelLogic.c:225: }
 	pop	hl
 	add	sp, #4
 	jp	(hl)
-;src/LevelLogic.c:235: void update_victory_screen(void){
+;src/LevelLogic.c:227: void update_victory_screen(void){
 ;	---------------------------------
 ; Function update_victory_screen
 ; ---------------------------------
 _update_victory_screen::
-;src/LevelLogic.c:236: update_menu_pointer();
+;src/LevelLogic.c:228: update_menu_pointer();
 	call	_update_menu_pointer
-;src/LevelLogic.c:237: if(joypad() & (J_START | J_A)){
+;src/LevelLogic.c:229: if(joypad() & (J_START | J_A)){
 	call	_joypad
 	and	a, #0x90
 	ret	Z
-;src/LevelLogic.c:238: if(global_option_selection_from_menu == 0){
+;src/LevelLogic.c:230: if(global_option_selection_from_menu == 0){
 	ld	a, (#_global_option_selection_from_menu)
 	or	a, a
 	jr	NZ, 00102$
-;src/LevelLogic.c:239: update_game_state(STATE_GAME_SETTING);
+;src/LevelLogic.c:231: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	jp	_update_game_state
 00102$:
-;src/LevelLogic.c:241: update_game_state(STATE_SELECTION);
+;src/LevelLogic.c:233: update_game_state(STATE_SELECTION);
 	ld	a, #0x01
-;src/LevelLogic.c:244: }
+;src/LevelLogic.c:236: }
 	jp	_update_game_state
-;src/LevelLogic.c:246: void update_game_over_screen(void){
+;src/LevelLogic.c:238: void update_game_over_screen(void){
 ;	---------------------------------
 ; Function update_game_over_screen
 ; ---------------------------------
 _update_game_over_screen::
-;src/LevelLogic.c:247: update_menu_pointer();
+;src/LevelLogic.c:239: update_menu_pointer();
 	call	_update_menu_pointer
-;src/LevelLogic.c:248: if(joypad() & (J_START | J_A)){
+;src/LevelLogic.c:240: if(joypad() & (J_START | J_A)){
 	call	_joypad
 	and	a, #0x90
 	ret	Z
-;src/LevelLogic.c:249: if(global_option_selection_from_menu == 0){
+;src/LevelLogic.c:241: if(global_option_selection_from_menu == 0){
 	ld	a, (#_global_option_selection_from_menu)
 	or	a, a
 	jr	NZ, 00102$
-;src/LevelLogic.c:250: update_game_state(STATE_GAME_SETTING);
+;src/LevelLogic.c:242: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	jp	_update_game_state
 00102$:
-;src/LevelLogic.c:252: update_game_state(STATE_SELECTION);
+;src/LevelLogic.c:244: update_game_state(STATE_SELECTION);
 	ld	a, #0x01
-;src/LevelLogic.c:255: }
+;src/LevelLogic.c:247: }
 	jp	_update_game_state
-;src/LevelLogic.c:257: void update_pausa_screen(void) {
+;src/LevelLogic.c:249: void update_pausa_screen(void) {
 ;	---------------------------------
 ; Function update_pausa_screen
 ; ---------------------------------
 _update_pausa_screen::
-;src/LevelLogic.c:258: update_menu_pointer();
+;src/LevelLogic.c:250: update_menu_pointer();
 	call	_update_menu_pointer
-;src/LevelLogic.c:259: if(joypad() & (J_START | J_A)){
+;src/LevelLogic.c:251: if(joypad() & (J_START | J_A)){
 	call	_joypad
 	and	a, #0x90
 	ret	Z
-;src/LevelLogic.c:260: if(global_option_selection_from_menu == 0){
+;src/LevelLogic.c:252: if(global_option_selection_from_menu == 0){
 	ld	a, (#_global_option_selection_from_menu)
 	or	a, a
 	jr	NZ, 00102$
-;src/LevelLogic.c:261: update_game_state(STATE_GAME_SETTING);
+;src/LevelLogic.c:253: update_game_state(STATE_GAME_SETTING);
 	ld	a, #0x02
 	jp	_update_game_state
 00102$:
-;src/LevelLogic.c:263: update_game_state(STATE_SELECTION);
+;src/LevelLogic.c:255: update_game_state(STATE_SELECTION);
 	ld	a, #0x01
-;src/LevelLogic.c:266: } 
+;src/LevelLogic.c:258: } 
 	jp	_update_game_state
 	.area _CODE
 	.area _INITIALIZER

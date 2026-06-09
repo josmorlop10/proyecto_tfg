@@ -25,7 +25,6 @@ Symbol Table
     _init_game_title                                                ******** GX
   0 _init_gfx                                                       00000000 GR
     _init_level                                                     ******** GX
-    _init_start_selection_menu                                      ******** GX
     _init_win_screen                                                ******** GX
     _joypad                                                         ******** GX
   1 _last_state                                                     00000017 GR
@@ -39,6 +38,7 @@ Symbol Table
     _pointer_init                                                   ******** GX
     _print_objects_in_screen                                        ******** GX
   1 _s                                                              0000000F GR
+    _selection_menu                                                 ******** GX
     _selector                                                       ******** GX
     _set_bkg_data                                                   ******** GX
     _set_bkg_tiles                                                  ******** GX
@@ -62,7 +62,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      243   flags    0
+   0 _CODE                                      size      262   flags    0
    1 _DATA                                      size       18   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8
