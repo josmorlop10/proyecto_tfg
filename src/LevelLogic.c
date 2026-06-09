@@ -250,9 +250,10 @@ void update_pausa_screen(void) {
     update_menu_pointer();
     if(joypad() & (J_START | J_A)){
         if(global_option_selection_from_menu == 0){
-            update_game_state(STATE_GAME_SETTING);
+            waitpadup();
+            update_game_state(STATE_GAME_RUNNING);
         } else {
-            update_game_state(STATE_SELECTION);
+            update_game_state(STATE_GAME_SETTING);
         }
     }
 } 

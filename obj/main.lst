@@ -23,444 +23,495 @@
                                      23 	.globl _init_game_title
                                      24 	.globl _normalize_level_number
                                      25 	.globl _update_game_state
-                                     26 	.globl _update_character
-                                     27 	.globl _character_init
-                                     28 	.globl _performantdelay
-                                     29 	.globl _set_sprite_data
-                                     30 	.globl _set_win_tiles
-                                     31 	.globl _set_win_data
-                                     32 	.globl _set_bkg_tiles
-                                     33 	.globl _set_bkg_data
-                                     34 	.globl _joypad
-                                     35 	.globl _last_state
-                                     36 	.globl _s
-                                     37 	.globl _p
-                                     38 ;--------------------------------------------------------
-                                     39 ; special function registers
+                                     26 	.globl _move_character
+                                     27 	.globl _update_character
+                                     28 	.globl _character_init
+                                     29 	.globl _performantdelay
+                                     30 	.globl _set_sprite_data
+                                     31 	.globl _set_win_tiles
+                                     32 	.globl _set_win_data
+                                     33 	.globl _set_bkg_tiles
+                                     34 	.globl _set_bkg_data
+                                     35 	.globl _waitpadup
+                                     36 	.globl _joypad
+                                     37 	.globl _last_state
+                                     38 	.globl _s
+                                     39 	.globl _p
                                      40 ;--------------------------------------------------------
-                                     41 ;--------------------------------------------------------
-                                     42 ; ram data
+                                     41 ; special function registers
+                                     42 ;--------------------------------------------------------
                                      43 ;--------------------------------------------------------
-                                     44 	.area _DATA
-    00000000                         45 _p::
-    00000000                         46 	.ds 15
-    0000000F                         47 _s::
-    0000000F                         48 	.ds 8
-    00000017                         49 _last_state::
-    00000017                         50 	.ds 1
-                                     51 ;--------------------------------------------------------
-                                     52 ; ram data
+                                     44 ; ram data
+                                     45 ;--------------------------------------------------------
+                                     46 	.area _DATA
+    00000000                         47 _p::
+    00000000                         48 	.ds 15
+    0000000F                         49 _s::
+    0000000F                         50 	.ds 8
+    00000017                         51 _last_state::
+    00000017                         52 	.ds 1
                                      53 ;--------------------------------------------------------
-                                     54 	.area _INITIALIZED
+                                     54 ; ram data
                                      55 ;--------------------------------------------------------
-                                     56 ; absolute external ram data
+                                     56 	.area _INITIALIZED
                                      57 ;--------------------------------------------------------
-                                     58 	.area _DABS (ABS)
+                                     58 ; absolute external ram data
                                      59 ;--------------------------------------------------------
-                                     60 ; global & static initialisations
+                                     60 	.area _DABS (ABS)
                                      61 ;--------------------------------------------------------
-                                     62 	.area _HOME
-                                     63 	.area _GSINIT
-                                     64 	.area _GSFINAL
+                                     62 ; global & static initialisations
+                                     63 ;--------------------------------------------------------
+                                     64 	.area _HOME
                                      65 	.area _GSINIT
-                                     66 ;--------------------------------------------------------
-                                     67 ; Home
+                                     66 	.area _GSFINAL
+                                     67 	.area _GSINIT
                                      68 ;--------------------------------------------------------
-                                     69 	.area _HOME
-                                     70 	.area _HOME
-                                     71 ;--------------------------------------------------------
-                                     72 ; code
+                                     69 ; Home
+                                     70 ;--------------------------------------------------------
+                                     71 	.area _HOME
+                                     72 	.area _HOME
                                      73 ;--------------------------------------------------------
-                                     74 	.area _CODE
-                                     75 ;src/main.c:34: void init_gfx(void){
-                                     76 ;	---------------------------------
-                                     77 ; Function init_gfx
-                                     78 ; ---------------------------------
-    00000000                         79 _init_gfx::
-                                     80 ;src/main.c:36: set_sprite_data(0, 4, duck);
-    00000000 11r00r00         [12]   81 	ld	de, #_duck
-    00000003 D5               [16]   82 	push	de
-    00000004 21 00 04         [12]   83 	ld	hl, #0x400
-    00000007 E5               [16]   84 	push	hl
-    00000008 CDr00r00         [24]   85 	call	_set_sprite_data
-    0000000B E8 04            [16]   86 	add	sp, #4
-                                     87 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
-    0000000D 21r02r00         [12]   88 	ld	hl, #(_shadow_OAM + 2)
-    00000010 36 00            [12]   89 	ld	(hl), #0x00
-    00000012 21r06r00         [12]   90 	ld	hl, #(_shadow_OAM + 6)
-    00000015 36 01            [12]   91 	ld	(hl), #0x01
-    00000017 21r0Ar00         [12]   92 	ld	hl, #(_shadow_OAM + 10)
-    0000001A 36 02            [12]   93 	ld	(hl), #0x02
-    0000001C 21r0Er00         [12]   94 	ld	hl, #(_shadow_OAM + 14)
-    0000001F 36 03            [12]   95 	ld	(hl), #0x03
-                                     96 ;src/main.c:43: set_sprite_data(4, 4, selector);
-    00000021 11r00r00         [12]   97 	ld	de, #_selector
-    00000024 D5               [16]   98 	push	de
-    00000025 21 04 04         [12]   99 	ld	hl, #0x404
-    00000028 E5               [16]  100 	push	hl
-    00000029 CDr00r00         [24]  101 	call	_set_sprite_data
-    0000002C E8 04            [16]  102 	add	sp, #4
-                                    103 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
-    0000002E 21r12r00         [12]  104 	ld	hl, #(_shadow_OAM + 18)
-    00000031 36 04            [12]  105 	ld	(hl), #0x04
-    00000033 21r16r00         [12]  106 	ld	hl, #(_shadow_OAM + 22)
-    00000036 36 05            [12]  107 	ld	(hl), #0x05
-    00000038 21r1Ar00         [12]  108 	ld	hl, #(_shadow_OAM + 26)
-    0000003B 36 06            [12]  109 	ld	(hl), #0x06
-    0000003D 21r1Er00         [12]  110 	ld	hl, #(_shadow_OAM + 30)
-    00000040 36 07            [12]  111 	ld	(hl), #0x07
-                                    112 ;src/main.c:50: set_sprite_data(8,8,object_sprites);
-    00000042 11r00r00         [12]  113 	ld	de, #_object_sprites
-    00000045 D5               [16]  114 	push	de
-    00000046 21 08 08         [12]  115 	ld	hl, #0x808
-    00000049 E5               [16]  116 	push	hl
-    0000004A CDr00r00         [24]  117 	call	_set_sprite_data
-    0000004D E8 04            [16]  118 	add	sp, #4
-                                    119 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
-    0000004F 21r22r00         [12]  120 	ld	hl, #(_shadow_OAM + 34)
-    00000052 36 08            [12]  121 	ld	(hl), #0x08
-    00000054 21r26r00         [12]  122 	ld	hl, #(_shadow_OAM + 38)
-    00000057 36 09            [12]  123 	ld	(hl), #0x09
-    00000059 21r2Ar00         [12]  124 	ld	hl, #(_shadow_OAM + 42)
-    0000005C 36 0A            [12]  125 	ld	(hl), #0x0a
-    0000005E 21r2Er00         [12]  126 	ld	hl, #(_shadow_OAM + 46)
-    00000061 36 0B            [12]  127 	ld	(hl), #0x0b
-    00000063 21r32r00         [12]  128 	ld	hl, #(_shadow_OAM + 50)
-    00000066 36 0C            [12]  129 	ld	(hl), #0x0c
-    00000068 21r36r00         [12]  130 	ld	hl, #(_shadow_OAM + 54)
-    0000006B 36 0D            [12]  131 	ld	(hl), #0x0d
-    0000006D 21r3Ar00         [12]  132 	ld	hl, #(_shadow_OAM + 58)
-    00000070 36 0E            [12]  133 	ld	(hl), #0x0e
-    00000072 21r3Er00         [12]  134 	ld	hl, #(_shadow_OAM + 62)
-    00000075 36 0F            [12]  135 	ld	(hl), #0x0f
-                                    136 ;src/main.c:61: set_sprite_data(16,1,block_pointer);
-    00000077 11r00r00         [12]  137 	ld	de, #_block_pointer
-    0000007A D5               [16]  138 	push	de
-    0000007B 21 10 01         [12]  139 	ld	hl, #0x110
-    0000007E E5               [16]  140 	push	hl
-    0000007F CDr00r00         [24]  141 	call	_set_sprite_data
-    00000082 E8 04            [16]  142 	add	sp, #4
-                                    143 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
-    00000084 21r42r00         [12]  144 	ld	hl, #(_shadow_OAM + 66)
-    00000087 36 10            [12]  145 	ld	(hl), #0x10
-                                    146 ;src/main.c:65: global_actual_level = normalize_level_number(global_actual_level);
-    00000089 FAr00r00         [16]  147 	ld	a, (_global_actual_level)
-    0000008C CDr00r00         [24]  148 	call	_normalize_level_number
-    0000008F EAr00r00         [16]  149 	ld	(#_global_actual_level),a
-                                    150 ;src/main.c:66: set_bkg_data(0, 96, map_tiles_alt);
-    00000092 11r00r00         [12]  151 	ld	de, #_map_tiles_alt
-    00000095 D5               [16]  152 	push	de
-    00000096 21 00 60         [12]  153 	ld	hl, #0x6000
-    00000099 E5               [16]  154 	push	hl
-    0000009A CDr00r00         [24]  155 	call	_set_bkg_data
-    0000009D E8 04            [16]  156 	add	sp, #4
-                                    157 ;src/main.c:67: set_bkg_tiles(0,0,20,15,global_levels_array[global_actual_level]);
-    0000009F 01r00r00         [12]  158 	ld	bc, #_global_levels_array+0
-    000000A2 FAr00r00         [16]  159 	ld	a, (_global_actual_level)
-    000000A5 26 00            [ 8]  160 	ld	h, #0x00
-    000000A7 6F               [ 4]  161 	ld	l, a
-    000000A8 29               [ 8]  162 	add	hl, hl
-    000000A9 09               [ 8]  163 	add	hl, bc
-    000000AA 2A               [ 8]  164 	ld	a, (hl+)
-    000000AB 4F               [ 4]  165 	ld	c, a
-    000000AC 46               [ 8]  166 	ld	b, (hl)
-    000000AD C5               [16]  167 	push	bc
-    000000AE 21 14 0F         [12]  168 	ld	hl, #0xf14
-    000000B1 E5               [16]  169 	push	hl
-    000000B2 AF               [ 4]  170 	xor	a, a
-    000000B3 0F               [ 4]  171 	rrca
-    000000B4 F5               [16]  172 	push	af
-    000000B5 CDr00r00         [24]  173 	call	_set_bkg_tiles
-    000000B8 E8 06            [16]  174 	add	sp, #6
-                                    175 ;src/main.c:68: SHOW_BKG;
-    000000BA F0r00            [12]  176 	ldh	a, (_LCDC_REG + 0)
-    000000BC F6 01            [ 8]  177 	or	a, #0x01
-    000000BE E0r00            [12]  178 	ldh	(_LCDC_REG + 0), a
-                                    179 ;src/main.c:72: set_win_data(96,68, hud_tiles);
-    000000C0 11r00r00         [12]  180 	ld	de, #_hud_tiles
-    000000C3 D5               [16]  181 	push	de
-    000000C4 21 60 44         [12]  182 	ld	hl, #0x4460
-    000000C7 E5               [16]  183 	push	hl
-    000000C8 CDr00r00         [24]  184 	call	_set_win_data
-    000000CB E8 04            [16]  185 	add	sp, #4
-                                    186 ;src/main.c:73: set_win_tiles(0,0,20,4, hud_selector);
-    000000CD 11r00r00         [12]  187 	ld	de, #_hud_selector
-    000000D0 D5               [16]  188 	push	de
-    000000D1 21 14 04         [12]  189 	ld	hl, #0x414
-    000000D4 E5               [16]  190 	push	hl
-    000000D5 AF               [ 4]  191 	xor	a, a
-    000000D6 0F               [ 4]  192 	rrca
-    000000D7 F5               [16]  193 	push	af
-    000000D8 CDr00r00         [24]  194 	call	_set_win_tiles
-    000000DB E8 06            [16]  195 	add	sp, #6
-                                    196 ;src/main.c:74: draw_game_hud_buttons();
-    000000DD CDr00r00         [24]  197 	call	_draw_game_hud_buttons
-                                    198 ;src/main.c:76: WX_REG = 7;      // SIEMPRE 7
-    000000E0 3E 07            [ 8]  199 	ld	a, #0x07
-    000000E2 E0r00            [12]  200 	ldh	(_WX_REG + 0), a
-                                    201 ;src/main.c:78: SHOW_WIN;
-    000000E4 F0r00            [12]  202 	ldh	a, (_LCDC_REG + 0)
-    000000E6 F6 20            [ 8]  203 	or	a, #0x20
-    000000E8 E0r00            [12]  204 	ldh	(_LCDC_REG + 0), a
-                                    205 ;src/main.c:79: SHOW_SPRITES;
-    000000EA F0r00            [12]  206 	ldh	a, (_LCDC_REG + 0)
-    000000EC F6 02            [ 8]  207 	or	a, #0x02
-    000000EE E0r00            [12]  208 	ldh	(_LCDC_REG + 0), a
-                                    209 ;src/main.c:81: }
-    000000F0 C9               [16]  210 	ret
-                                    211 ;src/main.c:83: void main(void)
-                                    212 ;	---------------------------------
-                                    213 ; Function main
-                                    214 ; ---------------------------------
-    000000F1                        215 _main::
-                                    216 ;src/main.c:85: init_game_title();
-    000000F1 CDr00r00         [24]  217 	call	_init_game_title
-                                    218 ;src/main.c:86: global_game_state = STATE_MENU;
-    000000F4 AF               [ 4]  219 	xor	a, a
-    000000F5 EAr00r00         [16]  220 	ld	(#_global_game_state),a
-                                    221 ;src/main.c:88: while(1) {
-    000000F8                        222 00134$:
-                                    223 ;src/main.c:89: switch (global_game_state)
-    000000F8 3E 07            [ 8]  224 	ld	a, #0x07
-    000000FA 21r00r00         [12]  225 	ld	hl, #_global_game_state
-    000000FD 96               [ 8]  226 	sub	a, (hl)
-    000000FE DAr5Ar02         [16]  227 	jp	C, 00132$
-    00000101 4E               [ 8]  228 	ld	c, (hl)
-    00000102 06 00            [ 8]  229 	ld	b, #0x00
-    00000104 21r0Er01         [12]  230 	ld	hl, #00229$
-    00000107 09               [ 8]  231 	add	hl, bc
-    00000108 09               [ 8]  232 	add	hl, bc
-    00000109 4E               [ 8]  233 	ld	c, (hl)
-    0000010A 23               [ 8]  234 	inc	hl
-    0000010B 66               [ 8]  235 	ld	h, (hl)
-    0000010C 69               [ 4]  236 	ld	l, c
-    0000010D E9               [ 4]  237 	jp	(hl)
-    0000010E                        238 00229$:
-    0000010Er1Er01                  239 	.dw	00101$
-    00000110r3Ar01                  240 	.dw	00106$
-    00000112r6Dr01                  241 	.dw	00109$
-    00000114r9Br01                  242 	.dw	00112$
-    00000116r37r02                  243 	.dw	00128$
-    00000118rC2r01                  244 	.dw	00117$
-    0000011ArE7r01                  245 	.dw	00120$
-    0000011Cr0Cr02                  246 	.dw	00123$
-                                    247 ;src/main.c:92: case STATE_MENU:
-    0000011E                        248 00101$:
-                                    249 ;src/main.c:93: if(last_state != STATE_MENU) {
-    0000011E FAr17r00         [16]  250 	ld	a, (#_last_state)
-    00000121 B7               [ 4]  251 	or	a, a
-    00000122 28 07            [12]  252 	jr	Z, 00103$
-                                    253 ;src/main.c:94: init_game_title();
-    00000124 CDr00r00         [24]  254 	call	_init_game_title
-                                    255 ;src/main.c:95: last_state = STATE_MENU;
-    00000127 AF               [ 4]  256 	xor	a, a
-    00000128 EAr17r00         [16]  257 	ld	(#_last_state),a
-    0000012B                        258 00103$:
-                                    259 ;src/main.c:98: if(joypad() & J_START){
-    0000012B CDr00r00         [24]  260 	call	_joypad
-    0000012E 07               [ 4]  261 	rlca
-    0000012F D2r5Ar02         [16]  262 	jp	NC, 00132$
-                                    263 ;src/main.c:99: update_game_state(STATE_SELECTION);
-    00000132 3E 01            [ 8]  264 	ld	a, #0x01
-    00000134 CDr00r00         [24]  265 	call	_update_game_state
-                                    266 ;src/main.c:101: break;
-    00000137 C3r5Ar02         [16]  267 	jp	00132$
-                                    268 ;src/main.c:103: case STATE_SELECTION:
-    0000013A                        269 00106$:
-                                    270 ;src/main.c:104: if(last_state != STATE_SELECTION) {
-    0000013A FAr17r00         [16]  271 	ld	a, (#_last_state)
-    0000013D 3D               [ 4]  272 	dec	a
-    0000013E 28 27            [12]  273 	jr	Z, 00108$
-                                    274 ;src/main.c:105: set_win_data(96,68, hud_tiles);
-    00000140 11r00r00         [12]  275 	ld	de, #_hud_tiles
-    00000143 D5               [16]  276 	push	de
-    00000144 21 60 44         [12]  277 	ld	hl, #0x4460
-    00000147 E5               [16]  278 	push	hl
-    00000148 CDr00r00         [24]  279 	call	_set_win_data
-    0000014B E8 04            [16]  280 	add	sp, #4
-                                    281 ;src/main.c:106: init_win_screen(selection_menu, 7, 0, 20, 18, 0);
-    0000014D 21 12 00         [12]  282 	ld	hl, #0x12
-    00000150 E5               [16]  283 	push	hl
-    00000151 21 00 14         [12]  284 	ld	hl, #0x1400
-    00000154 E5               [16]  285 	push	hl
-    00000155 3E 07            [ 8]  286 	ld	a, #0x07
-    00000157 11r00r00         [12]  287 	ld	de, #_selection_menu
-    0000015A CDr00r00         [24]  288 	call	_init_win_screen
-                                    289 ;src/main.c:107: last_state = STATE_SELECTION;
-    0000015D 21r17r00         [12]  290 	ld	hl, #_last_state
-    00000160 36 01            [12]  291 	ld	(hl), #0x01
-                                    292 ;src/main.c:108: performantdelay(30);
-    00000162 3E 1E            [ 8]  293 	ld	a, #0x1e
-    00000164 CDr00r00         [24]  294 	call	_performantdelay
-    00000167                        295 00108$:
-                                    296 ;src/main.c:110: update_start_selection_menu();
-    00000167 CDr00r00         [24]  297 	call	_update_start_selection_menu
-                                    298 ;src/main.c:111: break;
-    0000016A C3r5Ar02         [16]  299 	jp	00132$
-                                    300 ;src/main.c:113: case STATE_GAME_SETTING:
-    0000016D                        301 00109$:
-                                    302 ;src/main.c:114: if(last_state != STATE_GAME_SETTING) {
-    0000016D FAr17r00         [16]  303 	ld	a, (#_last_state)
-    00000170 D6 02            [ 8]  304 	sub	a, #0x02
-    00000172 28 1B            [12]  305 	jr	Z, 00111$
-                                    306 ;src/main.c:115: init_gfx();
-    00000174 CDr00r00         [24]  307 	call	_init_gfx
-                                    308 ;src/main.c:116: WY_REG = 120;
-    00000177 3E 78            [ 8]  309 	ld	a, #0x78
-    00000179 E0r00            [12]  310 	ldh	(_WY_REG + 0), a
-                                    311 ;src/main.c:117: pointer_init(&s);
-    0000017B 11r0Fr00         [12]  312 	ld	de, #_s
-    0000017E CDr00r00         [24]  313 	call	_pointer_init
-                                    314 ;src/main.c:118: init_level(global_actual_level);
-    00000181 FAr00r00         [16]  315 	ld	a, (_global_actual_level)
-    00000184 CDr00r00         [24]  316 	call	_init_level
-                                    317 ;src/main.c:119: print_objects_in_screen();
-    00000187 CDr00r00         [24]  318 	call	_print_objects_in_screen
-                                    319 ;src/main.c:120: last_state = STATE_GAME_SETTING;
-    0000018A 21r17r00         [12]  320 	ld	hl, #_last_state
-    0000018D 36 02            [12]  321 	ld	(hl), #0x02
-    0000018F                        322 00111$:
-                                    323 ;src/main.c:122: update_pointer(&s);
-    0000018F 11r0Fr00         [12]  324 	ld	de, #_s
-    00000192 CDr00r00         [24]  325 	call	_update_pointer
-                                    326 ;src/main.c:123: update_HUD();
-    00000195 CDr00r00         [24]  327 	call	_update_HUD
-                                    328 ;src/main.c:124: break;
-    00000198 C3r5Ar02         [16]  329 	jp	00132$
-                                    330 ;src/main.c:126: case STATE_GAME_RUNNING:
-    0000019B                        331 00112$:
-                                    332 ;src/main.c:127: if(last_state != STATE_GAME_RUNNING) {
-    0000019B FAr17r00         [16]  333 	ld	a, (#_last_state)
-    0000019E D6 03            [ 8]  334 	sub	a, #0x03
-    000001A0 28 0B            [12]  335 	jr	Z, 00114$
-                                    336 ;src/main.c:128: character_init(&p);
-    000001A2 11r00r00         [12]  337 	ld	de, #_p
-    000001A5 CDr00r00         [24]  338 	call	_character_init
-                                    339 ;src/main.c:129: last_state = STATE_GAME_RUNNING;
-    000001A8 21r17r00         [12]  340 	ld	hl, #_last_state
-    000001AB 36 03            [12]  341 	ld	(hl), #0x03
-    000001AD                        342 00114$:
-                                    343 ;src/main.c:131: update_character(&p);
-    000001AD 11r00r00         [12]  344 	ld	de, #_p
-    000001B0 CDr00r00         [24]  345 	call	_update_character
-                                    346 ;src/main.c:132: if(joypad() & J_START){
-    000001B3 CDr00r00         [24]  347 	call	_joypad
-    000001B6 07               [ 4]  348 	rlca
-    000001B7 D2r5Ar02         [16]  349 	jp	NC, 00132$
-                                    350 ;src/main.c:133: update_game_state(STATE_GAME_PAUSED);
-    000001BA 3E 04            [ 8]  351 	ld	a, #0x04
-    000001BC CDr00r00         [24]  352 	call	_update_game_state
-                                    353 ;src/main.c:135: break;
-    000001BF C3r5Ar02         [16]  354 	jp	00132$
-                                    355 ;src/main.c:137: case STATE_GAME_OVER:
-    000001C2                        356 00117$:
-                                    357 ;src/main.c:138: if(last_state != STATE_GAME_OVER) {
-    000001C2 FAr17r00         [16]  358 	ld	a, (#_last_state)
-    000001C5 D6 05            [ 8]  359 	sub	a, #0x05
-    000001C7 28 19            [12]  360 	jr	Z, 00119$
-                                    361 ;src/main.c:139: last_state = STATE_GAME_OVER;
-    000001C9 21r17r00         [12]  362 	ld	hl, #_last_state
-    000001CC 36 05            [12]  363 	ld	(hl), #0x05
-                                    364 ;src/main.c:140: global_option_selection_from_menu = 0;
-    000001CE AF               [ 4]  365 	xor	a, a
-    000001CF EAr00r00         [16]  366 	ld	(#_global_option_selection_from_menu),a
-                                    367 ;src/main.c:141: init_win_screen(game_over_screen, 7, 120, 20, 12, -72);
-    000001D2 21 0C B8         [12]  368 	ld	hl, #0xb80c
-    000001D5 E5               [16]  369 	push	hl
-    000001D6 21 78 14         [12]  370 	ld	hl, #0x1478
-    000001D9 E5               [16]  371 	push	hl
-    000001DA 3E 07            [ 8]  372 	ld	a, #0x07
-    000001DC 11r00r00         [12]  373 	ld	de, #_game_over_screen
-    000001DF CDr00r00         [24]  374 	call	_init_win_screen
-    000001E2                        375 00119$:
-                                    376 ;src/main.c:143: update_game_over_screen();
-    000001E2 CDr00r00         [24]  377 	call	_update_game_over_screen
-                                    378 ;src/main.c:144: break;
-    000001E5 18 73            [12]  379 	jr	00132$
-                                    380 ;src/main.c:146: case STATE_VICTORY:
-    000001E7                        381 00120$:
-                                    382 ;src/main.c:147: if(last_state != STATE_VICTORY) {
-    000001E7 FAr17r00         [16]  383 	ld	a, (#_last_state)
-    000001EA D6 06            [ 8]  384 	sub	a, #0x06
-    000001EC 28 19            [12]  385 	jr	Z, 00122$
-                                    386 ;src/main.c:148: last_state = STATE_VICTORY;
-    000001EE 21r17r00         [12]  387 	ld	hl, #_last_state
-    000001F1 36 06            [12]  388 	ld	(hl), #0x06
-                                    389 ;src/main.c:149: global_option_selection_from_menu = 0;
-    000001F3 AF               [ 4]  390 	xor	a, a
-    000001F4 EAr00r00         [16]  391 	ld	(#_global_option_selection_from_menu),a
-                                    392 ;src/main.c:150: init_win_screen(victory_screen, 7, 120, 20, 12, -72);
-    000001F7 21 0C B8         [12]  393 	ld	hl, #0xb80c
-    000001FA E5               [16]  394 	push	hl
-    000001FB 21 78 14         [12]  395 	ld	hl, #0x1478
-    000001FE E5               [16]  396 	push	hl
-    000001FF 3E 07            [ 8]  397 	ld	a, #0x07
-    00000201 11r00r00         [12]  398 	ld	de, #_victory_screen
-    00000204 CDr00r00         [24]  399 	call	_init_win_screen
-    00000207                        400 00122$:
-                                    401 ;src/main.c:152: update_victory_screen();
-    00000207 CDr00r00         [24]  402 	call	_update_victory_screen
-                                    403 ;src/main.c:153: break;
-    0000020A 18 4E            [12]  404 	jr	00132$
-                                    405 ;src/main.c:155: case STATE_FINAL_MESSAGE:
-    0000020C                        406 00123$:
-                                    407 ;src/main.c:156: if(last_state != STATE_FINAL_MESSAGE) {
-    0000020C FAr17r00         [16]  408 	ld	a, (#_last_state)
-    0000020F D6 07            [ 8]  409 	sub	a, #0x07
-    00000211 28 14            [12]  410 	jr	Z, 00125$
-                                    411 ;src/main.c:157: last_state = STATE_FINAL_MESSAGE;
-    00000213 21r17r00         [12]  412 	ld	hl, #_last_state
-    00000216 36 07            [12]  413 	ld	(hl), #0x07
-                                    414 ;src/main.c:158: init_win_screen(final_message, 0, 0, 20, 18, 0);
-    00000218 21 12 00         [12]  415 	ld	hl, #0x12
-    0000021B E5               [16]  416 	push	hl
-    0000021C 21 00 14         [12]  417 	ld	hl, #0x1400
-    0000021F E5               [16]  418 	push	hl
-    00000220 AF               [ 4]  419 	xor	a, a
-    00000221 11r00r00         [12]  420 	ld	de, #_final_message
-    00000224 CDr00r00         [24]  421 	call	_init_win_screen
-    00000227                        422 00125$:
-                                    423 ;src/main.c:160: if(joypad() & (J_START | J_A)){
-    00000227 CDr00r00         [24]  424 	call	_joypad
-    0000022A E6 90            [ 8]  425 	and	a, #0x90
-    0000022C 28 2C            [12]  426 	jr	Z, 00132$
-                                    427 ;src/main.c:161: global_actual_level = 0;
-                                    428 ;src/main.c:162: update_game_state(STATE_MENU);
-    0000022E AF               [ 4]  429 	xor	a, a
-    0000022F EAr00r00         [16]  430 	ld	(#_global_actual_level), a
-    00000232 CDr00r00         [24]  431 	call	_update_game_state
-                                    432 ;src/main.c:164: break;
-    00000235 18 23            [12]  433 	jr	00132$
-                                    434 ;src/main.c:166: case STATE_GAME_PAUSED:
-    00000237                        435 00128$:
-                                    436 ;src/main.c:167: if(last_state != STATE_GAME_PAUSED) {
-    00000237 FAr17r00         [16]  437 	ld	a, (#_last_state)
-    0000023A D6 04            [ 8]  438 	sub	a, #0x04
-    0000023C 28 19            [12]  439 	jr	Z, 00130$
-                                    440 ;src/main.c:168: last_state = STATE_GAME_PAUSED;
-    0000023E 21r17r00         [12]  441 	ld	hl, #_last_state
-    00000241 36 04            [12]  442 	ld	(hl), #0x04
-                                    443 ;src/main.c:169: global_option_selection_from_menu = 0;
-    00000243 AF               [ 4]  444 	xor	a, a
-    00000244 EAr00r00         [16]  445 	ld	(#_global_option_selection_from_menu),a
-                                    446 ;src/main.c:170: init_win_screen(pausa, 7, 120, 20, 12, -72);
-    00000247 21 0C B8         [12]  447 	ld	hl, #0xb80c
-    0000024A E5               [16]  448 	push	hl
-    0000024B 21 78 14         [12]  449 	ld	hl, #0x1478
-    0000024E E5               [16]  450 	push	hl
-    0000024F 3E 07            [ 8]  451 	ld	a, #0x07
-    00000251 11r00r00         [12]  452 	ld	de, #_pausa
-    00000254 CDr00r00         [24]  453 	call	_init_win_screen
-    00000257                        454 00130$:
-                                    455 ;src/main.c:172: update_pausa_screen();
-    00000257 CDr00r00         [24]  456 	call	_update_pausa_screen
-                                    457 ;src/main.c:177: }
-    0000025A                        458 00132$:
-                                    459 ;src/main.c:178: performantdelay(10);
-    0000025A 3E 0A            [ 8]  460 	ld	a, #0x0a
-    0000025C CDr00r00         [24]  461 	call	_performantdelay
-                                    462 ;src/main.c:180: }
-    0000025F C3rF8r00         [16]  463 	jp	00134$
-                                    464 	.area _CODE
-                                    465 	.area _INITIALIZER
-                                    466 	.area _CABS (ABS)
+                                     74 ; code
+                                     75 ;--------------------------------------------------------
+                                     76 	.area _CODE
+                                     77 ;src/main.c:34: void init_gfx(void){
+                                     78 ;	---------------------------------
+                                     79 ; Function init_gfx
+                                     80 ; ---------------------------------
+    00000000                         81 _init_gfx::
+                                     82 ;src/main.c:36: set_sprite_data(0, 4, duck);
+    00000000 11r00r00         [12]   83 	ld	de, #_duck
+    00000003 D5               [16]   84 	push	de
+    00000004 21 00 04         [12]   85 	ld	hl, #0x400
+    00000007 E5               [16]   86 	push	hl
+    00000008 CDr00r00         [24]   87 	call	_set_sprite_data
+    0000000B E8 04            [16]   88 	add	sp, #4
+                                     89 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    0000000D 21r02r00         [12]   90 	ld	hl, #(_shadow_OAM + 2)
+    00000010 36 00            [12]   91 	ld	(hl), #0x00
+    00000012 21r06r00         [12]   92 	ld	hl, #(_shadow_OAM + 6)
+    00000015 36 01            [12]   93 	ld	(hl), #0x01
+    00000017 21r0Ar00         [12]   94 	ld	hl, #(_shadow_OAM + 10)
+    0000001A 36 02            [12]   95 	ld	(hl), #0x02
+    0000001C 21r0Er00         [12]   96 	ld	hl, #(_shadow_OAM + 14)
+    0000001F 36 03            [12]   97 	ld	(hl), #0x03
+                                     98 ;src/main.c:43: set_sprite_data(4, 4, selector);
+    00000021 11r00r00         [12]   99 	ld	de, #_selector
+    00000024 D5               [16]  100 	push	de
+    00000025 21 04 04         [12]  101 	ld	hl, #0x404
+    00000028 E5               [16]  102 	push	hl
+    00000029 CDr00r00         [24]  103 	call	_set_sprite_data
+    0000002C E8 04            [16]  104 	add	sp, #4
+                                    105 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    0000002E 21r12r00         [12]  106 	ld	hl, #(_shadow_OAM + 18)
+    00000031 36 04            [12]  107 	ld	(hl), #0x04
+    00000033 21r16r00         [12]  108 	ld	hl, #(_shadow_OAM + 22)
+    00000036 36 05            [12]  109 	ld	(hl), #0x05
+    00000038 21r1Ar00         [12]  110 	ld	hl, #(_shadow_OAM + 26)
+    0000003B 36 06            [12]  111 	ld	(hl), #0x06
+    0000003D 21r1Er00         [12]  112 	ld	hl, #(_shadow_OAM + 30)
+    00000040 36 07            [12]  113 	ld	(hl), #0x07
+                                    114 ;src/main.c:50: set_sprite_data(8,8,object_sprites);
+    00000042 11r00r00         [12]  115 	ld	de, #_object_sprites
+    00000045 D5               [16]  116 	push	de
+    00000046 21 08 08         [12]  117 	ld	hl, #0x808
+    00000049 E5               [16]  118 	push	hl
+    0000004A CDr00r00         [24]  119 	call	_set_sprite_data
+    0000004D E8 04            [16]  120 	add	sp, #4
+                                    121 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    0000004F 21r22r00         [12]  122 	ld	hl, #(_shadow_OAM + 34)
+    00000052 36 08            [12]  123 	ld	(hl), #0x08
+    00000054 21r26r00         [12]  124 	ld	hl, #(_shadow_OAM + 38)
+    00000057 36 09            [12]  125 	ld	(hl), #0x09
+    00000059 21r2Ar00         [12]  126 	ld	hl, #(_shadow_OAM + 42)
+    0000005C 36 0A            [12]  127 	ld	(hl), #0x0a
+    0000005E 21r2Er00         [12]  128 	ld	hl, #(_shadow_OAM + 46)
+    00000061 36 0B            [12]  129 	ld	(hl), #0x0b
+    00000063 21r32r00         [12]  130 	ld	hl, #(_shadow_OAM + 50)
+    00000066 36 0C            [12]  131 	ld	(hl), #0x0c
+    00000068 21r36r00         [12]  132 	ld	hl, #(_shadow_OAM + 54)
+    0000006B 36 0D            [12]  133 	ld	(hl), #0x0d
+    0000006D 21r3Ar00         [12]  134 	ld	hl, #(_shadow_OAM + 58)
+    00000070 36 0E            [12]  135 	ld	(hl), #0x0e
+    00000072 21r3Er00         [12]  136 	ld	hl, #(_shadow_OAM + 62)
+    00000075 36 0F            [12]  137 	ld	(hl), #0x0f
+                                    138 ;src/main.c:61: set_sprite_data(16,1,block_pointer);
+    00000077 11r00r00         [12]  139 	ld	de, #_block_pointer
+    0000007A D5               [16]  140 	push	de
+    0000007B 21 10 01         [12]  141 	ld	hl, #0x110
+    0000007E E5               [16]  142 	push	hl
+    0000007F CDr00r00         [24]  143 	call	_set_sprite_data
+    00000082 E8 04            [16]  144 	add	sp, #4
+                                    145 ;/home/josem/gbdk/include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    00000084 21r42r00         [12]  146 	ld	hl, #(_shadow_OAM + 66)
+    00000087 36 10            [12]  147 	ld	(hl), #0x10
+                                    148 ;src/main.c:65: global_actual_level = normalize_level_number(global_actual_level);
+    00000089 FAr00r00         [16]  149 	ld	a, (_global_actual_level)
+    0000008C CDr00r00         [24]  150 	call	_normalize_level_number
+    0000008F EAr00r00         [16]  151 	ld	(#_global_actual_level),a
+                                    152 ;src/main.c:66: set_bkg_data(0, 96, map_tiles_alt);
+    00000092 11r00r00         [12]  153 	ld	de, #_map_tiles_alt
+    00000095 D5               [16]  154 	push	de
+    00000096 21 00 60         [12]  155 	ld	hl, #0x6000
+    00000099 E5               [16]  156 	push	hl
+    0000009A CDr00r00         [24]  157 	call	_set_bkg_data
+    0000009D E8 04            [16]  158 	add	sp, #4
+                                    159 ;src/main.c:67: set_bkg_tiles(0,0,20,15,global_levels_array[global_actual_level]);
+    0000009F 01r00r00         [12]  160 	ld	bc, #_global_levels_array+0
+    000000A2 FAr00r00         [16]  161 	ld	a, (_global_actual_level)
+    000000A5 26 00            [ 8]  162 	ld	h, #0x00
+    000000A7 6F               [ 4]  163 	ld	l, a
+    000000A8 29               [ 8]  164 	add	hl, hl
+    000000A9 09               [ 8]  165 	add	hl, bc
+    000000AA 2A               [ 8]  166 	ld	a, (hl+)
+    000000AB 4F               [ 4]  167 	ld	c, a
+    000000AC 46               [ 8]  168 	ld	b, (hl)
+    000000AD C5               [16]  169 	push	bc
+    000000AE 21 14 0F         [12]  170 	ld	hl, #0xf14
+    000000B1 E5               [16]  171 	push	hl
+    000000B2 AF               [ 4]  172 	xor	a, a
+    000000B3 0F               [ 4]  173 	rrca
+    000000B4 F5               [16]  174 	push	af
+    000000B5 CDr00r00         [24]  175 	call	_set_bkg_tiles
+    000000B8 E8 06            [16]  176 	add	sp, #6
+                                    177 ;src/main.c:68: SHOW_BKG;
+    000000BA F0r00            [12]  178 	ldh	a, (_LCDC_REG + 0)
+    000000BC F6 01            [ 8]  179 	or	a, #0x01
+    000000BE E0r00            [12]  180 	ldh	(_LCDC_REG + 0), a
+                                    181 ;src/main.c:72: set_win_data(96,68, hud_tiles);
+    000000C0 11r00r00         [12]  182 	ld	de, #_hud_tiles
+    000000C3 D5               [16]  183 	push	de
+    000000C4 21 60 44         [12]  184 	ld	hl, #0x4460
+    000000C7 E5               [16]  185 	push	hl
+    000000C8 CDr00r00         [24]  186 	call	_set_win_data
+    000000CB E8 04            [16]  187 	add	sp, #4
+                                    188 ;src/main.c:73: set_win_tiles(0,0,20,4, hud_selector);
+    000000CD 11r00r00         [12]  189 	ld	de, #_hud_selector
+    000000D0 D5               [16]  190 	push	de
+    000000D1 21 14 04         [12]  191 	ld	hl, #0x414
+    000000D4 E5               [16]  192 	push	hl
+    000000D5 AF               [ 4]  193 	xor	a, a
+    000000D6 0F               [ 4]  194 	rrca
+    000000D7 F5               [16]  195 	push	af
+    000000D8 CDr00r00         [24]  196 	call	_set_win_tiles
+    000000DB E8 06            [16]  197 	add	sp, #6
+                                    198 ;src/main.c:74: draw_game_hud_buttons();
+    000000DD CDr00r00         [24]  199 	call	_draw_game_hud_buttons
+                                    200 ;src/main.c:76: WX_REG = 7;      // SIEMPRE 7
+    000000E0 3E 07            [ 8]  201 	ld	a, #0x07
+    000000E2 E0r00            [12]  202 	ldh	(_WX_REG + 0), a
+                                    203 ;src/main.c:78: SHOW_WIN;
+    000000E4 F0r00            [12]  204 	ldh	a, (_LCDC_REG + 0)
+    000000E6 F6 20            [ 8]  205 	or	a, #0x20
+    000000E8 E0r00            [12]  206 	ldh	(_LCDC_REG + 0), a
+                                    207 ;src/main.c:79: SHOW_SPRITES;
+    000000EA F0r00            [12]  208 	ldh	a, (_LCDC_REG + 0)
+    000000EC F6 02            [ 8]  209 	or	a, #0x02
+    000000EE E0r00            [12]  210 	ldh	(_LCDC_REG + 0), a
+                                    211 ;src/main.c:81: }
+    000000F0 C9               [16]  212 	ret
+                                    213 ;src/main.c:83: void main(void)
+                                    214 ;	---------------------------------
+                                    215 ; Function main
+                                    216 ; ---------------------------------
+    000000F1                        217 _main::
+                                    218 ;src/main.c:85: init_game_title();
+    000000F1 CDr00r00         [24]  219 	call	_init_game_title
+                                    220 ;src/main.c:86: global_game_state = STATE_MENU;
+    000000F4 AF               [ 4]  221 	xor	a, a
+    000000F5 EAr00r00         [16]  222 	ld	(#_global_game_state),a
+                                    223 ;src/main.c:88: while(1) {
+    000000F8                        224 00137$:
+                                    225 ;src/main.c:89: switch (global_game_state)
+    000000F8 3E 07            [ 8]  226 	ld	a, #0x07
+    000000FA 21r00r00         [12]  227 	ld	hl, #_global_game_state
+    000000FD 96               [ 8]  228 	sub	a, (hl)
+    000000FE DAr9Ar02         [16]  229 	jp	C, 00135$
+                                    230 ;src/main.c:114: if(last_state != STATE_GAME_SETTING) {
+    00000101 FAr17r00         [16]  231 	ld	a, (#_last_state)
+    00000104 D6 02            [ 8]  232 	sub	a, #0x02
+    00000106 3E 01            [ 8]  233 	ld	a, #0x01
+    00000108 28 01            [12]  234 	jr	Z, 00240$
+    0000010A AF               [ 4]  235 	xor	a, a
+    0000010B                        236 00240$:
+    0000010B 47               [ 4]  237 	ld	b, a
+                                    238 ;src/main.c:129: } else if(last_state == STATE_GAME_PAUSED) {
+    0000010C FAr17r00         [16]  239 	ld	a, (#_last_state)
+    0000010F D6 04            [ 8]  240 	sub	a, #0x04
+    00000111 3E 01            [ 8]  241 	ld	a, #0x01
+    00000113 28 01            [12]  242 	jr	Z, 00242$
+    00000115 AF               [ 4]  243 	xor	a, a
+    00000116                        244 00242$:
+    00000116 4F               [ 4]  245 	ld	c, a
+                                    246 ;src/main.c:89: switch (global_game_state)
+    00000117 FAr00r00         [16]  247 	ld	a, (_global_game_state)
+    0000011A 5F               [ 4]  248 	ld	e, a
+    0000011B 16 00            [ 8]  249 	ld	d, #0x00
+    0000011D 21r27r01         [12]  250 	ld	hl, #00243$
+    00000120 19               [ 8]  251 	add	hl, de
+    00000121 19               [ 8]  252 	add	hl, de
+    00000122 5E               [ 8]  253 	ld	e, (hl)
+    00000123 23               [ 8]  254 	inc	hl
+    00000124 66               [ 8]  255 	ld	h, (hl)
+    00000125 6B               [ 4]  256 	ld	l, e
+    00000126 E9               [ 4]  257 	jp	(hl)
+    00000127                        258 00243$:
+    00000127r37r01                  259 	.dw	00101$
+    00000129r53r01                  260 	.dw	00106$
+    0000012Br86r01                  261 	.dw	00109$
+    0000012DrB1r01                  262 	.dw	00112$
+    0000012Fr7Ar02                  263 	.dw	00131$
+    00000131r05r02                  264 	.dw	00120$
+    00000133r2Ar02                  265 	.dw	00123$
+    00000135r4Fr02                  266 	.dw	00126$
+                                    267 ;src/main.c:92: case STATE_MENU:
+    00000137                        268 00101$:
+                                    269 ;src/main.c:93: if(last_state != STATE_MENU) {
+    00000137 FAr17r00         [16]  270 	ld	a, (#_last_state)
+    0000013A B7               [ 4]  271 	or	a, a
+    0000013B 28 07            [12]  272 	jr	Z, 00103$
+                                    273 ;src/main.c:94: init_game_title();
+    0000013D CDr00r00         [24]  274 	call	_init_game_title
+                                    275 ;src/main.c:95: last_state = STATE_MENU;
+    00000140 AF               [ 4]  276 	xor	a, a
+    00000141 EAr17r00         [16]  277 	ld	(#_last_state),a
+    00000144                        278 00103$:
+                                    279 ;src/main.c:98: if(joypad() & J_START){
+    00000144 CDr00r00         [24]  280 	call	_joypad
+    00000147 07               [ 4]  281 	rlca
+    00000148 D2r9Ar02         [16]  282 	jp	NC, 00135$
+                                    283 ;src/main.c:99: update_game_state(STATE_SELECTION);
+    0000014B 3E 01            [ 8]  284 	ld	a, #0x01
+    0000014D CDr00r00         [24]  285 	call	_update_game_state
+                                    286 ;src/main.c:101: break;
+    00000150 C3r9Ar02         [16]  287 	jp	00135$
+                                    288 ;src/main.c:103: case STATE_SELECTION:
+    00000153                        289 00106$:
+                                    290 ;src/main.c:104: if(last_state != STATE_SELECTION) {
+    00000153 FAr17r00         [16]  291 	ld	a, (#_last_state)
+    00000156 3D               [ 4]  292 	dec	a
+    00000157 28 27            [12]  293 	jr	Z, 00108$
+                                    294 ;src/main.c:105: set_win_data(96,68, hud_tiles);
+    00000159 11r00r00         [12]  295 	ld	de, #_hud_tiles
+    0000015C D5               [16]  296 	push	de
+    0000015D 21 60 44         [12]  297 	ld	hl, #0x4460
+    00000160 E5               [16]  298 	push	hl
+    00000161 CDr00r00         [24]  299 	call	_set_win_data
+    00000164 E8 04            [16]  300 	add	sp, #4
+                                    301 ;src/main.c:106: init_win_screen(selection_menu, 7, 0, 20, 18, 0);
+    00000166 21 12 00         [12]  302 	ld	hl, #0x12
+    00000169 E5               [16]  303 	push	hl
+    0000016A 21 00 14         [12]  304 	ld	hl, #0x1400
+    0000016D E5               [16]  305 	push	hl
+    0000016E 3E 07            [ 8]  306 	ld	a, #0x07
+    00000170 11r00r00         [12]  307 	ld	de, #_selection_menu
+    00000173 CDr00r00         [24]  308 	call	_init_win_screen
+                                    309 ;src/main.c:107: last_state = STATE_SELECTION;
+    00000176 21r17r00         [12]  310 	ld	hl, #_last_state
+    00000179 36 01            [12]  311 	ld	(hl), #0x01
+                                    312 ;src/main.c:108: performantdelay(30);
+    0000017B 3E 1E            [ 8]  313 	ld	a, #0x1e
+    0000017D CDr00r00         [24]  314 	call	_performantdelay
+    00000180                        315 00108$:
+                                    316 ;src/main.c:110: update_start_selection_menu();
+    00000180 CDr00r00         [24]  317 	call	_update_start_selection_menu
+                                    318 ;src/main.c:111: break;
+    00000183 C3r9Ar02         [16]  319 	jp	00135$
+                                    320 ;src/main.c:113: case STATE_GAME_SETTING:
+    00000186                        321 00109$:
+                                    322 ;src/main.c:114: if(last_state != STATE_GAME_SETTING) {
+    00000186 CB 40            [ 8]  323 	bit	0, b
+    00000188 20 1B            [12]  324 	jr	NZ, 00111$
+                                    325 ;src/main.c:115: init_gfx();
+    0000018A CDr00r00         [24]  326 	call	_init_gfx
+                                    327 ;src/main.c:116: WY_REG = 120;
+    0000018D 3E 78            [ 8]  328 	ld	a, #0x78
+    0000018F E0r00            [12]  329 	ldh	(_WY_REG + 0), a
+                                    330 ;src/main.c:117: pointer_init(&s);
+    00000191 11r0Fr00         [12]  331 	ld	de, #_s
+    00000194 CDr00r00         [24]  332 	call	_pointer_init
+                                    333 ;src/main.c:118: init_level(global_actual_level);
+    00000197 FAr00r00         [16]  334 	ld	a, (_global_actual_level)
+    0000019A CDr00r00         [24]  335 	call	_init_level
+                                    336 ;src/main.c:119: print_objects_in_screen();
+    0000019D CDr00r00         [24]  337 	call	_print_objects_in_screen
+                                    338 ;src/main.c:120: last_state = STATE_GAME_SETTING;
+    000001A0 21r17r00         [12]  339 	ld	hl, #_last_state
+    000001A3 36 02            [12]  340 	ld	(hl), #0x02
+    000001A5                        341 00111$:
+                                    342 ;src/main.c:122: update_pointer(&s);
+    000001A5 11r0Fr00         [12]  343 	ld	de, #_s
+    000001A8 CDr00r00         [24]  344 	call	_update_pointer
+                                    345 ;src/main.c:123: update_HUD();
+    000001AB CDr00r00         [24]  346 	call	_update_HUD
+                                    347 ;src/main.c:124: break;
+    000001AE C3r9Ar02         [16]  348 	jp	00135$
+                                    349 ;src/main.c:126: case STATE_GAME_RUNNING:
+    000001B1                        350 00112$:
+                                    351 ;src/main.c:127: if(last_state == STATE_GAME_SETTING) {
+    000001B1 78               [ 4]  352 	ld	a, b
+    000001B2 B7               [ 4]  353 	or	a, a
+    000001B3 28 08            [12]  354 	jr	Z, 00116$
+                                    355 ;src/main.c:128: character_init(&p);
+    000001B5 11r00r00         [12]  356 	ld	de, #_p
+    000001B8 CDr00r00         [24]  357 	call	_character_init
+    000001BB 18 2E            [12]  358 	jr	00117$
+    000001BD                        359 00116$:
+                                    360 ;src/main.c:129: } else if(last_state == STATE_GAME_PAUSED) {
+    000001BD 79               [ 4]  361 	ld	a, c
+    000001BE B7               [ 4]  362 	or	a, a
+    000001BF 28 2A            [12]  363 	jr	Z, 00117$
+                                    364 ;src/main.c:130: WX_REG = 7;
+    000001C1 3E 07            [ 8]  365 	ld	a, #0x07
+    000001C3 E0r00            [12]  366 	ldh	(_WX_REG + 0), a
+                                    367 ;src/main.c:131: WY_REG = 120;
+    000001C5 3E 78            [ 8]  368 	ld	a, #0x78
+    000001C7 E0r00            [12]  369 	ldh	(_WY_REG + 0), a
+                                    370 ;src/main.c:132: set_win_tiles(0,0,20,4,hud_selector);
+    000001C9 11r00r00         [12]  371 	ld	de, #_hud_selector
+    000001CC D5               [16]  372 	push	de
+    000001CD 21 14 04         [12]  373 	ld	hl, #0x414
+    000001D0 E5               [16]  374 	push	hl
+    000001D1 AF               [ 4]  375 	xor	a, a
+    000001D2 0F               [ 4]  376 	rrca
+    000001D3 F5               [16]  377 	push	af
+    000001D4 CDr00r00         [24]  378 	call	_set_win_tiles
+    000001D7 E8 06            [16]  379 	add	sp, #6
+                                    380 ;src/main.c:133: draw_game_hud_buttons();
+    000001D9 CDr00r00         [24]  381 	call	_draw_game_hud_buttons
+                                    382 ;src/main.c:134: move_character(&p);
+    000001DC 11r00r00         [12]  383 	ld	de, #_p
+    000001DF CDr00r00         [24]  384 	call	_move_character
+                                    385 ;src/main.c:135: SHOW_SPRITES;
+    000001E2 F0r00            [12]  386 	ldh	a, (_LCDC_REG + 0)
+    000001E4 F6 02            [ 8]  387 	or	a, #0x02
+    000001E6 E0r00            [12]  388 	ldh	(_LCDC_REG + 0), a
+                                    389 ;src/main.c:136: waitpadup();
+    000001E8 CDr00r00         [24]  390 	call	_waitpadup
+    000001EB                        391 00117$:
+                                    392 ;src/main.c:139: last_state = STATE_GAME_RUNNING;
+    000001EB 21r17r00         [12]  393 	ld	hl, #_last_state
+    000001EE 36 03            [12]  394 	ld	(hl), #0x03
+                                    395 ;src/main.c:140: update_character(&p);
+    000001F0 11r00r00         [12]  396 	ld	de, #_p
+    000001F3 CDr00r00         [24]  397 	call	_update_character
+                                    398 ;src/main.c:141: if(joypad() & J_START){
+    000001F6 CDr00r00         [24]  399 	call	_joypad
+    000001F9 07               [ 4]  400 	rlca
+    000001FA D2r9Ar02         [16]  401 	jp	NC, 00135$
+                                    402 ;src/main.c:142: update_game_state(STATE_GAME_PAUSED);
+    000001FD 3E 04            [ 8]  403 	ld	a, #0x04
+    000001FF CDr00r00         [24]  404 	call	_update_game_state
+                                    405 ;src/main.c:145: break;
+    00000202 C3r9Ar02         [16]  406 	jp	00135$
+                                    407 ;src/main.c:147: case STATE_GAME_OVER:
+    00000205                        408 00120$:
+                                    409 ;src/main.c:148: if(last_state != STATE_GAME_OVER) {
+    00000205 FAr17r00         [16]  410 	ld	a, (#_last_state)
+    00000208 D6 05            [ 8]  411 	sub	a, #0x05
+    0000020A 28 19            [12]  412 	jr	Z, 00122$
+                                    413 ;src/main.c:149: last_state = STATE_GAME_OVER;
+    0000020C 21r17r00         [12]  414 	ld	hl, #_last_state
+    0000020F 36 05            [12]  415 	ld	(hl), #0x05
+                                    416 ;src/main.c:150: global_option_selection_from_menu = 0;
+    00000211 AF               [ 4]  417 	xor	a, a
+    00000212 EAr00r00         [16]  418 	ld	(#_global_option_selection_from_menu),a
+                                    419 ;src/main.c:151: init_win_screen(game_over_screen, 7, 120, 20, 12, -72);
+    00000215 21 0C B8         [12]  420 	ld	hl, #0xb80c
+    00000218 E5               [16]  421 	push	hl
+    00000219 21 78 14         [12]  422 	ld	hl, #0x1478
+    0000021C E5               [16]  423 	push	hl
+    0000021D 3E 07            [ 8]  424 	ld	a, #0x07
+    0000021F 11r00r00         [12]  425 	ld	de, #_game_over_screen
+    00000222 CDr00r00         [24]  426 	call	_init_win_screen
+    00000225                        427 00122$:
+                                    428 ;src/main.c:153: update_game_over_screen();
+    00000225 CDr00r00         [24]  429 	call	_update_game_over_screen
+                                    430 ;src/main.c:154: break;
+    00000228 18 70            [12]  431 	jr	00135$
+                                    432 ;src/main.c:156: case STATE_VICTORY:
+    0000022A                        433 00123$:
+                                    434 ;src/main.c:157: if(last_state != STATE_VICTORY) {
+    0000022A FAr17r00         [16]  435 	ld	a, (#_last_state)
+    0000022D D6 06            [ 8]  436 	sub	a, #0x06
+    0000022F 28 19            [12]  437 	jr	Z, 00125$
+                                    438 ;src/main.c:158: last_state = STATE_VICTORY;
+    00000231 21r17r00         [12]  439 	ld	hl, #_last_state
+    00000234 36 06            [12]  440 	ld	(hl), #0x06
+                                    441 ;src/main.c:159: global_option_selection_from_menu = 0;
+    00000236 AF               [ 4]  442 	xor	a, a
+    00000237 EAr00r00         [16]  443 	ld	(#_global_option_selection_from_menu),a
+                                    444 ;src/main.c:160: init_win_screen(victory_screen, 7, 120, 20, 12, -72);
+    0000023A 21 0C B8         [12]  445 	ld	hl, #0xb80c
+    0000023D E5               [16]  446 	push	hl
+    0000023E 21 78 14         [12]  447 	ld	hl, #0x1478
+    00000241 E5               [16]  448 	push	hl
+    00000242 3E 07            [ 8]  449 	ld	a, #0x07
+    00000244 11r00r00         [12]  450 	ld	de, #_victory_screen
+    00000247 CDr00r00         [24]  451 	call	_init_win_screen
+    0000024A                        452 00125$:
+                                    453 ;src/main.c:162: update_victory_screen();
+    0000024A CDr00r00         [24]  454 	call	_update_victory_screen
+                                    455 ;src/main.c:163: break;
+    0000024D 18 4B            [12]  456 	jr	00135$
+                                    457 ;src/main.c:165: case STATE_FINAL_MESSAGE:
+    0000024F                        458 00126$:
+                                    459 ;src/main.c:166: if(last_state != STATE_FINAL_MESSAGE) {
+    0000024F FAr17r00         [16]  460 	ld	a, (#_last_state)
+    00000252 D6 07            [ 8]  461 	sub	a, #0x07
+    00000254 28 14            [12]  462 	jr	Z, 00128$
+                                    463 ;src/main.c:167: last_state = STATE_FINAL_MESSAGE;
+    00000256 21r17r00         [12]  464 	ld	hl, #_last_state
+    00000259 36 07            [12]  465 	ld	(hl), #0x07
+                                    466 ;src/main.c:168: init_win_screen(final_message, 0, 0, 20, 18, 0);
+    0000025B 21 12 00         [12]  467 	ld	hl, #0x12
+    0000025E E5               [16]  468 	push	hl
+    0000025F 21 00 14         [12]  469 	ld	hl, #0x1400
+    00000262 E5               [16]  470 	push	hl
+    00000263 AF               [ 4]  471 	xor	a, a
+    00000264 11r00r00         [12]  472 	ld	de, #_final_message
+    00000267 CDr00r00         [24]  473 	call	_init_win_screen
+    0000026A                        474 00128$:
+                                    475 ;src/main.c:170: if(joypad() & (J_START | J_A)){
+    0000026A CDr00r00         [24]  476 	call	_joypad
+    0000026D E6 90            [ 8]  477 	and	a, #0x90
+    0000026F 28 29            [12]  478 	jr	Z, 00135$
+                                    479 ;src/main.c:171: global_actual_level = 0;
+                                    480 ;src/main.c:172: update_game_state(STATE_MENU);
+    00000271 AF               [ 4]  481 	xor	a, a
+    00000272 EAr00r00         [16]  482 	ld	(#_global_actual_level), a
+    00000275 CDr00r00         [24]  483 	call	_update_game_state
+                                    484 ;src/main.c:174: break;
+    00000278 18 20            [12]  485 	jr	00135$
+                                    486 ;src/main.c:176: case STATE_GAME_PAUSED:
+    0000027A                        487 00131$:
+                                    488 ;src/main.c:177: if(last_state != STATE_GAME_PAUSED) {
+    0000027A CB 41            [ 8]  489 	bit	0, c
+    0000027C 20 19            [12]  490 	jr	NZ, 00133$
+                                    491 ;src/main.c:178: last_state = STATE_GAME_PAUSED;
+    0000027E 21r17r00         [12]  492 	ld	hl, #_last_state
+    00000281 36 04            [12]  493 	ld	(hl), #0x04
+                                    494 ;src/main.c:179: global_option_selection_from_menu = 0;
+    00000283 AF               [ 4]  495 	xor	a, a
+    00000284 EAr00r00         [16]  496 	ld	(#_global_option_selection_from_menu),a
+                                    497 ;src/main.c:180: init_win_screen(pausa, 7, 120, 20, 12, -72);
+    00000287 21 0C B8         [12]  498 	ld	hl, #0xb80c
+    0000028A E5               [16]  499 	push	hl
+    0000028B 21 78 14         [12]  500 	ld	hl, #0x1478
+    0000028E E5               [16]  501 	push	hl
+    0000028F 3E 07            [ 8]  502 	ld	a, #0x07
+    00000291 11r00r00         [12]  503 	ld	de, #_pausa
+    00000294 CDr00r00         [24]  504 	call	_init_win_screen
+    00000297                        505 00133$:
+                                    506 ;src/main.c:182: update_pausa_screen();
+    00000297 CDr00r00         [24]  507 	call	_update_pausa_screen
+                                    508 ;src/main.c:187: }
+    0000029A                        509 00135$:
+                                    510 ;src/main.c:188: performantdelay(10);
+    0000029A 3E 0A            [ 8]  511 	ld	a, #0x0a
+    0000029C CDr00r00         [24]  512 	call	_performantdelay
+                                    513 ;src/main.c:190: }
+    0000029F C3rF8r00         [16]  514 	jp	00137$
+                                    515 	.area _CODE
+                                    516 	.area _INITIALIZER
+                                    517 	.area _CABS (ABS)

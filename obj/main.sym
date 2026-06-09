@@ -30,6 +30,7 @@ Symbol Table
   1 _last_state                                                     00000017 GR
   0 _main                                                           000000F1 GR
     _map_tiles_alt                                                  ******** GX
+    _move_character                                                 ******** GX
     _normalize_level_number                                         ******** GX
     _object_sprites                                                 ******** GX
   1 _p                                                              00000000 GR
@@ -55,14 +56,14 @@ Symbol Table
     _update_start_selection_menu                                    ******** GX
     _update_victory_screen                                          ******** GX
     _victory_screen                                                 ******** GX
-
+    _waitpadup                                                      ******** GX
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      262   flags    0
+   0 _CODE                                      size      2A2   flags    0
    1 _DATA                                      size       18   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

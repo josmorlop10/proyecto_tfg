@@ -78,6 +78,7 @@ Symbol Table
   0 _update_start_selection_menu                                    0000037C GR
     _update_values_in_hud                                           ******** GX
   0 _update_victory_screen                                          000003F5 GR
+    _waitpadup                                                      ******** GX
 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 3
@@ -85,7 +86,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      440   flags    0
+   0 _CODE                                      size      443   flags    0
    1 _DATA                                      size       2C   flags    0
    2 _INITIALIZED                               size      149   flags    0
    3 _DABS                                      size        0   flags    8

@@ -23,6 +23,7 @@
 	.globl _init_game_title
 	.globl _normalize_level_number
 	.globl _update_game_state
+	.globl _move_character
 	.globl _update_character
 	.globl _character_init
 	.globl _performantdelay
@@ -31,6 +32,7 @@
 	.globl _set_win_data
 	.globl _set_bkg_tiles
 	.globl _set_bkg_data
+	.globl _waitpadup
 	.globl _joypad
 	.globl _last_state
 	.globl _s
@@ -219,31 +221,49 @@ _main::
 	xor	a, a
 	ld	(#_global_game_state),a
 ;src/main.c:88: while(1) {
-00134$:
+00137$:
 ;src/main.c:89: switch (global_game_state)
 	ld	a, #0x07
 	ld	hl, #_global_game_state
 	sub	a, (hl)
-	jp	C, 00132$
-	ld	c, (hl)
-	ld	b, #0x00
-	ld	hl, #00229$
-	add	hl, bc
-	add	hl, bc
-	ld	c, (hl)
+	jp	C, 00135$
+;src/main.c:114: if(last_state != STATE_GAME_SETTING) {
+	ld	a, (#_last_state)
+	sub	a, #0x02
+	ld	a, #0x01
+	jr	Z, 00240$
+	xor	a, a
+00240$:
+	ld	b, a
+;src/main.c:129: } else if(last_state == STATE_GAME_PAUSED) {
+	ld	a, (#_last_state)
+	sub	a, #0x04
+	ld	a, #0x01
+	jr	Z, 00242$
+	xor	a, a
+00242$:
+	ld	c, a
+;src/main.c:89: switch (global_game_state)
+	ld	a, (_global_game_state)
+	ld	e, a
+	ld	d, #0x00
+	ld	hl, #00243$
+	add	hl, de
+	add	hl, de
+	ld	e, (hl)
 	inc	hl
 	ld	h, (hl)
-	ld	l, c
+	ld	l, e
 	jp	(hl)
-00229$:
+00243$:
 	.dw	00101$
 	.dw	00106$
 	.dw	00109$
 	.dw	00112$
-	.dw	00128$
-	.dw	00117$
+	.dw	00131$
 	.dw	00120$
 	.dw	00123$
+	.dw	00126$
 ;src/main.c:92: case STATE_MENU:
 00101$:
 ;src/main.c:93: if(last_state != STATE_MENU) {
@@ -259,12 +279,12 @@ _main::
 ;src/main.c:98: if(joypad() & J_START){
 	call	_joypad
 	rlca
-	jp	NC, 00132$
+	jp	NC, 00135$
 ;src/main.c:99: update_game_state(STATE_SELECTION);
 	ld	a, #0x01
 	call	_update_game_state
 ;src/main.c:101: break;
-	jp	00132$
+	jp	00135$
 ;src/main.c:103: case STATE_SELECTION:
 00106$:
 ;src/main.c:104: if(last_state != STATE_SELECTION) {
@@ -296,13 +316,12 @@ _main::
 ;src/main.c:110: update_start_selection_menu();
 	call	_update_start_selection_menu
 ;src/main.c:111: break;
-	jp	00132$
+	jp	00135$
 ;src/main.c:113: case STATE_GAME_SETTING:
 00109$:
 ;src/main.c:114: if(last_state != STATE_GAME_SETTING) {
-	ld	a, (#_last_state)
-	sub	a, #0x02
-	jr	Z, 00111$
+	bit	0, b
+	jr	NZ, 00111$
 ;src/main.c:115: init_gfx();
 	call	_init_gfx
 ;src/main.c:116: WY_REG = 120;
@@ -326,45 +345,78 @@ _main::
 ;src/main.c:123: update_HUD();
 	call	_update_HUD
 ;src/main.c:124: break;
-	jp	00132$
+	jp	00135$
 ;src/main.c:126: case STATE_GAME_RUNNING:
 00112$:
-;src/main.c:127: if(last_state != STATE_GAME_RUNNING) {
-	ld	a, (#_last_state)
-	sub	a, #0x03
-	jr	Z, 00114$
+;src/main.c:127: if(last_state == STATE_GAME_SETTING) {
+	ld	a, b
+	or	a, a
+	jr	Z, 00116$
 ;src/main.c:128: character_init(&p);
 	ld	de, #_p
 	call	_character_init
-;src/main.c:129: last_state = STATE_GAME_RUNNING;
+	jr	00117$
+00116$:
+;src/main.c:129: } else if(last_state == STATE_GAME_PAUSED) {
+	ld	a, c
+	or	a, a
+	jr	Z, 00117$
+;src/main.c:130: WX_REG = 7;
+	ld	a, #0x07
+	ldh	(_WX_REG + 0), a
+;src/main.c:131: WY_REG = 120;
+	ld	a, #0x78
+	ldh	(_WY_REG + 0), a
+;src/main.c:132: set_win_tiles(0,0,20,4,hud_selector);
+	ld	de, #_hud_selector
+	push	de
+	ld	hl, #0x414
+	push	hl
+	xor	a, a
+	rrca
+	push	af
+	call	_set_win_tiles
+	add	sp, #6
+;src/main.c:133: draw_game_hud_buttons();
+	call	_draw_game_hud_buttons
+;src/main.c:134: move_character(&p);
+	ld	de, #_p
+	call	_move_character
+;src/main.c:135: SHOW_SPRITES;
+	ldh	a, (_LCDC_REG + 0)
+	or	a, #0x02
+	ldh	(_LCDC_REG + 0), a
+;src/main.c:136: waitpadup();
+	call	_waitpadup
+00117$:
+;src/main.c:139: last_state = STATE_GAME_RUNNING;
 	ld	hl, #_last_state
 	ld	(hl), #0x03
-00114$:
-;src/main.c:131: update_character(&p);
+;src/main.c:140: update_character(&p);
 	ld	de, #_p
 	call	_update_character
-;src/main.c:132: if(joypad() & J_START){
+;src/main.c:141: if(joypad() & J_START){
 	call	_joypad
 	rlca
-	jp	NC, 00132$
-;src/main.c:133: update_game_state(STATE_GAME_PAUSED);
+	jp	NC, 00135$
+;src/main.c:142: update_game_state(STATE_GAME_PAUSED);
 	ld	a, #0x04
 	call	_update_game_state
-;src/main.c:135: break;
-	jp	00132$
-;src/main.c:137: case STATE_GAME_OVER:
-00117$:
-;src/main.c:138: if(last_state != STATE_GAME_OVER) {
+;src/main.c:145: break;
+	jp	00135$
+;src/main.c:147: case STATE_GAME_OVER:
+00120$:
+;src/main.c:148: if(last_state != STATE_GAME_OVER) {
 	ld	a, (#_last_state)
 	sub	a, #0x05
-	jr	Z, 00119$
-;src/main.c:139: last_state = STATE_GAME_OVER;
+	jr	Z, 00122$
+;src/main.c:149: last_state = STATE_GAME_OVER;
 	ld	hl, #_last_state
 	ld	(hl), #0x05
-;src/main.c:140: global_option_selection_from_menu = 0;
+;src/main.c:150: global_option_selection_from_menu = 0;
 	xor	a, a
 	ld	(#_global_option_selection_from_menu),a
-;src/main.c:141: init_win_screen(game_over_screen, 7, 120, 20, 12, -72);
+;src/main.c:151: init_win_screen(game_over_screen, 7, 120, 20, 12, -72);
 	ld	hl, #0xb80c
 	push	hl
 	ld	hl, #0x1478
@@ -372,24 +424,24 @@ _main::
 	ld	a, #0x07
 	ld	de, #_game_over_screen
 	call	_init_win_screen
-00119$:
-;src/main.c:143: update_game_over_screen();
+00122$:
+;src/main.c:153: update_game_over_screen();
 	call	_update_game_over_screen
-;src/main.c:144: break;
-	jr	00132$
-;src/main.c:146: case STATE_VICTORY:
-00120$:
-;src/main.c:147: if(last_state != STATE_VICTORY) {
+;src/main.c:154: break;
+	jr	00135$
+;src/main.c:156: case STATE_VICTORY:
+00123$:
+;src/main.c:157: if(last_state != STATE_VICTORY) {
 	ld	a, (#_last_state)
 	sub	a, #0x06
-	jr	Z, 00122$
-;src/main.c:148: last_state = STATE_VICTORY;
+	jr	Z, 00125$
+;src/main.c:158: last_state = STATE_VICTORY;
 	ld	hl, #_last_state
 	ld	(hl), #0x06
-;src/main.c:149: global_option_selection_from_menu = 0;
+;src/main.c:159: global_option_selection_from_menu = 0;
 	xor	a, a
 	ld	(#_global_option_selection_from_menu),a
-;src/main.c:150: init_win_screen(victory_screen, 7, 120, 20, 12, -72);
+;src/main.c:160: init_win_screen(victory_screen, 7, 120, 20, 12, -72);
 	ld	hl, #0xb80c
 	push	hl
 	ld	hl, #0x1478
@@ -397,21 +449,21 @@ _main::
 	ld	a, #0x07
 	ld	de, #_victory_screen
 	call	_init_win_screen
-00122$:
-;src/main.c:152: update_victory_screen();
+00125$:
+;src/main.c:162: update_victory_screen();
 	call	_update_victory_screen
-;src/main.c:153: break;
-	jr	00132$
-;src/main.c:155: case STATE_FINAL_MESSAGE:
-00123$:
-;src/main.c:156: if(last_state != STATE_FINAL_MESSAGE) {
+;src/main.c:163: break;
+	jr	00135$
+;src/main.c:165: case STATE_FINAL_MESSAGE:
+00126$:
+;src/main.c:166: if(last_state != STATE_FINAL_MESSAGE) {
 	ld	a, (#_last_state)
 	sub	a, #0x07
-	jr	Z, 00125$
-;src/main.c:157: last_state = STATE_FINAL_MESSAGE;
+	jr	Z, 00128$
+;src/main.c:167: last_state = STATE_FINAL_MESSAGE;
 	ld	hl, #_last_state
 	ld	(hl), #0x07
-;src/main.c:158: init_win_screen(final_message, 0, 0, 20, 18, 0);
+;src/main.c:168: init_win_screen(final_message, 0, 0, 20, 18, 0);
 	ld	hl, #0x12
 	push	hl
 	ld	hl, #0x1400
@@ -419,31 +471,30 @@ _main::
 	xor	a, a
 	ld	de, #_final_message
 	call	_init_win_screen
-00125$:
-;src/main.c:160: if(joypad() & (J_START | J_A)){
+00128$:
+;src/main.c:170: if(joypad() & (J_START | J_A)){
 	call	_joypad
 	and	a, #0x90
-	jr	Z, 00132$
-;src/main.c:161: global_actual_level = 0;
-;src/main.c:162: update_game_state(STATE_MENU);
+	jr	Z, 00135$
+;src/main.c:171: global_actual_level = 0;
+;src/main.c:172: update_game_state(STATE_MENU);
 	xor	a, a
 	ld	(#_global_actual_level), a
 	call	_update_game_state
-;src/main.c:164: break;
-	jr	00132$
-;src/main.c:166: case STATE_GAME_PAUSED:
-00128$:
-;src/main.c:167: if(last_state != STATE_GAME_PAUSED) {
-	ld	a, (#_last_state)
-	sub	a, #0x04
-	jr	Z, 00130$
-;src/main.c:168: last_state = STATE_GAME_PAUSED;
+;src/main.c:174: break;
+	jr	00135$
+;src/main.c:176: case STATE_GAME_PAUSED:
+00131$:
+;src/main.c:177: if(last_state != STATE_GAME_PAUSED) {
+	bit	0, c
+	jr	NZ, 00133$
+;src/main.c:178: last_state = STATE_GAME_PAUSED;
 	ld	hl, #_last_state
 	ld	(hl), #0x04
-;src/main.c:169: global_option_selection_from_menu = 0;
+;src/main.c:179: global_option_selection_from_menu = 0;
 	xor	a, a
 	ld	(#_global_option_selection_from_menu),a
-;src/main.c:170: init_win_screen(pausa, 7, 120, 20, 12, -72);
+;src/main.c:180: init_win_screen(pausa, 7, 120, 20, 12, -72);
 	ld	hl, #0xb80c
 	push	hl
 	ld	hl, #0x1478
@@ -451,16 +502,16 @@ _main::
 	ld	a, #0x07
 	ld	de, #_pausa
 	call	_init_win_screen
-00130$:
-;src/main.c:172: update_pausa_screen();
+00133$:
+;src/main.c:182: update_pausa_screen();
 	call	_update_pausa_screen
-;src/main.c:177: }
-00132$:
-;src/main.c:178: performantdelay(10);
+;src/main.c:187: }
+00135$:
+;src/main.c:188: performantdelay(10);
 	ld	a, #0x0a
 	call	_performantdelay
-;src/main.c:180: }
-	jp	00134$
+;src/main.c:190: }
+	jp	00137$
 	.area _CODE
 	.area _INITIALIZER
 	.area _CABS (ABS)

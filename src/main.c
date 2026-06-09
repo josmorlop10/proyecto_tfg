@@ -124,14 +124,24 @@ void main(void)
             break;
 
         case STATE_GAME_RUNNING:
-            if(last_state != STATE_GAME_RUNNING) {
+            if(last_state == STATE_GAME_SETTING) {
                 character_init(&p);
-                last_state = STATE_GAME_RUNNING;
+            } else if(last_state == STATE_GAME_PAUSED) {
+                WX_REG = 7;
+                WY_REG = 120;
+                set_win_tiles(0,0,20,4,hud_selector);
+                draw_game_hud_buttons();
+                move_character(&p);
+                SHOW_SPRITES;
+                waitpadup();
             }
+            
+            last_state = STATE_GAME_RUNNING;
             update_character(&p);
             if(joypad() & J_START){
                 update_game_state(STATE_GAME_PAUSED);
             }
+            
             break;
             
         case STATE_GAME_OVER:

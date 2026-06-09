@@ -10,6 +10,7 @@
 	.globl _set_win_tiles
 	.globl _set_bkg_tiles
 	.globl _set_bkg_data
+	.globl _waitpadup
 	.globl _joypad
 	.globl _move_win_screen
 	.globl _update_values_in_hud
@@ -1055,13 +1056,15 @@ _update_pausa_screen::
 	ld	a, (#_global_option_selection_from_menu)
 	or	a, a
 	jr	NZ, 00102$
-;src/LevelLogic.c:253: update_game_state(STATE_GAME_SETTING);
-	ld	a, #0x02
+;src/LevelLogic.c:253: waitpadup();
+	call	_waitpadup
+;src/LevelLogic.c:254: update_game_state(STATE_GAME_RUNNING);
+	ld	a, #0x03
 	jp	_update_game_state
 00102$:
-;src/LevelLogic.c:255: update_game_state(STATE_SELECTION);
-	ld	a, #0x01
-;src/LevelLogic.c:258: } 
+;src/LevelLogic.c:256: update_game_state(STATE_GAME_SETTING);
+	ld	a, #0x02
+;src/LevelLogic.c:259: } 
 	jp	_update_game_state
 	.area _CODE
 	.area _INITIALIZER
