@@ -21,6 +21,7 @@
 #define SOURCE_L 14
 #define SOURCE_U 15
 #define SOURCE_D 16
+#define NULO 17
 
 #define UMBRAL_COLISION_UP 5
 #define UMBRAL_COLISION_DOWN 20

@@ -93,15 +93,18 @@ void update_game_state(GameState new_value){
 void get_colision_from_map(const unsigned char in[], uint8_t out[]){
     uint8_t e = 0;
     for(uint16_t i = 0; i<NUMBER_OF_TILES_IN_GRID; i++){
-        if(in[i] == 51){
-            out[i] = SOURCE_R;
-        } else if(in[i] == 55){
-            out[i] = SOURCE_L;
-        } else if(in[i] == 59){
-            out[i] = SOURCE_U;
-        } else if(in[i] == 63){
-            out[i] = SOURCE_D;
-        } else if(in[i] >= 64 && in[i] <= 67){
+        if(in[i] >= 48 && in[i] <= 63){
+            out[i] = NULO;
+            if(in[i] == 51){
+                out[i] = SOURCE_R;
+            } else if(in[i] == 55){
+                out[i] = SOURCE_L;
+            } else if(in[i] == 59){
+                out[i] = SOURCE_U;
+            } else if(in[i] == 63){
+                out[i] = SOURCE_D;
+            } 
+        }else if(in[i] >= 64 && in[i] <= 67){
             out[i] = DESTINATION;
         } else if(in[i] >= 21 && in[i] <= 29){
             out[i] = FALL;

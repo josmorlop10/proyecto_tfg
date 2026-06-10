@@ -66,7 +66,7 @@ uint8_t block_is_placed_below(Pointer* s){
 
     //comprobar que, abajo a la derecha, el numero está entre 5 (der) y 9(abajo) ambos incluidos
     //comprobar que el resto es distinto de EMPTY
-    //devuelbe el bloque si es que hay un bloque. 
+    //devuelve el bloque si es que hay un bloque. 
     //Si no devuelve 0
     uint8_t res = 0;
     if ((global_colision_map[s->tileindexBR]>= RIGHT && global_colision_map[s->tileindexBR]<=RIGHT+NUMBER_OF_BLOCKS) 
