@@ -31,7 +31,7 @@
 
 #define NUMBER_OF_BLOCKS 6
 #define NUMBER_OF_TILES_IN_GRID 300 //20x15
-#define NUMBER_OF_LEVELS 3
+#define NUMBER_OF_LEVELS 5
 
 //Global variable for block selected.Indicará la cantidad de bloques disponibles.
 //Siendo index 1 = DER, 2= IZQ, 3=ARRIBA, 4=ABAJO, 5=CLOCKWISE 6 = COUNTERCLOCKWISE

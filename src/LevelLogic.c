@@ -11,6 +11,11 @@
 #include "../res/map1_alt.h"
 #include "../res/map2.h"
 #include "../res/map_test.h"
+#include "../res/f_map_0.h"
+#include "../res/f_map_1.h"
+#include "../res/f_map_2.h"
+#include "../res/f_map_3.h"
+#include "../res/f_map_4.h"
 #include "../res/png_prueba.h"
 #include "../res/selection_menu.h"
 #include "../res/map_tiles_alt.h"
@@ -35,7 +40,7 @@ int8_t global_selected_block = 0;
 int8_t global_first_x = 0;
 int8_t global_first_y = 0;
 
-const unsigned char* global_levels_array[] = {map_test, map1_alt, map2};
+const unsigned char* global_levels_array[] = {f_map_0,f_map_1,f_map_2,f_map_3,f_map_4};
 const unsigned char* global_level_objects_array[] = {objects_map_test, objects_map1_alt, objects_map2};
 const unsigned char* global_level_blocks_array[] = { blocks_map_test, blocks_map1_alt, blocks_map2 };
 

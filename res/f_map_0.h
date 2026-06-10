@@ -25,6 +25,8 @@
 #define f_map_0Bank 0
 
 extern const unsigned char f_map_0[];
+extern const unsigned char objects_f_map_0[];
+extern const unsigned char blocks_f_map_0[];
 
 #endif
 
