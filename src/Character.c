@@ -229,6 +229,12 @@ void update_character(Character* p) { //devuelve las teclas actuales
     if(canplayermove(p)) {
         p->x += p->speed * p->dir_x;
         p->y += p->speed * p->dir_y;
+        decrease_steps_counter();
+        if(global_steps_counter == 0){
+            update_game_state(STATE_GAME_OVER);
+            p->speed = 0;
+            return;
+        }
     } else {
         flip_direction(p);
     } 

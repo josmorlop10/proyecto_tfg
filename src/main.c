@@ -13,6 +13,7 @@
 #include "../res/object_sprites.h"
 #include "../res/hud_tiles.h"
 #include "../res/hud_selector.h"
+#include "../res/HUD_running.h"
 #include "../res/final_message.h"
 #include "../res/pausa.h"
 #include "../res/game_over_screen.h"
@@ -30,6 +31,11 @@
 Character p;
 Pointer s;
 GameState last_state;
+
+void draw_running_hud(void){
+    set_win_tiles(0, 0, HUD_runningWidth, HUD_runningHeight, HUD_running);
+    print_counter();
+}
 
 void init_gfx(void){
     //player
@@ -126,12 +132,12 @@ void main(void)
 
         case STATE_GAME_RUNNING:
             if(last_state == STATE_GAME_SETTING) {
+                draw_running_hud();
                 character_init(&p);
             } else if(last_state == STATE_GAME_PAUSED) {
                 WX_REG = 7;
                 WY_REG = 120;
-                set_win_tiles(0,0,20,4,hud_selector);
-                draw_game_hud_buttons();
+                draw_running_hud();
                 move_character(&p);
                 SHOW_SPRITES;
                 waitpadup();

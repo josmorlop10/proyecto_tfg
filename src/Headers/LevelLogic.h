@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define MAX_STEPS_COUNTER 99
+
 //COLISION VALUES
 #define EMPTY 0 //no colision
 #define SOLID 1 //colision
@@ -44,6 +46,7 @@ extern const unsigned char* global_level_blocks_array[];
 
 extern uint8_t global_actual_level;
 extern uint8_t global_option_selection_from_menu;
+extern uint8_t global_steps_counter;
 
 extern uint8_t global_keyset;
 extern int8_t global_first_x;
@@ -73,6 +76,8 @@ extern GameState global_game_state;
 extern uint16_t global_init_point;
 
 void update_game_state(GameState new_value);
+void reset_steps_counter(void);
+void decrease_steps_counter(void);
 uint8_t normalize_level_number(uint8_t level_number);
 void init_game_title(void);
 void get_colision_from_map(const unsigned char in[], uint8_t out[]);

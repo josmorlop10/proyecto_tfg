@@ -43,6 +43,18 @@ const unsigned char* global_level_blocks_array[] = { blocks_map_test, blocks_map
 
 uint8_t global_actual_level = 0;
 uint8_t global_option_selection_from_menu = 0;
+uint8_t global_steps_counter = MAX_STEPS_COUNTER;
+
+void reset_steps_counter(void){
+    global_steps_counter = MAX_STEPS_COUNTER;
+}
+
+void decrease_steps_counter(void){
+    if(global_steps_counter > 0){
+        global_steps_counter--;
+        print_counter();
+    }
+}
 
 uint8_t normalize_level_number(uint8_t level_number){
     if(level_number >= NUMBER_OF_LEVELS){
@@ -65,6 +77,7 @@ void init_level(uint8_t level_number){
 
     global_keyset = 0;
     global_hud_selected = 0;
+    reset_steps_counter();
     level_number = normalize_level_number(level_number);
     global_actual_level = level_number;
 

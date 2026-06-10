@@ -128,10 +128,12 @@ void move_sprite_block_pointer(uint8_t direction){
     }
 }
 
-//TODO:TEMPORAL
 void print_counter(void){
-    uint8_t tile_id = global_selected_block + 115;
-    set_win_tile_xy(0, 0, tile_id);
+    uint8_t tens = global_steps_counter / 10;
+    uint8_t units = global_steps_counter % 10;
+
+    set_win_tile_xy(14, 2, tens + hud_selectorTileOffset + 1);
+    set_win_tile_xy(15, 2, units + hud_selectorTileOffset + 1);
 }
 
 void update_values_in_hud(uint8_t position, uint8_t new_value){
