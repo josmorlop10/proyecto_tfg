@@ -4,6 +4,7 @@
 #include "Headers/LevelLogic.h"
 
 uint8_t global_object_information[3*NUMBER_OF_OBJECTS] = {0};
+static uint8_t global_object_vaiven_frame = 0;
 
 void print_objects_in_screen(void){
 
@@ -24,6 +25,27 @@ void hide_object(uint8_t i){
     global_object_information[i*3] = 255;
     global_object_information[(i*3)+1] = 255;
     move_sprite(8+i, 0, 160);
+}
+
+void update_objects_vaiven(void){
+    const int8_t offsets[8] = {0, 0, 0, -1, 0, 0, 0, 0};
+    int8_t offset;
+    uint8_t obj_x;
+    uint8_t obj_y;
+
+    global_object_vaiven_frame++;
+    offset = offsets[(global_object_vaiven_frame) & 7];
+
+    for(uint8_t e = 0; e<NUMBER_OF_OBJECTS; e++){
+        obj_x = global_object_information[3*e];
+        obj_y = global_object_information[3*e + 1];
+
+        if(obj_x == 255 && obj_y == 255){
+            continue;
+        }
+
+        move_sprite(8+e, obj_x, obj_y + offset);
+    }
 }
 
 uint8_t check_colision_with_object(uint8_t x, uint8_t y, uint8_t w, uint8_t h){

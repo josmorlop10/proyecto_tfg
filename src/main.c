@@ -121,6 +121,7 @@ void main(void)
             }
             update_pointer(&s);
             update_HUD();
+            update_objects_vaiven();
             break;
 
         case STATE_GAME_RUNNING:
@@ -138,6 +139,7 @@ void main(void)
             
             last_state = STATE_GAME_RUNNING;
             update_character(&p);
+            update_objects_vaiven();
             if(joypad() & J_START){
                 update_game_state(STATE_GAME_PAUSED);
             }
