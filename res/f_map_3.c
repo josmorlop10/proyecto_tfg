@@ -22,6 +22,11 @@
 #define f_map_3Height 15
 #define f_map_3Bank 0
 
+#include "../src/Headers/Object.h"
+const unsigned char objects_f_map_3[] = {6*8+4, 13*8+4, KEY, 3*8+4, 13*8+4, NO_ACTION};
+const unsigned char blocks_f_map_3[] = {0,1,0,0,0,0};
+
+
 const unsigned char f_map_3[] =
 {
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x05,0x08,

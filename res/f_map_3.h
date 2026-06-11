@@ -26,6 +26,9 @@
 
 extern const unsigned char f_map_3[];
 
+extern const unsigned char objects_f_map_3[];
+extern const unsigned char blocks_f_map_3[];
+
 #endif
 
 /* End of F_MAP_3.H */

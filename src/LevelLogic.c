@@ -41,8 +41,8 @@ int8_t global_first_x = 0;
 int8_t global_first_y = 0;
 
 const unsigned char* global_levels_array[] = {f_map_0,f_map_1,f_map_2,f_map_3,f_map_4};
-const unsigned char* global_level_objects_array[] = {objects_f_map_0, objects_f_map_1, objects_map2};
-const unsigned char* global_level_blocks_array[] = { blocks_f_map_0, blocks_f_map_1, blocks_map2 };
+const unsigned char* global_level_objects_array[] = {objects_f_map_0, objects_f_map_1, objects_f_map_2, objects_f_map_3, objects_f_map_4};
+const unsigned char* global_level_blocks_array[] = { blocks_f_map_0, blocks_f_map_1, blocks_f_map_2, blocks_f_map_3, blocks_f_map_4};
 
 #define LEVEL_COUNT (sizeof(global_levels_array) / sizeof(global_levels_array[0]))
 
@@ -188,9 +188,9 @@ void get_init_point_from_map(uint8_t colision_map[NUMBER_OF_TILES_IN_GRID]){
                 } else if(colision_map[i]==SOURCE_R){
                     global_first_x = 1;
                 }else if(colision_map[i]==SOURCE_U){
-                    global_first_y = -1;
-                }else if(colision_map[i]==SOURCE_D){
                     global_first_y = 1;
+                }else if(colision_map[i]==SOURCE_D){
+                    global_first_y = -1;
                 }
           }
      }
