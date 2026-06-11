@@ -23,7 +23,16 @@
 #define map2Height 15
 #define map2Bank 0
 
-const unsigned char objects_map2[] = {2*8+4, 13*8+4, NO_ACTION, 16*8+4, 13*8+4, KEY, 13*8+4, 13*8+4, GO_RIGHT};
+const unsigned char objects_map2[] = {
+  2*8+4, 13*8+4, NO_ACTION,
+  16*8+4, 13*8+4, KEY,
+  13*8+4, 13*8+4, GO_RIGHT,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE
+};
 
 const unsigned char blocks_map2[] = {1,1,1,0,1,0};
 

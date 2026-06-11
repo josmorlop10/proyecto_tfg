@@ -24,8 +24,16 @@
 #define map1_altHeight 15
 #define map1_altBank 0
 
-const unsigned char objects_map1_alt[] = {9*8+4, 6*8+4, GO_LEFT, 9*8+4, 13*8+4, KEY,
-13*8+4, 13*8+4, KEY};
+const unsigned char objects_map1_alt[] = {
+  9*8+4, 6*8+4, GO_LEFT,
+  9*8+4, 13*8+4, KEY,
+  13*8+4, 13*8+4, KEY,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE
+};
 
 const unsigned char blocks_map1_alt[] = {0,0,0,1,1,1};
 

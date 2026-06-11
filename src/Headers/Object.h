@@ -5,6 +5,7 @@
 
 #define OBJECT_SIZE 8
 #define NUMBER_OF_OBJECTS 8
+#define OBJECT_NONE 255
 
 //OBJECT TYPES;
 //Esto debe estar en orden. Empieza en 8, y no en 0 debido a los tiles están cargados

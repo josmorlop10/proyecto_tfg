@@ -24,8 +24,16 @@
 #define map_testHeight 15
 #define map_testBank 0
 
-const unsigned char objects_map_test[] = {9*8+4, 6*8+4, GO_LEFT,9*8+4, 8*8+4, NO_ACTION, 9*8+4, 13*8+4, KEY,
-13*8+4, 13*8+4, KEY};
+const unsigned char objects_map_test[] = {
+  9*8+4, 6*8+4, GO_LEFT,
+  9*8+4, 8*8+4, NO_ACTION,
+  9*8+4, 13*8+4, KEY,
+  13*8+4, 13*8+4, KEY,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE
+};
 
 const unsigned char blocks_map_test[] = {10,10,10,10,10,10};
 

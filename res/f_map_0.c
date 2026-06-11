@@ -23,7 +23,16 @@
 #define f_map_0Bank 0
 
 #include "../src/Headers/Object.h"
-const unsigned char objects_f_map_0[] = {15*8+4, 10*8+4, GO_UP};
+const unsigned char objects_f_map_0[] = {
+  15*8+4, 10*8+4, GO_UP,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE
+};
 const unsigned char blocks_f_map_0[] = {1,0,0,0,0,0};
 
 

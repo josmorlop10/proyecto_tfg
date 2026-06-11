@@ -23,7 +23,16 @@
 #define f_map_2Bank 0
 
 #include "../src/Headers/Object.h"
-const unsigned char objects_f_map_2[] = {7*8+4, 4*8+4, KEY, 14*8+4, 12*8+4, KEY};
+const unsigned char objects_f_map_2[] = {
+  7*8+4, 4*8+4, KEY,
+  14*8+4, 12*8+4, KEY,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE,
+  OBJECT_NONE, OBJECT_NONE, OBJECT_NONE
+};
 const unsigned char blocks_f_map_2[] = {0,0,0,0,1,1};
 
 const unsigned char f_map_2[] =
