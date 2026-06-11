@@ -1,4 +1,4 @@
-#ifndef POINTER_SELECTOR_H
+# ifndef POINTER_SELECTOR_H
 #define POINTER_SELECTOR_H
 
 #include <stdint.h>

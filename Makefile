@@ -18,7 +18,7 @@ endif
 
 
 # You can set the name of the .gb ROM file here
-PROJECTNAME    = Example
+PROJECTNAME    = tfg_alfa_0_0_1
 
 SRCDIR      = src
 OBJDIR      = obj

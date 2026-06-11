@@ -204,11 +204,12 @@ void update_character(Character* p) { //devuelve las teclas actuales
 
     if(player_tileBR_over_destination(p->next_tileindexBR)){
         global_actual_level++;
-        update_game_state(STATE_VICTORY);
         if (global_actual_level >= NUMBER_OF_LEVELS) {
             update_game_state(STATE_FINAL_MESSAGE);
             return;
         }
+        update_game_state(STATE_VICTORY);
+ 
     }
 
     if(player_over_fall(p->next_tileindexBR)){

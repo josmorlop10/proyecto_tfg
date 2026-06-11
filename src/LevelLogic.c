@@ -40,9 +40,9 @@ int8_t global_selected_block = 0;
 int8_t global_first_x = 0;
 int8_t global_first_y = 0;
 
-const unsigned char* global_levels_array[] = {f_map_0,f_map_1,f_map_2,f_map_3,f_map_4};
-const unsigned char* global_level_objects_array[] = {objects_f_map_0, objects_f_map_1, objects_f_map_2, objects_f_map_3, objects_f_map_4};
-const unsigned char* global_level_blocks_array[] = { blocks_f_map_0, blocks_f_map_1, blocks_f_map_2, blocks_f_map_3, blocks_f_map_4};
+const unsigned char* global_levels_array[] = {f_map_0,f_map_1,f_map_2,f_map_3,f_map_4,map1_alt, map2};
+const unsigned char* global_level_objects_array[] = {objects_f_map_0, objects_f_map_1, objects_f_map_2, objects_f_map_3, objects_f_map_4,objects_map1_alt,objects_map2};
+const unsigned char* global_level_blocks_array[] = { blocks_f_map_0, blocks_f_map_1, blocks_f_map_2, blocks_f_map_3, blocks_f_map_4, blocks_map1_alt, blocks_map2};
 
 #define LEVEL_COUNT (sizeof(global_levels_array) / sizeof(global_levels_array[0]))
 
