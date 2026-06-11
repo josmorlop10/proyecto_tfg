@@ -22,6 +22,10 @@
 #define f_map_1Height 15
 #define f_map_1Bank 0
 
+#include "../src/Headers/Object.h"
+const unsigned char objects_f_map_1[] = {11*8+4, 9*8+4, KEY};
+const unsigned char blocks_f_map_1[] = {0,2,1,1,0,0};
+
 const unsigned char f_map_1[] =
 {
   0x00,0x00,0x1F,0x00,0x00,0x1F,0x00,0x00,0x00,0x00,
