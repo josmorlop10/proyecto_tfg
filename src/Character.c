@@ -155,10 +155,6 @@ void rotate_direction(Character*p, uint8_t sentido){
 }
 
 void take_effect(Character* p, uint8_t index){
-    //me pregunto: quiero que esta funcion esté en object.c, por que me parece 
-    //mas aclaratorio. Pero como cambiará valores del personaje Character, no 
-    //me deja pasarselo por parametros. Alguna forma de hacerlo?
-
     uint8_t type = global_object_information[index*3+2];
         switch (type)
     {

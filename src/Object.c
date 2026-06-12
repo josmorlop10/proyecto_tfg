@@ -67,7 +67,7 @@ uint8_t check_colision_with_object(uint8_t x, uint8_t y, uint8_t w, uint8_t h){
 
         if(obj_x==OBJECT_NONE && obj_y==OBJECT_NONE){
             if(obj_type == OBJECT_NONE){
-                break;
+                continue;
             }
         }
         //Axis Aligned Bounding box (AABB)
