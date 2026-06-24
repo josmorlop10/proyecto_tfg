@@ -63,14 +63,9 @@ typedef enum {
     STATE_FINAL_MESSAGE
 } GameState;
 
-struct TileEvent {
-    uint16_t tile_index;
-    uint8_t (*on_trigger)(void);
-};
 
 //global colision map : 20x15 = 300 tiles, cada posicion es un tile del mapa de fondo.
 //cada incice indicara que tipo de bloque hay en ese tile y como gestionar la colision
-extern struct TileEvent global_events[10];
 extern uint8_t global_colision_map[NUMBER_OF_TILES_IN_GRID];
 extern GameState global_game_state;
 extern uint16_t global_init_point;
@@ -89,12 +84,9 @@ void init_level(uint8_t level_number);
 uint8_t check_colision_of_sprites(uint8_t ax, uint8_t ay, uint8_t aw, uint8_t ah, uint8_t bx, uint8_t by, uint8_t bw, uint8_t bh);
 void read_global_object_info_from_map(const unsigned char* objects_map);
 void read_global_block_info_from_map(const unsigned char* blocks_map);
-void init_start_selection_menu(void);
 void update_start_selection_menu(void);
 void init_win_screen(const unsigned char* screen, uint8_t wx, uint8_t wy, uint8_t width, uint8_t height, int8_t movement);
-void init_game_over_screen(void);
 void update_game_over_screen(void);
-void init_victory_screen(void);
 void update_victory_screen(void);
 void update_pausa_screen(void);
 

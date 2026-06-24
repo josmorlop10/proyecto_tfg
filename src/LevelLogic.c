@@ -7,7 +7,10 @@
 
 #include <stdio.h>
 #include <gb/gb.h>
+#include <gbdk/platform.h>
+#include <gbdk/incbin.h>
 #include <gbdk/console.h>
+
 #include "../res/map1_alt.h"
 #include "../res/map2.h"
 #include "../res/map_test.h"
@@ -22,6 +25,7 @@
 #include "../res/hud_tiles.h"
 #include "../res/game_over_screen.h"
 #include "../res/victory_screen.h"
+#include "../res/titulo2.h"
 
 #include "Headers/PointerSelector.h"
 #include "Headers/HUD_button.h"
@@ -30,7 +34,6 @@
 //variables globales
 GameState global_game_state;
 uint8_t global_colision_map[NUMBER_OF_TILES_IN_GRID] = {EMPTY};
-struct TileEvent global_events[10];
 uint16_t global_init_point;
 uint8_t global_keyset;
 
@@ -70,11 +73,10 @@ uint8_t normalize_level_number(uint8_t level_number){
 }
 
 void init_game_title(void){
-    
     HIDE_WIN;
     HIDE_SPRITES;
-    set_bkg_data(0,232,png_prueba_tiles);
-    set_bkg_tiles(0,0,20,18,png_prueba_map);
+    set_bkg_data(0u, titulo2_TILE_COUNT, titulo2_tiles);
+    set_bkg_tiles(0, 0, 20, 18, titulo2_map);
     SHOW_BKG;
 }
 

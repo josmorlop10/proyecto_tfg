@@ -1,6 +1,7 @@
 # Build artifacts
 obj/
 !obj/tfg_alfa_0_0_1.gb
+Documentacion automatica/
 
 # GBDK temporary files
 *.map
